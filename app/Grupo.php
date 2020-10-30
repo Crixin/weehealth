@@ -1,0 +1,32 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Grupo extends Model
+{
+    
+    public $table = 'grupo';
+
+    protected $fillable = [
+        'id', 'nome', 'descricao'
+    ];
+
+    
+    /**
+     * Os usuários que pertencem ao grupo.
+     */
+    public function users() {
+        return $this->belongsToMany('App\User');
+    }
+
+    
+    /**
+     * As empresas vinculadas ao grupo.
+     */
+    public function enterprises() {
+        return $this->belongsToMany('App\Empresa')->withPivot('permissao_download', 'permissao_visualizar', 'permissao_impressao', 'permissao_aprovar_doc', 'permissao_excluir_doc', 'permissao_upload_doc', 'permissao_receber_email', 'empresa_id', 'grupo_id');;
+    }
+
+}

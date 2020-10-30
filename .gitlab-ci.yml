@@ -1,0 +1,54 @@
+stages:
+    - build
+    - deploy
+
+    
+before_script:
+    - apk update     
+
+build:
+    stage: build
+    only:
+        - homolog
+    script:
+        - echo "Buildando aplicação [Composer] "
+        - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+        - cp .env.example .env
+        - php artisan key:generate
+    artifacts:
+        # Validade para acessar o artefato gerado pelo pipeline
+        expire_in: 1 month
+
+        # Definindo quais serão os arquivos de saída do pipeline [para serem usados nas próximas etapas] 
+        paths:
+            - vendor/
+            - .env
+
+    cache:
+
+        # The variable CI_COMMIT_REF_SLUG 
+        # refers to the slug of the branch.
+        # For example: `master` for the master branch.
+        # We use the `composer` suffix to avoid conflicts with
+        # the `npm` cache that we'll define next.
+        key: ${CI_COMMIT_REF_SLUG}-composer
+    
+        # Define what to cache.
+        paths:
+            - vendor/
+        
+deploy:
+    stage: deploy
+    only:
+        - homolog
+    script:
+        - echo "Realizando deploy...."
+        - ls -lha 
+    
+    environment:
+        name: nomolog
+        url: http://log20.weecode.com.br
+
+    # Do not run automatically.
+    # Wait for a human to click on play.
+    when: manual
