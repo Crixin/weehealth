@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Permissao;
 use Illuminate\Database\Seeder;
 use App\Repositories\{PermissaoRepository, PerfilPermissaoRepository};

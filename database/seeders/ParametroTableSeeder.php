@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Parametro;
 use Illuminate\Database\Seeder;
 
@@ -118,7 +120,5 @@ class ParametroTableSeeder extends Seeder
         $prmCaminhoBase->valor_usuario = "";
         $prmCaminhoBase->ativo = true;
         $prmCaminhoBase->save();
-
-
     }
 }

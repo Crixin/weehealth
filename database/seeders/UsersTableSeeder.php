@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\User;
 use Illuminate\Database\Seeder;
 
@@ -21,6 +23,5 @@ class UsersTableSeeder extends Seeder
         $adminWeecode->administrador = true;
         $adminWeecode->perfil_id = 1;
         $adminWeecode->save();
-        
     }
 }

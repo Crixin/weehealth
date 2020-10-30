@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Cidade;
 use Illuminate\Database\Seeder;
 
@@ -31,7 +33,7 @@ class CidadeTableSeeder extends Seeder
         }
 
         foreach ($ids as $key => $value) {
-            $request = $client->get('https://servicodados.ibge.gov.br/api/v1/localidades/estados/'.$value.'/municipios');
+            $request = $client->get('https://servicodados.ibge.gov.br/api/v1/localidades/estados/' . $value . '/municipios');
             $contents = $request->getBody()->getContents();
             
             $arr = json_decode($contents, true);
