@@ -14,7 +14,7 @@ class PortalController extends Controller
      */
     public function index()
     {
-        return view('portal::index');
+        return view('portal::home');
     }
 
     /**
