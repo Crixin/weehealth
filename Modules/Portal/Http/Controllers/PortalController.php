@@ -23,7 +23,7 @@ class PortalController extends Controller
      */
     public function create()
     {
-        return view('portal::create');
+        //return view('portal::create');
     }
 
     /**
@@ -43,7 +43,7 @@ class PortalController extends Controller
      */
     public function show($id)
     {
-        return view('portal::show');
+        //return view('portal::show');
     }
 
     /**
@@ -53,7 +53,7 @@ class PortalController extends Controller
      */
     public function edit($id)
     {
-        return view('portal::edit');
+        //return view('portal::edit');
     }
 
     /**
