@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Modules\Portal\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,5 +12,4 @@ class GrupoUser extends Model
     protected $fillable = [
         'id', 'grupo_id', 'user_id'
     ];
-
 }
