@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\Docs\Http\Controllers;
+namespace Modules\Core\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class DocsController extends Controller
+class CoreController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,7 @@ class DocsController extends Controller
      */
     public function index()
     {
-        dd();
-        return view('docs::index');
+        return view('core::index');
     }
 
     /**
@@ -24,7 +23,7 @@ class DocsController extends Controller
      */
     public function create()
     {
-        return view('docs::create');
+        return view('core::create');
     }
 
     /**
@@ -44,7 +43,7 @@ class DocsController extends Controller
      */
     public function show($id)
     {
-        return view('docs::show');
+        return view('core::show');
     }
 
     /**
@@ -54,7 +53,7 @@ class DocsController extends Controller
      */
     public function edit($id)
     {
-        return view('docs::edit');
+        return view('core::edit');
     }
 
     /**
