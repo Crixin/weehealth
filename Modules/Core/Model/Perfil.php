@@ -16,12 +16,12 @@ class Perfil extends Model
 
     public function permissoes()
     {
-        return $this->belongsToMany('App\Permissao');
+        return $this->belongsToMany('Modules\Core\Model\Permissao');
     }
 
 
     public function users()
     {
-        return $this->hasMany('App\User');
+        return $this->hasMany('Modules\Core\Model\User');
     }
 }

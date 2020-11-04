@@ -35,18 +35,18 @@ class User extends Authenticatable
     /**
      * Os grupos que o usuário pertence.
      */
-    public function groups()
+    public function coreGroups()
     {
-        return $this->belongsToMany('App\Grupo');
+        return $this->belongsToMany('Modules\Portal\Model\Grupo');
     }
 
 
     /**
      * As empresas que o usuário pertence.
      */
-    public function enterprises()
+    public function coreEnterprises()
     {
-        return $this->belongsToMany('App\Empresa')->withPivot('permissao_download', 'permissao_visualizar', 'permissao_impressao', 'permissao_aprovar_doc', 'permissao_excluir_doc', 'permissao_upload_doc', 'permissao_receber_email', 'empresa_id', 'user_id');
+        return $this->belongsToMany('Modules\Core\Model\Empresa')->withPivot('permissao_download', 'permissao_visualizar', 'permissao_impressao', 'permissao_aprovar_doc', 'permissao_excluir_doc', 'permissao_upload_doc', 'permissao_receber_email', 'empresa_id', 'user_id');
     }
 
 
@@ -61,14 +61,14 @@ class User extends Authenticatable
     }
 
 
-    public function perfil()
+    public function corePerfil()
     {
-        return $this->belongsTo('App\Perfil');
+        return $this->belongsTo('Modules\Core\Model\Perfil');
     }
 
 
-    public function dashboards()
+    public function portalDashboards()
     {
-        return $this->hasMany('App\UserDashboard');
+        return $this->hasMany('Modules\Portal\Model\UserDashboard');
     }
 }
