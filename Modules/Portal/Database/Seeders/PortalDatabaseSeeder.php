@@ -16,6 +16,6 @@ class PortalDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call(Modules\Portal\Database\Seeders\ProcessoTableSeeder::class);
     }
 }
