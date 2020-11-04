@@ -16,6 +16,12 @@ class CoreDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call(Modules\Core\Database\Seeders\CidadeTableSeeder::class);
+        $this->call(Modules\Core\Database\Seeders\PermissoesTableSeeder::class);
+        $this->call(Modules\Core\Database\Seeders\UsersTableSeeder::class);
+        $this->call(Modules\Core\Database\Seeders\CidadeTableSeeder::class);
+        $this->call(Modules\Core\Database\Seeders\ParametroTableSeeder::class);
+        $this->call(Modules\Core\Database\Seeders\SetupTableSeeder::class);
+        $this->call(Modules\Core\Database\Seeders\ParametroDossieSeeder::class);
     }
 }
