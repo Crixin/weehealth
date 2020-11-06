@@ -16,18 +16,18 @@ class EmpresaProcesso extends Model
 
     public function processo()
     {
-        return $this->hasOne('App\Processo', 'id', 'processo_id');
+        return $this->hasOne('Modules\Portal\Model\Processo', 'id', 'processo_id');
     }
 
 
     public function empresa()
     {
-        return $this->hasOne('App\Empresa', 'id', 'empresa_id');
+        return $this->hasOne('Modules\Core\Model\Empresa', 'id', 'empresa_id');
     }
 
 
     public function empresaProcessoGrupo()
     {
-        return $this->hasMany('App\EmpresaProcessoGrupo');
+        return $this->hasMany('Modules\Portal\Model\EmpresaProcessoGrupo');
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserDashboard extends Model
 {
-    public $table = 'portal_user_dashboard';
+    public $table = 'portal_php user_dashboard';
 
     protected $fillable = [
         'dashboard_id',
@@ -15,10 +15,10 @@ class UserDashboard extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('Modules\Core\Model\User');
     }
 
-    
+
     public function dashboard()
     {
         return $this->belongsTo('Modules\Portal\Model\Dashboard');

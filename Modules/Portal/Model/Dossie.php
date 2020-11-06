@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dossie extends Model
 {
-    public $table = 'dossie';
+    public $table = 'portal_dossie';
 
     protected $fillable = [
         'id',

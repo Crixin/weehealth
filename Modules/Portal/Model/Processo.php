@@ -21,6 +21,6 @@ class Processo extends Model
      */
     public function enterprises()
     {
-        return $this->belongsToMany('App\Empresa')->withPivot('id_area_ged', 'empresa_id', 'processo_id');
+        return $this->belongsToMany('Modules\Core\Model\Empresa')->withPivot('id_area_ged', 'empresa_id', 'processo_id');
     }
 }
