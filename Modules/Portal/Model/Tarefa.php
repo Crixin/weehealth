@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tarefa extends Model
 {
-    public $table = 'tarefa';
+    public $table = 'portal_tarefa';
 
     protected $fillable = [
         'id',

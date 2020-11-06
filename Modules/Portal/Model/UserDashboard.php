@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserDashboard extends Model
 {
-    public $table = 'user_dashboard';
+    public $table = 'portal_user_dashboard';
 
     protected $fillable = [
         'dashboard_id',

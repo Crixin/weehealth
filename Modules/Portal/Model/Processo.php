@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Processo extends Model
 {
     
-    public $table = 'processo';
+    public $table = 'portal_processo';
 
     protected $fillable = [
         'id', 'nome', 'descricao'

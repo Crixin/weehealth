@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class EmpresaProcesso extends Model
 {
     
-    public $table = 'empresa_processo';
+    public $table = 'portal_empresa_processo';
 
     protected $fillable = [
         'id', 'indice_filtro_utilizado', 'id_area_ged', 'empresa_id', 'processo_id', 'todos_filtros_pesquisaveis'

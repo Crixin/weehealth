@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmpresaProcessoGrupo extends Model
 {
-    public $table = "empresa_processo_grupo";
+    public $table = "portal_empresa_processo_grupo";
 
     protected $fillable = [
         'id',
