@@ -13,14 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(PerfilTableSeeder::class);
-        $this->call(PermissoesTableSeeder::class);
-        $this->call(UsersTableSeeder::class);
-        $this->call(CidadeTableSeeder::class);
-        $this->call(ParametroTableSeeder::class);
-        $this->call(GerenciadorTableSeeder::class);
-        $this->call(ProcessoTableSeeder::class);
-        $this->call(SetupTableSeeder::class);
-        $this->call(ParametrosDossieSeeder::class);
+        $this->call(\Modules\Core\Database\Seeders\SeedCoreCidadeTableSeeder::class);
+        $this->call(\Modules\Core\Database\Seeders\SeedCoreParametroTableSeeder::class);
+        $this->call(\Modules\Core\Database\Seeders\SeedCorePerfilTableSeeder::class);
+        $this->call(\Modules\Core\Database\Seeders\SeedCorePermissaoTableSeeder::class);
+        $this->call(\Modules\Core\Database\Seeders\SeedCoreSetupTableSeeder::class);
+        $this->call(\Modules\Core\Database\Seeders\SeedCoreUserTableSeeder::class);
+        $this->call(\Modules\Portal\Database\Seeders\SeedPortalProcessoTableSeeder::class);
     }
 }

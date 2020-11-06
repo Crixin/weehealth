@@ -71,7 +71,8 @@ class GeneralNotification extends Notification implements ShouldQueue
      * 
      * -> Toda vez que o atributo updated_at é inserido/atualizado, sobescreve o valor esperado por uma nova instância do Carbon.
      */
-    public function setUpdatedAtAttribute($value) {
+    public function setUpdatedAtAttribute($value)
+    {
         $this->attributes['updated_at'] = Carbon::now();
     }
 }

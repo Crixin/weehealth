@@ -22,7 +22,7 @@
     <!-- Custom CSS -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     @php 
-        $setup = \App\Setup::find(1); 
+        $setup = \Modules\Core\Model\Setup::find(1); 
         $templete  = $setup->theme_sistema ?? 'weecode';
         $permissaoMenu = [];
         foreach (Auth::user()->perfil->permissoes ?? [] as $key => $value) {

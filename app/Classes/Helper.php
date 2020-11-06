@@ -49,7 +49,11 @@ class Helper
      */
     public static function getUserEnterprises()
     {
-        return Auth::user()->coreEnterprises()->select('nome')->orderBy('nome')->get();
+        return Auth::user()
+        ->coreEnterprises()
+        ->select('nome')
+        ->orderBy('nome')
+        ->get();
     }
 
 
@@ -58,7 +62,11 @@ class Helper
      */
     public static function getUserGroups()
     {
-        return Auth::user()->coreGroups()->select('nome')->orderBy('nome')->get();
+        return Auth::user()
+        ->coreGroups()
+        ->select('nome')
+        ->orderBy('nome')
+        ->get();
     }
 
 
