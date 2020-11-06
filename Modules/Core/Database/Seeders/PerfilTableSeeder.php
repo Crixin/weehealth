@@ -1,5 +1,7 @@
 <?php
 
+namespace Modules\Core\Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\Repositories\PerfilRepository;
 

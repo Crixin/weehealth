@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\{Log, Storage, File};
 use App\Classes\{Constants, RESTServices};
-use App\Repositories\{ConfiguracaoTarefaRepository, TarefaRepository};
+use Modules\Portal\Repositories\{ConfiguracaoTarefaRepository, TarefaRepository};
 use Exception;
 
 class ProcessaTarefa extends Command

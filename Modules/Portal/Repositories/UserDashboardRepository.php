@@ -3,7 +3,7 @@
 namespace Modules\Portal\Repositories;
 
 use Modules\Portal\Model\UserDashboard;
-use App\Repositories\BaseRepository\BaseRepository;
+use Modules\Core\Repositories\BaseRepository;
 
 class UserDashboardRepository extends BaseRepository
 {

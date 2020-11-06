@@ -1,6 +1,7 @@
 <?php
 
-use App\Permissao;
+namespace Modules\Core\Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\Repositories\{PermissaoRepository, PerfilPermissaoRepository};
 
@@ -36,7 +37,7 @@ class PermissoesTableSeeder extends Seeder
                 "nome" => $nome,
                 "descricao" => $descricao
             ]);
-            
+
             $perfilPermissao->create([
                 'perfil_id' => 1,
                 'permissao_id' => $retorno->id

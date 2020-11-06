@@ -1,7 +1,10 @@
 <?php
 
-use App\Cidade;
+namespace Modules\Core\Database\Seeders;
+
+use Modules\Core\App\Cidade;
 use Illuminate\Database\Seeder;
+use Modules\Core\Model\Cidade as ModelCidade;
 
 class CidadeTableSeeder extends Seeder
 {
@@ -36,7 +39,7 @@ class CidadeTableSeeder extends Seeder
             
             $arr = json_decode($contents, true);
             foreach ($arr as $key => $cidade) {
-                $c = new Cidade();
+                $c = new ModelCidade();
                 $c->nome = $cidade["nome"];
                 $c->estado = $cidade["microrregiao"]["mesorregiao"]["UF"]["nome"];
                 $c->sigla_estado = $cidade["microrregiao"]["mesorregiao"]["UF"]["sigla"];

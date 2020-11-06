@@ -3,7 +3,7 @@
 namespace Modules\Portal\Repositories;
 
 use Modules\Portal\Model\EdicaoDocumento;
-use App\Repositories\BaseRepository\BaseRepository;
+use Modules\Core\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
 
 class EdicaoDocumentoRepository extends BaseRepository

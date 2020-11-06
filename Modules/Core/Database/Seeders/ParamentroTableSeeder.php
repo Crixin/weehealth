@@ -1,5 +1,7 @@
 <?php
 
+namespace Modules\Core\Database\Seeders;
+
 use App\Parametro;
 use Illuminate\Database\Seeder;
 
@@ -12,7 +14,6 @@ class ParametroTableSeeder extends Seeder
      */
     public function run()
     {
-        
         /**
          * Ações disponíveis no que se refere aos documentos
          */
@@ -32,7 +33,7 @@ class ParametroTableSeeder extends Seeder
         $prmVisualizar->valor_usuario = "";
         $prmVisualizar->ativo = true;
         $prmVisualizar->save();
-        
+
         $prmImprimir = new Parametro();
         $prmImprimir->identificador_parametro = "PERMITIR_IMPRIMIR";
         $prmImprimir->descricao = "Texto que será exibido na tabela de permissionamento, na opção que possibilita realizar impressões do documento.";
@@ -40,7 +41,7 @@ class ParametroTableSeeder extends Seeder
         $prmImprimir->valor_usuario = "";
         $prmImprimir->ativo = true;
         $prmImprimir->save();
-        
+
         $prmAprovar = new Parametro();
         $prmAprovar->identificador_parametro = "PERMITIR_APROVAR";
         $prmAprovar->descricao = "Texto que será exibido na tabela de permissionamento, na opção que habilita a permissão para aprovar um documento.";
@@ -48,7 +49,7 @@ class ParametroTableSeeder extends Seeder
         $prmAprovar->valor_usuario = "";
         $prmAprovar->ativo = true;
         $prmAprovar->save();
-        
+
         $prmExcluir = new Parametro();
         $prmExcluir->identificador_parametro = "PERMITIR_EXCLUIR";
         $prmExcluir->descricao = "Texto que será exibido na tabela de permissionamento, na opção que identifica a permissão de excluir um documento.";
@@ -56,7 +57,7 @@ class ParametroTableSeeder extends Seeder
         $prmExcluir->valor_usuario = "";
         $prmExcluir->ativo = true;
         $prmExcluir->save();
-        
+
         $prmUpload = new Parametro();
         $prmUpload->identificador_parametro = "PERMITIR_UPLOAD";
         $prmUpload->descricao = "Texto da opção que identifica a permissão para realizar o upload de um documento externo ao processo em uma área específica.";
@@ -72,13 +73,9 @@ class ParametroTableSeeder extends Seeder
         $prmEditar->valor_usuario = "";
         $prmEditar->ativo = true;
         $prmEditar->save();
-        
-        
-        
         /*
         * Configurações de FTP
         */
-
         $prmIP = new Parametro();
         $prmIP->identificador_parametro = "FTP_IP";
         $prmIP->descricao = "Endereço IP do servidor de FTP centralizado disponibilizado pelo cliente para que os arquivos comprimidos (.zip) possam ser inseridos.";
@@ -118,7 +115,5 @@ class ParametroTableSeeder extends Seeder
         $prmCaminhoBase->valor_usuario = "";
         $prmCaminhoBase->ativo = true;
         $prmCaminhoBase->save();
-
-
     }
 }

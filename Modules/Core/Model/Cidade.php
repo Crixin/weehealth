@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cidade extends Model
 {
-    
     public $table = 'core_cidade';
 
     protected $fillable = [
