@@ -1,9 +1,12 @@
-@extends('app')
+@extends('core::layouts.app')
+
+@extends('core::layouts.menuPortal')
+@yield('menu')
 
 @section('page_title', __('page_titles.dashboard.create'))
 
 @section('breadcrumbs')
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
     <li class="breadcrumb-item"><a href="{{ route('dashboards') }}"> @lang('page_titles.dashboard.index') </a></li>
     <li class="breadcrumb-item active"> @lang('page_titles.dashboard.create') </li>    
 @endsection
@@ -13,7 +16,7 @@
     <div class="card">
         <div class="card-body">
             @if(Session::has('message'))
-                @component('componentes.alert')
+                @component('core::componentes.alert')
                 @endcomponent
                 {{ Session::forget('message') }}
             @endif
@@ -67,7 +70,7 @@
 <script>
     let arrayTipoIndiceGED = {!! json_encode($tiposIndicesGED, JSON_HEX_TAG) !!};
 </script>
-@include('modal/configDashboard', compact('empresas'))
+@include('portal::modal/configDashboard', compact('empresas'))
 <script src="{{asset('js/controller/dashboard.js')}}"></script>
 <script type="text/javascript">
     var idGrafico = 0;

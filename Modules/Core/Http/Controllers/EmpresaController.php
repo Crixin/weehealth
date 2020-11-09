@@ -41,7 +41,7 @@ class EmpresaController extends Controller
         (
             $request->all(),
             [
-                'nome'                  => 'required|string|max:100|unique:empresa',
+                'nome'                  => 'required|string|max:100|unique:core_empresa',
                 'cnpj'                  => 'required|string|min:18|max:18',
                 'telefone'              => 'required|string|min:14|max:15',
                 'responsavel_contato'   => 'required|string|max:50',
@@ -50,6 +50,7 @@ class EmpresaController extends Controller
                 'cidade_id'             => 'required|numeric'
             ]
         );
+
 
         if ($validator->fails()) {
             Helper::setNotify($validator->messages()->first(), 'danger|close-circle');
@@ -80,11 +81,18 @@ class EmpresaController extends Controller
 
     public function updateEnterprise(Request $request)
     {
-        $arrRegras = array('cnpj' => 'required|string|min:18|max:18', 'telefone' => 'required|string|min:14|max:15', 'responsavel_contato' => 'required|string|max:100', 'pasta_ftp' => array('required', 'string', 'max:150', "regex:/^[a-zA-Z_\/]*$/"), 'obs' => 'max:500', 'cidade_id' => 'required|numeric');
+        $arrRegras = array(
+            'cnpj' => 'required|string|min:18|max:18',
+            'telefone' => 'required|string|min:14|max:15',
+            'responsavel_contato' => 'required|string|max:100',
+            'pasta_ftp' => array('required', 'string', 'max:150', "regex:/^[a-zA-Z_\/]*$/"),
+            'obs' => 'max:500',
+            'cidade_id' => 'required|numeric'
+        );
         $empresa = Empresa::find($request->get('idEmpresa'));
 
         if ($empresa->nome != $request->get('nome')) {
-            $arrRegras['nome'] = 'required|string|max:100|unique:empresa';
+            $arrRegras['nome'] = 'required|string|max:100|unique:core_empresa';
         }
 
         $validator = Validator::make($request->all(), $arrRegras);

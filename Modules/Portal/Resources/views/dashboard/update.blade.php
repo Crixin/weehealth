@@ -1,4 +1,7 @@
-@extends('app')
+@extends('core::layouts.app')
+
+@extends('core::layouts.menuPortal')
+@yield('menu')
 
 @section('page_title', __('page_titles.dashboard.update'))
 
@@ -13,7 +16,7 @@
     <div class="card">
         <div class="card-body">
             @if(Session::has('message'))
-                @component('componentes.alert')
+                @component('core::componentes.alert')
                 @endcomponent
                 {{ Session::forget('message') }}
             @endif
@@ -70,7 +73,7 @@
 <script>
     let arrayTipoIndiceGED = {!! json_encode($tiposIndicesGED, JSON_HEX_TAG) !!};
 </script>
-@include('modal/configDashboard', compact('empresas'))
+@include('portal::modal/configDashboard', compact('empresas'))
 <script src="{{asset('js/controller/dashboard.js')}}"></script>
 <script type="text/javascript">
     var idGrafico = Number($('#idGrafico').val());

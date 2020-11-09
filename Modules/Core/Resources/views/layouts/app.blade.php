@@ -71,7 +71,7 @@
                 <!-- Logo -->
                 <!-- ============================================================== -->
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="{{ route('home') }}">
+                    <a class="navbar-brand" href="{{ route('core.home') }}">
                         <!-- Logo icon -->
                         <b>
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->

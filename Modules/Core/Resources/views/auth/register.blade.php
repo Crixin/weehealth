@@ -1,4 +1,7 @@
-@extends('app')
+@extends('core::layouts.app')
+
+@extends('core::layouts.menuPortal')
+@yield('menu')
 
 
 @section('page_title', __('page_titles.user.create'))
@@ -21,7 +24,7 @@
             <div class="card-body">
             
             
-                <form method="POST" action="{{ route('register') }}"  enctype="multipart/form-data">
+                <form method="POST" action="{{ route('usuario.save') }}"  enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="form-body">

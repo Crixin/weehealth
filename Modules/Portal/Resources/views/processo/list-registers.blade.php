@@ -1,4 +1,7 @@
-@extends('app')
+@extends('core::layouts.app')
+
+@extends('core::layouts.menuPortal')
+@yield('menu')
 
 
 @section('page_title', __('page_titles.process.index'))

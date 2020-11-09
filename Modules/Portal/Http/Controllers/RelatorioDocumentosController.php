@@ -28,7 +28,7 @@ class RelatorioDocumentosController extends Controller
 
         $empresas = Empresa::whereIn('id', $empresasArray)->get();
 
-        return view('relatorio-documentos.index', compact('empresas'));
+        return view('portal::relatorio-documentos.index', compact('empresas'));
     }
 
     public function gerar(Request $request)

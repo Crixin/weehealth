@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Core\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Classes\{Constants, GEDServices, RESTServices, Helper};
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\{Auth, DB};
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\Auth\JWTController;
 use App\{Empresa, EmpresaGrupo, EmpresaProcesso, EmpresaUser, Grupo, Parametro, Processo, User, Setup};
-use App\Repositories\{DashboardRepository, EmpresaProcessoRepository, DossieRepository, ParametroRepository};
+use Modules\Portal\Repositories\{DashboardRepository, EmpresaProcessoRepository, DossieRepository, ParametroRepository};
 
 class AjaxController extends Controller
 {

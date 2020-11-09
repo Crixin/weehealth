@@ -1,4 +1,7 @@
-@extends('app')
+@extends('core::layouts.app')
+
+@extends('core::layouts.menuPortal')
+@yield('menu')
 
 @section('page_title', __('page_titles.dossieDocumentos.index'))
 
@@ -43,7 +46,7 @@
                             @endif
 
                             @if(Session::has('message'))
-                                @component('componentes.alert') @endcomponent
+                                @component('core::componentes.alert') @endcomponent
                                 {{ Session::forget('message') }}
                             @endif
                             

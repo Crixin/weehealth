@@ -47,7 +47,7 @@ class RelatorioController extends Controller
             '_idProcesso'     => $_idProcesso
         )]);
 
-        return view('relatorio.index', [
+        return view('portal::relatorio.index', [
             'logs' => $logs,
             'filtroAdicional' => null,
             'dataInicio' => $dataInicio->format('Y-m-d'),
@@ -74,7 +74,7 @@ class RelatorioController extends Controller
         if ($validator->fails()) {
             Helper::setNotify($validator->messages()->first(), 'danger|close-circle');
 
-            return view('relatorio.index', [
+            return view('portal::relatorio.index', [
                 'logs' => collect(),
                 'filtroAdicional' => $filtroAdicional,
                 'dataInicio' => $dataInicio->format('Y-m-d'),
@@ -98,7 +98,7 @@ class RelatorioController extends Controller
         }
         $logs = is_null($logs) ? collect() : $logs;
 
-        return view('relatorio.index', [
+        return view('portal::relatorio.index', [
             'logs' => $logs,
             'filtroAdicional' => $filtroAdicional,
             'dataInicio' => $dataInicio->format('Y-m-d'),

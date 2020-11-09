@@ -75,7 +75,7 @@ class EmpresaProcessoGrupoController extends Controller
 
         $tipoIndicesGED = Constants::$OPTIONS_TYPE_INDICES_GED;
         return view(
-            'processo-grupo.vinculo-grupos-filtros',
+            'portal::processo-grupo.vinculo-grupos-filtros',
             compact(
                 'empresaProcessoGrupo',
                 'gruposNaoVinculados',

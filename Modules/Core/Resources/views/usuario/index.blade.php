@@ -1,4 +1,7 @@
-@extends('app')
+@extends('core::layouts.app')
+
+@extends('core::layouts.menuPortal')
+@yield('menu')
 
 
 @section('page_title', __('page_titles.user.index'))
@@ -6,7 +9,7 @@
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
     <li class="breadcrumb-item active"> @lang('page_titles.user.index') </li>    
 
 @endsection
@@ -20,7 +23,7 @@
             <div class="card-body">
 
                 @if(Session::has('message'))
-                    @component('componentes.alert')
+                    @component('core::componentes.alert')
                     @endcomponent
                     
                     {{ Session::forget('message') }}
@@ -28,7 +31,7 @@
 
 
                 <div class="col-md-12">
-                    <a href="{{ url('/register') }}" class="btn btn-lg waves-effect waves-light btn-success pull-right">@lang('buttons.user.create') </a>
+                    <a href="{{ url('core/usuario/register') }}" class="btn btn-lg waves-effect waves-light btn-success pull-right">@lang('buttons.user.create') </a>
                 </div>
             
                 <div class="table-responsive m-t-40">
@@ -53,7 +56,7 @@
                                     <td>{{ $usuario->name }}</td>
                                     <td>{{ $usuario->username }}</td>
                                     <td>{{ $usuario->email }}</td>
-                                    <td>{{ $usuario->perfil->nome ?? "" }}</td>
+                                    <td>{{ $usuario->corePerfil->nome ?? "" }}</td>
                                     <td> 
                                         <input type="checkbox" id="permissao_nivel_usuario-{{ $usuario->id }}" class="filled-in chk-col-cyan" {{ ($usuario->permissao_nivel_usuario) ? 'checked' : '' }} /> 
                                         <label for="permissao_nivel_usuario-{{ $usuario->id }}">Ativa</label>

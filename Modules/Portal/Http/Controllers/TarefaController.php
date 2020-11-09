@@ -51,14 +51,14 @@ class TarefaController extends Controller
     public function index()
     {
         $tarefas = $this->tarefaRepository->findAll();
-        return view('tarefa.index', compact('tarefas'));
+        return view('portal::tarefa.index', compact('tarefas'));
     }
 
     public function newTarefa()
     {
         $empresas = Helper::getProcessesByUserAccess();
         $configuracoes = $this->configuracaoTarefa->findAll();
-        return view('tarefa.create', compact('configuracoes', 'empresas'));
+        return view('portal::tarefa.create', compact('configuracoes', 'empresas'));
     }
 
     public function saveTarefa(Request $request)
@@ -88,7 +88,7 @@ class TarefaController extends Controller
 
         $decode = json_decode($tarefa->indices);
         $indices = $decode->indice;
-        return view('tarefa.update', compact('tarefa', 'empresas', 'configuracoes', 'indices'));
+        return view('portal::tarefa.update', compact('tarefa', 'empresas', 'configuracoes', 'indices'));
     }
 
     public function updateTarefa(Request $request)

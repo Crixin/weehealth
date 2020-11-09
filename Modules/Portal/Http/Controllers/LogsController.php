@@ -34,7 +34,7 @@ class LogsController extends Controller
         $logs = Logs::whereBetween('data', [$startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s')])->get();
         $logs = is_null($logs) ? collect() : $logs;
 
-        return view('logs.index', [
+        return view('portal::logs.index', [
             'startDate' => $startDate->format('Y-m-d'),
             'endDate' => $endDate->format('Y-m-d'),
             'logs' => $logs,
@@ -52,7 +52,7 @@ class LogsController extends Controller
         if ($validator->fails()) {
             Helper::setNotify($validator->messages()->first(), 'danger|close-circle');
 
-            return view('logs.index', [
+            return view('portal::logs.index', [
                 'startDate' => $startDate->format('Y-m-d'),
                 'endDate' => $endDate->format('Y-m-d'),
                 'logs' => $logs,
@@ -62,7 +62,7 @@ class LogsController extends Controller
         // Captura todos os logs que foram criados dentro do período definido pelo usuário
         $logs = Logs::whereBetween('data', [$startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s')])->get();
 
-        return view('logs.index', [
+        return view('portal::logs.index', [
             'startDate' => $startDate->format('Y-m-d'),
             'endDate' => $endDate->format('Y-m-d'),
             'logs' => $logs,

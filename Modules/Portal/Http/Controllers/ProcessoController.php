@@ -38,19 +38,19 @@ class ProcessoController extends Controller
     public function index()
     {
         $processos = Processo::orderBy('nome')->get();
-        return view('processo.index', compact('processos'));
+        return view('portal::processo.index', compact('processos'));
     }
 
 
     public function newProcess()
     {
-        return view('processo.create');
+        return view('portal::processo.create');
     }
 
     public function saveProcess(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nome'      => 'required|string|max:100|unique:processo',
+            'nome'      => 'required|string|max:100|unique:portal_processo',
             'descricao' => 'required|string|max:300'
         ]);
 
@@ -73,7 +73,7 @@ class ProcessoController extends Controller
     public function editProcess($_id)
     {
         $processo = Processo::find($_id);
-        return view('processo.update', compact('processo'));
+        return view('portal::processo.update', compact('processo'));
     }
 
 
@@ -83,7 +83,7 @@ class ProcessoController extends Controller
         $processo = Processo::find($request->get('idProcesso'));
 
         if ($request->get('nome') != $processo->nome) {
-            $arrRegras['nome'] = 'required|string|max:100|unique:processo';
+            $arrRegras['nome'] = 'required|string|max:100|unique:portal_processo';
         }
         $validator = Validator::make($request->all(), $arrRegras);
 
@@ -134,7 +134,7 @@ class ProcessoController extends Controller
 
         $tipoIndicesGED = Constants::$OPTIONS_TYPE_INDICES_GED;
 
-        return view('processo.search-documents', compact("indices", "tipoIndicesGED", "filtros"));
+        return view('portal::processo.search-documents', compact("indices", "tipoIndicesGED", "filtros"));
     }
 
 
@@ -248,7 +248,7 @@ class ProcessoController extends Controller
 
         $detalhado = $_request->tipoPesquisa == "detalhada" ?: false;
 
-        return view('processo.list-registers', compact('registros', 'cabecalho', 'detalhado'));
+        return view('portal::processo.list-registers', compact('registros', 'cabecalho', 'detalhado'));
     }
 
 
@@ -288,7 +288,7 @@ class ProcessoController extends Controller
         // Pode Excluir?
         $podeExcluir = Helper::isEnabled('PERMITIR_EXCLUIR', 'permissao_excluir_doc', $identificadores['_idEmpresa']);
 
-        return view('processo.list-documents', compact('possuiDocumento', 'cabecalho', 'documentos', 'podeExcluir'));
+        return view('portal::processo.list-documents', compact('possuiDocumento', 'cabecalho', 'documentos', 'podeExcluir'));
     }
 
 
@@ -358,7 +358,7 @@ class ProcessoController extends Controller
             }
         }
         return view(
-            'processo.access-document',
+            'portal::processo.access-document',
             compact(
                 'documento',
                 'permissoes',
@@ -508,7 +508,7 @@ class ProcessoController extends Controller
 
         $idAreaGED = $empresaProcesso->id_area_ged;
 
-        return view('processo.upload-documents', compact("idAreaGED"));
+        return view('portal::processo.upload-documents', compact("idAreaGED"));
     }
 
 

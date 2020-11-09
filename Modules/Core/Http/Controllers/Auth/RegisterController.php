@@ -5,7 +5,7 @@ namespace Modules\Core\Http\Controllers\Auth;
 use Modules\Core\Model\User;
 use Illuminate\Http\Request;
 use Modules\Core\Repositories\PerfilRepository;
-use App\Http\Controllers\Controller;
+use Modules\Core\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -48,7 +48,7 @@ class RegisterController extends Controller
     public function showRegistrationForm()
     {
         $perfis = $this->perfilRepository->findAll();
-        return view('auth.register', compact('perfis'));
+        return view('core::auth.register', compact('perfis'));
     }
 
     /**
@@ -61,8 +61,8 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|string|max:255',
-            'username' => 'required|string|max:20|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
+            'username' => 'required|string|max:20|unique:core_users',
+            'email' => 'required|string|email|max:255|unique:core_users',
             'password' => 'required|string|min:6|confirmed',
             'foto' => 'image|mimes:jpeg,png,jpg',
             'perfil' => 'required|numeric',

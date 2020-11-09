@@ -1,4 +1,7 @@
-@extends('app')
+@extends('core::layouts.app')
+
+@extends('core::layouts.menuPortal')
+@yield('menu')
 
 
 @section('page_title', __('page_titles.process.update'))
@@ -22,7 +25,7 @@
 
 
                 @if(Session::has('message'))
-                    @component('componentes.alert')
+                    @component('core::componentes.alert')
                     @endcomponent
 
                     {{ Session::forget('message') }}

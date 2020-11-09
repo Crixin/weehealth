@@ -63,14 +63,14 @@ class DashboardController extends Controller
         $gedUserToken = env('GED_USER_TOKEN');
         $dashboards = $this->dashboardRepository->findAll();
 
-        return view('dashboard.index', compact('dashboards', 'gedUserToken', 'gedUrl'));
+        return view('portal::dashboard.index', compact('dashboards', 'gedUserToken', 'gedUrl'));
     }
 
     public function newDashboard()
     {
         $empresas = Helper::getProcessesByUserAccess();
         $tiposIndicesGED = $this->const::$OPTIONS_TYPE_INDICES_GED;
-        return view('dashboard.create', compact('empresas', 'tiposIndicesGED'));
+        return view('portal::dashboard.create', compact('empresas', 'tiposIndicesGED'));
     }
 
     public function saveDashboard(Request $request)
@@ -99,7 +99,7 @@ class DashboardController extends Controller
         $numGraficos = count(json_decode($dashboard['config']));
         $empresas = Helper::getProcessesByUserAccess();
         $tiposIndicesGED = $this->const::$OPTIONS_TYPE_INDICES_GED;
-        return view('dashboard.update', compact('dashboard', 'numGraficos', 'tiposIndicesGED', 'empresas'));
+        return view('portal::dashboard.update', compact('dashboard', 'numGraficos', 'tiposIndicesGED', 'empresas'));
     }
 
     public function updateDashboard(Request $request)
@@ -130,7 +130,7 @@ class DashboardController extends Controller
         $usuariosVinculados = $this->userDashboardRepository->findBy([['dashboard_id', '=', $_id]], ['user'])->toArray();
         $usuariosVinculados = array_column($usuariosVinculados, 'user_id');
 
-        return view('dashboard.usuarios_vinculados', compact('dashboard', 'usuarios', 'usuariosVinculados'));
+        return view('portal::dashboard.usuarios_vinculados', compact('dashboard', 'usuarios', 'usuariosVinculados'));
     }
 
     public function updateLinkedUsers(Request $request)
@@ -203,13 +203,13 @@ class DashboardController extends Controller
         //dd($dashes);
 
         if (!in_array($_id, $dashes)) {
-            return response()->view('errors.403');
+            return response()->view('core::errors.403');
         }
 
         $configuracao = $this->dashboardRepository->find($_id);
         $configuracao = json_decode($configuracao->config);
 
-        return view('dashboard.view', compact('configuracao', 'gedUrl', 'gedUserToken'));
+        return view('portal::dashboard.view', compact('configuracao', 'gedUrl', 'gedUserToken'));
     }
 
     private function validador(Request $request)

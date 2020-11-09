@@ -1,4 +1,7 @@
-@extends('app')
+@extends('core::layouts.app')
+
+@extends('core::layouts.menuPortal')
+@yield('menu')
 
 
 @section('page_title', __('page_titles.group.index'))
@@ -6,7 +9,7 @@
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
     <li class="breadcrumb-item active"> @lang('page_titles.group.index') </li>    
 
 @endsection
@@ -20,8 +23,7 @@
             <div class="card-body">
 
                     @if(Session::has('message'))
-                        @component('componentes.alert')
-                        @endcomponent
+                        @component('core::componentes.alert')@endcomponent
 
                         {{ Session::forget('message') }}
                     @endif

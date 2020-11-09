@@ -16,8 +16,9 @@
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('portal')->group(function () {
-    Route::get('/', 'PortalController@index')->name('home');
-    Route::get('/home', 'PortalController@index')->name('home');
+
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@index')->name('home');
 
     /*
     * DOWNLOAD DE DOSSIES
@@ -30,16 +31,16 @@ Route::prefix('portal')->group(function () {
         /*
         * EMPRESAS
         */
-        Route::group(['prefix' => 'empresa', 'middleware' => 'permissionamento:mod_base'], function () {
-            Route::get('usuarios-vinculados/{id}',  ['as' => 'empresa.usuariosVinculados',     'uses' => 'EmpresaController@linkedUsers']);
-            Route::post('vincular-usuarios',        ['as' => 'empresa.vincularUsuarios',       'uses' => 'EmpresaController@updateLinkedUsers']);
-            Route::get('grupos-vinculados/{id}',    ['as' => 'empresa.gruposVinculados',       'uses' => 'EmpresaController@linkedGroups']);
-            Route::post('vincular-grupos',          ['as' => 'empresa.vincularGrupos',         'uses' => 'EmpresaController@updateLinkedGroups']);
-            Route::get('processos-vinculados/{id}', ['as' => 'empresa.processosVinculados',    'uses' => 'EmpresaController@linkedProcesses']);
-            Route::post('vincular-processos',       ['as' => 'empresa.vincularProcessos',      'uses' => 'EmpresaController@updateLinkedProcesses']);
-            Route::post('empresa/grupo',            ['as' => 'relacao.empresaGrupo.deletar',   'uses' => 'AjaxController@deleteLinkEnterpriseGroup']);
-            Route::post('empresa/processo',         ['as' => 'relacao.empresaProcesso.deletar','uses' => 'AjaxController@deleteLinkEnterpriseProcess']);
-            Route::post('empresa/usuario',          ['as' => 'relacao.empresaUsuario.deletar', 'uses' => 'AjaxController@deleteLinkEnterpriseUser']);
+         Route::group(['prefix' => 'empresa', 'middleware' => 'permissionamento:mod_base'], function () {
+             Route::get('usuarios-vinculados/{id}',  ['as' => 'empresa.usuariosVinculados',     'uses' => 'EmpresaController@linkedUsers']);
+             Route::post('vincular-usuarios',        ['as' => 'empresa.vincularUsuarios',       'uses' => 'EmpresaController@updateLinkedUsers']);
+             Route::get('grupos-vinculados/{id}',    ['as' => 'empresa.gruposVinculados',       'uses' => 'EmpresaController@linkedGroups']);
+             Route::post('vincular-grupos',          ['as' => 'empresa.vincularGrupos',         'uses' => 'EmpresaController@updateLinkedGroups']);
+             Route::get('processos-vinculados/{id}', ['as' => 'empresa.processosVinculados',    'uses' => 'EmpresaController@linkedProcesses']);
+             Route::post('vincular-processos',       ['as' => 'empresa.vincularProcessos',      'uses' => 'EmpresaController@updateLinkedProcesses']);
+             Route::post('empresa/grupo',            ['as' => 'relacao.empresaGrupo.deletar',   'uses' => 'AjaxController@deleteLinkEnterpriseGroup']);
+             Route::post('empresa/processo',         ['as' => 'relacao.empresaProcesso.deletar','uses' => 'AjaxController@deleteLinkEnterpriseProcess']);
+             Route::post('empresa/usuario',          ['as' => 'relacao.empresaUsuario.deletar', 'uses' => 'AjaxController@deleteLinkEnterpriseUser']);
         });
         
         /*
@@ -54,20 +55,6 @@ Route::prefix('portal')->group(function () {
             Route::get('usuarios-vinculados/{id}',  ['as' => 'grupo.usuariosVinculados',    'uses' => 'GrupoController@linkedUsers']);
             Route::post('vincular-usuarios',        ['as' => 'grupo.vincularUsuarios',      'uses' => 'GrupoController@updateLinkedUsers']);
             Route::post('deletar',	                ['as' => 'grupo.deletar',               'uses' => 'AjaxController@deleteGroup']);
-        });
-
-        
-        /*
-        * CONFIGURAÇÃO
-        */
-        Route::group(['prefix' => 'configuracao', 'as' => 'configuracao.'], function () {
-            Route::get('parametros',        ['as' => 'parametros',         'uses' => 'ConfiguracaoController@indexParameters'])->middleware('onlyAllowSuperAdmins');
-            Route::get('administradores',   ['as' => 'administradores',    'uses' => 'ConfiguracaoController@indexAdministrators'])->middleware('onlyAllowSuperAdmins');
-        
-            Route::group(['prefix' => 'setup', 'as' => 'setup.', 'middleware' => 'permissionamento:conf_setup'], function () {
-                Route::get('',         ['as' => 'index',   'uses' => 'SetupController@index']);
-                Route::post('alterar', ['as' => 'alterar', 'uses' => 'SetupController@update']);
-            });
         });
         
         Route::group(['prefix' => 'ged', 'as' => 'ged.'], function () {
@@ -154,21 +141,34 @@ Route::prefix('portal')->group(function () {
             Route::post('deleteRegistroAndDoc', ['as' => 'deleteRegistroAndDoc',    'uses' => 'EdicaoDocumentoController@deleteRegistroAndDoc']);
         });
 
+        /*
+        * PROCESSOS
+        */
+        Route::group(['prefix' => 'processo', 'middleware' => 'permissionamento:mod_base'], function () {
+            Route::get('',              ['as' => 'processo',            'uses' => 'ProcessoController@index']);
+            Route::get('novo',          ['as' => 'processo.novo',       'uses' => 'ProcessoController@newProcess']);
+            Route::post('salvar',       ['as' => 'processo.salvar',     'uses' => 'ProcessoController@saveProcess']);
+            Route::get('editar/{id}',   ['as' => 'processo.editar',     'uses' => 'ProcessoController@editProcess']);
+            Route::post('alterar',      ['as' => 'processo.alterar',    'uses' => 'ProcessoController@updateProcess']);
+            Route::post('deletar',      ['as' => 'processo.deletar',    'uses' => 'AjaxController@deleteProcess']);
+        });
 
         /**
          * PROCESSO - documentos
          */
-        Route::group(['prefix' => 'processo', 'as' => 'processo.', 'middleware' => 'userCanByEntreprise'], function () {
-            Route::get('buscar/{idEmpresa}/{idProcesso}',  ['as' => 'buscar',             'uses' => 'ProcessoController@search']);
-            Route::post('listarRegistros',                 ['as' => 'listarRegistros',    'uses' => 'ProcessoController@listRegisters']);
-            Route::get('listarDocumentos/{_idRegistro}',   ['as' => 'listarDocumentos',   'uses' => 'ProcessoController@listDocuments']);
-            Route::get('documento/{_idDocumento}',         ['as' => 'acessarDocumento',   'uses' => 'ProcessoController@accessDocument']);
-            Route::post('documento/aprovar',               ['as' => 'documento.aprovar',  'uses' => 'ProcessoController@approveDocument']);
-            Route::post('documento/rejeitar',              ['as' => 'documento.rejeitar', 'uses' => 'ProcessoController@rejectDocument']);
-            Route::post('documento/update',                ['as' => 'documento.update',   'uses' => 'ProcessoController@updateDocument']);
-            Route::get('upload/{idEmpresa}/{idProcesso}',  ['as' => 'upload',             'uses' => 'ProcessoController@upload']);
-            Route::post('realizarUpload',                  ['as' => 'realizarUpload',     'uses' => 'ProcessoController@makeUpload']);
-        });
+        // Route::group(['prefix' => 'processo', 'as' => 'processo.', 'middleware' => 'userCanByEntreprise'], function () {
+        //     Route::get('buscar/{idEmpresa}/{idProcesso}',  ['as' => 'buscar',             'uses' => 'ProcessoController@search']);
+        //     Route::post('listarRegistros',                 ['as' => 'listarRegistros',    'uses' => 'ProcessoController@listRegisters']);
+        //     Route::get('listarDocumentos/{_idRegistro}',   ['as' => 'listarDocumentos',   'uses' => 'ProcessoController@listDocuments']);
+        //     Route::get('documento/{_idDocumento}',         ['as' => 'acessarDocumento',   'uses' => 'ProcessoController@accessDocument']);
+        //     Route::post('documento/aprovar',               ['as' => 'documento.aprovar',  'uses' => 'ProcessoController@approveDocument']);
+        //     Route::post('documento/rejeitar',              ['as' => 'documento.rejeitar', 'uses' => 'ProcessoController@rejectDocument']);
+        //     Route::post('documento/update',                ['as' => 'documento.update',   'uses' => 'ProcessoController@updateDocument']);
+        //     Route::get('upload/{idEmpresa}/{idProcesso}',  ['as' => 'upload',             'uses' => 'ProcessoController@upload']);
+        //     Route::post('realizarUpload',                  ['as' => 'realizarUpload',     'uses' => 'ProcessoController@makeUpload']);
+        // });
+
+        
         
 
 

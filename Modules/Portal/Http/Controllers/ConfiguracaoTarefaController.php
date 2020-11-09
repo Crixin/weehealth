@@ -20,12 +20,12 @@ class ConfiguracaoTarefaController extends Controller
     public function index()
     {
         $configuracoes = $this->configuracaoTarefaRepository->findAll();
-        return view('configuracaoTarefa.index', compact('configuracoes'));
+        return view('portal::configuracaoTarefa.index', compact('configuracoes'));
     }
 
     public function newConfiguracaoTarefa()
     {
-        return view('configuracaoTarefa.create');
+        return view('portal::configuracaoTarefa.create');
     }
 
     public function saveConfiguracaoTarefa(Request $request)
@@ -50,7 +50,7 @@ class ConfiguracaoTarefaController extends Controller
     public function editConfiguracaoTarefa($_id)
     {
         $configuracao = $this->configuracaoTarefaRepository->find($_id);
-        return view('configuracaoTarefa.update', compact('configuracao'));
+        return view('portal::configuracaoTarefa.update', compact('configuracao'));
     }
 
     public function updateConfiguracaoTarefa(Request $request)

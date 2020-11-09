@@ -53,17 +53,7 @@ Route::prefix('core')->group(function () {
         Route::post('deletar',      ['as' => 'perfil.deletar', 'uses' => 'PerfilController@destroy']);
     });
 
-    /*
-    * PROCESSOS
-    */
-    Route::group(['prefix' => 'processo', 'middleware' => 'permissionamento:mod_base'], function () {
-        Route::get('',              ['as' => 'processo',            'uses' => 'ProcessoController@index']);
-        Route::get('novo',          ['as' => 'processo.novo',       'uses' => 'ProcessoController@newProcess']);
-        Route::post('salvar',       ['as' => 'processo.salvar',     'uses' => 'ProcessoController@saveProcess']);
-        Route::get('editar/{id}',   ['as' => 'processo.editar',     'uses' => 'ProcessoController@editProcess']);
-        Route::post('alterar',      ['as' => 'processo.alterar',    'uses' => 'ProcessoController@updateProcess']);
-        Route::post('deletar',      ['as' => 'processo.deletar',    'uses' => 'AjaxController@deleteProcess']);
-    });
+    
 
     /*
     * USUÁRIO
@@ -73,9 +63,13 @@ Route::prefix('core')->group(function () {
         Route::get('editar/{id}',       ['as' => 'usuario.editar',          'uses' => 'UsuarioController@editUser'])->middleware('blockAdmin');
         Route::post('alterar',          ['as' => 'usuario.alterar',         'uses' => 'UsuarioController@updateUser']);
         Route::post('alterar-senha',    ['as' => 'usuario.alterarSenha',    'uses' => 'UsuarioController@updateUserPassword']);
-        Route::post('deletar',          ['as' => 'usuario.deletar',         'uses' => 'AjaxController@deleteUser'])->middleware('blockAdmin');;
+        Route::post('deletar',          ['as' => 'usuario.deletar',         'uses' => 'AjaxController@deleteUser'])->middleware('blockAdmin');
+        Route::get('register',          ['as' => 'usuario.register',        'uses' => 'Auth\RegisterController@showRegistrationForm']);
+        Route::post('save',             ['as' => 'usuario.save',            'uses' => 'Auth\RegisterController@register']);
+    
     });
 
+    
     /*
     * NOTIFICAÇãO
     */
@@ -83,6 +77,17 @@ Route::prefix('core')->group(function () {
         Route::get('',                          ['as' => 'notificacao',                           'uses' => 'NotificacaoController@index']);
         Route::get('marcar-todas-como-lidas',   ['as' => 'notificacao.marcar-todas-como-lidas',   'uses' => 'NotificacaoController@markAllAsRead']);
     });
-
-
+    
+    /*
+    * CONFIGURAÇÃO
+    */
+    Route::group(['prefix' => 'configuracao', 'as' => 'configuracao.'], function () {
+        Route::get('parametros',        ['as' => 'parametros',         'uses' => 'ConfiguracaoController@indexParameters'])->middleware('onlyAllowSuperAdmins');
+        Route::get('administradores',   ['as' => 'administradores',    'uses' => 'ConfiguracaoController@indexAdministrators'])->middleware('onlyAllowSuperAdmins');
+    
+        Route::group(['prefix' => 'setup', 'as' => 'setup.', 'middleware' => 'permissionamento:conf_setup'], function () {
+            Route::get('',         ['as' => 'index',   'uses' => 'SetupController@index']);
+            Route::post('alterar', ['as' => 'alterar', 'uses' => 'SetupController@update']);
+        });
+    });
 });

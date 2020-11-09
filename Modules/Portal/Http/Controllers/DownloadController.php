@@ -25,7 +25,7 @@ class DownloadController extends Controller
     public function index()
     {
         $empresas = Empresa::whereNotNull('pasta_ftp')->orderBy("nome")->get()->pluck('nome', 'id')->toArray();
-        return view('download.index', compact('empresas'));
+        return view('portal::download.index', compact('empresas'));
     }
 
 

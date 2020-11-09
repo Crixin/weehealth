@@ -41,7 +41,7 @@ class GedController extends Controller
         $tipoIndicesGED = Constants::$OPTIONS_TYPE_INDICES_GED;
         $tipo = "create";
 
-        return view('ged.default', compact('empresasProcessos', 'tipoIndicesGED', 'tipo'));
+        return view('portal::ged.default', compact('empresasProcessos', 'tipoIndicesGED', 'tipo'));
     }
 
     /**
@@ -152,7 +152,7 @@ class GedController extends Controller
         }
 
         return view(
-            'ged.default',
+            'portal::ged.default',
             compact(
                 'empresasProcessos',
                 'tipoIndicesGED',
@@ -233,7 +233,7 @@ class GedController extends Controller
         $tipo = "search-view";
 
         return view(
-            'ged.default',
+            'portal::ged.default',
             compact(
                 'empresasProcessos',
                 'tipoIndicesGED',
@@ -300,7 +300,7 @@ class GedController extends Controller
             });
         }
 
-        return view('ged.result_search', compact('registros', 'cabecalho', 'empresaProcessoId'));
+        return view('portal::ged.result_search', compact('registros', 'cabecalho', 'empresaProcessoId'));
     }
 
 
@@ -342,7 +342,7 @@ class GedController extends Controller
         $idRegistro = $_idRegistro;
         $empresaProcesso = $_empresaProcesso;
 
-        return view('ged.result_search', compact('documentos', 'cabecalho', 'idRegistro', 'idArea', 'empresaProcesso'));
+        return view('portal::ged.result_search', compact('documentos', 'cabecalho', 'idRegistro', 'idArea', 'empresaProcesso'));
     }
 
 
@@ -391,7 +391,7 @@ class GedController extends Controller
         $permissoes['usa_editar'] = false;
 
         return view(
-            'ged.access-document',
+            'portal::ged.access-document',
             compact(
                 'documento',
                 'permissoes',

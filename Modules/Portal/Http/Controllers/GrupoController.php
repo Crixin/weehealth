@@ -13,18 +13,18 @@ class GrupoController extends Controller
     public function index()
     {
         $grupos = Grupo::orderBy('nome')->get();
-        return view('grupo.index', compact('grupos'));
+        return view('portal::grupo.index', compact('grupos'));
     }
 
     public function newGroup()
     {
-        return view('grupo.create');
+        return view('portal::grupo.create');
     }
 
     public function saveGroup(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nome'      => 'required|string|max:100|unique:grupo',
+            'nome'      => 'required|string|max:100|unique:portal_grupo',
             'descricao' => 'required|string|max:300'
         ]);
 
@@ -46,7 +46,7 @@ class GrupoController extends Controller
     public function editGroup($_id)
     {
         $grupo = Grupo::find($_id);
-        return view('grupo.update', compact('grupo'));
+        return view('portal::grupo.update', compact('grupo'));
     }
 
 
@@ -56,7 +56,7 @@ class GrupoController extends Controller
         $grupo = Grupo::find($request->get('idGrupo'));
 
         if ($request->get('nome') != $grupo->nome) {
-            $arrRegras['nome'] = 'required|string|max:100|unique:grupo';
+            $arrRegras['nome'] = 'required|string|max:100|unique:portal_grupo';
         }
         $validator = Validator::make($request->all(), $arrRegras);
 
@@ -78,7 +78,7 @@ class GrupoController extends Controller
     {
         $grupo = Grupo::find($_id);
         $todosUsuarios = User::select('id', 'name')->orderBy('name')->get();
-        return view('grupo.usuarios_vinculados', compact('grupo', 'todosUsuarios'));
+        return view('portal::grupo.usuarios_vinculados', compact('grupo', 'todosUsuarios'));
     }
 
 

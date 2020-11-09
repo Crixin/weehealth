@@ -68,13 +68,13 @@ class DossieDocumentosController extends Controller
         $tiposIndicesGED = Constants::$OPTIONS_TYPE_INDICES_GED;
         $pocHavan = $this->parametroRepository->findOneBy([["identificador_parametro", '=', 'POC_HAVAN']]);
 
-        return view('dossieDocumentos.index', compact('empresas', 'tiposIndicesGED', 'pocHavan'));
+        return view('portal::dossieDocumentos.index', compact('empresas', 'tiposIndicesGED', 'pocHavan'));
     }
 
     public function list()
     {
         $dossies = $this->dossieRepository->findAll();
-        return view('dossieDocumentos.sended_list', compact('dossies'));
+        return view('portal::dossieDocumentos.sended_list', compact('dossies'));
     }
 
     public function downloadDossie(Request $_request)
@@ -391,7 +391,7 @@ class DossieDocumentosController extends Controller
                 'Seu link para download dos arquivos é inválido ou seu tempo já expirou. Solicite outro ao remetente do link',
                 'warning|close-circle'
             );
-            return view('dossieDocumentos.download', compact('disabled', 'token'));
+            return view('portal::dossieDocumentos.download', compact('disabled', 'token'));
         }
         $response = $authenticate['response'];
 
@@ -417,7 +417,7 @@ class DossieDocumentosController extends Controller
             'O email informado não está autorizado para efetuar o download!',
             'warning|close-circle'
         );
-        return view('dossieDocumentos.download', compact('disabled', 'token'));
+        return view('portal::dossieDocumentos.download', compact('disabled', 'token'));
     }
 
 
@@ -436,6 +436,6 @@ class DossieDocumentosController extends Controller
                 'warning|close-circle'
             );
         }
-        return view('dossieDocumentos.download', compact('disabled', 'token'));
+        return view('portal::dossieDocumentos.download', compact('disabled', 'token'));
     }
 }

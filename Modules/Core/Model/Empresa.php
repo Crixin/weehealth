@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Empresa extends Model
 {
-    
+
     public $table = 'core_empresa';
 
     protected $fillable = [
@@ -22,7 +22,18 @@ class Empresa extends Model
      */
     public function portalGroups()
     {
-        return $this->belongsToMany('Modules\Portal\Model\Grupo')->withPivot('permissao_download', 'permissao_visualizar', 'permissao_impressao', 'permissao_aprovar_doc', 'permissao_excluir_doc', 'permissao_upload_doc', 'permissao_receber_email', 'empresa_id', 'grupo_id');
+        return $this->belongsToMany('Modules\Portal\Model\Grupo', 'Modules\Portal\Model\EmpresaGrupo')
+        ->withPivot(
+            'permissao_download',
+            'permissao_visualizar',
+            'permissao_impressao',
+            'permissao_aprovar_doc',
+            'permissao_excluir_doc',
+            'permissao_upload_doc',
+            'permissao_receber_email',
+            'empresa_id',
+            'grupo_id'
+        );
     }
 
 
@@ -33,7 +44,18 @@ class Empresa extends Model
      */
     public function coreUsers()
     {
-        return $this->belongsToMany('Modules\Core\Model\User')->withPivot('permissao_download', 'permissao_visualizar', 'permissao_impressao', 'permissao_aprovar_doc', 'permissao_excluir_doc', 'permissao_upload_doc', 'permissao_receber_email', 'empresa_id', 'user_id');
+        return $this->belongsToMany('Modules\Core\Model\User', 'Modules\Portal\Model\EmpresaUser')
+        ->withPivot(
+            'permissao_download',
+            'permissao_visualizar',
+            'permissao_impressao',
+            'permissao_aprovar_doc',
+            'permissao_excluir_doc',
+            'permissao_upload_doc',
+            'permissao_receber_email',
+            'empresa_id',
+            'user_id'
+        );
     }
 
 
@@ -44,6 +66,13 @@ class Empresa extends Model
      */
     public function portalProcesses()
     {
-        return $this->belongsToMany('Modules\Portal\Model\Processo')->withPivot('id', 'id_area_ged', 'empresa_id', 'processo_id', 'indice_filtro_utilizado', 'todos_filtros_pesquisaveis');
+        return $this->belongsToMany('Modules\Portal\Model\Processo', 'Modules\Portal\Model\EmpresaProcesso')->withPivot(
+            'id',
+            'id_area_ged',
+            'empresa_id',
+            'processo_id',
+            'indice_filtro_utilizado',
+            'todos_filtros_pesquisaveis'
+        );
     }
 }

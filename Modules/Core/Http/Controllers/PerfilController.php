@@ -31,8 +31,8 @@ class PerfilController extends Controller
      */
     public function index()
     {
-        $perfis = $this->perfilRepository->findAll(['users']);
-        return view('perfil.index', compact('perfis'));
+        $perfis = $this->perfilRepository->findAll(['coreUsers']);
+        return view('core::perfil.index', compact('perfis'));
     }
 
     /**
@@ -43,7 +43,7 @@ class PerfilController extends Controller
     public function create()
     {
         $permissoes = $this->permissaoRepository->findAll([], [['descricao', 'ASC']]);
-        return view('perfil.create', compact('permissoes'));
+        return view('core::perfil.create', compact('permissoes'));
     }
 
     /**
@@ -85,15 +85,15 @@ class PerfilController extends Controller
      */
     public function edit($id)
     {
-        $perfil = $this->perfilRepository->find($id, ['permissoes']);
+        $perfil = $this->perfilRepository->find($id, ['corePermissoes']);
         $userPermissao = [];
 
-        foreach ($perfil->permissoes as $key => $value) {
+        foreach ($perfil->corePermissoes as $key => $value) {
             $userPermissao[] = $value->pivot->permissao_id;
         }
 
         $permissoes = $this->permissaoRepository->findAll([], [['descricao', 'ASC']]);
-        return view('perfil.update', compact('perfil', 'permissoes', 'userPermissao'));
+        return view('core::perfil.update', compact('perfil', 'permissoes', 'userPermissao'));
     }
 
     /**
@@ -112,10 +112,10 @@ class PerfilController extends Controller
         try {
             DB::transaction(function () use ($_request, $id) {
                 $this->perfilRepository->update(['nome' => $_request->nome], $id);
-                $perfil = $this->perfilRepository->find($id, ['permissoes']);
+                $perfil = $this->perfilRepository->find($id, ['corePermissoes']);
                 $userPermissao = [];
 
-                foreach ($perfil->permissoes as $key => $value) {
+                foreach ($perfil->corePermissoes as $key => $value) {
                     $userPermissao[] = $value->pivot->permissao_id;
                 }
 
@@ -173,8 +173,8 @@ class PerfilController extends Controller
     public function validator(Request $_request, $id = "")
     {
         $validator = Validator::make($_request->all(), [
-            'nome' => 'required|string|unique:perfil,nome' . ($id ? ',' . $id : ''),
-            'permissoes' => 'required|exists:permissao,id',
+            'nome' => 'required|string|unique:core_perfil,nome' . ($id ? ',' . $id : ''),
+            'permissoes' => 'required|exists:core_permissao,id',
         ]);
 
         if ($validator->fails()) {

@@ -6,7 +6,7 @@
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
     <li class="breadcrumb-item active"> @lang('page_titles.configs.index_setup') </li>    
 
 @endsection

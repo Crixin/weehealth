@@ -22,7 +22,7 @@ class EdicaoDocumentoController extends Controller
 
         $documentos = $this->edicaoDocumentoRepository->findBy([['user_id', '=', Auth::id()]]);
 
-        return view("edicaoDocumento.index", compact('documentos'));
+        return view("portal::edicaoDocumento.index", compact('documentos'));
     }
 
     public function deleteRegistroAndDoc(Request $request)

@@ -24,7 +24,7 @@ class UsuarioController extends Controller
     {
     /*     $usuarios = User::where('id', '!=', reset(Constants::$ARR_SUPER_ADMINISTRATORS_ID))->orderBy('name')->select('id', 'name', 'username', 'email', 'utilizar_permissoes_nivel_usuario')->get(); */
         $usuarios = $this->userRepository->findAll();
-        return view('usuario.index', compact('usuarios'));
+        return view('core::usuario.index', compact('usuarios'));
     }
 
 
@@ -33,7 +33,7 @@ class UsuarioController extends Controller
         $perfis = $this->perfilRepository->findAll();
 
         $usuario = $this->userRepository->find($_id);
-        return view('usuario.update', compact('usuario', 'perfis'));
+        return view('core::usuario.update', compact('usuario', 'perfis'));
     }
 
 

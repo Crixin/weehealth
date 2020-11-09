@@ -1,4 +1,7 @@
-@extends('app')
+@extends('core::layouts.app')
+
+@extends('core::layouts.menuPortal')
+@yield('menu')
 
 
 @section('page_title', __('page_titles.ged.index'))
@@ -22,7 +25,7 @@
 			<div class="card-body">
 
                 @if(Session::has('message'))
-                    @component('componentes.alert') @endcomponent
+                    @component('portal.componentes.alert') @endcomponent
                     {{ Session::forget('message') }}
                 @endif
 
