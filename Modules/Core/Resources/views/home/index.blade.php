@@ -17,7 +17,7 @@
         <div class="card-body">
             
             <p class="text-center  font-weight-bold" style="font-size: xx-large;">
-                {{ Auth::user()->name }}
+                {{ \Auth::user()->name }}
                 <p class="text-center text-info" style="font-size: larger;"> @lang('home.welcome') </p>
             </p>
 

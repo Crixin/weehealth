@@ -50,7 +50,7 @@ class Helper
     public static function getUserEnterprises()
     {
         return Auth::user()
-        ->coreEnterprises()
+        ->enterprises()
         ->select('nome')
         ->orderBy('nome')
         ->get();

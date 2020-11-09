@@ -22,7 +22,7 @@ class Tarefa extends Model
         'status'
     ];
 
-    public function configuracaoTarefa()
+    public function portalConfiguracaoTarefa()
     {
         return $this->hasOne('Modules\Portal\Model\ConfiguracaoTarefa', 'id', 'configuracao_id');
     }

@@ -12,22 +12,27 @@
 */
 // @codingStandardsIgnoreFile
 
-use Illuminate\Support\Facades\Route;
-use Modules\Core\Http\Controllers\Auth\LoginController;
-use Modules\Core\Http\Controllers\HomeCoreController;
 
 Route::prefix('core')->group(function () {
 
-    Route::get('login', [LoginController::class, 'showLoginForm']);
-    Route::post('login', [LoginController::class,'login'])->name('core.login');
-    Route::post('logout', [LoginController::class,'logout'])->name('core.logout');
+    Route::get('login',  ['uses' => 'Auth\LoginController@showLoginForm']);
+    Route::post('login', ['uses' => 'Auth\LoginController@login'])->name('core.login');
+    Route::post('logout', ['uses' => 'Auth\LoginController@logout'])->name('core.logout');
 
-    Route::get('home', [HomeCoreController::class, 'index'])->name('core.home');
+    // LOG-OUT
+    Route::get('logout', function () {
+        Auth::logout();
+        Session::flush();
+        return Redirect::to('/login');
+    });
+
+    Route::get('home', ['uses' => 'HomeCoreController@index'])->name('core.home');
 
     /*
     * Empresa
     */
     Route::group(['prefix' => 'empresa', 'middleware' => 'permissionamento:mod_base'], function () {
+        
         Route::get('',                          ['as' => 'empresa',                        'uses' => 'EmpresaController@index']);
         Route::get('nova',                      ['as' => 'empresa.nova',                   'uses' => 'EmpresaController@newEnterprise']);
         Route::post('salvar',                   ['as' => 'empresa.salvar',                 'uses' => 'EmpresaController@saveEnterprise']);

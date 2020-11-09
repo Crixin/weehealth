@@ -6,15 +6,13 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeCoreController extends Controller
 {
+
     public function index()
     {
+        if (is_null(Auth::user())) {
+            return redirect('/core/login');
+        }
         //dd('home modulo core');
-        $a = Auth::user()
-        ->coreEnterprises()
-        ->select('nome')
-        ->orderBy('nome')
-        ->toSql();
-        dd($a);
         return view('core::home.index');
     }
 }

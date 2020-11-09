@@ -6,21 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserDashboard extends Model
 {
-    public $table = 'portal_php user_dashboard';
+    public $table = 'portal_user_dashboard';
 
     protected $fillable = [
         'dashboard_id',
         'user_id'
     ];
 
-    public function user()
+    public function coreUser()
     {
-        return $this->belongsTo('Modules\Core\Model\User');
+        return $this->belongsTo('Modules\Core\Model\User', 'user_id');
     }
 
 
-    public function dashboard()
+    public function portalDashboard()
     {
-        return $this->belongsTo('Modules\Portal\Model\Dashboard');
+        return $this->belongsTo('Modules\Portal\Model\Dashboard', 'dashboard_id');
     }
 }

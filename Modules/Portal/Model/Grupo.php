@@ -17,7 +17,7 @@ class Grupo extends Model
     /**
      * Os usuários que pertencem ao grupo.
      */
-    public function users()
+    public function coreUsers()
     {
         return $this->belongsToMany('Modules\Core\Model\User');
     }
@@ -26,7 +26,7 @@ class Grupo extends Model
     /**
      * As empresas vinculadas ao grupo.
      */
-    public function enterprises()
+    public function coreEnterprises()
     {
         return $this->belongsToMany('Modules\Core\Model\Empresa')->withPivot('permissao_download', 'permissao_visualizar', 'permissao_impressao', 'permissao_aprovar_doc', 'permissao_excluir_doc', 'permissao_upload_doc', 'permissao_receber_email', 'empresa_id', 'grupo_id');;
     }

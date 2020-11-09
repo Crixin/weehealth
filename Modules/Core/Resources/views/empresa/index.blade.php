@@ -1,8 +1,10 @@
-@extends('app')
+@extends('core::layouts.app')
+
+@extends('core::layouts.menuPortal')
+@yield('menu')
 
 
 @section('page_title', __('page_titles.enterprise.index'))
-
 
 @section('breadcrumbs')
 
@@ -10,8 +12,6 @@
     <li class="breadcrumb-item active"> @lang('page_titles.enterprise.index') </li>    
 
 @endsection
-
-
 
 @section('content')
 
@@ -67,8 +67,6 @@
     </div>
     
 @endsection
-
-
 
 @section('footer')
     <!-- This is data table -->

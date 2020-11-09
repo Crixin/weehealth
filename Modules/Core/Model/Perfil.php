@@ -14,13 +14,13 @@ class Perfil extends Model
     ];
 
 
-    public function permissoes()
+    public function corePermissoes()
     {
-        return $this->belongsToMany('Modules\Core\Model\Permissao');
+        return $this->belongsToMany('Modules\Core\Model\Permissao', 'Modules\Core\Model\PerfilPermissao');
     }
 
 
-    public function users()
+    public function coreUsers()
     {
         return $this->hasMany('Modules\Core\Model\User');
     }

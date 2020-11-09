@@ -16,14 +16,14 @@ class EmpresaProcessoGrupo extends Model
     ];
 
 
-    public function grupo()
+    public function portalGrupo()
     {
-        return $this->belongsTo('Modules\Portal\Model\Grupo');
+        return $this->belongsTo('Modules\Portal\Model\Grupo', 'grupo_id');
     }
 
     
-    public function empresaProcesso()
+    public function portalEmpresaProcesso()
     {
-        return $this->belongsTo('Modules\Portal\Model\EmpresaProcesso');
+        return $this->belongsTo('Modules\Portal\Model\EmpresaProcesso', 'empresa_processo_id');
     }
 }

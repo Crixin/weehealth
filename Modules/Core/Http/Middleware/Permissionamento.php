@@ -20,7 +20,7 @@ class Permissionamento
             return redirect('/login');
         }
 
-        foreach (Auth::user()->perfil->permissoes ?? [] as $per) {
+        foreach (Auth::user()->corePerfil->corePermissoes ?? [] as $per) {
             if (in_array($per->nome, $permissoes)) {
                 return $next($request);
             }

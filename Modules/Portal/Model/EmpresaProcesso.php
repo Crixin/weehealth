@@ -14,19 +14,19 @@ class EmpresaProcesso extends Model
     ];
 
 
-    public function processo()
+    public function portalProcesso()
     {
         return $this->hasOne('Modules\Portal\Model\Processo', 'id', 'processo_id');
     }
 
 
-    public function empresa()
+    public function coreEmpresa()
     {
         return $this->hasOne('Modules\Core\Model\Empresa', 'id', 'empresa_id');
     }
 
 
-    public function empresaProcessoGrupo()
+    public function portalEmpresaProcessoGrupo()
     {
         return $this->hasMany('Modules\Portal\Model\EmpresaProcessoGrupo');
     }

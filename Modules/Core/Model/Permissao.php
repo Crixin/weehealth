@@ -16,6 +16,6 @@ class Permissao extends Model
 
     public function corePerfil()
     {
-        return $this->belongsToMany('Modules\Core\Model\Perfil');
+        return $this->belongsToMany('Modules\Core\Model\Perfil', 'Modules\Core\Model\Perfil_permissao');
     }
 }

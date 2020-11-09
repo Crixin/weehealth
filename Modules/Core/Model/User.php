@@ -44,9 +44,9 @@ class User extends Authenticatable
     /**
      * As empresas que o usuário pertence.
      */
-    public function coreEnterprises()
+    public function enterprises()
     {
-        return $this->belongsToMany('Modules\Core\Model\Empresa')->withPivot(
+        return $this->belongsToMany('Modules\Core\Model\Empresa', 'Modules\Portal\Model\EmpresaUser')->withPivot(
             'permissao_download',
             'permissao_visualizar',
             'permissao_impressao',
@@ -73,7 +73,7 @@ class User extends Authenticatable
 
     public function corePerfil()
     {
-        return $this->belongsTo('Modules\Core\Model\Perfil');
+        return $this->belongsTo('Modules\Core\Model\Perfil', 'perfil_id');
     }
 
 

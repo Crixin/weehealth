@@ -19,7 +19,7 @@ class Processo extends Model
      *
      * PS: usa-se o `withPivot` quando uma tabela de relacionamento possui valores adicionais, ou seja, não apenas as keys de vinculação
      */
-    public function enterprises()
+    public function coreEnterprises()
     {
         return $this->belongsToMany('Modules\Core\Model\Empresa')->withPivot('id_area_ged', 'empresa_id', 'processo_id');
     }

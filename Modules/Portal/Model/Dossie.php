@@ -18,7 +18,7 @@ class Dossie extends Model
     ];
 
 
-    public function dossieEmpresaProcesso()
+    public function portalDossieEmpresaProcesso()
     {
         return $this->hasMany('Modules\Portal\Model\DossieEmpresaProcesso');
     }

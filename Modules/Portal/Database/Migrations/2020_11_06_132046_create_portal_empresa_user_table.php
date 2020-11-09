@@ -21,6 +21,7 @@ class CreatePortalEmpresaUserTable extends Migration
             $table->boolean('permissao_aprovar_doc');
             $table->boolean('permissao_excluir_doc');
             $table->boolean('permissao_upload_doc');
+            $table->boolean('permissao_receber_email');
             $table->boolean('permissao_editar')->nullable();
             $table->integer('empresa_id')->unsigned();
             $table->foreign('empresa_id')->references('id')->on('core_empresa')->onDelete('cascade');

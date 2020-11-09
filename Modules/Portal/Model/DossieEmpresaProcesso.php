@@ -15,14 +15,14 @@ class DossieEmpresaProcesso extends Model
     ];
 
 
-    public function dossie()
+    public function portalDossie()
     {
-        return $this->belongsTo('Modules\Portal\Model\Dossie');
+        return $this->belongsTo('Modules\Portal\Model\Dossie', 'dossie_id');
     }
 
 
-    public function empresaProcesso()
+    public function portalEmpresaProcesso()
     {
-        return $this->belongsTo('Modules\Portal\Model\EmpresaProcesso');
+        return $this->belongsTo('Modules\Portal\Model\EmpresaProcesso', 'empresa_processo_id');
     }
 }
