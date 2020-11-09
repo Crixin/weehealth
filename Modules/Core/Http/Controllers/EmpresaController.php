@@ -32,7 +32,7 @@ class EmpresaController extends Controller
     public function newEnterprise()
     {
         $cidades = $this->getCitiesWithState();
-        return view('empresa.create', compact('cidades'));
+        return view('core::empresa.create', compact('cidades'));
     }
 
     public function saveEnterprise(Request $request)
@@ -75,7 +75,7 @@ class EmpresaController extends Controller
     {
         $cidades = $this->getCitiesWithState();
         $empresa = Empresa::find($_id);
-        return view('empresa.update', compact('cidades', 'empresa'));
+        return view('core::empresa.update', compact('cidades', 'empresa'));
     }
 
     public function updateEnterprise(Request $request)

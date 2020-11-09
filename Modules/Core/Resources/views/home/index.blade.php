@@ -1,13 +1,13 @@
 @extends('core::layouts.app')
 
+@extends('core::layouts.menuPortal')
+@yield('menu')
 
 @section('page_title', 'Página Inicial')
-
 
 @section('breadcrumbs')
     <li class="breadcrumb-item active"><a href="javascript:void(0)">Página Inicial</a></li>
 @endsection
-
 
 
 @section('content')

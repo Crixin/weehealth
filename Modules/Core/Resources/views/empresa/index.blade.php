@@ -6,12 +6,15 @@
 
 @section('page_title', __('page_titles.enterprise.index'))
 
+
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
     <li class="breadcrumb-item active"> @lang('page_titles.enterprise.index') </li>    
 
 @endsection
+
+
 
 @section('content')
 
@@ -67,6 +70,8 @@
     </div>
     
 @endsection
+
+
 
 @section('footer')
     <!-- This is data table -->
