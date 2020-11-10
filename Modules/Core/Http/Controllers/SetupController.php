@@ -11,7 +11,7 @@ class SetupController extends Controller
 {
     public function index()
     {
-        return view('configuracoes.setup.index');
+        return view('core::configuracoes.setup.index');
     }
 
     public function update(Request $request)

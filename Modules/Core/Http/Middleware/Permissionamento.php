@@ -17,7 +17,7 @@ class Permissionamento
     public function handle($request, Closure $next, ...$permissoes)
     {
         if (is_null(Auth::user())) {
-            return redirect('/login');
+            return redirect('/core/login');
         }
 
         foreach (Auth::user()->corePerfil->corePermissoes ?? [] as $per) {

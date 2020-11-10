@@ -24,7 +24,7 @@ $(document).ready(function(){
    $.ajax({
         type:'POST',
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        url: "/atualizar/setup",
+        url: "/core/atualizar/setup",
         data:{'valor': valor, 'coluna': 'theme_sistema'},
         success:function(data){
           console.log(data.response);

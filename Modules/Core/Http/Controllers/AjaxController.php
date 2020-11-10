@@ -7,7 +7,8 @@ use App\Classes\{Constants, GEDServices, RESTServices, Helper};
 use Illuminate\Support\Facades\{Auth, DB};
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\Auth\JWTController;
-use App\{Empresa, EmpresaGrupo, EmpresaProcesso, EmpresaUser, Grupo, Parametro, Processo, User, Setup};
+use Modules\Core\Model\{Empresa, Parametro, User, Setup};
+use Modules\Portal\Model\{EmpresaGrupo, EmpresaProcesso, EmpresaUser,Processo, Grupo};
 use Modules\Portal\Repositories\{DashboardRepository, EmpresaProcessoRepository, DossieRepository, ParametroRepository};
 
 class AjaxController extends Controller

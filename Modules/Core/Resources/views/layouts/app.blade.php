@@ -101,9 +101,22 @@
                     
                     <!-- ** MODULOS TESTE** -->
                     <ul class="nav nav-tabs customtab mr-start " role="tablist">
-                        <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home2" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Home</span></a> </li>
-                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile2" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Profile</span></a> </li>
-                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages2" role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Messages</span></a> </li>
+                       
+                       @php
+                            $arquivo = dirname($_SERVER['DOCUMENT_ROOT']).'/modules_statuses.json';
+                            $fp = fopen($arquivo, "r");
+                            $modulos = fread($fp, filesize($arquivo));
+                            $i = 0;
+                       @endphp
+                       @foreach (json_decode($modulos) as $key => $modulo)
+                            
+                            @if ($key != 'Core')
+                                <li class="nav-item"> <a class="nav-link @if ($i == 0) active @endif" data-toggle="tab" href="#home2" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">{{$key}}</span></a> </li>   
+                            @endif
+                            @php
+                                $i += 1;
+                            @endphp
+                        @endforeach
                     </ul>
 
                     <!-- ============================================================== -->

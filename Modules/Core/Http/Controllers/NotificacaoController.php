@@ -11,7 +11,7 @@ class NotificacaoController extends Controller
 
     public function index()
     {
-        return view('notifications.index');
+        return view('core::notifications.index');
     }
 
 

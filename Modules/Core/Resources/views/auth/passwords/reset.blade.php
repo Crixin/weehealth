@@ -1,4 +1,7 @@
-@extends('layouts.app')
+@extends('core::layouts.app')
+
+@extends('core::layouts.menuPortal')
+@yield('menu')
 
 @section('content')
 <div class="container">

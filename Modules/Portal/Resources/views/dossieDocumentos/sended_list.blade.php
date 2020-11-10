@@ -139,7 +139,7 @@
             let obj = {'dossie': $(this).data('id')};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('dossie.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('dossieDocumentos.dossie.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Dossiê excluído com sucesso.");
                     } else {
