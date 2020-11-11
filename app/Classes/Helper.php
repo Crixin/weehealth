@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Modules\Portal\Model\{Grupo, EmpresaUser, EmpresaGrupo};
 use Modules\Core\Model\{Empresa, Parametro};
 use Modules\Core\Repositories\{EmpresaRepository};
+use Modules\Core\Repositories\{ParametroRepository};
 use Modules\Portal\Repositories\{GrupoUserRepository, EmpresaGrupoRepository, EmpresaUserRepository};
 
 class Helper
@@ -29,8 +30,13 @@ class Helper
      */
     public static function isParamActive($_key)
     {
-        $param = Parametro::where('identificador_parametro', $_key)->first();
-        return $param->ativo;
+        $parametroRepository = new ParametroRepository();
+        $param = $parametroRepository->findOneBy(
+            [
+                ['identificador_parametro', '=', $_key]
+            ]
+        );
+        return $param->ativo ?? false;
     }
 
 
@@ -84,7 +90,7 @@ class Helper
             $roles = Auth::user()->enterprises->unique('id');
             foreach ($roles as $key => $value) {
                 $processos = array();
-                foreach ($value->processes as $key2 => $value2) {
+                foreach ($value->portalProcesses as $key2 => $value2) {
 
                     // Verificação especial para os processos de upload de documento externo ('Documentos Diversos'), que possuem uma permissão especial dentro do sistema
                     if ($value2->nome == Constants::$PROCESSOS[2]) {

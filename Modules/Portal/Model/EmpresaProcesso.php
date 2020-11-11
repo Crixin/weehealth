@@ -28,6 +28,6 @@ class EmpresaProcesso extends Model
 
     public function portalEmpresaProcessoGrupo()
     {
-        return $this->hasMany('Modules\Portal\Model\EmpresaProcessoGrupo');
+        return $this->hasMany('Modules\Portal\Model\EmpresaProcessoGrupo', 'id', 'empresa_processo_id');
     }
 }

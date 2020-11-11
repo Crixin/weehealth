@@ -10,7 +10,7 @@
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('core.empresa') }}"> @lang('page_titles.enterprise.index') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('empresa') }}"> @lang('page_titles.enterprise.index') </a></li>
     <li class="breadcrumb-item active"> @lang('page_titles.enterprise.linked_processes') </li>    
 
 @endsection
@@ -25,7 +25,7 @@
 
 
                 @if(Session::has('message'))
-                    @component('componentes.alert')
+                    @component('core::componentes.alert')
                     @endcomponent
 
                     {{ Session::forget('message') }}
@@ -105,8 +105,9 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($processosVinculados as $processoV)
+                                                
                                                     <tr>
-                                                        <td class="text-bold"><b> {{ $processoV->nome }} </b></td>
+                                                        <td class="text-bold"><b> {{ $processoV->portalProcesso->nome }} </b></td>
                                                         {{-- <td> {{ $processoV->id_area_ged }} </td> --}}
                                                         <td>
                                                             <a href="{{ route('empresa-processo-grupo.criar', ['empresaProcesso' => $processoV->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-link"></i> @lang('buttons.general.link') </a>

@@ -28,6 +28,17 @@ class Grupo extends Model
      */
     public function coreEnterprises()
     {
-        return $this->belongsToMany('Modules\Core\Model\Empresa')->withPivot('permissao_download', 'permissao_visualizar', 'permissao_impressao', 'permissao_aprovar_doc', 'permissao_excluir_doc', 'permissao_upload_doc', 'permissao_receber_email', 'empresa_id', 'grupo_id');;
+        return $this->belongsToMany('Modules\Core\Model\Empresa')
+        ->withPivot(
+            'permissao_download',
+            'permissao_visualizar',
+            'permissao_impressao',
+            'permissao_aprovar_doc',
+            'permissao_excluir_doc',
+            'permissao_upload_doc',
+            'permissao_receber_email',
+            'empresa_id',
+            'grupo_id'
+        );
     }
 }

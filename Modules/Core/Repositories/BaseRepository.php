@@ -63,20 +63,22 @@ abstract class BaseRepository
         $model = $model::with($with);
 
         foreach ($where as $value) {
-            switch ($value[3] ?? '') {
+            $toUpper = $value[3] ?? '';
+            switch (strtoupper($toUpper) ?? '') {
                 case "AND":
-                case "and":
                     $model = $model->where($value[0], $value[1], $value[2]);
                     break;
 
                 case "OR":
-                case "or":
                     $model = $model->orWhere($value[0], $value[1], $value[2]);
                     break;
 
                 case "IN":
-                case "in":
                     $model = $model->whereIn($value[0], $value[2]);
+                    break;
+
+                case "NOTIN":
+                    $model = $model->whereNotIn($value[0], $value[2]);
                     break;
 
                 default:
@@ -92,7 +94,7 @@ abstract class BaseRepository
         if (!is_null($offset)) {
             $model = $model->offset((int) $offset);
         }
-        
+
         $model = $model->get();
 
         if (count($orderBy)) {

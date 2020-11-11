@@ -22,7 +22,7 @@ class Empresa extends Model
      */
     public function portalGroups()
     {
-        return $this->belongsToMany('Modules\Portal\Model\Grupo', 'Modules\Portal\Model\EmpresaGrupo')
+        return $this->belongsToMany('Modules\Portal\Model\Grupo', 'Modules\Portal\Model\EmpresaGrupo', 'grupo_id', 'id')
         ->withPivot(
             'permissao_download',
             'permissao_visualizar',

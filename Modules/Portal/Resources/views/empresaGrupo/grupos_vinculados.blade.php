@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.enterprise.linked_users'))
+@section('page_title', __('page_titles.enterprise.linked_groups'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('core.empresa') }}"> @lang('page_titles.enterprise.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.enterprise.linked_users') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('empresa') }}"> @lang('page_titles.enterprise.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.enterprise.linked_groups') </li>    
 
 @endsection
 
@@ -25,31 +25,31 @@
 
 
                 @if(Session::has('message'))
-                    @component('componentes.alert')
-                    @endcomponent
+                    @component('core::componentes.alert')@endcomponent
 
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('empresa.vincularUsuarios') }}">
+                <form method="POST" action="{{ route('empresa.vincularGrupos') }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="idEmpresa" value="{{ $empresa->id }}">
                     
                     <div class="form-body">
-                        
-                        {{-- Parte 1: cadastro --}}
-                        <h3 class="box-title"> @lang('page_titles.enterprise.users_available') </h3>
-                        <hr class="m-t-0 m-b-10">
 
-                        @if ($usuariosRestantes->count() > 0)
+                        {{-- Parte 1: cadastro --}}
+                        <h3 class="box-title"> @lang('page_titles.enterprise.groups_available') </h3>
+                        <hr class="m-t-0 m-b-10">
+                        
+                        @if ($gruposRestantes->count() > 0)
                             <div class="row p-t-20">
                                 <div class="col-md-12 m-b-30">
-                                    <select multiple id="usuarios_empresa" name="usuarios_empresa[]">
-                                        @foreach ($usuariosRestantes as $usuario)
-                                            @if ($empresa->users->contains('id', $usuario->id))
-                                                <option value="{{ $usuario->id }}" selected>{{ $usuario->name }}</option>
+                                    <select multiple id="grupos_empresa" name="grupos_empresa[]">
+                                        @foreach ($gruposRestantes as $grupo)
+                                       
+                                            @if ($empresa->portalGroups->contains('id', $grupo->id))
+                                                <option value="{{ $grupo->id }}" selected>{{ $grupo->nome }}</option>
                                             @else
-                                                <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                                                <option value="{{ $grupo->id }}">{{ $grupo->nome }}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -63,7 +63,7 @@
                         @else
                             <div class="row p-t-20 m-b-40">
                                 <div class="col-md-12 text-center">
-                                    <div class="alert alert-warning"> <i class="mdi mdi-alert-circle"></i> Todos os usuários do sistema já estão vinculados à empresa <span class="font-weight-bold">{{ $empresa->nome }}</span>.
+                                    <div class="alert alert-warning"> <i class="mdi mdi-alert-circle"></i> Todos os grupos do sistema já estão vinculados à empresa <span class="font-weight-bold">{{ $empresa->nome }}</span> ou nenhum grupo foi cadastrado ainda.
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                                     </div>
                                 </div>
@@ -74,26 +74,24 @@
                         @endif
 
 
+
+
                         {{-- Parte 2: listagem --}}
-                        <h3 class="box-title m-t-40">  @lang('page_titles.enterprise.linked_users_to') <span style="font-weight: bold;">{{ $empresa->nome }}</span> <small>- Defina as permissões de cada um abaixo</small> </h3>
+                        <h3 class="box-title m-t-40">  @lang('page_titles.enterprise.linked_groups_to') <span style="font-weight: bold;">{{ $empresa->nome }}</span> <small>- Defina as permissões de cada um abaixo</small> </h3>
                         <hr>
                         <div class="row">
                             <div class="col-md-12">
-                                @if ($usuariosJaVinculados->count() > 0)    
+                                @if ($gruposJaVinculados->count() > 0)    
                                     <div class="table-responsive">
-                                        <table id="dataTable-empresa-usuarios" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                        <table id="dataTable-empresa-grupos" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>Nome</th>
-                                                    <th>Email</th>
                                                     @if (Helper::isParamActive('PERMITIR_DOWNLOAD'))
                                                         <th> {{ Helper::getParamValue('PERMITIR_DOWNLOAD') }} </th>
                                                     @endif
                                                     @if (Helper::isParamActive('PERMITIR_VISUALIZAR'))
                                                         <th> {{ Helper::getParamValue('PERMITIR_VISUALIZAR') }} </th>
-                                                    @endif
-                                                    @if (Helper::isParamActive('PERMITIR_EDITAR'))
-                                                        <th> {{ Helper::getParamValue('PERMITIR_EDITAR') }} </th>
                                                     @endif
                                                     @if (Helper::isParamActive('PERMITIR_IMPRIMIR'))
                                                         <th> {{ Helper::getParamValue('PERMITIR_IMPRIMIR') }} </th>
@@ -110,64 +108,67 @@
                                                     @if (Helper::isParamActive('PERMITIR_RECEBER_EMAIL'))
                                                         <th> {{ Helper::getParamValue('PERMITIR_RECEBER_EMAIL') }} </th>
                                                     @endif
+                                                    @if (Helper::isParamActive('PERMITIR_EDITAR'))
+                                                        <th> {{ Helper::getParamValue('PERMITIR_EDITAR') }} </th>
+                                                    @endif
                                                     <th>Remover Vínculo</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($usuariosJaVinculados as $usuarioV)
+                                                @foreach ($gruposJaVinculados as $grupoV)
+                                                
                                                     <tr>
-                                                        <td><b> {{ $usuarioV->name }} </b></td>
-                                                        <td> {{ $usuarioV->email }} </td>
-                                                        @if (Helper::isParamActive('PERMITIR_DOWNLOAD'))
+                                                        <td><b> {{ $grupoV->portalGrupo->nome }} </b></td>
+                                                        @if (Helper::isParamActive('PERMITIR_DOWNLOAD'))    
                                                             <td> 
-                                                                <input type="checkbox" id="permissao_download-{{ $usuarioV->id }}" class="filled-in chk-col-cyan" {{ ($usuarioV->permissao_download) ? 'checked' : '' }} /> 
-                                                                <label for="permissao_download-{{ $usuarioV->id }}">Habilitado</label>
+                                                                <input type="checkbox" id="permissao_download-{{ $grupoV->id }}" class="filled-in chk-col-cyan" {{ ($grupoV->permissao_download) ? 'checked' : '' }} /> 
+                                                                <label for="permissao_download-{{ $grupoV->id }}">Habilitado</label>
                                                             </td>
                                                         @endif
                                                         @if (Helper::isParamActive('PERMITIR_VISUALIZAR'))
                                                             <td>
-                                                                <input type="checkbox" id="permissao_visualizar-{{ $usuarioV->id }}" class="filled-in chk-col-cyan" {{ ($usuarioV->permissao_visualizar) ? 'checked' : '' }} disabled/> 
-                                                                <label for="permissao_visualizar-{{ $usuarioV->id }}" class="text-muted">Habilitado</label>
+                                                                <input type="checkbox" id="permissao_visualizar-{{ $grupoV->id }}" class="filled-in chk-col-cyan" {{ ($grupoV->permissao_visualizar) ? 'checked' : '' }} disabled /> 
+                                                                <label for="permissao_visualizar-{{ $grupoV->id }}" class="text-muted">Habilitado</label>
                                                             </td>
                                                         @endif
-                                                        @if (Helper::isParamActive('PERMITIR_EDITAR'))
-                                                        <td>
-                                                            <input type="checkbox" id="permissao_editar-{{ $usuarioV->id }}" class="filled-in chk-col-cyan" {{ ($usuarioV->permissao_editar) ? 'checked' : '' }} /> 
-                                                            <label for="permissao_editar-{{ $usuarioV->id }}">Habilitado</label>
-                                                        </td>                                                        
-                                                    @endif
                                                         @if (Helper::isParamActive('PERMITIR_IMPRIMIR'))
                                                             <td>
-                                                                <input type="checkbox" id="permissao_impressao-{{ $usuarioV->id }}" class="filled-in chk-col-cyan" {{ ($usuarioV->permissao_impressao) ? 'checked' : '' }} /> 
-                                                                <label for="permissao_impressao-{{ $usuarioV->id }}">Habilitado</label>
+                                                                <input type="checkbox" id="permissao_impressao-{{ $grupoV->id }}" class="filled-in chk-col-cyan" {{ ($grupoV->permissao_impressao) ? 'checked' : '' }} /> 
+                                                                <label for="permissao_impressao-{{ $grupoV->id }}">Habilitado</label>
                                                             </td>                                                        
                                                         @endif
                                                         @if (Helper::isParamActive('PERMITIR_APROVAR'))
                                                             <td>
-                                                                <input type="checkbox" id="permissao_aprovar_doc-{{ $usuarioV->id }}" class="filled-in chk-col-cyan" {{ ($usuarioV->permissao_aprovar_doc) ? 'checked' : '' }} /> 
-                                                                <label for="permissao_aprovar_doc-{{ $usuarioV->id }}">Habilitado</label>
+                                                                <input type="checkbox" id="permissao_aprovar_doc-{{ $grupoV->id }}" class="filled-in chk-col-cyan" {{ ($grupoV->permissao_aprovar_doc) ? 'checked' : '' }} /> 
+                                                                <label for="permissao_aprovar_doc-{{ $grupoV->id }}">Habilitado</label>
                                                             </td>
                                                         @endif
                                                         @if (Helper::isParamActive('PERMITIR_EXCLUIR'))
                                                             <td>
-                                                                <input type="checkbox" id="permissao_excluir_doc-{{ $usuarioV->id }}" class="filled-in chk-col-cyan" {{ ($usuarioV->permissao_excluir_doc) ? 'checked' : '' }} /> 
-                                                                <label for="permissao_excluir_doc-{{ $usuarioV->id }}">Habilitado</label>
-                                                            </td>
+                                                                <input type="checkbox" id="permissao_excluir_doc-{{ $grupoV->id }}" class="filled-in chk-col-cyan" {{ ($grupoV->permissao_excluir_doc) ? 'checked' : '' }} /> 
+                                                                <label for="permissao_excluir_doc-{{ $grupoV->id }}">Habilitado</label>
+                                                            </td>                                                        
                                                         @endif
                                                         @if (Helper::isParamActive('PERMITIR_UPLOAD'))
                                                             <td>
-                                                                <input type="checkbox" id="permissao_upload_doc-{{ $usuarioV->id }}" class="filled-in chk-col-cyan" {{ ($usuarioV->permissao_upload_doc) ? 'checked' : '' }} /> 
-                                                                <label for="permissao_upload_doc-{{ $usuarioV->id }}">Habilitado</label>
-                                                            </td>
+                                                                <input type="checkbox" id="permissao_upload_doc-{{ $grupoV->id }}" class="filled-in chk-col-cyan" {{ ($grupoV->permissao_upload_doc) ? 'checked' : '' }} /> 
+                                                                <label for="permissao_upload_doc-{{ $grupoV->id }}">Habilitado</label>
+                                                            </td>                                                        
                                                         @endif
                                                         @if (Helper::isParamActive('PERMITIR_RECEBER_EMAIL'))
                                                             <td>
-                                                                <input type="checkbox" id="permissao_receber_email-{{ $usuarioV->id }}" class="filled-in chk-col-cyan" {{ ($usuarioV->permissao_receber_email) ? 'checked' : '' }} /> 
-                                                                <label for="permissao_receber_email-{{ $usuarioV->id }}">Habilitado</label>
+                                                                <input type="checkbox" id="permissao_receber_email-{{ $grupoV->id }}" class="filled-in chk-col-cyan" {{ ($grupoV->permissao_receber_email) ? 'checked' : '' }} /> 
+                                                                <label for="permissao_receber_email-{{ $grupoV->id }}">Habilitado</label>
                                                             </td>
                                                         @endif
-                                                        <td> 
-                                                            <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $usuarioV->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.unlink') </a>
+                                                        @if (Helper::isParamActive('PERMITIR_EDITAR'))
+                                                            <td>
+                                                                <input type="checkbox" id="permissao_editar-{{ $grupoV->id }}" class="filled-in chk-col-cyan" {{ ($grupoV->permissao_editar) ? 'checked' : '' }} /> 
+                                                                <label for="permissao_editar-{{ $grupoV->id }}">Habilitado</label>
+                                                            </td>
+                                                        @endif
+                                                        <td>
+                                                            <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $grupoV->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.unlink') </a>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -175,13 +176,13 @@
                                         </table>
                                     </div>
                                 @else
-                                    <div class="alert alert-info"> <i class="mdi mdi-alert-circle"></i> A empresa <span class="font-weight-bold">{{ $empresa->nome }}</span> ainda não possui nenhum usuário vinculado.
+                                    <div class="alert alert-info"> <i class="mdi mdi-alert-circle"></i> A empresa <span class="font-weight-bold">{{ $empresa->nome }}</span> ainda não possui nenhum grupo vinculado.
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                                     </div>
                                 @endif
                             </div>
                         </div>
-
+                    
                     </div>
 
                 </form>
@@ -200,10 +201,10 @@
     <script src="{{ asset('plugins/quicksearch/jquery.quicksearch.js') }}" type="text/javascript" ></script>
 
     <script>
-        $('#usuarios_empresa').multiSelect({ 
+        $('#grupos_empresa').multiSelect({ 
             keepOrder: true,
-            selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Pesquisar usuários do sistema'>",
-            selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Pesquisar usuários já vinculados à empresa'>",
+            selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Pesquisar grupos do sistema'>",
+            selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Pesquisar grupos já vinculados à empresa'>",
             afterInit: function(ms){
                 var that = this,
                     $selectableSearch = that.$selectableUl.prev(),
@@ -238,80 +239,79 @@
         });
 
         $('#select-all').click(function() {
-            $('#usuarios_empresa').multiSelect('select_all');
+            $('#grupos_empresa').multiSelect('select_all');
             return false;
         });
         $('#deselect-all').click(function() {
-            $('#usuarios_empresa').multiSelect('deselect_all');
+            $('#grupos_empresa').multiSelect('deselect_all');
             return false;
         });
 
         // Removendo a classe que tornava o multiselect tamanho único (e permitindo que ocupe a tela / width inteira)
-        $("#ms-usuarios_empresa").css("width", "auto");
+        $("#ms-grupos_empresa").css("width", "auto");
     </script>
 
+     <!-- This is data table -->
+     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
 
-    <!-- This is data table -->
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+     <!-- start - This is for export functionality only -->
+     <script src="{{ asset('js/dataTables/dataTables-1.2.2.buttons.min.js') }}"></script>
+     <script src="{{ asset('js/dataTables/buttons-1.2.2.flash.min.js') }}"></script>
+     <script src="{{ asset('js/dataTables/jszip-2.5.0.min.js') }}"></script>
+     <script src="{{ asset('js/dataTables/pdfmake-0.1.18.min.js') }}"></script>
+     <script src="{{ asset('js/dataTables/vfs_fonts-0.1.18.js') }}"></script>
+     <script src="{{ asset('js/dataTables/buttons-1.2.2.html5.min.js') }}"></script>
+     <script src="{{ asset('js/dataTables/buttons-1.2.2.print.min.js') }}"></script>
+     <!-- end - This is for export functionality only -->
+ 
+     <script>
+         $(document).ready(function() {
+             $('#dataTable-empresa-grupos').DataTable({
+                 "language": {
+                     "sEmptyTable": "Nenhum registro encontrado",
+                     "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                     "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                     "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                     "sInfoPostFix": "",
+                     "sInfoThousands": ".",
+                     "sLengthMenu": "_MENU_ resultados por página",
+                     "sLoadingRecords": "Carregando...",
+                     "sProcessing": "Processando...",
+                     "sZeroRecords": "Nenhum registro encontrado",
+                     "sSearch": "Pesquisar",
+                     "oPaginate": {
+                         "sNext": "Próximo",
+                         "sPrevious": "Anterior",
+                         "sFirst": "Primeiro",
+                         "sLast": "Último"
+                     },
+                     "oAria": {
+                         "sSortAscending": ": Ordenar colunas de forma ascendente",
+                         "sSortDescending": ": Ordenar colunas de forma descendente"
+                     }
+                 },
+                 dom: 'Bfrtip',
+                 buttons: [
+                     { extend: 'excel',  text: 'Excel' },
+                     { extend: 'pdf',    text: 'PDF' },
+                     { extend: 'print',  text: 'Imprimir' }
+                 ]
+             });
+         });
+     </script>
 
-    <!-- start - This is for export functionality only -->
-    <script src="{{ asset('js/dataTables/dataTables-1.2.2.buttons.min.js') }}"></script>
-    <script src="{{ asset('js/dataTables/buttons-1.2.2.flash.min.js') }}"></script>
-    <script src="{{ asset('js/dataTables/jszip-2.5.0.min.js') }}"></script>
-    <script src="{{ asset('js/dataTables/pdfmake-0.1.18.min.js') }}"></script>
-    <script src="{{ asset('js/dataTables/vfs_fonts-0.1.18.js') }}"></script>
-    <script src="{{ asset('js/dataTables/buttons-1.2.2.html5.min.js') }}"></script>
-    <script src="{{ asset('js/dataTables/buttons-1.2.2.print.min.js') }}"></script>
-    <!-- end - This is for export functionality only -->
-
-    <script>
-        $(document).ready(function() {
-            $('#dataTable-empresa-usuarios').DataTable({
-                "language": {
-                    "sEmptyTable": "Nenhum registro encontrado",
-                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-                    "sInfoPostFix": "",
-                    "sInfoThousands": ".",
-                    "sLengthMenu": "_MENU_ resultados por página",
-                    "sLoadingRecords": "Carregando...",
-                    "sProcessing": "Processando...",
-                    "sZeroRecords": "Nenhum registro encontrado",
-                    "sSearch": "Pesquisar",
-                    "oPaginate": {
-                        "sNext": "Próximo",
-                        "sPrevious": "Anterior",
-                        "sFirst": "Primeiro",
-                        "sLast": "Último"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": Ordenar colunas de forma ascendente",
-                        "sSortDescending": ": Ordenar colunas de forma descendente"
-                    }
-                },
-                dom: 'Bfrtip',
-                buttons: [
-                    { extend: 'excel',  text: 'Excel' },
-                    { extend: 'pdf',    text: 'PDF' },
-                    { extend: 'print',  text: 'Imprimir' }
-                ]
-            });
-        });
-    </script>
-
-
-    <!-- SweetAlert2 -->
+     <!-- SweetAlert2 -->
     <script>
         
-        // Exclusão de víncula entre empresa e usuário
+        // Exclusão de víncula entre empresa e grupo
         $('.sa-warning').click(function(){
-            let idVinculoEmpresaUsuario = $(this).data('id');
+            let idEmpresa = "{{ $empresa->id }}";
+            let idGrupoVinculado = $(this).data('id');
             let deleteIt = swal2_warning("Essa ação é irreversível!");
-            let obj = {'vinculo_id': idVinculoEmpresaUsuario};
+            let obj = {'empresa_id': idEmpresa, 'grupo_id': idGrupoVinculado};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('relacao.empresaUsuario.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('relacao.empresaGrupo.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Vínculo entre empresa e usuário excluído com sucesso.");
                     } else {
@@ -335,17 +335,17 @@
             // Permissão de visualização deve estar habilitada sempre!
             if(idElemento.split('-')[0] == 'permissao_visualizar')
                 return;
-
+            
             let idVinculo = idElemento.split('-')[1];
             let colunaModificada = idElemento.split('-')[0];
             let valor = $("#" + idElemento).is(":checked");
             
             let obj = {'idVinculo': idVinculo, 'coluna': colunaModificada, 'valor': valor};
-            ajaxMethod('POST', "{{ URL::route('atualizar.relacao.empresaUsuario') }}", obj).then(response => {
+            ajaxMethod('POST', "{{ URL::route('atualizar.relacao.empresaGrupo') }}", obj).then(response => {
                 if(response.response != 'erro') {
-                    showToast('Atualizado!', 'Permissão do usuário atualizada com sucesso.', 'success');
+                    showToast('Atualizado!', 'Permissão do grupo atualizada com sucesso.', 'success');
                 } else {
-                    swal2_alert_error_support("Tivemos um problema ao atualizar a permissão do usuário.");
+                    swal2_alert_error_support("Tivemos um problema ao atualizar a permissão do grupo.");
                 }
             }, error => {
                 console.log(error);

@@ -26,6 +26,7 @@ class CreatePortalEmpresaGrupoTable extends Migration
             $table->integer('grupo_id')->unsigned();
             $table->foreign('grupo_id')->references('id')->on('portal_grupo')->onDelete('cascade');
             $table->boolean('permissao_editar')->nullable();
+            $table->boolean('permissao_receber_email')->nullable();
             $table->timestamps();
         });
     }

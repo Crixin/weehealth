@@ -37,7 +37,7 @@
                     <div class="form-body">
                         
                         {{-- Parte 1: cadastro --}}
-                        <h3 class="box-title"> <b> {{ $empresaProcesso->empresa->nome }} <i class="mdi mdi-link"></i> {{ $empresaProcesso->processo->nome}} </b>  </h3>
+                        <h3 class="box-title"> <b> {{ $empresaProcesso->coreEmpresa->nome }} <i class="mdi mdi-link"></i> {{ $empresaProcesso->portalProcesso->nome}} </b>  </h3>
                         <hr class="m-t-0 m-b-10">
                         <h3 class="box-title mt-4"> @lang('page_titles.empresa-processo-grupo.available-groups') </h3>
                         <hr class="m-t-0 m-b-10">
@@ -58,7 +58,7 @@
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.empresa-processo-grupo.create-links')</button>
-                                <a href="{{ route('empresa.processosVinculados', ['id' => $empresaProcesso->empresa->id]) }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                                <a href="{{ route('empresa.processosVinculados', ['id' => $empresaProcesso->coreEmpresa->id]) }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                             </div>
                         @else
                             <div class="row p-t-20 m-b-40">
@@ -69,7 +69,7 @@
                                 </div>
                             </div>
                             <div class="form-actions">
-                                <a href="{{ route('empresa.processosVinculados', ['id' => $empresaProcesso->empresa->id]) }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                                <a href="{{ route('empresa.processosVinculados', ['id' => $empresaProcesso->coreEmpresa->id]) }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                             </div>
                         @endif
                     </div>
@@ -102,9 +102,9 @@
                                             <tbody>
                                                 @foreach ($gruposVinculados as $infoGrupo)
                                                     <tr data-id-empresa-processo-grupo="{{ $infoGrupo->id }}">
-                                                        <td><b> {{ $infoGrupo->grupo->nome}} </b></td>
+                                                        <td><b> {{ $infoGrupo->portalGrupo->nome}} </b></td>
 
-                                                        @foreach (json_decode($infoGrupo->empresaProcesso->indice_filtro_utilizado) as $key => $indice)
+                                                        @foreach (json_decode($infoGrupo->portalEmpresaProcesso->indice_filtro_utilizado) as $key => $indice)
                                                         
                                                             <td class="td-{{ $infoGrupo->id . '-' . $key }}"></td>
                                                             <script>

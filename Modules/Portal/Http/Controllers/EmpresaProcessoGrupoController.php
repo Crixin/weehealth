@@ -54,8 +54,8 @@ class EmpresaProcessoGrupoController extends Controller
             [
                 ['empresa_processo_id', '=', $_empresaProcessoId]
             ],
-            ['empresaProcesso', 'grupo'],
-            [['grupo.nome']],
+            ['portalEmpresaProcesso', 'portalGrupo'],
+            [['portal_grupo.nome']],
         );
 
         $empresaProcesso = $this->empresaProcessoRepository->find($_empresaProcessoId);
@@ -68,7 +68,7 @@ class EmpresaProcessoGrupoController extends Controller
         $gruposVinculados = $empresaProcessoGrupo;
 
         $cabecalho = [];
-        foreach (json_decode($gruposVinculados[0]->empresaProcesso->indice_filtro_utilizado ?? "[]") as $key => $indice) {
+        foreach (json_decode($gruposVinculados[0]->portalEmpresaProcesso->indice_filtro_utilizado ?? "[]") as $key => $indice) {
             $indice = json_decode($indice);
             array_push($cabecalho, $indice->descricao);
         }

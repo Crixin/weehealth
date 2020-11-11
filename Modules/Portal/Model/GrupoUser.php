@@ -11,4 +11,14 @@ class GrupoUser extends Model
     protected $fillable = [
         'id', 'grupo_id', 'user_id'
     ];
+
+    public function coreUser()
+    {
+        return $this->hasOne('Modules\Core\Model\User', 'id', 'user_id');
+    }
+
+    public function portalGrupo()
+    {
+        return $this->hasOne('Modules\Portal\Model\Empresa', 'id', 'empresa_id');
+    }
 }

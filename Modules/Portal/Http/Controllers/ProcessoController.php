@@ -111,7 +111,7 @@ class ProcessoController extends Controller
             $indices[$key] = json_decode($indice);
         }
 
-        $gruposFiltros = array_column($empresaProcesso->empresaProcessoGrupo->toArray(), 'grupo_id');
+        $gruposFiltros = array_column($empresaProcesso->portalEmpresaProcessoGrupo->toArray(), 'grupo_id');
 
         $grupoUser = $this->grupoUserRepository->findOneBy([
             ['grupo_id', "", $gruposFiltros, "IN"],
