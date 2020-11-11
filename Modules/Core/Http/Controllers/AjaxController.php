@@ -8,15 +8,30 @@ use Illuminate\Support\Facades\{Auth, DB};
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\Auth\JWTController;
 use Modules\Core\Model\{Empresa, Parametro, User, Setup};
+use Modules\Core\Repositories\{EmpresaRepository, ParametroRepository, UserRepository, SetupRepository};
 
 class AjaxController extends Controller
 {
+
+    protected $empresaRepository;
+    protected $paramentroRepository;
+    protected $userRepository;
+    protected $setupRepository;
+
+    public function __construct(EmpresaRepository $empresaRepository, ParametroRepository $paramentroRepository, UserRepository $userRepository, SetupRepository $setupRepository)
+    {
+        $this->empresaRepository = $empresaRepository;
+        $this->paramentroRepository = $paramentroRepository;
+        $this->userRepository = $userRepository;
+        $this->setupRepository = $setupRepository;
+    }
+
     // EMPRESA
     public function deleteEnterprise(Request $request)
     {
         $_id = $request->empresa_id;
         try {
-            Empresa::destroy($_id);
+            $this->empresaRepository->delete($_id);
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {
             return response()->json(['response' => 'erro']);
@@ -28,7 +43,7 @@ class AjaxController extends Controller
     {
         $_id = $request->id;
         try {
-            User::destroy($_id);
+            $this->userRepository->delete($_id);
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {
             return response()->json(['response' => 'erro']);

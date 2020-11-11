@@ -10,8 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 // @codingStandardsIgnoreFile
 
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('core')->group(function () {
 
