@@ -106,16 +106,13 @@
                             $arquivo = dirname($_SERVER['DOCUMENT_ROOT']).'/modules_statuses.json';
                             $fp = fopen($arquivo, "r");
                             $modulos = fread($fp, filesize($arquivo));
-                            $i = 0;
+                            $url = $_SERVER["REQUEST_URI"];
+                            $explode = explode('/',$url);
                        @endphp
                        @foreach (json_decode($modulos) as $key => $modulo)
-                            
                             @if ($key != 'Core')
-                                <li class="nav-item"> <a class="nav-link @if ($i == 0) active @endif" data-toggle="tab" href="#home2" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">{{$key}}</span></a> </li>   
+                                <li class="nav-item"> <button class="nav-link @if ($explode[1] == strtolower($key)) active @endif" data-toggle="tab" onclick="location.href='/{{strtolower($key)}}/home'" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">{{$key}}</span></button> </li>   
                             @endif
-                            @php
-                                $i += 1;
-                            @endphp
                         @endforeach
                     </ul>
 

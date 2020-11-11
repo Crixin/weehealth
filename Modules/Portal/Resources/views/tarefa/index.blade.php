@@ -49,7 +49,7 @@
                                     <tr>
                                         <td>{{ $tarefa->id }}</td>
                                         <td>{{ $tarefa->pasta }}</td>
-                                        <td>{{ $tarefa->configuracaoTarefa->nome }}</td>
+                                        <td>{{ $tarefa->portalConfiguracaoTarefa->nome }}</td>
                                         <td>{{ $tarefa->status }}</td>
                                         <td>
                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $tarefa->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>

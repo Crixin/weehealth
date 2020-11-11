@@ -143,7 +143,7 @@
                                     <select  title="Selecione o processo desejado"  data-nome="Área para Consulta"   name="area" id="area" class="selectpicker form-control" data-live-search="true" data-actions-box="true" required="true" >  
                                         @foreach ($empresas as $key => $empresa)
                                             <optgroup  value="{{ $empresa->id }}" label="{{$empresa->nome}}">
-                                            @foreach ($empresa->processes as $key => $processo)
+                                            @foreach ($empresa->portalProcesses as $key => $processo)
                                                 <option  value="{{ $processo['pivot']['id_area_ged'] }}" {{ $processo['pivot']['id_area_ged'] == $tarefa->area ? 'selected' : '' }} > {{ $processo->nome }} </option>
                                             @endforeach
                                         @endforeach

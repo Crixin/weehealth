@@ -20,9 +20,13 @@ class CreatePortalTarefaTable extends Migration
             $table->string('pasta');
             $table->string('identificador', 1);
             $table->string('area');
-            $table->integer('tipo_indexacao');
+            $table->string('tipo_indexacao');
             $table->json('indices');
             $table->timestamps();
+            $table->string("pasta_rejeitados");
+            $table->string('frequencia');
+            $table->string('status');
+            $table->string('hora', 4)->nullable();
         });
     }
 

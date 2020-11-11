@@ -46,7 +46,7 @@
 									<option value="">Selecione</option>
                                     @foreach ($empresasProcessos as $key => $empresa)
                                         <optgroup value="{{ $empresa->id }}" label="{{$empresa->nome}}">
-                                        @foreach ($empresa->processes as $key => $processo)
+                                        @foreach ($empresa->portalProcesses as $key => $processo)
                                             <option value="{{ $processo->pivot->id }}" data-processo="{{$processo}}" data-empresa="{{$empresa}}" > {{ $processo->nome }} </option>
                                         @endforeach
                                     @endforeach

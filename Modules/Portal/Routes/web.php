@@ -28,37 +28,37 @@ Route::prefix('portal')->group(function () {
 
     Route::group(['middleware' => ['auth']], function () {
 
-    /*
-    * EMPRESAS
-    */
-    Route::group(['prefix' => 'empresa', 'middleware' => 'permissionamento:mod_base'], function () {
+        /*
+        * EMPRESAS
+        */
+        Route::group(['prefix' => 'empresa', 'middleware' => 'permissionamento:mod_base'], function () {
+                
+            Route::get('usuarios-vinculados/{id}',  ['as' => 'empresa.usuariosVinculados',     'uses' => 'EmpresaUserController@create']);
+            Route::post('vincular-usuarios',        ['as' => 'empresa.vincularUsuarios',       'uses' => 'EmpresaUserController@update']);
+            Route::post('empresa/usuario',          ['as' => 'relacao.empresaUsuario.deletar', 'uses' => 'AjaxController@deleteLinkEnterpriseUser']);
+
+            Route::get('grupos-vinculados/{id}',    ['as' => 'empresa.gruposVinculados',       'uses' => 'EmpresaGrupoController@create']);
+            Route::post('vincular-grupos',          ['as' => 'empresa.vincularGrupos',         'uses' => 'EmpresaGrupoController@update']);
+            Route::post('empresa/grupo',            ['as' => 'relacao.empresaGrupo.deletar',   'uses' => 'AjaxController@deleteLinkEnterpriseGroup']);
+
+            Route::get('processos-vinculados/{id}', ['as' => 'empresa.processosVinculados',    'uses' => 'EmpresaProcessoController@create']);
+            Route::post('vincular-processos',       ['as' => 'empresa.vincularProcessos',      'uses' => 'EmpresaProcessoController@update']);
+            Route::post('empresa/processo',         ['as' => 'relacao.empresaProcesso.deletar','uses' => 'AjaxController@deleteLinkEnterpriseProcess']);
+        });
             
-        Route::get('usuarios-vinculados/{id}',  ['as' => 'empresa.usuariosVinculados',     'uses' => 'EmpresaUserController@create']);
-        Route::post('vincular-usuarios',        ['as' => 'empresa.vincularUsuarios',       'uses' => 'EmpresaUserController@update']);
-        Route::post('empresa/usuario',          ['as' => 'relacao.empresaUsuario.deletar', 'uses' => 'AjaxController@deleteLinkEnterpriseUser']);
-
-        Route::get('grupos-vinculados/{id}',    ['as' => 'empresa.gruposVinculados',       'uses' => 'EmpresaGrupoController@create']);
-        Route::post('vincular-grupos',          ['as' => 'empresa.vincularGrupos',         'uses' => 'EmpresaGrupoController@update']);
-        Route::post('empresa/grupo',            ['as' => 'relacao.empresaGrupo.deletar',   'uses' => 'AjaxController@deleteLinkEnterpriseGroup']);
-
-        Route::get('processos-vinculados/{id}', ['as' => 'empresa.processosVinculados',    'uses' => 'EmpresaProcessoController@create']);
-        Route::post('vincular-processos',       ['as' => 'empresa.vincularProcessos',      'uses' => 'EmpresaProcessoController@update']);
-        Route::post('empresa/processo',         ['as' => 'relacao.empresaProcesso.deletar','uses' => 'AjaxController@deleteLinkEnterpriseProcess']);
-    });
-        
-    /*
-    * GRUPOS
-    */
-    Route::group(['prefix' => 'grupo', 'middleware' => 'permissionamento:mod_base'], function () {
-        Route::get('',                          ['as' => 'grupo',                       'uses' => 'GrupoController@index']);
-        Route::get('novo',                      ['as' => 'grupo.novo',                  'uses' => 'GrupoController@newGroup']);
-        Route::post('salvar',                   ['as' => 'grupo.salvar',                'uses' => 'GrupoController@saveGroup']);
-        Route::get('editar/{id}',               ['as' => 'grupo.editar',                'uses' => 'GrupoController@editGroup']);
-        Route::post('alterar',                  ['as' => 'grupo.alterar',               'uses' => 'GrupoController@updateGroup']);
-        Route::get('usuarios-vinculados/{id}',  ['as' => 'grupo.usuariosVinculados',    'uses' => 'GrupoController@linkedUsers']);
-        Route::post('vincular-usuarios',        ['as' => 'grupo.vincularUsuarios',      'uses' => 'GrupoController@updateLinkedUsers']);
-        Route::post('deletar',	                ['as' => 'grupo.deletar',               'uses' => 'AjaxController@deleteGroup']);
-    });
+        /*
+        * GRUPOS
+        */
+        Route::group(['prefix' => 'grupo', 'middleware' => 'permissionamento:mod_base'], function () {
+            Route::get('',                          ['as' => 'grupo',                       'uses' => 'GrupoController@index']);
+            Route::get('novo',                      ['as' => 'grupo.novo',                  'uses' => 'GrupoController@newGroup']);
+            Route::post('salvar',                   ['as' => 'grupo.salvar',                'uses' => 'GrupoController@saveGroup']);
+            Route::get('editar/{id}',               ['as' => 'grupo.editar',                'uses' => 'GrupoController@editGroup']);
+            Route::post('alterar',                  ['as' => 'grupo.alterar',               'uses' => 'GrupoController@updateGroup']);
+            Route::get('usuarios-vinculados/{id}',  ['as' => 'grupo.usuariosVinculados',    'uses' => 'GrupoController@linkedUsers']);
+            Route::post('vincular-usuarios',        ['as' => 'grupo.vincularUsuarios',      'uses' => 'GrupoController@updateLinkedUsers']);
+            Route::post('deletar',	                ['as' => 'grupo.deletar',               'uses' => 'AjaxController@deleteGroup']);
+        });
         
         Route::group(['prefix' => 'ged', 'as' => 'ged.'], function () {
             Route::get('getRegistro',          ['as' => 'getRegistro',          'uses' => 'AjaxController@getRegistro']);
