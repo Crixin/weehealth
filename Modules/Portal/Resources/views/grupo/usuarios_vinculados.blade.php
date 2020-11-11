@@ -49,7 +49,10 @@
                                         @endif
                                     @endforeach
                                 </select>
-                                <div class="button-box m-t-20"> <a id="select-all" class="btn btn-danger" href="#"> @lang('buttons.general.select_all') </a> <a id="deselect-all" class="btn btn-info" href="#"> @lang('buttons.general.deselect_all') </a> </div>
+                                <div class="button-box m-t-20"> 
+                                    <a id="select-all" class="btn btn-info"  href="#"> @lang('buttons.general.select_all') </a> 
+                                    <a id="deselect-all" class="btn btn-danger" href="#"> @lang('buttons.general.deselect_all') </a>
+                                </div>
                             </div>
                         </div>
                     </div>
