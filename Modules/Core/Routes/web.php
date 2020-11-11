@@ -92,13 +92,11 @@ Route::prefix('core')->group(function () {
     });
 
     Route::group(['prefix' => 'atualizar', 'as' => 'atualizar.'], function () {
-        Route::post('notificacao',              ['as' => 'notificacao',                 'uses' => 'AjaxController@markAsReadNotification']);
         Route::post('parametro',                ['as' => 'parametro',                   'uses' => 'AjaxController@updateParamValue']);
         Route::post('parametro-ativo',          ['as' => 'parametroAtivo',              'uses' => 'AjaxController@updateParamActiveValue']);
         Route::post('permissao-usuario',        ['as' => 'permissaoUsuario',            'uses' => 'AjaxController@updateUserPermissions']);
+        
         Route::post('permissao-administrador',  ['as' => 'permissaoAdministrador',      'uses' => 'AjaxController@updateAdministratorPermissions'])->middleware('onlyAllowSuperAdmins');
-        Route::post('empresa/grupo',            ['as' => 'relacao.empresaGrupo',        'uses' => 'AjaxController@updateLinkEnterpriseGroup']);
-        Route::post('empresa/usuario',          ['as' => 'relacao.empresaUsuario',      'uses' => 'AjaxController@updateLinkEnterpriseUser']);
         Route::post('setup',                    ['as' => 'setup',                       'uses' => 'AjaxController@updateSetup']);
     });
 });

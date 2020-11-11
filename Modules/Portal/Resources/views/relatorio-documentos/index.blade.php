@@ -51,7 +51,7 @@
                                                     <option value="">Selecione um processo</option>
                                                     @foreach ($empresas as $key => $empresa)
                                                         <optgroup value="{{ $empresa->id }}" label="{{$empresa->nome}}">
-                                                        @foreach ($empresa->processes as $key => $processo)
+                                                        @foreach ($empresa->portalProcesses as $key => $processo)
                                                             <option value="{{ $empresa->id}};{{$processo->id }}"> {{ $processo->nome }} </option>
                                                         @endforeach
                                                     @endforeach

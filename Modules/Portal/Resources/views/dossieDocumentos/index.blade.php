@@ -58,7 +58,7 @@
                                             <select name="empresas[]" id="empresas" class="form-control text-center selectpicker" required data-size="10" data-live-search="true" data-actions-box="true" multiple>
                                                 @foreach ($empresas as $key => $empresa)
                                                     <optgroup value="{{ $empresa->id }}" label="{{$empresa->nome}}">
-                                                    @foreach ($empresa->processes as $key => $processo)
+                                                    @foreach ($empresa->portalProcesses as $key => $processo)
                                                         <option value="{{ $empresa->id . $processo->id }}" data-processo="{{$processo}}" data-empresa="{{$empresa}}" > {{ $processo->nome }} </option>
                                                     @endforeach
                                                 @endforeach

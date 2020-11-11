@@ -309,7 +309,6 @@
             let idVinculoEmpresaUsuario = $(this).data('id');
             let deleteIt = swal2_warning("Essa ação é irreversível!");
             let obj = {'vinculo_id': idVinculoEmpresaUsuario};
-
             deleteIt.then(resolvedValue => {
                 ajaxMethod('POST', "{{ URL::route('relacao.empresaUsuario.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {

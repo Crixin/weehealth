@@ -37,7 +37,7 @@ class User extends Authenticatable
      */
     public function coreGroups()
     {
-        return $this->belongsToMany('Modules\Portal\Model\Grupo');
+        return $this->belongsToMany('Modules\Portal\Model\Grupo', 'Modules\Portal\Model\GrupoUser');
     }
 
 

@@ -122,7 +122,7 @@
             let idTrElm = $(this).closest('tr').attr('id');
             let obj = {'notificacao_id': idNotificacao};
 
-            ajaxMethod('POST', "{{ URL::route('atualizar.notificacao') }}", obj).then(response => {
+            ajaxMethod('POST', "{{ URL::route('notificacao.marcar-todas-como-lidas') }}", obj).then(response => {
                 if(response.response != 'erro') {
                     showToast('Atualizada!', 'Notificação marcada como lida com sucesso!', 'success');
                     $("#" + idTrElm).remove();
