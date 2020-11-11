@@ -124,12 +124,15 @@ class DashboardController extends Controller
     public function linkedUsers($_id)
     {
         $dashboard = $this->dashboardRepository->find($_id);
-
         $usuarios = $this->userRepository->findAll([], [['name', 'asc']]);
-
-        $usuariosVinculados = $this->userDashboardRepository->findBy([['dashboard_id', '=', $_id]], ['user'])->toArray();
+        $usuariosVinculados = $this->userDashboardRepository->findBy(
+            [
+                ['dashboard_id', '=', $_id]
+            ],
+            ['coreUser']
+        )->toArray();
         $usuariosVinculados = array_column($usuariosVinculados, 'user_id');
-
+        
         return view('portal::dashboard.usuarios_vinculados', compact('dashboard', 'usuarios', 'usuariosVinculados'));
     }
 

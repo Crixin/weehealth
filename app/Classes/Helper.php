@@ -411,7 +411,7 @@ class Helper
 
         $empresasArray = $grupo ? $empresasUser->merge($empresasGrupo)->toArray() : $empresasUser;
 
-        $empresas = $empresaRepository->findBy([['id', '', $empresasArray, "IN"]], ['processes']);
+        $empresas = $empresaRepository->findBy([['id', '', $empresasArray, "IN"]], ['portalProcesses']);
         
         return $empresas;
     }

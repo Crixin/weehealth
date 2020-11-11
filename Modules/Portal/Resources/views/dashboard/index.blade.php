@@ -26,7 +26,8 @@
                 <input type="hidden" id="gedUserToken" value="{{ $gedUserToken }}" />
 
                 @if(Session::has('message'))
-                    @component('core::componentes.alert @endcomponent
+                    @component('core::componentes.alert')
+                    @endcomponent
 
                     {{ Session::forget('message') }}
                 @endif

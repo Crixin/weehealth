@@ -105,7 +105,7 @@
                                         <select  title="Selecione a área desejada"  data-nome="Área para Consulta" multiple name="areaGrafico[]" id="areaGrafico" class="selectpicker form-control" data-live-search="true" data-actions-box="true" required="true" disabled>  
                                             @foreach ($empresas as $key => $empresa)
                                                 <optgroup  value="{{ $empresa->id }}" label="{{$empresa->nome}}">
-                                                @foreach ($empresa->processes as $key => $processo)
+                                                @foreach ($empresa->portalProcesses as $key => $processo)
                                                     <option  value="{{ $processo['pivot']['id_area_ged'] }}" data-idProcesso="{{$processo->id}}" data-idEmpresa="{{$empresa->id}}" data-processo="{{$processo}}" data-empresa="{{$empresa}}"> {{ $processo->nome }} </option>
                                                 @endforeach
                                             @endforeach

@@ -38,7 +38,7 @@
                                 <a class="has-arrow" href="#221" aria-expanded="false">@lang('sidebar_and_header.uls_li_system.dashboards.view')</a>
                                 <ul aria-expanded="false" class="collapse">
                                     @foreach (Auth::user()->portalDashboards as $key => $userDashboard)
-                                        <li><a href="{{ route('dashboard.view', ['id' => $userDashboard->dashboard_id]) }}"> {{$userDashboard->dashboard->nome}} </a></li>
+                                        <li><a href="{{ route('dashboard.view', ['id' => $userDashboard->dashboard_id]) }}"> {{$userDashboard->portalDashboard->nome}} </a></li>
                                     @endforeach
                                 </ul>
                             </li>
