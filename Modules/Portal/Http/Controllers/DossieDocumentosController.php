@@ -215,12 +215,12 @@ class DossieDocumentosController extends Controller
                     ['empresa_id', '=', $indices[0]->idEmpresa]
                 ];
 
-                $infoProcesso = $this->empresaProcessoRepository->findOneBy($filtro, ['processo', 'empresa']);
-                $nomeEmpresa = str_replace('/', '', Helper::cleanString($infoProcesso->empresa->nome));
+                $infoProcesso = $this->empresaProcessoRepository->findOneBy($filtro, ['portalProcesso', 'coreEmpresa']);
+                $nomeEmpresa = str_replace('/', '', Helper::cleanString($infoProcesso->coreEmpresa->nome));
 
                 $empresaProcessos[] = $infoProcesso->id;
 
-                $nomeProcesso = $infoProcesso->processo->nome;
+                $nomeProcesso = $infoProcesso->portalProcesso->nome;
 
                 //HAVAN BEGIN
                 $emailsHavan = [];

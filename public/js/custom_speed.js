@@ -199,7 +199,7 @@ function createFiltersComponentsGED($_indices, $_component, $_infoInputs, $_conf
     $.each($_indices, function (idx, el) {
 
         if (!onlyComponents) {
-            components += '<div class="col-md-' + col_md_size + '">';
+            components += '<div class="col-md-' + col_md_size + ' mt-3">';
             components += "<label>" + el.descricao + "</label>";                            
         }
         

@@ -35,15 +35,15 @@
 
 
                 @if($documento->tipo == 'pdf')
-                    @component('components.visualizadores.pdf',compact('documento','permissoes')) @endcomponent
+                    @component('portal::components.visualizadores.pdf',compact('documento','permissoes')) @endcomponent
                 @elseif(in_array($documento->tipo, $extensao_onlyoffice))
-                    @component('components.visualizadores.onlyOffice', compact('documento', 'permissoes', 'valor_doc_aprovado')) @endcomponent
+                    @component('portal::components.visualizadores.onlyOffice', compact('documento', 'permissoes', 'valor_doc_aprovado')) @endcomponent
                 @elseif(in_array($documento->tipo, $extensao_imagem))
-                    @component('components.visualizadores.imagem', compact('documento')) @endcomponent
+                    @component('portal::components.visualizadores.imagem', compact('documento')) @endcomponent
                 @elseif(in_array($documento->tipo, $extensao_video))
-                    @component('components.visualizadores.video',compact('documento','permissoes')) @endcomponent
+                    @component('portal::components.visualizadores.video',compact('documento','permissoes')) @endcomponent
                 @elseif($documento->tipo == 'mp3')
-                    @component('components.visualizadores.audio',compact('documento', 'permissoes')) @endcomponent
+                    @component('portal::components.visualizadores.audio',compact('documento', 'permissoes')) @endcomponent
                 @endif
                 
 
