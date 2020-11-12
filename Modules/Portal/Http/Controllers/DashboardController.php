@@ -202,7 +202,7 @@ class DashboardController extends Controller
         $gedUrl = env('GED_URL');
         $gedUserToken = env('GED_USER_TOKEN');
 
-        $dashes = array_column(Auth::user()->dashboards->toArray(), 'dashboard_id');
+        $dashes = array_column(Auth::user()->portalDashboards->toArray(), 'dashboard_id');
         //dd($dashes);
 
         if (!in_array($_id, $dashes)) {
