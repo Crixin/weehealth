@@ -43,7 +43,7 @@
             swal2_warning("Essa ação irá cancelar a edição do documento !", "Sim, cancelar!").then(resolvedValue => {
                 
                 $.ajax({
-                    url: '/edicaoDocumento/deleteRegistroAndDoc',
+                    url: '/portal/edicaoDocumento/deleteRegistroAndDoc',
                     type: 'POST',
                     data: {endereco: $('#endereco').val(), path: $('#path').val() },
                     dataType: 'JSON',

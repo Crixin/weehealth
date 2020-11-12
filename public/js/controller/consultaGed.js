@@ -73,7 +73,7 @@ function consulta(body)
 {   
     return new Promise((resolve,reject)=>{
         $.ajax({
-            url: '/ged/pesquisaRegistro',
+            url: '/portal/ged/pesquisaRegistro',
             type: 'POST',
             data: {params: body},
             dataType: 'JSON',

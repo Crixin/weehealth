@@ -152,7 +152,7 @@ $(document).ready(function(){
                 case "17":
                 case 17:
                     $.ajax({
-                        url: '/ged/buscaInfoArea?idArea=' + idAreaReferenciada,
+                        url: '/portal/ged/buscaInfoArea?idArea=' + idAreaReferenciada,
                         type: 'GET',
                         dataType: 'JSON',
                         headers: {
@@ -299,7 +299,7 @@ function buscaIndiceRegistro(empresa, processo)
 {
     return new Promise((resolve,reject)=>{
         $.ajax({
-            url: '/buscar/processByEnterpriseAndProcesso?empresa=' + empresa + '&processo=' + processo,
+            url: '/portal/buscar/processByEnterpriseAndProcesso?empresa=' + empresa + '&processo=' + processo,
             type: 'GET',
             dataType: 'JSON',
             success: function (data) {

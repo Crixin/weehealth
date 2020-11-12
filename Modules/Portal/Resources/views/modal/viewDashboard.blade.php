@@ -58,7 +58,7 @@ $(document).ready(function(){
         var id = $('#modalViewDashboard').attr('data-id');
         return new Promise((resolve,reject)=>{
             $.ajax({
-                url: '/dashboards/buscaDashboard',
+                url: '/portal/dashboards/buscaDashboard',
                 type: 'POST',
                 data: { idDashboard: id},
                 dataType: 'JSON',

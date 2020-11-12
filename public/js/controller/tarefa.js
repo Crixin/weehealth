@@ -35,7 +35,7 @@ function buscaIndiceRegistro(id)
 {
     return new Promise((resolve,reject)=>{
         $.ajax({
-            url: '/ged/buscaInfoArea?idArea='+id+'&params=?filhas=false',
+            url: '/portal/ged/buscaInfoArea?idArea='+id+'&params=?filhas=false',
             type: 'GET',
             dataType: 'JSON',
             success: function (data) {

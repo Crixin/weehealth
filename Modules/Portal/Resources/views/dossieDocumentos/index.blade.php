@@ -282,7 +282,7 @@
 
                 case "17":
                     $.ajax({
-                        url: '/ged/buscaInfoArea?idArea=' + idAreaReferenciada,
+                        url: '/portal/ged/buscaInfoArea?idArea=' + idAreaReferenciada,
                         type: 'GET',
                         dataType: 'JSON',
                         headers: {

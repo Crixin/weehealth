@@ -209,7 +209,6 @@ class AjaxController extends Controller
            ["empresa_id", "=", $_request->empresa],
            ["processo_id", "=", $_request->processo]
         ]);
-
         return $empresaProcesso;
     }
 
