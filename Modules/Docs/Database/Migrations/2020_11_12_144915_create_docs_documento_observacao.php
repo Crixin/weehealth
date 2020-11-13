@@ -15,7 +15,7 @@ class CreateDocsDocumentoObservacao extends Migration
     {
         Schema::create('docs_documento_observacao', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('observacao')->change();
+            $table->text('observacao');
             $table->string('nome_usuario_responsavel', 100);
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento');
