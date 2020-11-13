@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCorePermissaoTable extends Migration
+class CreateDocsSetor extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateCorePermissaoTable extends Migration
      */
     public function up()
     {
-        Schema::create('core_permissao', function (Blueprint $table) {
+        Schema::create('docs_setor', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nome');
+            $table->string('nome', 80);
+            $table->string('sigla', 5);
             $table->text('descricao');
-            $table->text('modulo');
+            $table->integer('tipo_setor_id')->unsigned();
+            $table->foreign('tipo_setor_id')->references('id')->on('docs_tipo_setor');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateCorePermissaoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('core_permissao');
+        Schema::dropIfExists('docs_setor');
     }
 }

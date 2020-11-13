@@ -428,7 +428,7 @@ class ProcessoController extends Controller
         );
 
         // [README] Essa validação é feita por questões de segurança. Em resumo, valida se o valor presente na sessão (id da empresa) é o mesmo que o valor encontrado no banco de outra forma (através do id de área vinculado à empresa, que é único). Se os dois valores são iguais, segue o processamento
-        $empresaProcesso = EmpresaProcesso::where('id_area_ged', $documentoCompleto->idArea)->first();
+        $empresaProcesso = EmpresaProcesso::where('id_area_ged', 'like', '%' . $documentoCompleto->idArea . '%' )->first();
         $identificadores = session('identificadores');
 
         if ($empresaProcesso->empresa_id != $identificadores['_idEmpresa']) {

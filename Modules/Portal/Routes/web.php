@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('portal')->group(function () {
 
-    Route::get('/', 'HomeController@index')->name('home');
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/', 'PortalController@index')->name('home');
+    Route::get('/home', 'PortalController@index')->name('home');
 
     /*
     * DOWNLOAD DE DOSSIES

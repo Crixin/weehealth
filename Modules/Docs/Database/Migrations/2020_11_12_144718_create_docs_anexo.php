@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCorePermissaoTable extends Migration
+class CreateDocsAnexo extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateCorePermissaoTable extends Migration
      */
     public function up()
     {
-        Schema::create('core_permissao', function (Blueprint $table) {
+        Schema::create('docs_anexo', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nome');
-            $table->text('descricao');
-            $table->text('modulo');
+            $table->text('nome');
+            $table->string('hash');
+            $table->string('extensao');
+            $table->integer('documento_id')->unsigned();
+            $table->foreign('documento_id')->references('id')->on('docs_documento');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateCorePermissaoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('core_permissao');
+        Schema::dropIfExists('docs_anexo');
     }
 }

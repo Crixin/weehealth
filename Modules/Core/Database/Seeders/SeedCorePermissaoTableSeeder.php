@@ -37,7 +37,8 @@ class SeedCorePermissaoTableSeeder extends Seeder
         foreach ($permissoes as $nome => $descricao) {
             $retorno = $permissaoRepository->create([
                 "nome" => $nome,
-                "descricao" => $descricao
+                "descricao" => $descricao,
+                "modulo" => 'portal'
             ]);
 
             $perfilPermissao->create([

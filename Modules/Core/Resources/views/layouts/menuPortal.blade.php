@@ -4,7 +4,9 @@
     $templete  = $setup->theme_sistema ?? 'weecode';
     $permissaoMenu = [];
     foreach (Auth::user()->corePerfil->corePermissoes ?? [] as $key => $value) {
-        $permissaoMenu[] = $value->nome;
+        if($value->modulo == 'portal') {
+            $permissaoMenu[] = $value->nome;
+        }
     }
     @endphp
     <!-- Sidebar scroll-->

@@ -4,7 +4,7 @@ namespace Modules\Portal\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class PortalController extends Controller
 {
     /**
      * Create a new controller instance.

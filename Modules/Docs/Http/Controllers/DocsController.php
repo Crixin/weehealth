@@ -8,14 +8,19 @@ use Illuminate\Routing\Controller;
 
 class DocsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
     public function index()
     {
-        dd();
-        return view('docs::index');
+        return view('docs::home.index');
     }
 
     /**
@@ -24,7 +29,7 @@ class DocsController extends Controller
      */
     public function create()
     {
-        return view('docs::create');
+        //return view('docs::create');
     }
 
     /**
@@ -44,7 +49,7 @@ class DocsController extends Controller
      */
     public function show($id)
     {
-        return view('docs::show');
+        //return view('docs::show');
     }
 
     /**
@@ -54,7 +59,7 @@ class DocsController extends Controller
      */
     public function edit($id)
     {
-        return view('docs::edit');
+        //return view('docs::edit');
     }
 
     /**

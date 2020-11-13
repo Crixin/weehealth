@@ -10,7 +10,8 @@ class Permissao extends Model
 
     protected $fillable = [
         'id',
-        'nome'
+        'nome',
+        'modulo'
     ];
 
 

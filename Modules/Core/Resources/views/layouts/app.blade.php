@@ -111,7 +111,7 @@
                        @endphp
                        @foreach (json_decode($modulos) as $key => $modulo)
                             @if ($key != 'Core')
-                                <li class="nav-item"> <button class="nav-link @if ($explode[1] == strtolower($key)) active @endif" data-toggle="tab" onclick="location.href='/{{strtolower($key)}}/home'" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">{{$key}}</span></button> </li>   
+                                <li class="nav-item"> <button class="nav-link @if ($explode[1] == strtolower($key)) active @endif" data-toggle="tab" onclick="location.href='/{{strtolower($key)}}/home'" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down"><b>{{$key}}</b></span></button> </li>   
                             @endif
                         @endforeach
                     </ul>
