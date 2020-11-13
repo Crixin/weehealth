@@ -103,7 +103,7 @@
                     <ul class="nav nav-tabs customtab mr-start " role="tablist">
                        
                        @php
-                            $arquivo = dirname($_SERVER['DOCUMENT_ROOT']).'/modules_statuses.json';
+                            $arquivo = $_SERVER['DOCUMENT_ROOT'].'/modules_statuses.json';
                             $fp = fopen($arquivo, "r");
                             $modulos = fread($fp, filesize($arquivo));
                             $url = $_SERVER["REQUEST_URI"];
