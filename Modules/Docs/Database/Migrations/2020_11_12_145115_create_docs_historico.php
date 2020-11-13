@@ -18,6 +18,8 @@ class CreateDocsHistorico extends Migration
             $table->text('descricao');
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento');
+            $table->integer('id_usuario_responsavel')->nullable()->after('descricao');
+            $table->string('nome_usuario_responsavel', 80)->nullable()->after('id_usuario_responsavel');
             $table->timestamps();
         });
     }

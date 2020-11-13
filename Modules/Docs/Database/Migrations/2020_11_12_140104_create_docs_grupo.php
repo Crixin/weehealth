@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDocsGrupoDivulgacaoTreinamento extends Migration
+class CreateDocsGrupo extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateDocsGrupoDivulgacaoTreinamento extends Migration
      */
     public function up()
     {
-        Schema::create('docs_grupo_divulgacao_treinamento', function (Blueprint $table) {
+        Schema::create('docs_grupo', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento');
             $table->integer('usuario_id')->unsigned();
             $table->foreign('usuario_id')->references('id')->on('core_users');
-            $table->string('tipo',50);
+            $table->string('tipo', 50);
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateDocsGrupoDivulgacaoTreinamento extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('');
+        Schema::dropIfExists('docs_grupo');
     }
 }

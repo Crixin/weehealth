@@ -19,15 +19,12 @@ class CreateDocsDocumentoExterno extends Migration
             $table->string('id_registro', 40);
             $table->string('id_area', 40);
             $table->boolean('validado')->default(false);
-            
             // Usuário que fez o upload do documento
             $table->integer('responsavel_upload_id')->unsigned();
             $table->foreign('responsavel_upload_id')->references('id')->on('core_users');
-            
             // Usuário que marcar o 'checkbox' validado
             $table->integer('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('core_users');
-            
             $table->integer('setor_id')->unsigned();
             $table->foreign('setor_id')->references('id')->on('docs_setor');
             $table->integer('empresa_id')->nullable(true)->references('id')->on('core_empresa');

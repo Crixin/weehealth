@@ -29,9 +29,9 @@ class CreateDocsDocumento extends Migration
             $table->integer('setor_id')->unsigned();
             $table->foreign('setor_id')->references('id')->on('docs_setor');
             $table->integer('grupo_treinamento_id')->unsigned();
-            $table->foreign('grupo_treinamento_id')->references('id')->on('docs_grupo_divulgacao_treinamento');
+            $table->foreign('grupo_treinamento_id')->references('id')->on('docs_grupo');
             $table->integer('grupo_divulgacao_id')->unsigned();
-            $table->foreign('grupo_divulgacao_id')->references('id')->on('docs_grupo_divulgacao_treinamento');
+            $table->foreign('grupo_divulgacao_id')->references('id')->on('docs_grupo');
             $table->integer('elaborador_id')->unsigned();
             $table->foreign('elaborador_id')->references('id')->on('core_users');
             $table->integer('aprovador_id')->unsigned();
@@ -40,7 +40,7 @@ class CreateDocsDocumento extends Migration
             $table->integer('id_usuario_solicitante')->nullable();
             $table->string('revisao', 20)->nullable();
             $table->string('justificativa_rejeicao_revisao', 200)->nullable();
-            $table->string('tipo',50);
+            $table->string('tipo', 50);
             $table->timestamps();
         });
     }
