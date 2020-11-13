@@ -103,17 +103,18 @@
                     <ul class="nav nav-tabs customtab mr-start " role="tablist">
                        
                        @php
-                            $arquivo = $_SERVER['DOCUMENT_ROOT'].'/modules_statuses.json';
-                            $fp = fopen($arquivo, "r");
-                            $modulos = fread($fp, filesize($arquivo));
+                            //$arquivo = $_SERVER['DOCUMENT_ROOT'].'/modules_statuses.json';
+                            //$fp = fopen($arquivo, "r");
+                            //$modulos = fread($fp, filesize($arquivo));
                             $url = $_SERVER["REQUEST_URI"];
                             $explode = explode('/',$url);
                        @endphp
-                       @foreach (json_decode($modulos) as $key => $modulo)
-                            @if ($key != 'Core')
-                                <li class="nav-item"> <button class="nav-link @if ($explode[1] == strtolower($key)) active @endif" data-toggle="tab" onclick="location.href='/{{strtolower($key)}}/home'" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down"><b>{{$key}}</b></span></button> </li>   
-                            @endif
-                        @endforeach
+                       
+                        <li class="nav-item"> <a class="nav-link @if ($explode[1] == strtolower('Portal')) active @endif"  href="{{route('a')}}" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down"><b>Portal</b></span></a></li>   
+                        <li class="nav-item"> <a class="nav-link @if ($explode[1] == strtolower('Docs')) active @endif"  href="{{route('b')}}" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down"><b>Docs</b></span></a> </li>   
+                        <li class="nav-item"> <a class="nav-link @if ($explode[1] == strtolower('Forms')) active @endif" href="{{route('c')}}" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down"><b>Forms</b></span></a> </li>   
+                            
+                        
                     </ul>
 
                     <!-- ============================================================== -->

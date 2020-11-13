@@ -28,6 +28,10 @@ Route::prefix('core')->group(function () {
         return Redirect::to('/core/login');
     });
 
+    
+
+
+
     Route::get('home', ['uses' => 'HomeCoreController@index'])->name('core.home');
 
     /*
