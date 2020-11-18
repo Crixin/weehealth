@@ -17,8 +17,8 @@ class CreateCoreParametroTable extends Migration
             $table->increments('id');
             $table->string('identificador_parametro', 150);
             $table->text('descricao');
-            $table->string('valor_padrao', 150);
-            $table->string('valor_usuario', 150)->nullable();
+            $table->text('valor_padrao');
+            $table->text('valor_usuario')->nullable();
             $table->boolean('ativo');
             $table->timestamps();
         });

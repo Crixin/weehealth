@@ -1,6 +1,6 @@
 @extends('core::layouts.app')
 
-@extends('core::layouts.menuPortal')
+@extends('core::layouts.menuCore')
 @yield('menu')
 
 @section('page_title', __('page_titles.enterprise.index'))
@@ -50,14 +50,14 @@
                                     <td>
                                         <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $empresa->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
                                         <a href="{{ route('empresa.editar', ['id' => $empresa->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
-                                        <div class="btn-group">
+                                        <!--<div class="btn-group">
                                             <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="{{ route('empresa.usuariosVinculados', ['id' => $empresa->id]) }}"> <i class="mdi mdi-account-settings-variant"></i> @lang('buttons.enterprise.users') </a>
                                                 <a class="dropdown-item" href="{{ route('empresa.gruposVinculados', ['id' => $empresa->id]) }}"> <i class="mdi mdi-account-switch"></i> @lang('buttons.enterprise.groups') </a>
                                                 <a class="dropdown-item" href="{{ route('empresa.processosVinculados', ['id' => $empresa->id]) }}"> <i class="mdi mdi-image-filter-none"></i> @lang('buttons.enterprise.processes') </a>                                                    
                                             </div>
-                                        </div>
+                                        </div>-->
                                     </td>
                                 </tr>
                             @endforeach

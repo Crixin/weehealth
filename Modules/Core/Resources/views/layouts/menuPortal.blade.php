@@ -47,20 +47,18 @@
                         </ul>
                     </li>
                 @endif
-                @if (in_array('mod_base', $permissaoMenu) || Auth::user()->administrador)
+
+                @if (in_array('mod_base_portal', $permissaoMenu) || Auth::user()->administrador)
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="#2" aria-expanded="false"><i class="mdi mdi-plus-circle-outline"></i><span class="hide-menu"> @lang('sidebar_and_header.uls_li_system.register.collapse') </span></a>
                         <ul aria-expanded="false" class="collapse">
-                            @if (in_array('mod_base', $permissaoMenu))
-                                <li><a href="{{ route('empresa') }}"> @lang('sidebar_and_header.uls_li_system.register.item1') </a></li>
+                            @if (in_array('mod_base_portal', $permissaoMenu))
+                                <li><a href="{{ route('portal.empresa') }}"> @lang('sidebar_and_header.uls_li_system.register.item1') </a></li>
                                 <li><a href="{{ route('grupo') }}"> @lang('sidebar_and_header.uls_li_system.register.item2') </a></li>
                                 <li><a href="{{ route('processo') }}"> @lang('sidebar_and_header.uls_li_system.register.item3') </a></li>
                             @endif
 
-                            @if (Auth::user()->administrador)
-                                <li><a href="{{ route('usuario') }}"> @lang('sidebar_and_header.uls_li_system.register.item4') </a></li>
-                                <li><a href="{{ route('perfil') }}"> @lang('sidebar_and_header.uls_li_system.register.item6') </a></li>
-                            @endif
+                           
                             {{-- <li><a href="{{ route('tarefa') }}"> @lang('sidebar_and_header.uls_li_system.register.item7') </a></li> --}}
                         </ul>
                     </li>
@@ -131,47 +129,9 @@
                     </ul>
                 </li>
 
-            {{--  <li> <a class="waves-effect waves-dark" href="{{ route('download') }}" aria-expanded="false"><i class="mdi mdi-file-import"></i><span class="hide-menu"> @lang('sidebar_and_header.uls_li_system.downloads.main') </span></a> </li>
-
-
-                {{-- <li> <a class="waves-effect waves-dark" href="{{ route('upload.novo') }}" aria-expanded="false"><i class="mdi mdi-upload"></i><span class="hide-menu"> @lang('sidebar_and_header.uls_li_system.upload.main') </span></a> </li> 
-
-                <li> <a class="waves-effect waves-dark" href="{{ route('logs') }}" aria-expanded="false"><i class="mdi mdi-book-open"></i><span class="hide-menu"> @lang('sidebar_and_header.uls_li_system.logs.main') </span></a> </li> --}}
-
-    {{--            <li>
-                    <a class="has-arrow waves-effect waves-dark" href="#5" aria-expanded="false"><i class="mdi mdi-book-open-page-variant"></i><span class="hide-menu"> @lang('sidebar_and_header.uls_li_system.conference.collapse') </span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        @foreach (Helper::getUserProcesses() as $key => $empresa)
-                            @if ( count($empresa->processos) > 0)
-                                <li>
-                                    <a class="has-arrow" href="#" aria-expanded="false">{{ $empresa->nome }}</a>
-                                    <ul aria-expanded="false" class="collapse">
-                                        @foreach ($empresa->processos as $processo)
-                                            <li><a href="{{ route('relatorio.conferencia', ['idEmpresa' => $empresa->id, 'idProcesso' => $processo->id]) }}"> {{ $processo->nome }} </a></li>
-                                        @endforeach
-                                    </ul>
-                                </li>
-                            @endif
-                        @endforeach
-                    </ul>
-                </li> --}}
             
-                @if ( in_array('conf_setup', $permissaoMenu) || in_array(Auth::user()->id, Constants::$ARR_SUPER_ADMINISTRATORS_ID) )
-                    <li>
-                        <a class="has-arrow waves-effect waves-dark" href="#3" aria-expanded="false"><i class="mdi mdi-settings"></i><span class="hide-menu"> @lang('sidebar_and_header.uls_li_system.configs.collapse') </span></a>
-                        <ul aria-expanded="false" class="collapse">
-                            @if ( in_array(Auth::user()->id, Constants::$ARR_SUPER_ADMINISTRATORS_ID) )
-                                <li><a href="{{ route('configuracao.administradores') }}"> @lang('sidebar_and_header.uls_li_system.configs.item1') </a></li>
-                                <li><a href="{{ route('configuracao.parametros') }}"> @lang('sidebar_and_header.uls_li_system.configs.item2') </a></li>
-                            @endif
-                        
-                            @if (in_array('conf_setup', $permissaoMenu))
-                                <li><a href="{{ route('configuracao.setup.index') }}"> @lang('sidebar_and_header.uls_li_system.configs.item3') </a></li>
-                            @endif
-                        
-                        </ul>
-                    </li>
-                @endif
+            
+                
 
             </ul>
         </nav>
@@ -183,9 +143,9 @@
     <!-- Bottom points-->
     <div class="sidebar-footer">
         <!-- item-->
-        <a href="{{ route('home') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.tooltip_home')"><i class="mdi mdi-home"></i></a>
+        <a href="{{ route('portal.home') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.tooltip_home')"><i class="mdi mdi-home"></i></a>
         <!-- item-->
-        <a href="{{ route('configuracao.parametros') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.uls_li_system.configs.item2')"><i class="ti-settings"></i></a>
+        <!--<a href="{{ route('configuracao.parametros') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.uls_li_system.configs.item2')"><i class="ti-settings"></i></a>-->
         <!-- item-->
         <a href="{{ route('core.logout') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.tooltip_logout')"><i class="mdi mdi-power"></i></a>
     </div>

@@ -21,17 +21,18 @@ class SeedCorePermissaoTableSeeder extends Seeder
         $perfilPermissao = new PerfilPermissaoRepository();
 
         $permissoes = [
-            'mod_base' => "Módulo Base (Empresa, Grupos, Usuários e Processos)",
-            'mod_dashboard' => "Módulo de Dashboards",
-            'mod_relatorios' => "Módulo de Relatório",
-            'mod_dossie' => "Módulo de Dossiê",
-            'conf_setup' => "Configuração da Setup",
+            'mod_base'         => "Módulo Base (Empresa, Usuários)",
+            'mod_dashboard'    => "Módulo de Dashboards",
+            'mod_relatorios'   => "Módulo de Relatório",
+            'mod_dossie'       => "Módulo de Dossiê",
+            'conf_setup'       => "Configuração da Setup",
             //'conf_parametros' => "Configuração dos Parametros ",
             //'conf_administradores' => "Configuração de Administradores",
             //'mod_processos' => "Módulo de Processos",
-            'mod_tarefas' => "Módulo de Agendamento de Tarefas",
-            'view_dashboard' => "Visualização de Dashboards",
-            'ger_processos' => "Gerenciamento de Processos",
+            'mod_tarefas'      => "Módulo de Agendamento de Tarefas",
+            'view_dashboard'   => "Visualização de Dashboards",
+            'ger_processos'    => "Gerenciamento de Processos",
+            'mod_base_portal'  => "Módulo Base (Grupos ,Processos)"
         ];
 
         foreach ($permissoes as $nome => $descricao) {

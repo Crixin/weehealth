@@ -82,10 +82,22 @@ return [
 
     'btn_view_profile'      => 'Ver Perfil',
 
-    'service_panel'           => [
-        'header'        => 'Painel de Serviços',
-        'item1'         => 'Com barra lateral clara',
-        'item2'         => 'Com barra lateral escura',
+    'service_panel'         => [
+        'header'            => 'Painel de Serviços',
+        'item1'             => 'Com barra lateral clara',
+        'item2'             => 'Com barra lateral escura',
     ],
+
+    'docs'                 => [
+        "menu"             => [
+            'documento'        => 'DOCUMENTOS',
+            'documento_externo' => 'DOC. EXTERNOS',
+            'workflow'         => 'BPMN 2.0',
+            'setor'            => 'Setor',
+            'configuracao'     => 'Configuração',
+            'controle_registro' => 'Controle de Registros',
+            'controle_registros' => 'CONTR. REGISTROS'
+        ]
+    ]
 
 ];

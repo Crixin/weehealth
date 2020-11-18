@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('portal')->group(function () {
 
     Route::get('/', 'PortalController@index')->name('home');
-    Route::get('/home', 'PortalController@index')->name('home');
+    Route::get('/home', ['as' => 'portal.home',   'uses' => 'PortalController@index']);
 
     /*
     * DOWNLOAD DE DOSSIES
@@ -32,7 +32,9 @@ Route::prefix('portal')->group(function () {
         * EMPRESAS
         */
         Route::group(['prefix' => 'empresa', 'middleware' => 'permissionamento:mod_base'], function () {
-                
+            
+            Route::get('',                          ['as' => 'portal.empresa',                        'uses' => 'EmpresaPortalController@index']);
+            
             Route::get('usuarios-vinculados/{id}',  ['as' => 'empresa.usuariosVinculados',     'uses' => 'EmpresaUserController@create']);
             Route::post('vincular-usuarios',        ['as' => 'empresa.vincularUsuarios',       'uses' => 'EmpresaUserController@update']);
             Route::post('empresa/usuario',          ['as' => 'relacao.empresaUsuario.deletar', 'uses' => 'AjaxController@deleteLinkEnterpriseUser']);

@@ -1,6 +1,6 @@
 @extends('core::layouts.app')
 
-@extends('core::layouts.menuPortal')
+@extends('core::layouts.menuCore')
 @yield('menu')
 
 @section('page_title', __('page_titles.perfil.create'))
