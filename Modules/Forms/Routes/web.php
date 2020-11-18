@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('forms')->group(function() {
-    Route::get('/', 'FormsController@index');
+Route::prefix('forms')->group(function () {
+    Route::get('/home', 'FormsController@index')->name('forms.home');
 });

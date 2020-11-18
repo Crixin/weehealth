@@ -6,7 +6,7 @@ Route::get('/', function () {
     return redirect('/core/home');
 })->name('home');
 
-Route::group(['prefix' => 'core', 'as' => 'core.'], function () {
+/* Route::group(['prefix' => 'core', 'as' => 'core.'], function () {
    Route::get('portal', function () {
       return Redirect::to('/portal/home');
    })->name('portal');
@@ -19,4 +19,4 @@ Route::group(['prefix' => 'core', 'as' => 'core.'], function () {
       return Redirect::to('/forms/home');
    })->name('forms');
 
-});
+}); */
