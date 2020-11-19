@@ -102,18 +102,16 @@
                     <!-- ** MODULOS TESTE** -->
                     <ul class="nav nav-tabs customtab mr-start " role="tablist">
                        
-                       @php
-                            //$arquivo = $_SERVER['DOCUMENT_ROOT'].'/modules_statuses.json';
-                            //$fp = fopen($arquivo, "r");
-                            //$modulos = fread($fp, filesize($arquivo));
+                        @php
                             $url = $_SERVER["REQUEST_URI"];
-                            $explode = explode('/',$url);
-                       @endphp
+                            $accessing = explode('/', $url)[1];
+                        @endphp
                        
-                        <li class="nav-item"> <a class="nav-link @if ($explode[1] == strtolower('Portal')) active @endif"  href="{{route('core.portal')}}" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down"><b>Portal</b></span></a></li>   
-                        <li class="nav-item"> <a class="nav-link @if ($explode[1] == strtolower('Docs')) active @endif"  href="{{route('core.docs')}}" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down"><b>Docs</b></span></a> </li>   
-                        <li class="nav-item"> <a class="nav-link @if ($explode[1] == strtolower('Forms')) active @endif" href="{{route('core.forms')}}" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down"><b>Forms</b></span></a> </li>   
-                            
+                        @foreach (json_decode(file_get_contents(base_path() . '/modules_statuses.json')) as $key => $module)
+                            @if ($module)
+                                <li class="nav-item"> <a class="nav-link @if ($accessing == strtolower($key)) active @endif" href="{{route(strtolower($key) . '.home')}}" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down"><b>{{ $key }}</b></span></a></li>   
+                            @endif
+                        @endforeach
                         
                     </ul>
 
@@ -456,75 +454,34 @@
     <script>
         // Theme color settings
         $(document).ready(function(){
-        var currentTheme = get();
-        if(currentTheme)
-        {
-            $('#theme').attr({href: 'css/colors/'+currentTheme+'.css'});
-        }
-        // color selector
-        $('#themecolors').on('click', 'a', function(){
-            $('#themecolors li a').removeClass('working');
-            $(this).addClass('working')
-        });
-
-
-        function store(name, valor) {
-            
-            /*
-            if (typeof (Storage) !== "undefined") {
-            localStorage.setItem(name, val);
-            } else {
-            window.alert('Please use a modern browser to properly view this template!');
-            }
-            */
-            
-        $.ajax({
-                type:'POST',
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                url: "{{route('atualizar.setup')}}",
-                data:{'valor': valor, 'coluna': 'theme_sistema'},
-                success:function(data){
-                console.log(data.response);
-                window.location.reload();
-                }
-            });
-        }
-        $("*[data-theme]").click(function(e){
-            e.preventDefault();
-                var currentStyle = $(this).attr('data-theme');
-
-                store('theme', currentStyle);
-                $('#theme').attr({href: 'css/colors/'+currentStyle+'.css'})
-            });
-
-            
-
-        });
-        function get() {
-        
-        }
-
-        $(document).ready(function(){
-            $("*[data-theme]").click(function(e){
-            e.preventDefault();
-                var currentStyle = $(this).attr('data-theme');
-        
-                store('theme', currentStyle);
-                $('#theme').attr({href: 'css/colors/'+currentStyle+'.css'});
-            });
-
-            var currentTheme = get();
-            if(currentTheme)
-            {
-            $('#theme').attr({href: 'css/colors/'+currentTheme+'.css'});
-            
-            }
             // color selector
             $('#themecolors').on('click', 'a', function(){
-                    $('#themecolors li a').removeClass('working');
-                    $(this).addClass('working')
-                });
+                $('#themecolors li a').removeClass('working');
+                $(this).addClass('working')
+            });
+
+            function store(name, valor) {
                 
+                $.ajax({
+                    type:'POST',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    url: "{{route('atualizar.setup')}}",
+                    data:{'valor': valor, 'coluna': 'theme_sistema'},
+                    success:function(data){
+                    console.log(data.response);
+                    //window.location.reload();
+                    }
+                });
+            }
+            $("*[data-theme]").click(function(e){
+                e.preventDefault();
+                var currentStyle = $(this).attr('data-theme');
+
+                store('theme', currentStyle);
+                let colorFile = "{!! asset('css/colors/" + currentStyle + ".css') !!}";
+                $('#theme').attr({href: colorFile})
+            });
+
         });
 
     </script>
