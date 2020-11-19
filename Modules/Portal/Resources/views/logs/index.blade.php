@@ -1,6 +1,6 @@
-@extends('core::layouts.app')
+@extends('layouts.app')
 
-@extends('core::layouts.menuPortal')
+@extends('layouts.menuPortal')
 @yield('menu')
 
 
@@ -33,7 +33,7 @@
                                     <h5 class="text-center text-muted m-b-30">@lang('page_titles.logs.warning')</h5>
     
                                     @if(Session::has('message'))
-                                        @component('core::componentes.alert')
+                                        @component('componentes.alert')
                                         @endcomponent
                     
                                         {{ Session::forget('message') }}

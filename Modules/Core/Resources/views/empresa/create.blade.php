@@ -1,6 +1,6 @@
-@extends('core::layouts.app')
+@extends('layouts.app')
 
-@extends('core::layouts.menuCore')
+@extends('layouts.menuCore')
 @yield('menu')
 
 
@@ -25,7 +25,7 @@
 
 
                 @if(Session::has('message'))
-                    @component('core::componentes.alert')
+                    @component('componentes.alert')
                     @endcomponent
 
                     {{ Session::forget('message') }}
@@ -68,6 +68,26 @@
 
                         <div class="row">
                             <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('tipo_empresa') ? ' has-error' : '' }}">
+                                    <label class="control-label">Tipo de empresa</label>
+                                    <select name="tipo_empresa[]" class="form-control selectpicker" multiple id="tipo_empresa" value="{{ old('tipo_empresa') }}" required>
+                                        @foreach ($tiposEmpresa as $key => $tipo)
+                                            <option value="{{$tipo}}">{{ucfirst(strtolower($tipo))}}</option>    
+                                        @endforeach
+                                    </select>
+                                    <small class="form-control-feedback"> Selecione o(s) tipo(s) que a empresa pertence. </small> 
+                                    @if ($errors->has('tipo_empresa'))
+                                        <br/>
+                                        <span class="help-block text-danger">
+                                            <strong>{{ $errors->first('tipo_empresa') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('cnpj') ? ' has-error' : '' }}">
                                     <label class="control-label">CNPJ</label>
                                     <input type="text" id="cnpj" class="form-control cnpj" name="cnpj" value="{{ old('cnpj') }}" required>
@@ -99,7 +119,8 @@
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('cidade_id') ? ' has-error' : '' }}">
                                     <label class="control-label">Cidade</label>
-                                    <select name="cidade_id" class="form-control select2" id="cidade_id" value="{{ old('cidade_id') }}" required>
+                                    <select name="cidade_id" class="form-control selectpicker" data-live-search="true" data-actions-box="true" id="cidade_id" value="{{ old('cidade_id') }}" required>
+                                            <option value="">Selecione</option>
                                         @foreach ($cidades as $estado => $cidadesDoEstado)
                                             <optgroup label="{{ $estado }}">
                                                 @foreach ($cidadesDoEstado as $key => $value)

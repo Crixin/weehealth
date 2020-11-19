@@ -1,6 +1,6 @@
-@extends('core::layouts.app')
+@extends('layouts.app')
 
-@extends('core::layouts.menuPortal')
+@extends('layouts.menuPortal')
 @yield('menu')
 
 
@@ -25,7 +25,7 @@
 
 
                 @if(Session::has('message'))
-                    @component('core::componentes.alert')@endcomponent
+                    @component('componentes.alert')@endcomponent
 
                     {{ Session::forget('message') }}
                 @endif

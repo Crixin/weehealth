@@ -1,6 +1,6 @@
-@extends('core::layouts.app')
+@extends('layouts.app')
 
-@extends('core::layouts.menuPortal')
+@extends('layouts.menuPortal')
 @yield('menu')
 
 
@@ -26,7 +26,7 @@
                 <input type="hidden" id="gedUserToken" value="{{ $gedUserToken }}" />
 
                 @if(Session::has('message'))
-                    @component('core::componentes.alert')
+                    @component('componentes.alert')
                     @endcomponent
 
                     {{ Session::forget('message') }}

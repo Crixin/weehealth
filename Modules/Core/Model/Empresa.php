@@ -75,4 +75,5 @@ class Empresa extends Model
             'todos_filtros_pesquisaveis'
         );
     }
+
 }

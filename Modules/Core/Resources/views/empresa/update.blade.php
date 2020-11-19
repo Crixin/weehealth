@@ -1,6 +1,6 @@
-@extends('core::layouts.app')
+@extends('layouts.app')
 
-@extends('core::layouts.menuCore')
+@extends('layouts.menuCore')
 @yield('menu')
 
 
@@ -25,7 +25,7 @@
 
 
                 @if(Session::has('message'))
-                    @component('core::componentes.alert')@endcomponent
+                    @component('componentes.alert')@endcomponent
 
                     {{ Session::forget('message') }}
                 @endif
@@ -65,7 +65,23 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('tipo_empresa') ? ' has-error' : '' }}">
+                                    <label class="control-label">Tipo de empresa</label>
+                                    <select class="form-control selectpicker" multiple data-live-search="true"  data-actions-box="true" name="tipo_empresa[]" id="tipo_empresa"  required>
+                                        @foreach ($tiposEmpresa as $key => $tipo)
+                                            <option value="{{$tipo}}" @if (in_array($tipo, $tipoSelecionados)) selected  @endif >{{ucfirst(strtolower($tipo))}}</option>    
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('tipo_empresa'))
+                                        <span class="help-block text-danger">
+                                            <strong>{{ $errors->first('tipo_empresa') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('cnpj') ? ' has-error' : '' }}">
@@ -99,7 +115,7 @@
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('cidade_id') ? ' has-error' : '' }}">
                                     <label class="control-label">Cidade</label>
-                                    <select class="form-control select2" id="cidade_id" name="cidade_id" value="{{ $empresa->cidade_id }}" required>
+                                    <select class="form-control selectpicker" data-live-search="true" data-actions-box="true" id="cidade_id" name="cidade_id" value="{{ $empresa->cidade_id }}" required>
                                         @foreach ($cidades as $estado => $cidadesDoEstado)
                                             <optgroup label="{{ $estado }}">
                                                 @foreach ($cidadesDoEstado as $key => $value)

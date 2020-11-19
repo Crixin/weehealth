@@ -1,10 +1,11 @@
 <?php
 
-namespace Database\Seeders;
+namespace Modules\Core\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Model;
 
-class DatabaseSeeder extends Seeder
+class CoreDatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -19,7 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(\Modules\Core\Database\Seeders\SeedCorePermissaoTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\SeedCoreSetupTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\SeedCoreUserTableSeeder::class);
-        $this->call(\Modules\Portal\Database\Seeders\SeedPortalProcessoTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateParametroTableSeeder::class);
+    
     }
 }

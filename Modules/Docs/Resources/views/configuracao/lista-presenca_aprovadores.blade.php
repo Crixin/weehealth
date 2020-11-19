@@ -1,6 +1,6 @@
-@extends('core::layouts.app')
+@extends('layouts.app')
 
-@extends('core::layouts.menuDocs')
+@extends('layouts.menuDocs')
 @yield('menu')
 
 @section('content')  
