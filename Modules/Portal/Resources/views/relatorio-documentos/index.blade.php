@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.report-docs.index'))
+@section('page_title', __('page_titles.portal.report-docs.index'))
 
 
 @section('breadcrumbs')
 
-<li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-<li class="breadcrumb-item active"> @lang('page_titles.report-docs.index') </li>
+<li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+<li class="breadcrumb-item active"> @lang('page_titles.portal.report-docs.index') </li>
 
 @endsection
 
@@ -25,14 +25,14 @@
                     <div class="col"></div>
                     <div class="col-10">
                         
-                        <h5 class="text-center text-muted m-b-30">@lang('page_titles.warnings.report-docs')</h5>
+                        <h5 class="text-center text-muted m-b-30">@lang('page_titles.portal.warnings.report-docs')</h5>
 
                         @if(Session::has('message'))
                             @component('componentes.alert') @endcomponent
                             {{ Session::forget('message') }}
                         @endif
 
-                        <form method="POST" action="{{ route('relatorio.documentos.gerar') }}">
+                        <form method="POST" action="{{ route('portal.relatorio.documentos.gerar') }}">
                             {{ csrf_field() }}
 
                             <div class="row">

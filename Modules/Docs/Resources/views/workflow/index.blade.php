@@ -3,7 +3,7 @@
 @extends('layouts.menuDocs')
 @yield('menu')
 
-@section('page_title', __('page_titles.enterprise.linked_groups'))
+@section('page_title', __('page_titles.portal.enterprise.linked_groups'))
 
 
 @section('breadcrumbs')

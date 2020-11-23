@@ -3,12 +3,12 @@
 @extends('layouts.menuCore')
 @yield('menu')
 
-@section('page_title', __('page_titles.perfil.index'))
+@section('page_title', __('page_titles.core.perfil.index'))
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.perfil.index') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.core.perfil.index') </li>    
 
 @endsection
 
@@ -24,7 +24,7 @@
                 @endif
             
                 <div class="col-md-12">
-                    <a href="{{ route('perfil.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.perfil.create') </a>
+                    <a href="{{ route('core.perfil.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.core.perfil.create') </a>
                 </div>
             
                 <div class="table-responsive m-t-40">
@@ -41,7 +41,7 @@
                                     <td>{{ $perfil->nome }}</td>
                                     <td>
                                         <button class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{$perfil->id}}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </button>
-                                        <a href="{{ route('perfil.editar', ['id' => $perfil->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                        <a href="{{ route('core.perfil.editar', ['id' => $perfil->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -109,7 +109,7 @@
             let obj = {'id': id};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('perfil.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('core.perfil.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Perfil excluído com sucesso.");
                     } else {

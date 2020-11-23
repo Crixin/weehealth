@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@extends('layouts.menuPortal')
+@extends('layouts.menuCore')
 @yield('menu')
 
 
-@section('page_title', __('page_titles.user.create'))
+@section('page_title', __('page_titles.core.user.create'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('usuario') }}"> @lang('page_titles.user.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.user.create') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('core.usuario') }}"> @lang('page_titles.core.user.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.core.user.create') </li>    
 
 @endsection
 
@@ -24,7 +24,7 @@
             <div class="card-body">
             
             
-                <form method="POST" action="{{ route('usuario.save') }}"  enctype="multipart/form-data">
+                <form method="POST" action="{{ route('core.usuario.save') }}"  enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="form-body">
@@ -136,7 +136,7 @@
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('usuario') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('core.usuario') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
                 </form>
             

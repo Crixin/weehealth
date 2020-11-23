@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.enterprise.linked_processes'))
+@section('page_title', __('page_titles.portal.enterprise.linked_processes'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('empresa') }}"> @lang('page_titles.enterprise.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.enterprise.linked_processes') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.empresa') }}"> @lang('page_titles.portal.enterprise.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.enterprise.linked_processes') </li>    
 
 @endsection
 
@@ -31,14 +31,14 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('empresa.vincularProcessos') }}"  >
+                <form method="POST" action="{{ route('portal.empresa.vincularProcessos') }}"  >
                     {{ csrf_field() }}
                     <input type="hidden" name="idEmpresa" value="{{ $empresa->id }}">
                     
                     <div class="form-body">
 
                         {{-- Parte 1: cadastro --}}
-                        <h3 class="box-title"> @lang('page_titles.enterprise.processes_available') <small> - Escolha um processo e selecione uma área</small>  </h3>
+                        <h3 class="box-title"> @lang('page_titles.portal.enterprise.processes_available') <small> - Escolha um processo e selecione uma área</small>  </h3>
                         <hr class="m-t-0 m-b-10">
                         
                         @if ($processosRestantes->count() > 0)
@@ -72,7 +72,7 @@
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                                <a href="{{ route('empresa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                                <a href="{{ route('portal.empresa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                             </div>
                         @else
                             <div class="row p-t-20 m-b-40">
@@ -83,12 +83,12 @@
                                 </div>
                             </div>
                             <div class="form-actions">
-                                <a href="{{ route('empresa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                                <a href="{{ route('portal.empresa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                             </div>
                         @endif
 
                         {{-- Parte 2: listagem --}}
-                        <h3 class="box-title m-t-40"> @lang('page_titles.enterprise.linked_processes_to')  <span style="font-weight: bold;">{{ $empresa->nome }}</span> </h3>
+                        <h3 class="box-title m-t-40"> @lang('page_titles.portal.enterprise.linked_processes_to')  <span style="font-weight: bold;">{{ $empresa->nome }}</span> </h3>
                         <hr>
                         <div class="row">
                             <div class="col-md-12">
@@ -110,7 +110,7 @@
                                                         <td class="text-bold"><b> {{ $processoV->portalProcesso->nome }} </b></td>
                                                         {{-- <td> {{ $processoV->id_area_ged }} </td> --}}
                                                         <td>
-                                                            <a href="{{ route('empresa-processo-grupo.criar', ['empresaProcesso' => $processoV->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-link"></i> @lang('buttons.general.link') </a>
+                                                            <a href="{{ route('portal.empresa-processo-grupo.criar', ['empresaProcesso' => $processoV->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-link"></i> @lang('buttons.general.link') </a>
                                                         </td>
                                                         <td> 
                                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $processoV->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
@@ -191,7 +191,7 @@
             let obj = {'vinculo_id': idEmpresaProcesso};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('relacao.empresaProcesso.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.relacao.empresaProcesso.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Vinculação entre empresa e processo excluída com sucesso.");
                     } else {
@@ -211,7 +211,7 @@
                 areas.push(el.id);
             });
 
-            ajaxMethod("GET", "{{ route('ged.getIndicesComumAreas') }}", {"listaAreas": areas}).then(resp => {
+            ajaxMethod("GET", "{{ route('portal.ged.getIndicesComumAreas') }}", {"listaAreas": areas}).then(resp => {
                 if (!resp.error) {
                     resp = resp.response
                     

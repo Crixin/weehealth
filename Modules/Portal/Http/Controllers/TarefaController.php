@@ -77,7 +77,7 @@ class TarefaController extends Controller
             DB::rollback();
             Helper::setNotify('Um erro ocorreu ao gravar o registro', 'danger|close-circle');
         }
-        return redirect()->route('tarefa');
+        return redirect()->route('portal.tarefa');
     }
 
     public function editTarefa($_id)

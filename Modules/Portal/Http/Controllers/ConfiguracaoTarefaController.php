@@ -44,7 +44,7 @@ class ConfiguracaoTarefaController extends Controller
             DB::rollback();
             Helper::setNotify('Um erro ocorreu ao gravar o registro', 'danger|close-circle');
         }
-        return redirect()->route('config-tarefa');
+        return redirect()->route('portal.config-tarefa');
     }
 
     public function editConfiguracaoTarefa($_id)

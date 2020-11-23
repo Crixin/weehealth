@@ -1,10 +1,11 @@
 <?php
 
-namespace Modules\Core\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Modules\Core\Http\Controllers\Controller;
+
 use Modules\Core\Model\Setup;
 
 class LoginController extends Controller

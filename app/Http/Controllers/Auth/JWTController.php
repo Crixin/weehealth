@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
 use Validator;
 use Throwable;

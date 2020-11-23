@@ -5,7 +5,7 @@
     <div class="modal-dialog modal-xl" >
         <div class="modal-content" >
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">@lang('page_titles.modalViewDashboard.index')</h5>
+                <h5 class="modal-title" id="exampleModalLabel">@lang('page_titles.portal.modalViewDashboard.index')</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
                     <span aria-hidden="true">&times;</span>
                 </button>

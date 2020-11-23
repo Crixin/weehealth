@@ -45,7 +45,7 @@
         <div class="login-register" style="background-image:url({{ ($setup->logo_login) ? $setup->logo_login : asset('images/background/login.jpg') }});">        
             <div class="login-box card">
             <div class="card-body">
-                <form class="form-horizontal form-material" method="POST" action="{{ route('core.login') }}">
+                <form class="form-horizontal form-material" method="POST" action="{{ route('login') }}">
                     {{ csrf_field() }}
 
                     <h3 class="box-title m-b-20">@lang('login.title')</h3>

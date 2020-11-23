@@ -3,11 +3,11 @@
 @extends('layouts.menuPortal')
 @yield('menu')
 
-@section('page_title', __('page_titles.dashboard.load'))
+@section('page_title', __('page_titles.portal.dashboard.load'))
 
 @section('breadcrumbs')
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.dashboard.load') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.dashboard.load') </li>    
 @endsection
 
 @section('content')   

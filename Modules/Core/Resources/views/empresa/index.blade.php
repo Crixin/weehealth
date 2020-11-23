@@ -3,13 +3,13 @@
 @extends('layouts.menuCore')
 @yield('menu')
 
-@section('page_title', __('page_titles.enterprise.index'))
+@section('page_title', __('page_titles.core.enterprise.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.enterprise.index') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.core.enterprise.index') </li>    
 
 @endsection
 
@@ -28,7 +28,7 @@
                 @endif
             
                 <div class="col-md-12">
-                    <a href="{{ route('empresa.nova') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.enterprise.create') </a>
+                    <a href="{{ route('core.empresa.nova') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.core.enterprise.create') </a>
                 </div>
             
                 <div class="table-responsive m-t-40">
@@ -49,15 +49,8 @@
                                     <td>{{ $empresa->telefone }}</td>
                                     <td>
                                         <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $empresa->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
-                                        <a href="{{ route('empresa.editar', ['id' => $empresa->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
-                                        <!--<div class="btn-group">
-                                            <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{ route('empresa.usuariosVinculados', ['id' => $empresa->id]) }}"> <i class="mdi mdi-account-settings-variant"></i> @lang('buttons.enterprise.users') </a>
-                                                <a class="dropdown-item" href="{{ route('empresa.gruposVinculados', ['id' => $empresa->id]) }}"> <i class="mdi mdi-account-switch"></i> @lang('buttons.enterprise.groups') </a>
-                                                <a class="dropdown-item" href="{{ route('empresa.processosVinculados', ['id' => $empresa->id]) }}"> <i class="mdi mdi-image-filter-none"></i> @lang('buttons.enterprise.processes') </a>                                                    
-                                            </div>
-                                        </div>-->
+                                        <a href="{{ route('core.empresa.editar', ['id' => $empresa->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                        
                                     </td>
                                 </tr>
                             @endforeach
@@ -132,7 +125,7 @@
             let obj = {'empresa_id': idEmpresa};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('empresa.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('core.empresa.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Empresa excluída com sucesso.");
                     } else {

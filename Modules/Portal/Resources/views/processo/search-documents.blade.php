@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.process.index'))
+@section('page_title', __('page_titles.portal.process.index'))
 
 
 @section('breadcrumbs')
 
-<li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-<li class="breadcrumb-item"> @lang('page_titles.process.index') </li>
-<li class="breadcrumb-item active"> @lang('page_titles.process.search') </li>
+<li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+<li class="breadcrumb-item"> @lang('page_titles.portal.process.index') </li>
+<li class="breadcrumb-item active"> @lang('page_titles.portal.process.search') </li>
 
 @endsection
 
@@ -55,7 +55,7 @@
 				<div class="row">
 					<div class="col"></div>
 					<div class="col-10">
-						<form method="POST" action="{{ route('processo.listarRegistros') }}">
+						<form method="POST" action="{{ route('portal.processo.listarRegistros') }}">
 							{{ csrf_field() }}
 
 							<input type="hidden" name="componentsForSubmit" id="componentsForSubmit" />

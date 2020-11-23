@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.enterprise.update'))
+@section('page_title', __('page_titles.core.enterprise.update'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('empresa') }}"> @lang('page_titles.enterprise.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.enterprise.update') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('core.empresa') }}"> @lang('page_titles.portal.enterprise.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.core.enterprise.update') </li>    
 
 @endsection
 
@@ -30,7 +30,7 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('empresa.alterar') }}">
+                <form method="POST" action="{{ route('core.empresa.alterar') }}">
                     {{ csrf_field() }}
                 <input type="hidden" name="idEmpresa" value="{{ $empresa->id }}">
                     
@@ -171,7 +171,7 @@
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('empresa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('core.empresa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
 
                 </form>

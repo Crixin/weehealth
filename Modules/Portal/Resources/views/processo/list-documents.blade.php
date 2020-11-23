@@ -4,16 +4,16 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.process.index'))
+@section('page_title', __('page_titles.portal.process.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"> @lang('page_titles.process.index') </li>    
-    <li class="breadcrumb-item"> @lang('page_titles.process.search') </li>    
-    <li class="breadcrumb-item"> @lang('page_titles.process.list_registers') </li>    
-    <li class="breadcrumb-item active"> @lang('page_titles.process.register_documents') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"> @lang('page_titles.portal.process.index') </li>    
+    <li class="breadcrumb-item"> @lang('page_titles.portal.process.search') </li>    
+    <li class="breadcrumb-item"> @lang('page_titles.portal.process.list_registers') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.process.register_documents') </li>    
 
 @endsection
 
@@ -63,7 +63,7 @@
                                             @endif
                                             
                                             {{-- Visualizar estará sempre disponível --}}
-                                            <a href="{{ route('processo.acessarDocumento', ['_idDocumento' => $documento->id]) }}" class="btn waves-effect waves-light btn-secondary m-l-10"> <i class="mdi mdi-file-document"></i> @lang('buttons.general.access') </button>
+                                            <a href="{{ route('portal.processo.acessarDocumento', ['_idDocumento' => $documento->id]) }}" class="btn waves-effect waves-light btn-secondary m-l-10"> <i class="mdi mdi-file-document"></i> @lang('buttons.general.access') </button>
                                         </td>
 									</tr>
 								@endforeach	
@@ -72,7 +72,7 @@
                     </div>
                     <div class="col-md-12 m-t-40">
                         <div class="col-md-4 pull-right">
-                            <a href="{{ route('processo.buscar', ['idEmpresa' => session('identificadores')['_idEmpresa'], 'idProcesso' => session('identificadores')['_idProcesso'] ] ) }}" class="btn btn-secondary btn-lg btn-block pull-right"> @lang('buttons.general.back') para pesquisa </a>
+                            <a href="{{ route('portal.processo.buscar', ['idEmpresa' => session('identificadores')['_idEmpresa'], 'idProcesso' => session('identificadores')['_idProcesso'] ] ) }}" class="btn btn-secondary btn-lg btn-block pull-right"> @lang('buttons.general.back') para pesquisa </a>
                         </div>
                     </div>
 				@else
@@ -83,7 +83,7 @@
 						<div class="row">
 							<div class="col"></div>
 							<div class="col-4">
-                                <a href="{{ route('processo.buscar', ['idEmpresa' => session('identificadores')['_idEmpresa'], 'idProcesso' => session('identificadores')['_idProcesso'] ] ) }}" class="btn btn-secondary btn-lg btn-block pull-right"> @lang('buttons.general.back') para pesquisa </a>
+                                <a href="{{ route('portal.processo.buscar', ['idEmpresa' => session('identificadores')['_idEmpresa'], 'idProcesso' => session('identificadores')['_idProcesso'] ] ) }}" class="btn btn-secondary btn-lg btn-block pull-right"> @lang('buttons.general.back') para pesquisa </a>
 							</div>
 							<div class="col"></div>
 						</div>
@@ -157,7 +157,7 @@
             let obj = {'documento_id': idDocumento};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('deletar.documento') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.deletar.documento') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Documento excluído com sucesso.");
                     } else {

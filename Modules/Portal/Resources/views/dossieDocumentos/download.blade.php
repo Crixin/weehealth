@@ -43,7 +43,7 @@
                         @component('componentes.alert') @endcomponent
                         {{ Session::forget('message') }}
                     @endif
-                    <form class="form-horizontal form-material" method="POST" action="{{ route('download.dossie.download') }}">
+                    <form class="form-horizontal form-material" method="POST" action="{{ route('portal.download.dossie.download') }}">
                         {{ csrf_field() }}
                         <input type="hidden" name='token' value="{{$token}}">
                         <h3 class="box-title m-b-20">Autenticação</h3>

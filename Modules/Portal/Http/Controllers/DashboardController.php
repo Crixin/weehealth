@@ -90,7 +90,7 @@ class DashboardController extends Controller
             DB::rollback();
             Helper::setNotify('Um erro ocorreu ao gravar o registro', 'danger|close-circle');
         }
-        return redirect()->route('dashboards');
+        return redirect()->route('portal.dashboards');
     }
 
     public function editDashboard($_id)

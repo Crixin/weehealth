@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.process.create'))
+@section('page_title', __('page_titles.portal.process.create'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('processo') }}"> @lang('page_titles.process.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.process.create') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('portal.processo') }}"> @lang('page_titles.portal.process.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.process.create') </li>    
 
 @endsection
 
@@ -31,7 +31,7 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('processo.salvar') }}">
+                <form method="POST" action="{{ route('portal.processo.salvar') }}">
                     {{ csrf_field() }}
                     <div class="form-body">
                         
@@ -69,7 +69,7 @@
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('processo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('portal.processo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
                 </form>
 

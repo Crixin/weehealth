@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.tarefa.create'))
+@section('page_title', __('page_titles.portal.tarefa.create'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('tarefa') }}"> @lang('page_titles.tarefa.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.tarefa.create') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('portal.tarefa') }}"> @lang('page_titles.portal.tarefa.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.tarefa.create') </li>    
 
 @endsection
 
@@ -29,7 +29,7 @@
                     {{ Session::forget('message') }}
                 @endif
                 
-                <form method="POST" id="formTarefa" action="{{ route('tarefa.salvar') }}">
+                <form method="POST" id="formTarefa" action="{{ route('portal.tarefa.salvar') }}">
                     {{ csrf_field() }}
                     <div class="form-body">
                         
@@ -202,7 +202,7 @@
                     </div>
                     <div class="form-actions">
                         <button type="button" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('tarefa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('portal.tarefa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
                 </form>
             

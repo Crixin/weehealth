@@ -4,17 +4,17 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.process.index'))
+@section('page_title', __('page_titles.portal.process.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"> @lang('page_titles.process.index') </li>    
-    <li class="breadcrumb-item"> @lang('page_titles.process.search') </li>    
-    <li class="breadcrumb-item"> @lang('page_titles.process.list_registers') </li>    
-    <li class="breadcrumb-item"> @lang('page_titles.process.register_documents') </li>    
-    <li class="breadcrumb-item active"> @lang('page_titles.process.document') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"> @lang('page_titles.portal.process.index') </li>    
+    <li class="breadcrumb-item"> @lang('page_titles.portal.process.search') </li>    
+    <li class="breadcrumb-item"> @lang('page_titles.portal.process.list_registers') </li>    
+    <li class="breadcrumb-item"> @lang('page_titles.portal.process.register_documents') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.process.document') </li>    
     
 @endsection
 
@@ -92,7 +92,7 @@
                                                 <p>@lang('document.approval.p_approve')</p>
                                             </div>
                                             <div class="col-md-12 text-center">
-                                                <form action="{{ route('processo.documento.aprovar') }}" method="post">
+                                                <form action="{{ route('portal.processo.documento.aprovar') }}" method="post">
                                                     {{ csrf_field() }}
                                                     <input type="hidden" name="id-documento" value="{{ $documento->id }}">
                                                     <button type="submit" class="btn btn-lg btn-success"> @lang('document.approval.approve_document') </button>
@@ -104,7 +104,7 @@
                                             <h4> @lang('document.approval.h4_reject') </h4>
                                             <p>@lang('document.approval.p_reject')</p>
 
-                                            <form action="{{ route('processo.documento.rejeitar') }}" method="post">
+                                            <form action="{{ route('portal.processo.documento.rejeitar') }}" method="post">
                                                 {{ csrf_field() }}
 
                                                 <div class="col-md-12 text-center">
@@ -136,7 +136,7 @@
                 
                 <div class="col-md-12 m-t-40">
                     <div class="col-md-2 pull-right">
-                        <a href="{{ route('processo.listarDocumentos', ['_idRegistro' => $documento->idRegistro]) }}" class="btn btn-secondary btn-lg btn-block pull-right" id="botao-voltar-detalhes-doc"> @lang('buttons.general.back') </a>
+                        <a href="{{ route('portal.processo.listarDocumentos', ['_idRegistro' => $documento->idRegistro]) }}" class="btn btn-secondary btn-lg btn-block pull-right" id="botao-voltar-detalhes-doc"> @lang('buttons.general.back') </a>
                     </div>
 
                     @if ($permissoes['usa_excluir'])
@@ -166,7 +166,7 @@
             let obj = {'documento_id': idDocumento};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('deletar.documento') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.deletar.documento') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal({   
                             title: "Excluído!",   

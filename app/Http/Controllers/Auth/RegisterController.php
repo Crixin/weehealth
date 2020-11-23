@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Core\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
 use Modules\Core\Model\User;
 use Illuminate\Http\Request;
 use Modules\Core\Repositories\PerfilRepository;
-use Modules\Core\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;

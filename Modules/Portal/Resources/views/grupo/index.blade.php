@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.group.index'))
+@section('page_title', __('page_titles.portal.group.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.group.index') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.group.index') </li>    
 
 @endsection
 
@@ -29,7 +29,7 @@
                     @endif
                     
                     <div class="col-md-12">
-                        <a href="{{ route('grupo.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.group.create') </a>
+                        <a href="{{ route('portal.grupo.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.portal.group.create') </a>
                     </div>
                 
                     <div class="table-responsive m-t-40">
@@ -48,12 +48,12 @@
                                         <td>{{ $grupo->descricao }}</td>
                                         <td>
                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $grupo->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
-                                            <a href="{{ route('grupo.editar', ['id' => $grupo->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                            <a href="{{ route('portal.grupo.editar', ['id' => $grupo->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
 
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{ route('grupo.usuariosVinculados', ['id' => $grupo->id]) }}"> <i class="mdi mdi-account-settings-variant"></i> @lang('buttons.group.users') </a>  
+                                                    <a class="dropdown-item" href="{{ route('portal.grupo.usuariosVinculados', ['id' => $grupo->id]) }}"> <i class="mdi mdi-account-settings-variant"></i> @lang('buttons.portal.group.users') </a>  
                                                 </div>
                                             </div>
                                         </td>
@@ -132,7 +132,7 @@
 
             deleteIt.then(resolvedValue => {
                 // ajaxMethod('POST', "/grupos/" + idGrupo, {}).then(response => {
-                ajaxMethod('POST', "{{ URL::route('grupo.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.grupo.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Grupo excluído com sucesso.");
                     } else {

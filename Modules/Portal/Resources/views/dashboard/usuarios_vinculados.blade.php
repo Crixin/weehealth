@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.dashboard.linked_users'))
+@section('page_title', __('page_titles.portal.dashboard.linked_users'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('dashboards') }}"> @lang('page_titles.dashboard.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.dashboard.linked_users') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('portal.dashboards') }}"> @lang('page_titles.portal.dashboard.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.dashboard.linked_users') </li>    
 
 @endsection
 
@@ -25,15 +25,15 @@
                     @endcomponent
                     {{ Session::forget('message') }}
                 @endif
-                <form method="POST" action="{{ route('dashboards.vincularUsuarios') }}">
+                <form method="POST" action="{{ route('portal.dashboards.vincularUsuarios') }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="idDashboard" value="{{ $dashboard->id }}">
                     
                     <div class="form-body">
                         
                         {{-- Parte 1: cadastro --}}
-                        <h3 class="box-title m-t-40">  @lang('page_titles.dashboard.linked_users_to') <span style="font-weight: bold;">{{ $dashboard->nome }}</span> <small></small> </h3>
-                        <!--<h3 class="box-title"> @lang('page_titles.dashboard.users_available') </h3>-->
+                        <h3 class="box-title m-t-40">  @lang('page_titles.portal.dashboard.linked_users_to') <span style="font-weight: bold;">{{ $dashboard->nome }}</span> <small></small> </h3>
+                        <!--<h3 class="box-title"> @lang('page_titles.portal.dashboard.users_available') </h3>-->
                         <hr class="m-t-0 m-b-10">
                         <div class="row p-t-20">
                             <div class="col-md-12 m-b-30">
@@ -50,7 +50,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                            <a href="{{ route('dashboards') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                            <a href="{{ route('portal.dashboards') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                         </div>
                     </div>
                 </form>

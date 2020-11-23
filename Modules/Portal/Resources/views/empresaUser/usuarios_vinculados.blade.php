@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.enterprise.linked_users'))
+@section('page_title', __('page_titles.portal.enterprise.linked_users'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('empresa') }}"> @lang('page_titles.enterprise.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.enterprise.linked_users') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.empresa') }}"> @lang('page_titles.portal.enterprise.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.enterprise.linked_users') </li>    
 
 @endsection
 
@@ -31,14 +31,14 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('empresa.vincularUsuarios') }}">
+                <form method="POST" action="{{ route('portal.empresa.vincularUsuarios') }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="idEmpresa" value="{{ $empresa->id }}">
                     
                     <div class="form-body">
                         
                         {{-- Parte 1: cadastro --}}
-                        <h3 class="box-title"> @lang('page_titles.enterprise.users_available') </h3>
+                        <h3 class="box-title"> @lang('page_titles.portal.enterprise.users_available') </h3>
                         <hr class="m-t-0 m-b-10">
 
                         @if ($usuariosRestantes->count() > 0)
@@ -60,7 +60,7 @@
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                                <a href="{{ route('empresa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                                <a href="{{ route('portal.empresa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                             </div>
                         @else
                             <div class="row p-t-20 m-b-40">
@@ -71,13 +71,13 @@
                                 </div>
                             </div>
                             <div class="form-actions">
-                                <a href="{{ route('empresa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                                <a href="{{ route('portal.empresa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                             </div>
                         @endif
 
 
                         {{-- Parte 2: listagem --}}
-                        <h3 class="box-title m-t-40">  @lang('page_titles.enterprise.linked_users_to') <span style="font-weight: bold;">{{ $empresa->nome }}</span> <small>- Defina as permissões de cada um abaixo</small> </h3>
+                        <h3 class="box-title m-t-40">  @lang('page_titles.portal.enterprise.linked_users_to') <span style="font-weight: bold;">{{ $empresa->nome }}</span> <small>- Defina as permissões de cada um abaixo</small> </h3>
                         <hr>
                         <div class="row">
                             <div class="col-md-12">
@@ -312,7 +312,7 @@
             let deleteIt = swal2_warning("Essa ação é irreversível!");
             let obj = {'vinculo_id': idVinculoEmpresaUsuario};
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('relacao.empresaUsuario.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.relacao.empresaUsuario.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Vínculo entre empresa e usuário excluído com sucesso.");
                     } else {
@@ -342,7 +342,7 @@
             let valor = $("#" + idElemento).is(":checked");
             
             let obj = {'idVinculo': idVinculo, 'coluna': colunaModificada, 'valor': valor};
-            ajaxMethod('POST', "{{ URL::route('atualizar.relacao.empresaUsuario') }}", obj).then(response => {
+            ajaxMethod('POST', "{{ URL::route('portal.atualizar.relacao.empresaUsuario') }}", obj).then(response => {
                 if(response.response != 'erro') {
                     showToast('Atualizado!', 'Permissão do usuário atualizada com sucesso.', 'success');
                 } else {

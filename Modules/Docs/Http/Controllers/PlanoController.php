@@ -5,16 +5,26 @@ namespace Modules\Docs\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Docs\Repositories\PlanoRepository;
 
 class PlanoController extends Controller
 {
+    protected $planoRepository;
+
+    public function __construct(PlanoRepository $planoRepository)
+    {
+        $this->planoRepository = $planoRepository;
+    }
+
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
     public function index()
     {
-        return view('docs::index');
+        $planos = $this->planoRepository->findAll();
+
+        return view('docs::plano.index', compact('planos'));
     }
 
     /**
@@ -23,7 +33,7 @@ class PlanoController extends Controller
      */
     public function create()
     {
-        return view('docs::create');
+        return view('docs::plano.create');
     }
 
     /**

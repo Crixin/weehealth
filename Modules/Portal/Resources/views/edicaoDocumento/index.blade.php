@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.editDocuments.index'))
+@section('page_title', __('page_titles.portal.editDocuments.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.editDocuments.index') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.editDocuments.index') </li>    
 
 @endsection
 

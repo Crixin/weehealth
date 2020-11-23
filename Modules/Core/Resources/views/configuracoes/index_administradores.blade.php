@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.user.index'))
+@section('page_title', __('page_titles.core.user.index'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.user.index') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.core.user.index') </li>    
 
 @endsection
 
@@ -130,7 +130,7 @@
             let mensagem = (valor == true) ? 'Este usuário agora é um administrador!' : 'Permissão de administrador removida com sucesso!';
 
             let obj = {'idUsuario': idUsuario, 'valor': valor};
-            ajaxMethod('POST', "{{ URL::route('atualizar.permissaoAdministrador') }}", obj).then(response => {
+            ajaxMethod('POST', "{{ URL::route('core.atualizar.permissaoAdministrador') }}", obj).then(response => {
                 if(response.response === 'sucesso') {
                     swal2_success('Atualizado!', mensagem);
                 } else {

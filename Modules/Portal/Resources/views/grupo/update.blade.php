@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.group.update'))
+@section('page_title', __('page_titles.portal.group.update'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('grupo') }}"> @lang('page_titles.group.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.group.update') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('portal.grupo') }}"> @lang('page_titles.portal.group.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.group.update') </li>    
 
 @endsection
 
@@ -30,7 +30,7 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('grupo.alterar') }}">
+                <form method="POST" action="{{ route('portal.grupo.alterar') }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="idGrupo" value="{{ $grupo->id }}">
                     
@@ -68,7 +68,7 @@
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('grupo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('portal.grupo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
 
                 </form>

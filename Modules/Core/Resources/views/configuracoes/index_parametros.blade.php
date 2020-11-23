@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.configs.index_parameters'))
+@section('page_title', __('page_titles.core.configs.index_parameters'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.configs.index_parameters') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.core.configs.index_parameters') </li>    
 
 @endsection
 
@@ -49,10 +49,10 @@
                                 <td id="descricao-{{ $p->id }}" class="edit-disabled">
                                     {{ $p->descricao }} 
                                 </td>
-                                <td id="valor_padrao-{{ $p->id }}" class="edit-disabled">
-                                    {{ $p->valor_padrao }}  
+                                <td  id="valor_padrao-{{ $p->id }}">
+                                    {{ trim($p->valor_padrao) }}  
                                 </td>
-                                <td id="valor_usuario-{{ $p->id }}"> {{ $p->valor_usuario }} </td>
+                                <td id="valor_usuario-{{ $p->id }}"> {{ trim($p->valor_usuario) }} </td>
                                 <td id="ativo-{{ $p->id }}" class="edit-disabled"> 
                                     <button type="button" class="btn btn-block waves-effect waves-light btn-{{ ($p->ativo) ? 'danger' : 'success' }} changeParamValue" data-id="{{ $p->id }}" data-value="{{ !$p->ativo }}"> 
                                         {{ ($p->ativo) ? 'Inativar' : 'Ativar' }} 
@@ -133,22 +133,7 @@
         $(document).ready(function() {
             $('#editable-datatable').DataTable();
 
-            // Alteração na coluna 'valor_usuario'
-            $('table td').on('change', function(evt, newValue) {
-                let idParametro = $(this).closest('tr').data('id');
-                let coluna = $(this).attr('id').split('-')[0];
-                
-                let obj = {'parametro_id': idParametro, 'coluna': coluna, 'valor': newValue};
-                ajaxMethod('POST', "{{ URL::route('atualizar.parametro') }}", obj).then(response => {
-                    if(response.response != 'erro') {
-                        showToast('Atualizado!', 'Valor do parâmetro atualizado com sucesso!', 'success');
-                    } else {
-                        swal2_alert_error_support("Tivemos um problema ao atualizar o valor do parâmetro.");
-                    }
-                }, error => {
-                    console.log(error);
-                });
-            });
+           
 
             // 'Click' no botão para ativar ou desativar o parâmetro
             $('.changeParamValue').on('click', function(evt) {
@@ -156,7 +141,7 @@
                 let newValue = ($(this).data('value')) ? true : false;
                 
                 let obj = {'parametro_id': idParam, 'coluna': 'ativo', 'valor': newValue};
-                ajaxMethod('POST', "{{ URL::route('atualizar.parametroAtivo') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('core.atualizar.parametroAtivo') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Sucesso!", "Valor do parâmetro atualizado com sucesso!");
                     } else {
@@ -168,5 +153,24 @@
             });
 
         });
+
+
+         // Alteração na coluna 'valor_usuario'
+        $(document).on("change","table td", function(evt, newValue) {
+            let idParametro = $(this).closest('tr').data('id');
+            let coluna = $(this).attr('id').split('-')[0];
+            
+            let obj = {'parametro_id': idParametro, 'coluna': coluna, 'valor': newValue.toUpperCase()};
+            ajaxMethod('POST', "{{ URL::route('core.atualizar.parametro') }}", obj).then(response => {
+                if(response.response != 'erro') {
+                    showToast('Atualizado!', 'Valor do parâmetro atualizado com sucesso!', 'success');
+                } else {
+                    swal2_alert_error_support("Tivemos um problema ao atualizar o valor do parâmetro.");
+                }
+            }, error => {
+                console.log(error);
+            });
+        });
+
     </script>
 @endsection

@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.report.index'))
+@section('page_title', __('page_titles.portal.report.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"> @lang('page_titles.report.index') </li>    
-    <li class="breadcrumb-item active"> @lang('page_titles.process.search') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"> @lang('page_titles.portal.report.index') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.process.search') </li>    
 
 @endsection
 
@@ -30,7 +30,7 @@
 						<div class="col-10">
 
 							<h2 class="text-center">Além do período, você pode informar <span class="text-info">{{ $filtrosDisponiveis }}</span> para realizar a busca</h2>
-							<h5 class="text-center text-muted m-b-30">@lang('page_titles.logs.warning')</h5>
+							<h5 class="text-center text-muted m-b-30">@lang('page_titles.portal.logs.warning')</h5>
 
 							@if(Session::has('message'))
 								@component('componentes.alert')
@@ -39,7 +39,7 @@
 								{{ Session::forget('message') }}
 							@endif
 
-							<form method="POST" action="{{ route('relatorio.buscar') }}">
+							<form method="POST" action="{{ route('portal.relatorio.buscar') }}">
 								{{ csrf_field() }}
 								<input type="hidden" name="idEmpresa" value="{{ $idEmpresa }}">
 								<input type="hidden" name="idProcesso" value="{{ $idProcesso }}">
@@ -114,11 +114,11 @@
 									<td>{{ $log->nomeProcesso }}</td>
 									<td><?php echo(Helper::stylizeString($log->descricao)); ?></td>
 									<td><?php echo(Helper::stylizeString($log->complemento)); ?></td>
-									<td> <a href="{{ route('processo.listarDocumentos', ['_idRegistro' => $log->idRegistro]) }}" target="_blank" class="btn waves-effect waves-light btn-secondary m-l-10"> <i class="mdi mdi-file-document"></i> @lang('buttons.general.list_documents') </button> </td>
+									<td> <a href="{{ route('portal.processo.listarDocumentos', ['_idRegistro' => $log->idRegistro]) }}" target="_blank" class="btn waves-effect waves-light btn-secondary m-l-10"> <i class="mdi mdi-file-document"></i> @lang('buttons.general.list_documents') </button> </td>
 								</tr>
 							@empty
 								<tr>
-									<td class="text-center" colspan="6">@lang('page_titles.logs.empty')</td>
+									<td class="text-center" colspan="6">@lang('page_titles.portal.logs.empty')</td>
 								</tr>
 							@endforelse
 						</tbody>
