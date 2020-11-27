@@ -18,10 +18,27 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                @if(Session::has('message'))
+                @php
+                $nome = "adasasdsaSlider";
+                $modules = ['Core'];
+                @endphp
+{{--                 @if(Session::has('message'))
                     @component('componentes.alert') @endcomponent
                     {{ Session::forget('message') }}
+                @endif --}}
+              {{--   @php
+                    dd(Session::get('message')->all());
+                @endphp --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                 @endif
+<<<<<<< Updated upstream
                 
                 <form method="POST" action="{{ route('core.perfil.salvar') }}">
                     {{ csrf_field() }}
@@ -49,17 +66,17 @@
                                         @endforeach
                                     </select>
                                     <small class="form-control-feedback"> Selecione as permissões. </small> 
+=======
+                <form method="POST" action="{{ route('perfil.salvar') }}">
+                    {{ Form::token() }}
+                        
+                    
+                    @component('core::components.perfil')
+                        @slot('nome') {{ $nome }} @endslot
+                        @slot('modules') {{ $modules }} @endslot
+                    @endcomponent
+>>>>>>> Stashed changes
 
-                                    @if ($errors->has('permissoes'))
-                                        <br/>
-                                        <span class="help-block text-danger">
-                                            <strong>{{ $errors->first('permissoes') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
                         <a href="{{ route('core.perfil') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>

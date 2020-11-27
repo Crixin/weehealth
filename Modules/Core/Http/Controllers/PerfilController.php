@@ -17,8 +17,7 @@ class PerfilController extends Controller
         PerfilRepository $perfil,
         PermissaoRepository $permissao,
         PerfilPermissaoRepository $perfilPermissao
-    )
-    {
+    ) {
         $this->perfilRepository = $perfil;
         $this->permissaoRepository = $permissao;
         $this->perfilPermissaoRepository = $perfilPermissao;
@@ -55,10 +54,13 @@ class PerfilController extends Controller
     public function store(Request $_request)
     {
         try {
-            if (!$this->validator($_request)) {
-                return redirect()->back()->withInput();
-            }
+            $permissoes = $this->permissaoRepository->findAll([], [['descricao', 'ASC']]);
 
+            [$result, $errors] = $this->validator($_request);
+            if (!$result) {
+                return redirect()->back()->withErrors($errors)->withInput();
+            }
+    
             DB::transaction(function () use ($_request) {
                 $perfil = $this->perfilRepository->create(['nome' => $_request->nome]);
                 foreach ($_request->permissoes as $key => $permissao) {
@@ -72,6 +74,7 @@ class PerfilController extends Controller
             Helper::setNotify('Novo perfil criado com sucesso!', 'success|check-circle');
             return redirect()->route('perfil');
         } catch (\Throwable $th) {
+            dd($th);
             Helper::setNotify("Erro ao criar o perfil", 'danger|close-circle');
             return redirect()->back()->withInput();
         }
@@ -105,8 +108,9 @@ class PerfilController extends Controller
      */
     public function update(Request $_request, $id)
     {
-        if (!$this->validator($_request, $id)) {
-            return redirect()->back()->withInput();
+        [$result, $error] = $this->validator($_request, $id);
+        if (!$result) {
+            return redirect()->back()->withInput()->compact(['error' => $error]);
         }
 
         try {
@@ -176,10 +180,9 @@ class PerfilController extends Controller
             'nome' => 'required|string|unique:core_perfil,nome' . ($id ? ',' . $id : ''),
             'permissoes' => 'required|exists:core_permissao,id',
         ]);
-
         if ($validator->fails()) {
-            Helper::setNotify($validator->messages()->first(), 'danger|close-circle');
-            return false;
+            Helper::setNotify($validator->messages(), 'danger|close-circle');
+            return [false, $validator];
         }
         return true;
     }
