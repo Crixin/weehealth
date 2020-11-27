@@ -19,8 +19,8 @@
             <!-- User profile text-->
             <div class="profile-text"> <a href="#" class="dropdown-toggle u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{ (!Auth::guest()) ? Auth::user()->name : 'Visitante' }}</a>
                 <div class="dropdown-menu animated flipInY">
-                    <a href="{{ route('usuario.editar', ['id' => Auth::user()->id]) }}" class="dropdown-item"><i class="ti-user"></i> @lang('sidebar_and_header.tooltip_profile')</a>
-                    <a href="{{ route('core.logout') }}" class="dropdown-item"><i class="fa fa-power-off"></i> @lang('sidebar_and_header.tooltip_logout')</a>
+                    <a href="{{ route('core.usuario.editar', ['id' => Auth::user()->id]) }}" class="dropdown-item"><i class="ti-user"></i> @lang('sidebar_and_header.tooltip_profile')</a>
+                    <a href="{{ route('logout') }}" class="dropdown-item"><i class="fa fa-power-off"></i> @lang('sidebar_and_header.tooltip_logout')</a>
                 </div>
             </div>
         </div>
@@ -31,28 +31,29 @@
             <ul id="sidebarnav">
                 <li class="nav-small-cap"> @lang('sidebar_and_header.li_system') </li> 
                 <li>
-                    <a class="has-arrow waves-effect waves-dark" href="#2" aria-expanded="false"><i class="mdi mdi-plus-circle-outline"></i><span class="hide-menu"> @lang('sidebar_and_header.uls_li_system.register.collapse') </span></a>
+                    <a class="has-arrow waves-effect waves-dark" href="#2" aria-expanded="false"><i class="mdi mdi-plus-circle-outline"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.uls_li_system.register.collapse') </span></a>
                     <ul aria-expanded="false" class="collapse">
                         
-                            <li><a href="{{ route('docs.setor') }}"> @lang('sidebar_and_header.docs.menu.setor') </a></li>
-                            <li><a href="{{ route('docs.configuracao') }}"> @lang('sidebar_and_header.docs.menu.configuracao') </a></li>
+                            <li><a href="{{ route('docs.setor') }}"> @lang('sidebar_and_header.docs.uls_li_system.register.setor') </a></li>
+                            <li><a href="{{ route('docs.configuracao') }}"> @lang('sidebar_and_header.docs.uls_li_system.register.configuracao') </a></li>
+                            <li><a href="{{ route('docs.plano') }}"> @lang('sidebar_and_header.docs.uls_li_system.register.plano') </a></li>
                     </ul>
                 </li>
 
                 <li>
-                    <a class="waves-effect waves-dark" href="{{ route('docs.controle_registro') }}" aria-expanded="false"><i class="mdi mdi-format-list-bulleted-type"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.menu.controle_registros') </span></a>
+                    <a class="waves-effect waves-dark" href="{{ route('docs.controle_registro') }}" aria-expanded="false"><i class="mdi mdi-format-list-bulleted-type"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.uls_li_system.controle_registros') </span></a>
                 </li>
                 
                 <li>
-                    <a class="waves-effect waves-dark" href="{{ route('docs.documento') }}" aria-expanded="false"><i class="mdi mdi-library-books"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.menu.documento') </span></a>
+                    <a class="waves-effect waves-dark" href="{{ route('docs.documento') }}" aria-expanded="false"><i class="mdi mdi-library-books"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.uls_li_system.documento') </span></a>
                 </li>
 
                 <li>
-                    <a class="waves-effect waves-dark" href="{{ route('docs.documentoExterno') }}" aria-expanded="false"><i class="mdi mdi-file-cloud"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.menu.documento_externo') </span></a>
+                    <a class="waves-effect waves-dark" href="{{ route('docs.documentoExterno') }}" aria-expanded="false"><i class="mdi mdi-file-cloud"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.uls_li_system.documento_externo') </span></a>
                 </li>
                 
                 <li>
-                    <a class="waves-effect waves-dark" href="{{ route('docs.workflow') }}" aria-expanded="false"><i class="mdi mdi-file-tree"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.menu.workflow') </span></a>
+                    <a class="waves-effect waves-dark" href="{{ route('docs.workflow') }}" aria-expanded="false"><i class="mdi mdi-file-tree"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.uls_li_system.workflow') </span></a>
                 </li>
                
 
@@ -68,9 +69,9 @@
         <!-- item-->
         <a href="{{ route('docs.home') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.tooltip_home')"><i class="mdi mdi-home"></i></a>
         <!-- item-->
-        <!--<a href="{{ route('configuracao.parametros') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.uls_li_system.configs.item2')"><i class="ti-settings"></i></a>-->
+        <!--<a href="{{ route('core.configuracao.parametros') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.uls_li_system.configs.item2')"><i class="ti-settings"></i></a>-->
         <!-- item-->
-        <a href="{{ route('core.logout') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.tooltip_logout')"><i class="mdi mdi-power"></i></a>
+        <a href="{{ route('logout') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.tooltip_logout')"><i class="mdi mdi-power"></i></a>
     </div>
     <!-- End Bottom points-->
 @endsection

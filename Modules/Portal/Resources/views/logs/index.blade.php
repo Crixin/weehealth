@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.logs.index'))
+@section('page_title', __('page_titles.portal.logs.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.logs.index') </li>
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.logs.index') </li>
 
 @endsection
 
@@ -26,11 +26,11 @@
                         <div class="row">
                             <div class="col"></div>
                             <div class="col-10">
-                                <form method="POST" action="{{ route('logs.search') }}">
+                                <form method="POST" action="{{ route('portal.logs.search') }}">
                                     {{ csrf_field() }}
     
-                                    <h2 class="text-center">@lang('page_titles.logs.instruction')</h2>
-                                    <h5 class="text-center text-muted m-b-30">@lang('page_titles.logs.warning')</h5>
+                                    <h2 class="text-center">@lang('page_titles.portal.logs.instruction')</h2>
+                                    <h5 class="text-center text-muted m-b-30">@lang('page_titles.portal.logs.warning')</h5>
     
                                     @if(Session::has('message'))
                                         @component('componentes.alert')
@@ -91,7 +91,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td class="text-center" colspan="5">@lang('page_titles.logs.empty')</td>
+                                        <td class="text-center" colspan="5">@lang('page_titles.portal.logs.empty')</td>
                                     </tr>
                                 @endforelse
                             </tbody>

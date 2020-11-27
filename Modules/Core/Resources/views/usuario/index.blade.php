@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.user.index'))
+@section('page_title', __('page_titles.core.user.index'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.user.index') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.core.user.index') </li>    
 
 @endsection
 
@@ -31,7 +31,7 @@
 
 
                 <div class="col-md-12">
-                    <a href="{{ url('core/usuario/register') }}" class="btn btn-lg waves-effect waves-light btn-success pull-right">@lang('buttons.user.create') </a>
+                    <a href="{{ url('core/usuario/register') }}" class="btn btn-lg waves-effect waves-light btn-success pull-right">@lang('buttons.core.user.create') </a>
                 </div>
             
                 <div class="table-responsive m-t-40">
@@ -63,7 +63,7 @@
                                     </td>
                                     <td>
                                         <a href="#" class="btn waves-effect waves-light btn-warning sa-warning" data-id="{{ $usuario->id }}"> <i class="mdi mdi-account-off"></i> @lang('buttons.general.disable') </a>
-                                        <a href="{{ route('usuario.editar', ['id' => $usuario->id ]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                        <a href="{{ route('core.usuario.editar', ['id' => $usuario->id ]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -163,7 +163,7 @@
             let obj = {'id': idUser};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('usuario.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('core.usuario.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Inativado!", "Usuário inativado com sucesso.");
                     } else {
@@ -207,7 +207,7 @@
             window.sessionStorage.clear();
 
             let obj = {'idUsuario': idUsuario, 'valor': valor};
-            ajaxMethod('POST', "{{ URL::route('atualizar.permissaoUsuario') }}", obj).then(response => {
+            ajaxMethod('POST', "{{ URL::route('core.atualizar.permissaoUsuario') }}", obj).then(response => {
                 console.log(response);
                 if(response.response != 'erro') {
                     swal2_success('Atualizado!', 'O nível de permissão do usuário foi atualizado com sucesso!');

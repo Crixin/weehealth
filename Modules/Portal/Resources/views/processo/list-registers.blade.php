@@ -4,15 +4,15 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.process.index'))
+@section('page_title', __('page_titles.portal.process.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"> @lang('page_titles.process.index') </li>    
-    <li class="breadcrumb-item"> @lang('page_titles.process.search') </li>    
-    <li class="breadcrumb-item active"> @lang('page_titles.process.list_registers') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"> @lang('page_titles.portal.process.index') </li>    
+    <li class="breadcrumb-item"> @lang('page_titles.portal.process.search') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.process.list_registers') </li>    
 
 @endsection
 
@@ -44,7 +44,7 @@
                                                                                         <td>{{ $indice->valor ?? '' }}</td>
                                         @endforeach
                                         <td style="white-space: nowrap">
-                                            <a href="{{ route('processo.listarDocumentos', ['_idRegistro' => $registro->id]) }}" class="btn btn-info"> <i class="mdi mdi-eye"></i> @lang('buttons.general.view') </a>
+                                            <a href="{{ route('portal.processo.listarDocumentos', ['_idRegistro' => $registro->id]) }}" class="btn btn-info"> <i class="mdi mdi-eye"></i> @lang('buttons.general.view') </a>
                                             <a href='#' class="btn btn-info buscaDocs" data-carregado="false" data-visible="false" data-registro="{{$registro->id}}"> <i class="mdi mdi-view-list"></i> @lang('buttons.general.preview')</a>
                                         </td>
                                     </tr>
@@ -54,7 +54,7 @@
                     </div>
                     <div class="col-md-12 m-t-40">
                         <div class="col-md-2 pull-right">
-                            <a href="{{ route('processo.buscar', ['idEmpresa' => session('identificadores')['_idEmpresa'], 'idProcesso' => session('identificadores')['_idProcesso'] ] ) }}" class="btn btn-secondary btn-lg btn-block pull-right"> @lang('buttons.general.back') </a>
+                            <a href="{{ route('portal.processo.buscar', ['idEmpresa' => session('identificadores')['_idEmpresa'], 'idProcesso' => session('identificadores')['_idProcesso'] ] ) }}" class="btn btn-secondary btn-lg btn-block pull-right"> @lang('buttons.general.back') </a>
                         </div>
                     </div>
                                 @else
@@ -65,7 +65,7 @@
                                                 <div class="row">
                                                         <div class="col"></div>
                                                         <div class="col-4">
-                                <a href="{{ route('processo.buscar', ['idEmpresa' => session('identificadores')['_idEmpresa'], 'idProcesso' => session('identificadores')['_idProcesso'] ] ) }}" class="btn btn-secondary btn-lg btn-block pull-right"> @lang('buttons.general.back') </a>
+                                                         <a href="{{ route('portal.processo.buscar', ['idEmpresa' => session('identificadores')['_idEmpresa'], 'idProcesso' => session('identificadores')['_idProcesso'] ] ) }}" class="btn btn-secondary btn-lg btn-block pull-right"> @lang('buttons.general.back') </a>
                                                         </div>
                                                         <div class="col"></div>
                                                 </div>
@@ -226,7 +226,7 @@
         function buscaDocs(registro) {
             return new Promise(function (resolve, reject){
                 $.ajax({
-                    url: '{{route("ged.getRegistro")}}',
+                    url: '{{route("portal.ged.getRegistro")}}',
                     type: 'GET',
                     dataType: 'JSON',
                     data: {

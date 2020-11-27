@@ -10,7 +10,7 @@ class HomeCoreController extends Controller
     public function index()
     {
         if (is_null(Auth::user())) {
-            return redirect('/core/login');
+            return redirect('login');
         }
         //dd('home modulo core');
         return view('core::home.index');

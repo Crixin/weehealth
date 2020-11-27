@@ -66,7 +66,7 @@ class ProcessoController extends Controller
         $processo->save();
 
         Helper::setNotify('Processo criado com sucesso!', 'success|check-circle');
-        return redirect()->route('processo');
+        return redirect()->route('portal.processo');
     }
 
 
@@ -739,6 +739,6 @@ class ProcessoController extends Controller
                 );
             }
         }
-        return redirect()->route('processo.listarDocumentos', ['_idRegistro' => $documentoCompleto->idRegistro]);
+        return redirect()->route('portal.processo.listarDocumentos', ['_idRegistro' => $documentoCompleto->idRegistro]);
     }
 }

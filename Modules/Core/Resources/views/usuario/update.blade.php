@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.user.update'))
+@section('page_title', __('page_titles.core.user.update'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('usuario') }}"> @lang('page_titles.user.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.user.update') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('core.usuario') }}"> @lang('page_titles.core.user.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.core.user.update') </li>    
 
 @endsection
 
@@ -30,12 +30,12 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('usuario.alterar') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('core.usuario.alterar') }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <input type="hidden" name="idUsuario" value="{{ $usuario->id }}">
 
                     <div class="form-body">
-                        <h3 class="box-title"> @lang('page_titles.user.person_info') </h3>
+                        <h3 class="box-title"> @lang('page_titles.core.user.person_info') </h3>
                         <hr class="m-t-0 m-b-10">
 
                         <div class="row p-t-20">
@@ -114,19 +114,19 @@
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('usuario') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('core.usuario') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
 
                 </form>
 
                     
 
-                <form method="POST" action="{{ route('usuario.alterarSenha') }}">
+                <form method="POST" action="{{ route('core.usuario.alterarSenha') }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="idUsuario" value="{{ $usuario->id }}">
 
                     <div class="form-body">
-                        <h3 class="m-t-40 box-title"> @lang('page_titles.user.password') </h3>
+                        <h3 class="m-t-40 box-title"> @lang('page_titles.core.user.password') </h3>
                         <hr class="m-t-5 m-b-10">
 
                         <div class="row p-t-20">
@@ -152,7 +152,7 @@
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('usuario') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('core.usuario') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
 
                 </form>

@@ -43,66 +43,91 @@ return [
     ],
 
 
-
-    /* CADASTROS */
-
-    'enterprise'    => [
-        'create'    => 'Criar Empresa',
-        'users'     => 'Usuários',
-        'groups'    => 'Grupos',
-        'processes' => 'Processos'
-    ],
-    
-    'group'         => [
-        'create'    => 'Criar Grupo',
-        'users'     => 'Usuários'
-    ],
-    
-    'process'     => [
-        'create'    => 'Criar Processo'
-    ],
-    
-    'user'          => [
-        'create'    => 'Criar Usuário'
-    ],
-   
-    'dossie'          => [
-        'create'    => 'Criar Dossiê',
-    ],
-
-    'perfil'          => [
-        'create'    => 'Criar Perfil',
-    ],
-    'ged'          => [
-        'view-insert-docs'    => "Visualizar / Inserir Documentos",
-    ],
-    'empresa-processo-grupo'          => [
-        'create-links'    => "Salvar Vínculos",
-        'save-filters'    => "Salvar Filtros",
+    /*core */
+    'core'  => [
+        'enterprise'    => [
+            'create'    => 'Criar Empresa',
+        ],
+        'user'          => [
+            'create'    => 'Criar Usuário'
+        ],
+        'perfil'          => [
+            'create'    => 'Criar Perfil',
+        ],
     ],
 
 
-    /* OUTROS */
+    /*portal*/
+    'portal' => [
+        /* CADASTROS */
 
-    'notifications' =>  [
-        'mark_all_as_read'  => 'Marcar Todas Como Lidas'
+        'enterprise'    => [
+            'create'    => 'Criar Empresa',
+            'users'     => 'Usuários',
+            'groups'    => 'Grupos',
+            'processes' => 'Processos'
+        ],
+
+        'group'         => [
+            'create'    => 'Criar Grupo',
+            'users'     => 'Usuários'
+        ],
+
+        'process'     => [
+            'create'    => 'Criar Processo'
+        ],
+
+        'dossie'          => [
+            'create'    => 'Criar Dossiê',
+        ],
+
+        'ged'          => [
+            'view-insert-docs'    => "Visualizar / Inserir Documentos",
+        ],
+        'empresa-processo-grupo'          => [
+            'create-links'    => "Salvar Vínculos",
+            'save-filters'    => "Salvar Filtros",
+        ],
+
+        /* OUTROS */
+
+        'notifications' =>  [
+            'mark_all_as_read'  => 'Marcar Todas Como Lidas'
+        ],
+
+        /*DASHBOARD*/
+        'dashboard'    => [
+            'create'   => 'Criar Dashboard',
+            'view'     => 'Visualizar',
+            'unlink'   => 'Vincular Usuário'
+        ],
+
+        /*CONFIGURAÇÕES TAREFA*/
+        'configuracaoTarefa'    => [
+            'create'   => 'Criar Configuração'
+        ],
+
+        /*TAREFA*/
+        'tarefa'    => [
+            'create'   => 'Criar Tarefa'
+        ],
     ],
 
 
-    /*DASHBOARD*/
-    'dashboard'    => [
-        'create'   => 'Criar Dashboard',
-        'view'     => 'Visualizar',
-        'unlink'   => 'Vincular Usuário'
+    /*Docs */
+    'docs' => [
+
+        /*PLANO*/
+        'plano'    => [
+            'create'   => 'Criar Plano'
+        ],
+
+
     ],
 
-    /*CONFIGURAÇÕES TAREFA*/
-    'configuracaoTarefa'    => [
-        'create'   => 'Criar Configuração'
-    ],
 
-    /*TAREFA*/
-    'tarefa'    => [
-        'create'   => 'Criar Tarefa'
-    ],
+    /*Forms */
+    'forms' => [
+
+    ]
 ];

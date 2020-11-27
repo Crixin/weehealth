@@ -3,13 +3,13 @@
 @extends('layouts.menuCore')
 @yield('menu')
 
-@section('page_title', __('page_titles.notifications.index'))
+@section('page_title', __('page_titles.portal.notifications.index'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.notifications.index') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.notifications.index') </li>    
 
 @endsection
 
@@ -29,7 +29,7 @@
             @endif
             
             <div class="col-md-12">
-                <a href="{{ route('notificacao.marcar-todas-como-lidas') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.notifications.mark_all_as_read') </a>
+                <a href="{{ route('notificacao.marcar-todas-como-lidas') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.portal.notifications.mark_all_as_read') </a>
             </div>
 
             <div class="table-responsive m-t-40">

@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.downloads.index'))
+@section('page_title', __('page_titles.portal.downloads.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>    
-    <li class="breadcrumb-item active"> @lang('page_titles.downloads.index') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.downloads.index') </li>    
 
 @endsection
 
@@ -70,7 +70,7 @@
                                 </div>
                                 @endif
 
-                            <form method="POST" action="{{ route('download.criarZip') }}">
+                            <form method="POST" action="{{ route('portal.download.criarZip') }}">
                                 {{ csrf_field() }}
 
 								<h2 class="text-center">Informe <span class="text-muted">o CPF</span> e/ou <span class="text-muted">a Matrícula</span> para buscar</h2>

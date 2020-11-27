@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.configuracaoTarefa.index'))
+@section('page_title', __('page_titles.portal.configuracaoTarefa.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.configuracaoTarefa.index') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.configuracaoTarefa.index') </li>    
 
 @endsection
 
@@ -30,7 +30,7 @@
                     @endif
                 
                     <div class="col-md-12">
-                        <a href="{{ route('config-tarefa.criar') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.configuracaoTarefa.create') </a>
+                        <a href="{{ route('portal.config-tarefa.criar') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.portal.configuracaoTarefa.create') </a>
                     </div>
                 
                     <div class="table-responsive m-t-40">
@@ -49,7 +49,7 @@
                                         <td>{{ $configuracao->nome }}</td>
                                         <td>
                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $configuracao->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
-                                            <a href="{{ route('config-tarefa.editar', ['id' => $configuracao->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                            <a href="{{ route('portal.config-tarefa.editar', ['id' => $configuracao->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -118,7 +118,7 @@
             let obj = {'id': id};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('config-tarefa.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.config-tarefa.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Configuração excluído com sucesso.");
                     } else {

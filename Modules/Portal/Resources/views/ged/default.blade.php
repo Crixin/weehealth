@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.ged.index'))
+@section('page_title', __('page_titles.portal.ged.index'))
 
 
 @section('breadcrumbs')
 
-<li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-<li class="breadcrumb-item"> @lang('page_titles.ged.index') </li>
+<li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+<li class="breadcrumb-item"> @lang('page_titles.portal.ged.index') </li>
 
 @endsection
 
@@ -29,13 +29,13 @@
 					<div class="col-10">
 
 						@if ($tipo == "create")
-                        	<form method="POST" action="{{ route('ged.salvar') }}" enctype="multipart/form-data">
+                        	<form method="POST" action="{{ route('portal.ged.salvar') }}" enctype="multipart/form-data">
 						@elseif ($tipo == "edit-form")
-							<form method="POST" action="{{ route('ged.alterar') }}" >
+							<form method="POST" action="{{ route('portal.ged.alterar') }}" >
 								<input type="hidden" name="idRegistro" id="idRegistro" value="{{$idRegistro}}"/>
 								<input type="hidden" name="idEmpresaProcesso" id="idEmpresaProcesso" value="{{$empresaProcessoSelected}}"/>
 						@else
-							<form method="POST" action="{{ route('ged.search') }}">
+							<form method="POST" action="{{ route('portal.ged.search') }}">
 						@endif
 
 							{{ csrf_field() }}
@@ -72,8 +72,8 @@
 						
 						<div class="m-t-20">
 							@if ($tipo == "edit-form")
-								<a href="{{ route('ged.list-document', [$empresaProcessoSelected, $idRegistro]) }}" class="btn waves-effect waves-light btn-lg btn-block btn-success pull-right mt-2" >@lang('buttons.ged.view-insert-docs') </a>
-								<form method="POST" action="{{ route('ged.search') }}">
+								<a href="{{ route('portal.ged.list-document', [$empresaProcessoSelected, $idRegistro]) }}" class="btn waves-effect waves-light btn-lg btn-block btn-success pull-right mt-2" >@lang('buttons.portal.ged.view-insert-docs') </a>
+								<form method="POST" action="{{ route('portal.ged.search') }}">
 									{{ csrf_field() }}
 									<button class="btn waves-effect waves-light btn-lg btn-block btn-secondary pull-right mt-4" >@lang('buttons.general.back') </button>
 								</form>

@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.dashboard.index'))
+@section('page_title', __('page_titles.portal.dashboard.index'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.dashboard.index') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.dashboard.index') </li>    
 
 @endsection
 
@@ -33,7 +33,7 @@
                 @endif
             
                 <div class="col-md-12">
-                    <a href="{{ route('dashboards.criar') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.dashboard.create') </a>
+                    <a href="{{ route('portal.dashboards.criar') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.portal.dashboard.create') </a>
                 </div>
             
                 <div class="table-responsive m-t-40">
@@ -52,12 +52,12 @@
                                     <td>{{ $dashboard->nome }}</td>
                                     <td>
                                         <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $dashboard->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
-                                        <a href="{{ route('dashboards.editar', ['id' => $dashboard->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                        <a href="{{ route('portal.dashboards.editar', ['id' => $dashboard->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item visualizar" data-id="{{ $dashboard->id }}" > <i class="mdi mdi-view-dashboard"></i> @lang('buttons.dashboard.view') </a>
-                                                <a class="dropdown-item" href="{{ route('dashboards.usuariosVinculados', ['id' => $dashboard->id]) }}"> <i class="mdi mdi-account-switch"></i> @lang('buttons.dashboard.unlink') </a>                                                                                          
+                                                <a class="dropdown-item visualizar" data-id="{{ $dashboard->id }}" > <i class="mdi mdi-view-dashboard"></i> @lang('buttons.portal.dashboard.view') </a>
+                                                <a class="dropdown-item" href="{{ route('portal.dashboards.usuariosVinculados', ['id' => $dashboard->id]) }}"> <i class="mdi mdi-account-switch"></i> @lang('buttons.portal.dashboard.unlink') </a>                                                                                          
                                             </div>
                                         </div>
                                     </td>
@@ -129,7 +129,7 @@
             let obj = {'id': idDashboard};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('dashboards.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.dashboards.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Dashboard excluído com sucesso.");
                     } else {

@@ -3,13 +3,13 @@
 @extends('layouts.menuPortal')
 @yield('menu')
 
-@section('page_title', __('page_titles.ged.index'))
+@section('page_title', __('page_titles.portal.ged.index'))
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"> @lang('page_titles.ged.index') </li>    
-    <li class="breadcrumb-item active"> @lang('page_titles.ged.search') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"> @lang('page_titles.portal.ged.index') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.ged.search') </li>    
 
     @endsection
 
@@ -36,7 +36,7 @@
                                             <td>{{ $indice->valor ?? '' }}</td>
                                         @endforeach
                                         <td style="white-space: nowrap">
-                                            <a href="{{ route('ged.editar', ['idRegistro' => $registro->id, 'empresaProcesso' => $empresaProcessoId]) }}" class="btn btn-info"> <i class="mdi mdi-pencil"></i> @lang('buttons.general.edit') </a>
+                                            <a href="{{ route('portal.ged.editar', ['idRegistro' => $registro->id, 'empresaProcesso' => $empresaProcessoId]) }}" class="btn btn-info"> <i class="mdi mdi-pencil"></i> @lang('buttons.general.edit') </a>
                                             <button type='button' class="btn waves-effect waves-light btn-danger delete-register" data-id-registro="{{ $registro->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </button>
 
                                         </td>
@@ -49,7 +49,7 @@
                                             <td>{{ $indice->valor ?? '' }}</td>
                                         @endforeach
                                         <td style="white-space: nowrap">
-                                            <a href="{{ route('ged.access-document', [$empresaProcesso, $documento->id]) }}" class="btn btn-info"> <i class="mdi mdi-eye"></i> @lang('buttons.general.access') </a>
+                                            <a href="{{ route('portal.ged.access-document', [$empresaProcesso, $documento->id]) }}" class="btn btn-info"> <i class="mdi mdi-eye"></i> @lang('buttons.general.access') </a>
                                             <button type='button' class="btn waves-effect waves-light btn-danger delete-document" data-id-documento="{{ $documento->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </button>
                                         </td>
                                     </tr>
@@ -60,9 +60,9 @@
                     <div class="col-md-12 m-t-40">
                         <div class="col-md-2 pull-right">
                             @if(isset($registros))
-                                <a href=" {{ route('ged.search-view') }} " class="btn waves-effect waves-light btn-lg btn-block btn-secondary pull-right mt-4" >@lang('buttons.general.back') </a>
+                                <a href=" {{ route('portal.ged.search-view') }} " class="btn waves-effect waves-light btn-lg btn-block btn-secondary pull-right mt-4" >@lang('buttons.general.back') </a>
                             @else
-                                <a href=" {{ route('ged.editar', ['idRegistro' => $idRegistro, 'empresaProcesso' => $empresaProcesso]) }} " class="btn waves-effect waves-light btn-lg btn-block btn-secondary pull-right mt-4" >@lang('buttons.general.back') </a>
+                                <a href=" {{ route('portal.ged.editar', ['idRegistro' => $idRegistro, 'empresaProcesso' => $empresaProcesso]) }} " class="btn waves-effect waves-light btn-lg btn-block btn-secondary pull-right mt-4" >@lang('buttons.general.back') </a>
                             @endif
                         </div>
                     </div>
@@ -71,7 +71,7 @@
             @if (isset($documentos))
                 <div class="card-body">
                     <h4>Inserir Documentos</h4>
-                    <form method="POST" action="{{ route('ged.create-document') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('portal.ged.create-document') }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <input type="hidden" name="idRegistro" value="{{ $idRegistro }}" />
                         <input type="hidden" name="idArea" value="{{ $idArea }}" />
@@ -148,7 +148,7 @@
                 let obj = {'documento_id': idDocumento};
 
                 deleteIt.then(resolvedValue => {
-                    ajaxMethod('POST', "{{ URL::route('deletar.documento') }}", obj).then(response => {
+                    ajaxMethod('POST', "{{ URL::route('portal.deletar.documento') }}", obj).then(response => {
                         if(response.response != 'erro') {
                             swal2_success("Excluído!", "Documento excluído com sucesso.");
                         } else {
@@ -168,7 +168,7 @@
                 let obj = {'registro_id': idRegistro};
 
                 deleteIt.then(resolvedValue => {
-                    ajaxMethod('POST', "{{ URL::route('deletar.registro') }}", obj).then(response => {
+                    ajaxMethod('POST', "{{ URL::route('portal.deletar.registro') }}", obj).then(response => {
                         if(response.response != 'erro') {
                             swal2_success("Excluído!", "Registro excluído com sucesso.");
                         } else {

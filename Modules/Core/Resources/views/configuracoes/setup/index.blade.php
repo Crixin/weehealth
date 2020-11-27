@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.configs.index_setup'))
+@section('page_title', __('page_titles.core.configs.index_setup'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.configs.index_setup') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.core.configs.index_setup') </li>    
 
 @endsection
 
@@ -28,11 +28,11 @@
                 {{ Session::forget('message') }}
             @endif
 
-            <form method="POST" action="{{ route('configuracao.setup.alterar') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('core.configuracao.setup.alterar') }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
                 <div class="form-body">
-                    <h3 class="box-title"> @lang('page_titles.configs.index_setup') </h3>
+                    <h3 class="box-title"> @lang('page_titles.core.configs.index_setup') </h3>
                     <hr class="m-t-0 m-b-10">
 
                     <div class="row p-t-20">

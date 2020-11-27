@@ -3,12 +3,12 @@
 @extends('layouts.menuPortal')
 @yield('menu')
 
-@section('page_title', __('page_titles.dossieDocumentos.index'))
+@section('page_title', __('page_titles.portal.dossieDocumentos.index'))
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>    
-    <li class="breadcrumb-item active"> @lang('page_titles.dossieDocumentos.index') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.dossieDocumentos.index') </li>    
     <link href="{{ asset('plugins/tag-input/bootstrap-tagsinput.css') }}" rel="stylesheet">
 
 
@@ -114,7 +114,7 @@
                                 </div>
                             </div>             
                                                         
-                            <form method="POST" action="{{ route('dossieDocumentos.download') }}" id="formDossie" name="formDossie" >
+                            <form method="POST" action="{{ route('portal.dossieDocumentos.download') }}" id="formDossie" name="formDossie" >
                                 {{ csrf_field() }}
                                 <input type="hidden" name="filters" id="filters"> 
                                 <input type="hidden" name="identificador" id="identificador">

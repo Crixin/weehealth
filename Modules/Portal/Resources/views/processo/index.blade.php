@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.process.index'))
+@section('page_title', __('page_titles.portal.process.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.process.index') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.process.index') </li>    
 
 @endsection
 
@@ -30,7 +30,7 @@
                 @endif
 
                 <div class="col-md-12">
-                    <a href="{{ route('processo.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.process.create') </a>
+                    <a href="{{ route('portal.processo.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.portal.process.create') </a>
                 </div>
             
                 <div class="table-responsive m-t-40">
@@ -49,7 +49,7 @@
                                     <td>{{ $processo->descricao }}</td>
                                     <td style="white-space: nowrap">
                                         <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $processo->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
-                                        <a href="{{ route('processo.editar', ['id' => $processo->id ]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                        <a href="{{ route('portal.processo.editar', ['id' => $processo->id ]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -125,7 +125,7 @@
             let obj = {'processo_id': idProcesso};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('processo.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.processo.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Processo excluído com sucesso.");
                     } else {

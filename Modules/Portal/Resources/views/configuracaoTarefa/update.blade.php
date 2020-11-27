@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.configuracaoTarefa.update'))
+@section('page_title', __('page_titles.portal.configuracaoTarefa.update'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('config-tarefa') }}"> @lang('page_titles.configuracaoTarefa.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.configuracaoTarefa.update') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('portal.config-tarefa') }}"> @lang('page_titles.portal.configuracaoTarefa.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.configuracaoTarefa.update') </li>    
 
 @endsection
 
@@ -26,7 +26,7 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('config-tarefa.alterar') }}">
+                <form method="POST" action="{{ route('portal.config-tarefa.alterar') }}">
                     {{ csrf_field() }}
                 <input type="hidden" name="idConfiguracao" value="{{ $configuracao->id }}">
                     
@@ -146,7 +146,7 @@
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('config-tarefa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('portal.config-tarefa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
 
                 </form>

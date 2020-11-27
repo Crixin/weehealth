@@ -4,15 +4,15 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.ged.index'))
+@section('page_title', __('page_titles.portal.ged.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"> @lang('page_titles.ged.index') </li>    
-    <li class="breadcrumb-item"> @lang('page_titles.ged.search') </li>    
-    <li class="breadcrumb-item active"> @lang('page_titles.process.document') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"> @lang('page_titles.portal.ged.index') </li>    
+    <li class="breadcrumb-item"> @lang('page_titles.portal.ged.search') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.process.document') </li>    
     
 @endsection
 
@@ -70,7 +70,7 @@
                 
                 <div class="col-md-12 m-t-40">
                     <div class="col-md-2 pull-right">
-                        <a href="{{ route('ged.list-document', [$empresaProcesso, $idRegistro]) }}" class="btn waves-effect waves-light btn-lg btn-block btn-secondary pull-right mt-4" >@lang('buttons.general.back') </a>
+                        <a href="{{ route('portal.ged.list-document', [$empresaProcesso, $idRegistro]) }}" class="btn waves-effect waves-light btn-lg btn-block btn-secondary pull-right mt-4" >@lang('buttons.general.back') </a>
                     </div>
                 </div>
 
@@ -94,7 +94,7 @@
             let obj = {'documento_id': idDocumento};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('deletar.documento') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.deletar.documento') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal({   
                             title: "Excluído!",   

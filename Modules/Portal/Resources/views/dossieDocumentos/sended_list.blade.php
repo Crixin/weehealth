@@ -3,11 +3,11 @@
 @extends('layouts.menuPortal')
 @yield('menu')
 
-@section('page_title', __('page_titles.enterprise.index'))
+@section('page_title', __('page_titles.portal.enterprise.index'))
 
 @section('breadcrumbs')
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.enterprise.index') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.enterprise.index') </li>    
 
     <link href="{{ asset('plugins/tag-input/bootstrap-tagsinput.css') }}" rel="stylesheet">
 
@@ -24,7 +24,7 @@
                 @endif
             
                 <div class="col-md-12">
-                    <a href="{{ route('dossieDocumentos.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.dossie.create') </a>
+                    <a href="{{ route('portal.dossieDocumentos.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.portal.dossie.create') </a>
                 </div>
             
                 <div class="table-responsive m-t-40">
@@ -139,7 +139,7 @@
             let obj = {'dossie': $(this).data('id')};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('dossieDocumentos.dossie.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.dossieDocumentos.dossie.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Dossiê excluído com sucesso.");
                     } else {
@@ -158,7 +158,7 @@
             let obj = {'dossie': $(this).data('id')};
 
             question.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('ajax.resendDossie') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.ajax.resendDossie') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Enviado!", "Emails enviado com sucesso.");
                     } else {

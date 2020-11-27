@@ -154,7 +154,7 @@
                                         </div>
                                     </li>
                                     <li>
-                                        <a class="nav-link text-center" href="{{ route('notificacao') }}"> <strong> @lang('sidebar_and_header.notifications_see_all') </strong> <i class="fa fa-angle-right"></i> </a>
+                                        <a class="nav-link text-center" href="{{ route('core.notificacao') }}"> <strong> @lang('sidebar_and_header.notifications_see_all') </strong> <i class="fa fa-angle-right"></i> </a>
                                     </li>
                                 </ul>
                             </div>
@@ -176,7 +176,7 @@
                                                 <p class="text-muted">{{ (!Auth::guest()) ? Auth::user()->email : '' }}</p>
                                                 
                                                 @if ( !in_array(Auth::user()->id, Constants::$ARR_SUPER_ADMINISTRATORS_ID) )
-                                                    <a href="{{ route('usuario.editar', ['id' => Auth::user()->id]) }}" class="btn btn-rounded btn-danger btn-sm">@lang('sidebar_and_header.btn_view_profile')</a>
+                                                    <a href="{{ route('core.usuario.editar', ['id' => Auth::user()->id]) }}" class="btn btn-rounded btn-danger btn-sm">@lang('sidebar_and_header.btn_view_profile')</a>
                                                 @endif
                                             </div>
                                         </div>
@@ -184,10 +184,10 @@
                                     <li role="separator" class="divider"></li>
 
                                     @if ( !in_array(Auth::user()->id, Constants::$ARR_SUPER_ADMINISTRATORS_ID) )
-                                        <li><a href="{{ route('usuario.editar', ['id' => Auth::user()->id]) }}"><i class="ti-user"></i> @lang('sidebar_and_header.tooltip_profile')</a></li>
+                                        <li><a href="{{ route('core.usuario.editar', ['id' => Auth::user()->id]) }}"><i class="ti-user"></i> @lang('sidebar_and_header.tooltip_profile')</a></li>
                                     @endif
                                     
-                                    <li><a href="{{ route('core.logout') }}"><i class="fa fa-power-off"></i> @lang('sidebar_and_header.tooltip_logout')</a></li>
+                                    <li><a href="{{ route('logout') }}"><i class="fa fa-power-off"></i> @lang('sidebar_and_header.tooltip_logout')</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -465,7 +465,7 @@
                 $.ajax({
                     type:'POST',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    url: "{{route('atualizar.setup')}}",
+                    url: "{{route('core.atualizar.setup')}}",
                     data:{'valor': valor, 'coluna': 'theme_sistema'},
                     success:function(data){
                     console.log(data.response);

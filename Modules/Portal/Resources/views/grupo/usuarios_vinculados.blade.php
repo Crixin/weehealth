@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.group.linked_users'))
+@section('page_title', __('page_titles.portal.group.linked_users'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('grupo') }}"> @lang('page_titles.group.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.group.linked_users') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('portal.grupo') }}"> @lang('page_titles.portal.group.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.group.linked_users') </li>    
 
 @endsection
 
@@ -30,12 +30,12 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('grupo.vincularUsuarios') }}">
+                <form method="POST" action="{{ route('portal.grupo.vincularUsuarios') }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="idGrupo" value="{{ $grupo->id }}">
                     
                     <div class="form-body">
-                        <h3 class="box-title"> @lang('page_titles.group.linked_users_to')  <span style="font-weight: bold;">{{ $grupo->nome }}</span> </h3>
+                        <h3 class="box-title"> @lang('page_titles.portal.group.linked_users_to')  <span style="font-weight: bold;">{{ $grupo->nome }}</span> </h3>
                         <hr class="m-t-0 m-b-10">
 
                         <div class="row p-t-20">
@@ -58,7 +58,7 @@
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('grupo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('portal.grupo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
 
                 </form>

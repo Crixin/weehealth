@@ -39,7 +39,7 @@ class GrupoController extends Controller
         $grupo->save();
 
         Helper::setNotify('Grupo criado com sucesso!', 'success|check-circle');
-        return redirect()->route('grupo');
+        return redirect()->route('portal.grupo');
     }
 
 

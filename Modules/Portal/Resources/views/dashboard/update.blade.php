@@ -3,12 +3,12 @@
 @extends('layouts.menuPortal')
 @yield('menu')
 
-@section('page_title', __('page_titles.dashboard.update'))
+@section('page_title', __('page_titles.portal.dashboard.update'))
 
 @section('breadcrumbs')
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('dashboards') }}"> @lang('page_titles.dashboard.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.dashboard.update') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('portal.dashboards') }}"> @lang('page_titles.portal.dashboard.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.dashboard.update') </li>    
 @endsection
 
 @section('content')
@@ -21,7 +21,7 @@
                 {{ Session::forget('message') }}
             @endif
 
-            <form method="POST" action="{{ route('dashboards.alterar') }}" id="updateDashboard" name="updateDashboard" >
+            <form method="POST" action="{{ route('portal.dashboards.alterar') }}" id="updateDashboard" name="updateDashboard" >
                 {{ csrf_field() }}
                 <input type="hidden" name="idDashboard" value="{{ $dashboard->id }}">
                 <input type="hidden" id="nameDashboard" name="nameDashboard" value="{{ $dashboard->nome }}">
@@ -38,16 +38,16 @@
                                     <i class="fa fa-trash" style="font-size: 300%;color: black"></i>
                                 </div>
                                 <div>
-                                <span style="font-size:12px">@lang('page_titles.dashboard.remove')</span>
+                                <span style="font-size:12px">@lang('page_titles.portal.dashboard.remove')</span>
                                 </div>
                             </div>
                             <div class=" btn" style="border-color: #26c6da" >
                                 <div class="card-body grid-stack-item-content">
                                     <div>
-                                        <i onClick="addWidget('@lang('page_titles.dashboard.config')')" class="fa fa-plus-circle" style="font-size: 250%"></i>
+                                        <i onClick="addWidget('@lang('page_titles.portal.dashboard.config')')" class="fa fa-plus-circle" style="font-size: 250%"></i>
                                     </div>
                                     <div>
-                                        <span class="add"  style="font-size:12px">@lang('page_titles.dashboard.add')</span>                       
+                                        <span class="add"  style="font-size:12px">@lang('page_titles.portal.dashboard.add')</span>                       
                                     </div>
                                 </div>
                             </div>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="form-actions" style="margin-top:3%">
                     <button type="button" id="saveDashboard" class="btn btn-success" > <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                    <a href="{{ route('dashboards') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                    <a href="{{ route('portal.dashboards') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                 </div>
             </form>
         </div>

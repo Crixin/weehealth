@@ -3,14 +3,14 @@
 @extends('layouts.menuPortal')
 @yield('menu')
 
-@section('page_title', __('page_titles.empresa-processo-grupo.create'))
+@section('page_title', __('page_titles.portal.empresa-processo-grupo.create'))
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('empresa') }}"> @lang('page_titles.enterprise.index') </a></li>
-    <li class="breadcrumb-item"> @lang('page_titles.enterprise.linked_processes') </li>
-    <li class="breadcrumb-item active"> @lang('page_titles.empresa-processo-grupo.create') </li>
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('portal.empresa') }}"> @lang('page_titles.portal.enterprise.index') </a></li>
+    <li class="breadcrumb-item"> @lang('page_titles.portal.enterprise.linked_processes') </li>
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.empresa-processo-grupo.create') </li>
 
 @endsection
 
@@ -29,7 +29,7 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('empresa-processo-grupo.salvar') }}">
+                <form method="POST" action="{{ route('portal.empresa-processo-grupo.salvar') }}">
                     {{ csrf_field() }}
                     
                     <input type="hidden" name="empresaProcessoId" value="{{ $empresaProcesso->id }}">
@@ -39,7 +39,7 @@
                         {{-- Parte 1: cadastro --}}
                         <h3 class="box-title"> <b> {{ $empresaProcesso->coreEmpresa->nome }} <i class="mdi mdi-link"></i> {{ $empresaProcesso->portalProcesso->nome}} </b>  </h3>
                         <hr class="m-t-0 m-b-10">
-                        <h3 class="box-title mt-4"> @lang('page_titles.empresa-processo-grupo.available-groups') </h3>
+                        <h3 class="box-title mt-4"> @lang('page_titles.portal.empresa-processo-grupo.available-groups') </h3>
                         <hr class="m-t-0 m-b-10">
 
                         @if (count($gruposNaoVinculados))
@@ -57,8 +57,8 @@
                                 </div>
                             </div>
                             <div class="form-actions">
-                                <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.empresa-processo-grupo.create-links')</button>
-                                <a href="{{ route('empresa.processosVinculados', ['id' => $empresaProcesso->coreEmpresa->id]) }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                                <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.portal.empresa-processo-grupo.create-links')</button>
+                                <a href="{{ route('portal.empresa.processosVinculados', ['id' => $empresaProcesso->coreEmpresa->id]) }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                             </div>
                         @else
                             <div class="row p-t-20 m-b-40">
@@ -69,12 +69,12 @@
                                 </div>
                             </div>
                             <div class="form-actions">
-                                <a href="{{ route('empresa.processosVinculados', ['id' => $empresaProcesso->coreEmpresa->id]) }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                                <a href="{{ route('portal.empresa.processosVinculados', ['id' => $empresaProcesso->coreEmpresa->id]) }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                             </div>
                         @endif
                     </div>
                 </form>
-                <form method="POST" action="{{ route('empresa-processo-grupo.alterar') }}" id="update-form">
+                <form method="POST" action="{{ route('portal.empresa-processo-grupo.alterar') }}" id="update-form">
                     {{ csrf_field() }}
                     
                     <input type="hidden" name="empresaProcessoId" value="{{ $empresaProcesso->id }}">
@@ -83,7 +83,7 @@
                     <div class="form-body">
                         
                         {{-- Parte 2: listagem --}}
-                        <h3 class="box-title m-t-40">  @lang('page_titles.empresa-processo-grupo.linked-groups') <span style="font-weight: bold;"></span> <small> - Defina os valores dos filstros de cada um abaixo</small> </h3>
+                        <h3 class="box-title m-t-40">  @lang('page_titles.portal.empresa-processo-grupo.linked-groups') <span style="font-weight: bold;"></span> <small> - Defina os valores dos filstros de cada um abaixo</small> </h3>
                         <hr>
                         <div class="row">
                             <div class="col-md-12">
@@ -138,7 +138,7 @@
                         </div>
                     </div>
                     <div class="form-actions mt-4">
-                        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.empresa-processo-grupo.save-filters')</button>
+                        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.portal.empresa-processo-grupo.save-filters')</button>
                     </div>
                 </form>
             </div>
@@ -251,7 +251,7 @@
             let obj = {'vinculo_id': idVinculo};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('empresa-processo-grupo.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.empresa-processo-grupo.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Vínculo entre empresa-processo e grupo excluído com sucesso.");
                     } else {

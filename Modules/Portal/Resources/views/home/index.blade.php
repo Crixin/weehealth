@@ -1,6 +1,6 @@
-@extends('core::layouts.app')
+@extends('layouts.app')
 
-@extends('core::layouts.menuPortal')
+@extends('layouts.menuPortal')
 @yield('menu')
 
 @section('page_title', 'Página Inicial')
@@ -8,11 +8,6 @@
 @section('breadcrumbs')
     <li class="breadcrumb-item active"><a href="javascript:void(0)">Página Inicial</a></li>
 @endsection
-
-@php
-     eval("\$str = \"\Auth::user()->id\";");
-    dd($str);
-@endphp
 
 
 @section('content')

@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.process.index'))
+@section('page_title', __('page_titles.portal.process.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"> @lang('page_titles.process.index') </li>    
-    <li class="breadcrumb-item active"> @lang('page_titles.process.upload') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('portal.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"> @lang('page_titles.portal.process.index') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.portal.process.upload') </li>    
 
 @endsection
 
@@ -53,7 +53,7 @@
 								{{ Session::forget('message') }}
 							@endif
 
-							<form method="POST" action="{{ route('processo.realizarUpload') }}" enctype="multipart/form-data">
+							<form method="POST" action="{{ route('portal.processo.realizarUpload') }}" enctype="multipart/form-data">
 								{{ csrf_field() }}
 								<input type="hidden" name="idAreaGED" value="{{ $idAreaGED }}">
 
