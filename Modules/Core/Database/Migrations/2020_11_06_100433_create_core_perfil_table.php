@@ -16,6 +16,7 @@ class CreateCorePerfilTable extends Migration
         Schema::create('core_perfil', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nome');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

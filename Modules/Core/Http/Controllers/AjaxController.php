@@ -7,7 +7,7 @@ use App\Classes\{Constants, GEDServices, RESTServices, Helper};
 use Illuminate\Support\Facades\{Auth, DB};
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\Auth\JWTController;
-use Modules\Core\Model\{Empresa, Parametro, User, Setup};
+use Modules\Core\Model\{Empresa, Grupo, Parametro, User, Setup};
 use Modules\Core\Repositories\{EmpresaRepository, ParametroRepository, UserRepository, SetupRepository};
 
 class AjaxController extends Controller
@@ -133,6 +133,18 @@ class AjaxController extends Controller
             $setup->save();
             return response()->json(['response' => 'sucesso']);
         } catch (\Throwable $th) {
+            return response()->json(['response' => 'erro']);
+        }
+    }
+
+    // GRUPO
+    public function deleteGroup(Request $request)
+    {
+        $_id = $request->grupo_id;
+        try {
+            Grupo::destroy($_id);
+            return response()->json(['response' => 'sucesso']);
+        } catch (\Exception $th) {
             return response()->json(['response' => 'erro']);
         }
     }

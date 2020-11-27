@@ -28,6 +28,7 @@ class CreatePortalEmpresaUserTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('core_users')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

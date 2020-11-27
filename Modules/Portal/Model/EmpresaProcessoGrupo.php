@@ -16,9 +16,9 @@ class EmpresaProcessoGrupo extends Model
     ];
 
 
-    public function portalGrupo()
+    public function coreGrupo()
     {
-        return $this->belongsTo('Modules\Portal\Model\Grupo', 'grupo_id');
+        return $this->belongsTo('Modules\Core\Model\Grupo', 'grupo_id');
     }
 
     public function portalEmpresaProcesso()

@@ -46,7 +46,7 @@
                                     <select multiple id="grupos_empresa" name="grupos_empresa[]">
                                         @foreach ($gruposRestantes as $grupo)
                                        
-                                            @if ($empresa->portalGroups->contains('id', $grupo->id))
+                                            @if ($empresa->coreGroups->contains('id', $grupo->id))
                                                 <option value="{{ $grupo->id }}" selected>{{ $grupo->nome }}</option>
                                             @else
                                                 <option value="{{ $grupo->id }}">{{ $grupo->nome }}</option>
@@ -120,7 +120,7 @@
                                                 @foreach ($gruposJaVinculados as $grupoV)
                                                 
                                                     <tr>
-                                                        <td><b> {{ $grupoV->portalGrupo->nome }} </b></td>
+                                                        <td><b> {{ $grupoV->coreGrupo->nome }} </b></td>
                                                         @if (Helper::isParamActive('PERMITIR_DOWNLOAD'))    
                                                             <td> 
                                                                 <input type="checkbox" id="permissao_download-{{ $grupoV->id }}" class="filled-in chk-col-cyan" {{ ($grupoV->permissao_download) ? 'checked' : '' }} /> 

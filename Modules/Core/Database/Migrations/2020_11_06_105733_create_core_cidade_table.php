@@ -18,6 +18,7 @@ class CreateCoreCidadeTable extends Migration
             $table->string('nome', 100);
             $table->string('estado', 100)->nullable();
             $table->string('sigla_estado', 2)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

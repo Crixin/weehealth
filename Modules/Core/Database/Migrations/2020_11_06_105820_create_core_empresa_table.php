@@ -23,6 +23,7 @@ class CreateCoreEmpresaTable extends Migration
             $table->text('obs')->nullable();
             $table->integer('cidade_id')->unsigned();
             $table->foreign('cidade_id')->references('id')->on('core_cidade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

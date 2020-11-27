@@ -11,6 +11,6 @@ class EmpresaTipo extends Model
     protected $fillable = [
         'id',
         'empresa_id',
-        'tipo_nome'
+        'tipo_id'
     ];
 }

@@ -47,6 +47,13 @@ return [
             'create'          => 'Novo Perfil',
             'update'          => 'Alterando Perfil',
         ],
+        'group'                 => [
+            'index'             => 'Grupos',
+            'create'            => 'Novo Grupo',
+            'update'            => 'Alterando Grupo ',
+            'linked_users'      => 'Usuários Vinculados',
+            'linked_users_to'   => 'Usuários Vinculados ao Grupo: '
+        ],
     ],
 
     'portal'        => [
@@ -63,15 +70,7 @@ return [
             'linked_processes_to'   => 'Processos Vinculados à Empresa: ',
             'processes_available'   => 'Processos Disponíveis'
         ],
-        
-        'group'                 => [
-            'index'             => 'Grupos',
-            'create'            => 'Novo Grupo',
-            'update'            => 'Alterando Grupo ',
-            'linked_users'      => 'Usuários Vinculados',
-            'linked_users_to'   => 'Usuários Vinculados ao Grupo: '
-        ],
-        
+
         'process'     => [
             'index'              => 'Processos',
             'create'             => 'Novo Processo',
@@ -179,6 +178,12 @@ return [
             'index'           => 'Planos',
             'create'          => 'Nova Plano',
             'update'          => 'Alterando Plano',
+        ],
+
+        'tipo-documento'        => [
+            'index'           => 'Tipos de Documento',
+            'create'          => 'Novo Tipo de Documento',
+            'update'          => 'Alterando Tipo de Documento',
         ],
 
     ]

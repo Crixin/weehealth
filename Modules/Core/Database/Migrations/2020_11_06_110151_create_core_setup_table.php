@@ -18,6 +18,7 @@ class CreateCoreSetupTable extends Migration
             $table->text('logo_login')->nullable();
             $table->text('logo_sistema')->nullable();
             $table->text('theme_sistema')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

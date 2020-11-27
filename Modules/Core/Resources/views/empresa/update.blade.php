@@ -71,7 +71,7 @@
                                     <label class="control-label">Tipo de empresa</label>
                                     <select class="form-control selectpicker" multiple data-live-search="true"  data-actions-box="true" name="tipo_empresa[]" id="tipo_empresa"  required>
                                         @foreach ($tiposEmpresa as $key => $tipo)
-                                            <option value="{{$tipo}}" @if (in_array($tipo, $tipoSelecionados)) selected  @endif >{{ucfirst(strtolower($tipo))}}</option>    
+                                            <option value="{{$key}}" @if (in_array($key, $tipoSelecionados)) selected  @endif >{{ucfirst(strtolower($tipo))}}</option>    
                                         @endforeach
                                     </select>
                                     @if ($errors->has('tipo_empresa'))

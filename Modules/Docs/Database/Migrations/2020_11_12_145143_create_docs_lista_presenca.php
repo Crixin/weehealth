@@ -24,6 +24,7 @@ class CreateDocsListaPresenca extends Migration
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

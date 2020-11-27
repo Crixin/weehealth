@@ -18,8 +18,13 @@ class SeedCoreCreateParametroTableSeeder extends Seeder
         $prmDownload = new Parametro();
         $prmDownload->identificador_parametro = "TIPO_EMPRESA";
         $prmDownload->descricao = "Tipos de empresas.";
-        $prmDownload->valor_padrao = "CLIENTE;FORNECEDOR;PARCEIRO;TRANSPORTADORA";
-        $prmDownload->valor_usuario = "CLIENTE";
+        $prmDownload->valor_padrao =
+        '{
+            "1": "CLIENTE",
+            "2": "FORNECEDOR",
+            "3": "TRANSPORTADOR"
+        }';
+        $prmDownload->valor_usuario = "1";
         $prmDownload->ativo = true;
         $prmDownload->save();
     }

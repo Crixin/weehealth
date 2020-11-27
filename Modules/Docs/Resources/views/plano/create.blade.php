@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@extends('layouts.menuPortal')
+@extends('layouts.menuDocs')
 @yield('menu')
 
 
@@ -39,7 +39,7 @@
                                 <div class="form-group{{ $errors->has('nome') ? ' has-error' : '' }}">
                                     <label class="control-label">Nome</label>
                                     <input type="text" id="nome" name="nome" value="{{ old('nome') }}" class="form-control" required autofocus>
-                                    <small class="form-control-feedback"> Digite o nome do grupo que será criado. </small> 
+                                    <small class="form-control-feedback"> Digite o nome do plano que será criado. </small> 
 
                                     @if ($errors->has('nome'))
                                         <br/>    
@@ -50,15 +50,20 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group{{ $errors->has('descricao') ? ' has-error' : '' }}">
-                                    <label class="control-label">Descrição</label>
-                                    <input type="text" id="descricao" class="form-control" name="descricao" value="{{ old('descricao') }}" required>
-                                    <small class="form-control-feedback"> Descreva, brevemente, qual a função deste grupo, de modo a facilitar a compreensão. </small> 
-
-                                    @if ($errors->has('descricao'))
+                                <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
+                                    <label class="control-label">Status</label>
+                                   
+                                    <td class="text-center text-nowrap">
+                                        <div class="switch">
+                                            <label>Inativo
+                                                <input name="status" id="status" type="checkbox" class="switch-elaborador"  checked ><span class="lever switch-col-light-blue"></span>Ativo
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @if ($errors->has('status'))
                                         <br/>
                                         <span class="help-block text-danger">
-                                            <strong>{{ $errors->first('descricao') }}</strong>
+                                            <strong>{{ $errors->first('status') }}</strong>
                                         </span>
                                     @endif
                                 </div>

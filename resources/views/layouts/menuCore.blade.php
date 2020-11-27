@@ -3,11 +3,7 @@
     $setup = \Modules\Core\Model\Setup::find(1); 
     $templete  = $setup->theme_sistema ?? 'weecode';
     $permissaoMenu = [];
-    foreach (Auth::user()->corePerfil->corePermissoes ?? [] as $key => $value) {
-        if($value->modulo == 'core') {
-            $permissaoMenu[] = $value->nome;
-        }
-    }
+    
     @endphp
     <!-- Sidebar scroll-->
     <div class="scroll-sidebar">
@@ -32,7 +28,6 @@
                 <li class="nav-small-cap"> @lang('sidebar_and_header.li_system') </li> 
                 
                 
-                @if (in_array('mod_base', $permissaoMenu) || Auth::user()->administrador)
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="#2" aria-expanded="false"><i class="mdi mdi-plus-circle-outline"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.register.collapse') </span></a>
                         <ul aria-expanded="false" class="collapse">
@@ -43,13 +38,12 @@
                             @if (Auth::user()->administrador)
                                 <li><a href="{{ route('core.usuario') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item4') </a></li>
                                 <li><a href="{{ route('core.perfil') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item6') </a></li>
+                                <li><a href="{{ route('core.grupo') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item2') </a></li>
                             @endif
                             {{-- <li><a href="{{ route('tarefa') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item7') </a></li> --}}
                         </ul>
                     </li>
-                @endif
-
-                @if ( in_array('conf_setup', $permissaoMenu) || in_array(Auth::user()->id, Constants::$ARR_SUPER_ADMINISTRATORS_ID) )
+                
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="#3" aria-expanded="false"><i class="mdi mdi-settings"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.configs.collapse') </span></a>
                         <ul aria-expanded="false" class="collapse">
@@ -64,7 +58,6 @@
                         
                         </ul>
                     </li>
-                @endif
 
             </ul>
         </nav>

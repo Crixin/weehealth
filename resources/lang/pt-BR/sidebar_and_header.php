@@ -107,7 +107,9 @@ return [
                 'collapse'      => 'CADASTROS',
                 'setor'            => 'Setor',
                 'configuracao'     => 'Configuração',
-                'plano' => 'Planos'
+                'plano' => 'Planos',
+                'tipo-documento' => 'Tipo de Documento',
+
             ],
             'documento'        => 'DOCUMENTOS',
             'documento_externo' => 'DOC. EXTERNOS',

@@ -3,11 +3,7 @@
     $setup = \Modules\Core\Model\Setup::find(1); 
     $templete  = $setup->theme_sistema ?? 'weecode';
     $permissaoMenu = [];
-    foreach (Auth::user()->corePerfil->corePermissoes ?? [] as $key => $value) {
-        if($value->modulo == 'portal') {
-            $permissaoMenu[] = $value->nome;
-        }
-    }
+    
     @endphp
     <!-- Sidebar scroll-->
     <div class="scroll-sidebar">
@@ -31,7 +27,6 @@
             <ul id="sidebarnav">
                 <li class="nav-small-cap"> @lang('sidebar_and_header.li_system') </li> 
                 
-                @if (in_array('mod_dashboard', $permissaoMenu))
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="#1" aria-expanded="false"><i class="mdi mdi-chart-areaspline"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.dashboards.collapse') </span></a> 
                         <ul aria-expanded="false" class="collapse">
@@ -46,25 +41,18 @@
                             </li>
                         </ul>
                     </li>
-                @endif
 
-                @if (in_array('mod_base_portal', $permissaoMenu) || Auth::user()->administrador)
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="#2" aria-expanded="false"><i class="mdi mdi-plus-circle-outline"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.register.collapse') </span></a>
                         <ul aria-expanded="false" class="collapse">
-                            @if (in_array('mod_base_portal', $permissaoMenu))
                                 <li><a href="{{ route('portal.empresa') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item1') </a></li>
-                                <li><a href="{{ route('portal.grupo') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item2') </a></li>
                                 <li><a href="{{ route('portal.processo') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item3') </a></li>
-                            @endif
 
                            
                             
                         </ul>
                     </li>
-                @endif
 
-                @if (in_array('ger_processos', $permissaoMenu))
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="#3" aria-expanded="false"><i class="mdi mdi-image-filter-none"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.processes.main') </span></a>
                         <ul aria-expanded="false" class="collapse">  
@@ -90,18 +78,14 @@
                     <li>
                         <a class="waves-effect waves-dark" href="{{ route('portal.edicaoDocumento.index') }}" aria-expanded="false"><i class="mdi mdi-grease-pencil"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.edicaoDocumento.main') </span></a>
                     </li>
-                @endif
 
-                @if (in_array('mod_relatorios', $permissaoMenu))
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="#4" aria-expanded="false"><i class="mdi mdi-book-open-page-variant"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.reports.collapse') </span></a> 
                         <ul aria-expanded="false" class="collapse">
                             <li><a href="{{ route('portal.relatorio.documentos') }}"> @lang('sidebar_and_header.portal.uls_li_system.reports.documents') </a></li>
                         </ul>
                     </li>
-                @endif
 
-                @if (in_array('mod_dossie', $permissaoMenu))
                     <li> 
                         <a class="has-arrow waves-effect waves-dark" href="#5" aria-expanded="false"><i class="mdi mdi-file-import"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.dossie.main') </span></a>
                         <ul aria-expanded="false" class="collapse">
@@ -109,9 +93,7 @@
                             <li><a href="{{ route('portal.dossieDocumentos.list') }}"> @lang('sidebar_and_header.portal.uls_li_system.dossie.sended') </a></li>
                         </ul>
                     </li>
-                @endif
 
-                @if (in_array('mod_tarefas', $permissaoMenu))
                     <li> 
                         <a class="has-arrow waves-effect waves-dark" href="#6" aria-expanded="false"><i class="mdi mdi-calendar-clock"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.tarefa.main') </span></a>
                         <ul aria-expanded="false" class="collapse">
@@ -119,7 +101,6 @@
                             <li><a href="{{ route('portal.config-tarefa') }}"> @lang('sidebar_and_header.portal.uls_li_system.tarefa.config') </a></li>
                         </ul>
                     </li>
-                @endif
                 
                 <li> 
                     <a class="has-arrow waves-effect waves-dark" href="#70" aria-expanded="false"><i class="mdi mdi-file-import"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.ged.main') </span></a>

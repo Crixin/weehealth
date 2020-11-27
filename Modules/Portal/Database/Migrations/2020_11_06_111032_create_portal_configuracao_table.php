@@ -23,6 +23,7 @@ class CreatePortalConfiguracaoTable extends Migration
             $table->string('usuario');
             $table->string('senha');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

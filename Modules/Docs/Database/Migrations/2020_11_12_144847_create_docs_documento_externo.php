@@ -25,12 +25,13 @@ class CreateDocsDocumentoExterno extends Migration
             // Usuário que marcar o 'checkbox' validado
             $table->integer('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('core_users');
-            $table->integer('setor_id')->unsigned();
-            $table->foreign('setor_id')->references('id')->on('docs_setor');
+            $table->integer('grupo_id')->unsigned();
+            $table->foreign('grupo_id')->references('id')->on('core_grupo');
             $table->integer('empresa_id')->nullable(true)->references('id')->on('core_empresa');
             $table->string('revisao')->nullable(true);
             $table->date('validade')->nullable(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

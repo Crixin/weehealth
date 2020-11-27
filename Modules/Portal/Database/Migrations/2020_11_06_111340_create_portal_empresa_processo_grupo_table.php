@@ -21,6 +21,7 @@ class CreatePortalEmpresaProcessoGrupoTable extends Migration
             $table->foreign('empresa_processo_id')->references('id')->on('portal_empresa_processo')->onDelete('cascade');
             $table->json('filtros');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

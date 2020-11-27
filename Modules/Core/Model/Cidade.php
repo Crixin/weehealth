@@ -9,6 +9,8 @@ class Cidade extends Model
     public $table = 'core_cidade';
 
     protected $fillable = [
-        'id', 'nome', 'estado'
+        'id',
+        'nome',
+        'estado'
     ];
 }

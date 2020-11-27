@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Core\Repositories\EmpresaRepository;
 use Modules\Portal\Repositories\EmpresaGrupoRepository;
-use Modules\Portal\Repositories\GrupoRepository;
+use Modules\Core\Repositories\GrupoRepository;
 
 class EmpresaGrupoController extends Controller
 {

@@ -28,8 +28,8 @@ class EmpresaGrupo extends Model
         return $this->hasOne('Modules\Core\Model\Empresa', 'id', 'empresa_id');
     }
 
-    public function portalGrupo()
+    public function coreGrupo()
     {
-        return $this->hasOne('Modules\Portal\Model\Grupo', 'id', 'grupo_id');
+        return $this->hasOne('Modules\Core\Model\Grupo', 'id', 'grupo_id');
     }
 }

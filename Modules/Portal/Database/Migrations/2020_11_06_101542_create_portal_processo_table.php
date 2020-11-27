@@ -18,6 +18,7 @@ class CreatePortalProcessoTable extends Migration
             $table->string('nome', 100);
             $table->string('descricao', 300);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

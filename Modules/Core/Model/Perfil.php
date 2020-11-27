@@ -14,10 +14,7 @@ class Perfil extends Model
     ];
 
 
-    public function corePermissoes()
-    {
-        return $this->belongsToMany('Modules\Core\Model\Permissao', 'Modules\Core\Model\PerfilPermissao');
-    }
+   
 
 
     public function coreUsers()

@@ -7,7 +7,7 @@ use App\Classes\{Constants, RESTServices, Helper};
 use Illuminate\Support\Facades\{Auth, DB};
 use Modules\Core\Http\Controllers\JobController;
 use Modules\Core\Http\Controllers\Auth\JWTController;
-use Modules\Portal\Model\{EmpresaGrupo, EmpresaProcesso, EmpresaUser, Grupo, Processo};
+use Modules\Portal\Model\{EmpresaGrupo, EmpresaProcesso, EmpresaUser, Processo};
 use Modules\Portal\Repositories\{
     EmpresaProcessoRepository,
     DashboardRepository,
@@ -95,17 +95,7 @@ class AjaxController extends Controller
         }
     }
 
-    // GRUPO
-    public function deleteGroup(Request $request)
-    {
-        $_id = $request->grupo_id;
-        try {
-            Grupo::destroy($_id);
-            return response()->json(['response' => 'sucesso']);
-        } catch (\Exception $th) {
-            return response()->json(['response' => 'erro']);
-        }
-    }
+    
 
     public function deleteDossie(Request $_request)
     {

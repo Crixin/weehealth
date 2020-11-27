@@ -21,8 +21,8 @@ class CreateDocsControleRegistro extends Migration
             $table->boolean('avulso');
             $table->integer('documento_id')->nullable();
             $table->foreign('documento_id')->references('id')->on('docs_documento');
-            $table->integer('setor_id')->unsigned();
-            $table->foreign('setor_id')->references('id')->on('docs_setor');
+            $table->integer('grupo_id')->unsigned();
+            $table->foreign('grupo_id')->references('id')->on('core_grupo');
             $table->integer('local_armazenamento_id')->nullable(false);
             $table->foreign('local_armazenamento_id')->references('id')->on('docs_opcoes_controle_registros');
             $table->integer('disposicao_id')->nullable(false);
@@ -46,6 +46,7 @@ class CreateDocsControleRegistro extends Migration
             $table->string('tempo_retencao_deposito')->nullable();
             $table->string('disposicao')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

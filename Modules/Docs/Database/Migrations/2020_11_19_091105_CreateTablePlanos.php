@@ -16,8 +16,11 @@ class CreateTablePlanos extends Migration
         Schema::create('docs_plano', function (Blueprint $table) {
             $table->increments('id');
             $table->text('nome');
-            $table->boolean('status');
+            $table->boolean('ativo');
+            $table->integer('grupo_id')->unsigned();
+            $table->foreign('grupo_id')->references('id')->on('core_grupo');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -19,10 +19,6 @@ Route::prefix('docs')->group(function () {
     Route::get('/home', ['as' => 'docs.home',   'uses' => 'DocsController@index']);
 
 
-    Route::group(['prefix' => 'setor'], function() {
-        Route::get('',['as' => 'docs.setor',   'uses' => 'SetorController@index']);
-    });
-
     Route::group(['prefix' => 'configuracao'], function() {
         Route::get('',['as' => 'docs.configuracao',   'uses' => 'SetorController@index']);
     });
@@ -30,13 +26,25 @@ Route::prefix('docs')->group(function () {
     /*
     * PLANO
     */
-    Route::group(['prefix' => 'plano', 'middleware' => 'permissionamento:administrador'], function () {
-        Route::get('',              ['as' => 'docs.plano',         'uses' => 'PlanoController@index']);
-        Route::get('novo',          ['as' => 'docs.plano.novo',    'uses' => 'PlanoController@create']);
-        Route::post('salvar',       ['as' => 'docs.plano.salvar',  'uses' => 'PlanoController@store']);
-        Route::get('editar/{id}',   ['as' => 'docs.plano.editar',  'uses' => 'PlanoController@edit']);
-        Route::post('alterar/{id}', ['as' => 'docs.plano.alterar', 'uses' => 'PlanoController@update']);
-        Route::post('deletar',      ['as' => 'docs.plano.deletar', 'uses' => 'PlanoController@destroy']);
+    Route::group(['prefix' => 'plano' , 'as' => 'docs.'], function () {
+        Route::get('',              ['as' => 'plano',         'uses' => 'PlanoController@index']);
+        Route::get('novo',          ['as' => 'plano.novo',    'uses' => 'PlanoController@create']);
+        Route::post('salvar',       ['as' => 'plano.salvar',  'uses' => 'PlanoController@store']);
+        Route::get('editar/{id}',   ['as' => 'plano.editar',  'uses' => 'PlanoController@edit']);
+        Route::post('alterar',      ['as' => 'plano.alterar', 'uses' => 'PlanoController@update']);
+        Route::post('deletar',      ['as' => 'plano.deletar', 'uses' => 'PlanoController@destroy']);
+    });
+
+    /*
+    * TIPO DOCUMENTO
+    */
+    Route::group(['prefix' => 'tipo-documento' , 'as' => 'docs.'], function () {
+        Route::get('',              ['as' => 'tipo-documento',         'uses' => 'TipoDocumentoController@index']);
+        Route::get('novo',          ['as' => 'tipo-documento.novo',    'uses' => 'TipoDocumentoController@create']);
+        Route::post('salvar',       ['as' => 'tipo-documento.salvar',  'uses' => 'TipoDocumentoController@store']);
+        Route::get('editar/{id}',   ['as' => 'tipo-documento.editar',  'uses' => 'TipoDocumentoController@edit']);
+        Route::post('alterar',      ['as' => 'tipo-documento.alterar', 'uses' => 'TipoDocumentoController@update']);
+        Route::post('deletar',      ['as' => 'tipo-documento.deletar', 'uses' => 'TipoDocumentoController@destroy']);
     });
 
 

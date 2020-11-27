@@ -22,11 +22,12 @@ class CreatePortalTarefaTable extends Migration
             $table->string('area');
             $table->string('tipo_indexacao');
             $table->json('indices');
-            $table->timestamps();
             $table->string("pasta_rejeitados");
             $table->string('frequencia');
             $table->string('status');
             $table->string('hora', 4)->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

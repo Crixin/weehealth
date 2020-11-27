@@ -19,8 +19,12 @@ class SeedCoreCreateParametroOrgaoReguladorTableSeeder extends Seeder
         $newParametro = new Parametro();
         $newParametro->identificador_parametro = "ORGAO_REGULADOR";
         $newParametro->descricao = "Órgãos reguladores";
-        $newParametro->valor_padrao = "ISO;ONA";
-        $newParametro->valor_usuario = "ONA";
+        $newParametro->valor_padrao =
+        '{
+            "1": "ISO",
+            "2": "ONA"
+        }';
+        $newParametro->valor_usuario = 1;
         $newParametro->ativo = true;
         $newParametro->save();
 
@@ -28,8 +32,15 @@ class SeedCoreCreateParametroOrgaoReguladorTableSeeder extends Seeder
         $newParametro = new Parametro();
         $newParametro->identificador_parametro = "CICLO_AUDITORIA";
         $newParametro->descricao = "Ciclo de Auditoria";
-        $newParametro->valor_padrao = "";
-        $newParametro->valor_usuario = "";
+        $newParametro->valor_padrao = 
+        '{
+            "1": "Mensal",
+            "2": "Bimestre",
+            "3": "Trimestre",
+            "4": "Semestre",
+            "5": "Anual"
+          }';
+        $newParametro->valor_usuario = "5";
         $newParametro->ativo = true;
         $newParametro->save();
     }

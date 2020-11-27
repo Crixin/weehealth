@@ -20,6 +20,7 @@ class CreatePortalEdicaoDocumentoTable extends Migration
             $table->string('documento_id');
             $table->string('documento_nome');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -20,6 +20,7 @@ class CreateDocsDocumentoFormulario extends Migration
             $table->integer('formulario_id')->unsigned();
             $table->foreign('formulario_id')->references('id')->on('docs_documento');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

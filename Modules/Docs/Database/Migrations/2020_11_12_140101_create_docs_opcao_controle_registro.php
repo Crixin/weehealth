@@ -19,6 +19,7 @@ class CreateDocsOpcaoControleRegistro extends Migration
             $table->string('descricao', 350);
             $table->boolean('ativo');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

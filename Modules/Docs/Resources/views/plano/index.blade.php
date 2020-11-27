@@ -37,7 +37,7 @@
                             <thead>
                                 <tr>
                                     <th>Nome</th>
-                                    <th>Descrição</th>
+                                    <th>Status</th>
                                     <th>Controle</th>
                                 </tr>
                             </thead>
@@ -45,17 +45,11 @@
                                 @foreach ($planos as $plano)
                                     <tr>
                                         <td>{{ $plano->nome }}</td>
-                                        <td>{{ $plano->descricao }}</td>
+                                        <td>{{ $plano->ativo == true ? 'Ativo' : 'Inativo' }}</td>
                                         <td>
                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $plano->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
                                             <a href="{{ route('docs.plano.editar', ['id' => $plano->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
-                                            <!--
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{ route('grupo.usuariosVinculados', ['id' => $grupo->id]) }}"> <i class="mdi mdi-account-settings-variant"></i> @lang('buttons.portal.group.users') </a>  
-                                                </div>
-                                            </div> -->
+                                            
                                         </td>
                                     </tr>
                                 @endforeach
@@ -128,7 +122,7 @@
         $('.sa-warning').click(function(){
             let id = $(this).data('id');
             let deleteIt = swal2_warning("Essa ação é irreversível!");
-            let obj = {'plano_id': id};
+            let obj = {'id': id};
 
             deleteIt.then(resolvedValue => {
                 // ajaxMethod('POST', "/plano/" + idPlano, {}).then(response => {

@@ -20,6 +20,7 @@ class CreatePortalDossieEmpresaProcessoTable extends Migration
             $table->integer('empresa_processo_id');
             $table->foreign('empresa_processo_id')->references('id')->on('portal_empresa_processo')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

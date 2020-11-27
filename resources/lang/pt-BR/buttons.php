@@ -54,6 +54,10 @@ return [
         'perfil'          => [
             'create'    => 'Criar Perfil',
         ],
+        'group'         => [
+            'create'    => 'Criar Grupo',
+            'users'     => 'Usuários'
+        ],
     ],
 
 
@@ -67,12 +71,6 @@ return [
             'groups'    => 'Grupos',
             'processes' => 'Processos'
         ],
-
-        'group'         => [
-            'create'    => 'Criar Grupo',
-            'users'     => 'Usuários'
-        ],
-
         'process'     => [
             'create'    => 'Criar Processo'
         ],
@@ -120,6 +118,11 @@ return [
         /*PLANO*/
         'plano'    => [
             'create'   => 'Criar Plano'
+        ],
+
+        /*TIPO DOCUMENTO*/
+        'tipo-documento'    => [
+            'create'   => 'Criar Tipo de Documento'
         ],
 
 

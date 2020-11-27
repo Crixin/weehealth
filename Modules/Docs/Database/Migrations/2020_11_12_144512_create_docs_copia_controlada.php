@@ -23,6 +23,7 @@ class CreateDocsCopiaControlada extends Migration
             $table->text('revisao', 10)->nullable();
             $table->text('setor', 35)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

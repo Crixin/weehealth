@@ -24,7 +24,7 @@ Route::prefix('core')->group(function () {
     /*
     * Empresa
     */
-    Route::group(['prefix' => 'empresa', 'middleware' => 'permissionamento:mod_base'], function () {
+    Route::group(['prefix' => 'empresa'], function () {
         
         Route::get('',                          ['as' => 'core.empresa',                        'uses' => 'EmpresaController@index']);
         Route::get('nova',                      ['as' => 'core.empresa.nova',                   'uses' => 'EmpresaController@newEnterprise']);
@@ -37,7 +37,7 @@ Route::prefix('core')->group(function () {
     /*
     * PERFIL
     */
-    Route::group(['prefix' => 'perfil', 'middleware' => 'permissionamento:administrador'], function () {
+    Route::group(['prefix' => 'perfil'], function () {
         Route::get('',              ['as' => 'core.perfil',         'uses' => 'PerfilController@index']);
         Route::get('novo',          ['as' => 'core.perfil.novo',    'uses' => 'PerfilController@create']);
         Route::post('salvar',       ['as' => 'core.perfil.salvar',  'uses' => 'PerfilController@store']);
@@ -51,7 +51,7 @@ Route::prefix('core')->group(function () {
     /*
     * USUÁRIO
     */
-    Route::group(['prefix' => 'usuario', 'middleware' => 'permissionamento:administrador'], function () {
+    Route::group(['prefix' => 'usuario'], function () {
         Route::get('',                  ['as' => 'core.usuario',                 'uses' => 'UsuarioController@index']);
         Route::get('editar/{id}',       ['as' => 'core.usuario.editar',          'uses' => 'UsuarioController@editUser'])->middleware('blockAdmin');
         Route::post('alterar',          ['as' => 'core.usuario.alterar',         'uses' => 'UsuarioController@updateUser']);
@@ -78,10 +78,24 @@ Route::prefix('core')->group(function () {
         Route::get('parametros',        ['as' => 'core.configuracao.parametros',         'uses' => 'ConfiguracaoController@indexParameters'])->middleware('onlyAllowSuperAdmins');
         Route::get('administradores',   ['as' => 'core.configuracao.administradores',    'uses' => 'ConfiguracaoController@indexAdministrators'])->middleware('onlyAllowSuperAdmins');
     
-        Route::group(['prefix' => 'setup', 'middleware' => 'permissionamento:conf_setup'], function () {
+        Route::group(['prefix' => 'setup'], function () {
             Route::get('',         ['as' => 'core.configuracao.setup.index',   'uses' => 'SetupController@index']);
             Route::post('alterar', ['as' => 'core.configuracao.setup.alterar', 'uses' => 'SetupController@update']);
         });
+    });
+
+    /*
+    * GRUPOS
+    */
+    Route::group(['prefix' => 'grupo', 'as' => 'core.'], function () {
+        Route::get('',                          ['as' => 'grupo',                       'uses' => 'GrupoController@index']);
+        Route::get('novo',                      ['as' => 'grupo.novo',                  'uses' => 'GrupoController@newGroup']);
+        Route::post('salvar',                   ['as' => 'grupo.salvar',                'uses' => 'GrupoController@saveGroup']);
+        Route::get('editar/{id}',               ['as' => 'grupo.editar',                'uses' => 'GrupoController@editGroup']);
+        Route::post('alterar',                  ['as' => 'grupo.alterar',               'uses' => 'GrupoController@updateGroup']);
+        Route::get('usuarios-vinculados/{id}',  ['as' => 'grupo.usuariosVinculados',    'uses' => 'GrupoController@linkedUsers']);
+        Route::post('vincular-usuarios',        ['as' => 'grupo.vincularUsuarios',      'uses' => 'GrupoController@updateLinkedUsers']);
+        Route::post('deletar',	                ['as' => 'grupo.deletar',               'uses' => 'AjaxController@deleteGroup']);
     });
 
     Route::group(['prefix' => 'atualizar'], function () {

@@ -20,6 +20,7 @@ class CreateCoreParametroTable extends Migration
             $table->text('valor_padrao');
             $table->text('valor_usuario')->nullable();
             $table->boolean('ativo');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

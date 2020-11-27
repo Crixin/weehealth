@@ -39,7 +39,7 @@ class EmpresaController extends Controller
                 ['identificador_parametro','=','TIPO_EMPRESA']
             ]
         );
-        $tiposEmpresa = explode(';', $tipos->valor_padrao);
+        $tiposEmpresa = json_decode($tipos->valor_padrao);
         return view('core::empresa.create', compact('cidades', 'tiposEmpresa'));
     }
 
@@ -52,11 +52,11 @@ class EmpresaController extends Controller
             DB::transaction(function () use ($cadastro, $request) {
                 $empresa = $this->empresaRepository->create($cadastro);
                 foreach ($request->tipo_empresa as $key => $tipo) {
-                    $this->empresaTipoRepository->create(["empresa_id" => $empresa->id,"tipo_nome"  => $tipo]);
+                    $this->empresaTipoRepository->create(["empresa_id" => $empresa->id,"tipo_id"  => $tipo]);
                 }
             });
             Helper::setNotify('Nova empresa criada com sucesso!', 'success|check-circle');
-            return redirect()->route('empresa');
+            return redirect()->route('core.empresa');
         } catch (\Throwable $th) {
             Helper::setNotify('Um erro ocorreu ao gravar a empresa o registro', 'danger|close-circle');
             return redirect()->back()->withInput();
@@ -73,7 +73,7 @@ class EmpresaController extends Controller
                 ['identificador_parametro','=','TIPO_EMPRESA']
             ]
         );
-        $tiposEmpresa = explode(';', $tipos->valor_padrao);
+        $tiposEmpresa = json_decode($tipos->valor_padrao);
         $buscaTiposSelecionados = $this->empresaTipoRepository->findBy(
             [
                 ['empresa_id','=',$empresa->id]
@@ -81,7 +81,7 @@ class EmpresaController extends Controller
         );
         $tipoSelecionados = [];
         foreach ($buscaTiposSelecionados as $key => $value) {
-            array_push($tipoSelecionados, $value->tipo_nome);
+            array_push($tipoSelecionados, $value->tipo_id);
         }
         return view('core::empresa.update', compact('cidades', 'empresa', 'tiposEmpresa', 'tipoSelecionados'));
     }
@@ -98,20 +98,20 @@ class EmpresaController extends Controller
                 $tiposEmpresa = $this->empresaTipoRepository->findBy([['empresa_id','=',$empresa]]);
                 $id_tipos = array();
                 foreach ($tiposEmpresa as $key => $value) {
-                    array_push($id_tipos, $value->tipo_nome);
+                    array_push($id_tipos, $value->tipo_id);
                 }
                 $diff_para_create  = array_diff($request->tipo_empresa, $id_tipos);
                 $diff_para_detete = array_diff($id_tipos, $request->tipo_empresa);
 
                 foreach ($diff_para_create as $key => $tipo) {
-                    $this->empresaTipoRepository->create(["empresa_id" => $empresa,"tipo_nome"  => $tipo]);
+                    $this->empresaTipoRepository->create(["empresa_id" => $empresa,"tipo_id"  => $tipo]);
                 }
 
                 foreach ($diff_para_detete as $key => $tipo) {
                     $this->empresaTipoRepository->delete(
                         [
                             ['empresa_id','=',$empresa],
-                            ['tipo_nome','=',$tipo,"AND"]
+                            ['tipo_id','=',$tipo,"AND"]
                         ]
                     );
                 }
@@ -119,7 +119,6 @@ class EmpresaController extends Controller
 
             Helper::setNotify('Informações da empresa atualizadas com sucesso!', 'success|check-circle');
         } catch (\Throwable $th) {
-            dd($th);
             Helper::setNotify('Um erro ocorreu ao atualizar a empresa', 'danger|close-circle');
         }
         return redirect()->back()->withInput();

@@ -54,7 +54,7 @@ class EmpresaProcessoGrupoController extends Controller
             [
                 ['empresa_processo_id', '=', $_empresaProcessoId]
             ],
-            ['portalEmpresaProcesso', 'portalGrupo'],
+            ['portalEmpresaProcesso', 'coreGrupo'],
             [['portal_grupo.nome']],
         );
 

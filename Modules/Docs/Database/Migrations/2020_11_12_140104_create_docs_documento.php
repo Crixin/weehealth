@@ -26,8 +26,8 @@ class CreateDocsDocumento extends Migration
             $table->boolean('copia_controlada');
             $table->string('nivel_acesso', 20);
             $table->boolean('finalizado');
-            $table->integer('setor_id')->unsigned();
-            $table->foreign('setor_id')->references('id')->on('docs_setor');
+            $table->integer('grupo_id')->unsigned();
+            $table->foreign('grupo_id')->references('id')->on('core_grupo');
             $table->integer('elaborador_id')->unsigned();
             $table->foreign('elaborador_id')->references('id')->on('core_users');
             $table->integer('aprovador_id')->unsigned();
@@ -45,6 +45,7 @@ class CreateDocsDocumento extends Migration
             $table->text('revisao_curta');
             $table->string('tipo', 50);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

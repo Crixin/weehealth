@@ -20,6 +20,7 @@ class CreatePortalUserDashboardTable extends Migration
             $table->integer('dashboard_id')->unsigned();
             $table->foreign('dashboard_id')->references('id')->on('portal_dashboard')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

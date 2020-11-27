@@ -17,7 +17,8 @@ class CreateCoreEmpresaTipoTable extends Migration
             $table->increments('id');
             $table->integer('empresa_id')->unsigned();
             $table->foreign('empresa_id')->references('id')->on('core_empresa')->onDelete('cascade');
-            $table->text('tipo_nome');
+            $table->integer('tipo_id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

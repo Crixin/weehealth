@@ -21,6 +21,7 @@ class CreatePortalDossieTable extends Migration
             $table->string('status');
             $table->dateTime('validade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

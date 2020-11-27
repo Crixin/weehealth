@@ -23,6 +23,7 @@ class CreatePortalEmpresaProcessoTable extends Migration
             $table->foreign('processo_id')->references('id')->on('portal_processo')->onDelete('cascade');
             $table->text("todos_filtros_pesquisaveis")->default("");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

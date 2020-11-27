@@ -31,7 +31,7 @@ Route::prefix('portal')->group(function () {
         /*
         * EMPRESAS
         */
-        Route::group(['prefix' => 'empresa', 'as' => 'portal.', 'middleware' => 'permissionamento:mod_base'], function () {
+        Route::group(['prefix' => 'empresa', 'as' => 'portal.'], function () {
             
             Route::get('',                          ['as' => 'empresa',                        'uses' => 'EmpresaPortalController@index']);
             
@@ -48,19 +48,7 @@ Route::prefix('portal')->group(function () {
             Route::post('empresa/processo',         ['as' => 'relacao.empresaProcesso.deletar','uses' => 'AjaxController@deleteLinkEnterpriseProcess']);
         });
             
-        /*
-        * GRUPOS
-        */
-        Route::group(['prefix' => 'grupo', 'as' => 'portal.', 'middleware' => 'permissionamento:mod_base'], function () {
-            Route::get('',                          ['as' => 'grupo',                       'uses' => 'GrupoController@index']);
-            Route::get('novo',                      ['as' => 'grupo.novo',                  'uses' => 'GrupoController@newGroup']);
-            Route::post('salvar',                   ['as' => 'grupo.salvar',                'uses' => 'GrupoController@saveGroup']);
-            Route::get('editar/{id}',               ['as' => 'grupo.editar',                'uses' => 'GrupoController@editGroup']);
-            Route::post('alterar',                  ['as' => 'grupo.alterar',               'uses' => 'GrupoController@updateGroup']);
-            Route::get('usuarios-vinculados/{id}',  ['as' => 'grupo.usuariosVinculados',    'uses' => 'GrupoController@linkedUsers']);
-            Route::post('vincular-usuarios',        ['as' => 'grupo.vincularUsuarios',      'uses' => 'GrupoController@updateLinkedUsers']);
-            Route::post('deletar',	                ['as' => 'grupo.deletar',               'uses' => 'AjaxController@deleteGroup']);
-        });
+        
         
         Route::group(['prefix' => 'ged', 'as' => 'portal.ged.'], function () {
             Route::get('getRegistro',          ['as' => 'getRegistro',          'uses' => 'AjaxController@getRegistro']);
@@ -132,7 +120,7 @@ Route::prefix('portal')->group(function () {
         /*
         * PROCESSOS
         */
-        Route::group(['prefix' => 'processo', 'as' => 'portal.', 'middleware' => 'permissionamento:mod_base'], function () {
+        Route::group(['prefix' => 'processo', 'as' => 'portal.'], function () {
             Route::get('',              ['as' => 'processo',            'uses' => 'ProcessoController@index']);
             Route::get('novo',          ['as' => 'processo.novo',       'uses' => 'ProcessoController@newProcess']);
             Route::post('salvar',       ['as' => 'processo.salvar',     'uses' => 'ProcessoController@saveProcess']);
@@ -160,7 +148,7 @@ Route::prefix('portal')->group(function () {
         /*
         * RELATÓRIOS
         */
-        Route::group(['prefix' => 'relatorio', 'as' => 'portal.relatorio.', 'middleware' => 'permissionamento:view_dashboard'], function () {
+        Route::group(['prefix' => 'relatorio', 'as' => 'portal.relatorio.'], function () {
             //Route::get('conferencia/{idEmpresa}/{idProcesso}',   ['as' => 'conferencia',  'uses' => 'RelatorioController@index']);
             //Route::post('conferencia/busca',                     ['as' => 'buscar',       'uses' => 'RelatorioController@search']);
             Route::get('documentos/',                  ['as' => 'documentos',  'uses' => 'RelatorioDocumentosController@index']);
@@ -172,7 +160,7 @@ Route::prefix('portal')->group(function () {
         /*
         * DASHBOARDS
         */
-        Route::group(['prefix' => 'dashboards', 'as' => 'portal.', 'middleware' => 'permissionamento:mod_dashboard'], function () {
+        Route::group(['prefix' => 'dashboards', 'as' => 'portal.'], function () {
             Route::get('',                          ['as' => 'dashboards',                    'uses' => 'DashboardController@index']);
             Route::get('novo',                      ['as' => 'dashboards.criar',              'uses' => 'DashboardController@newDashboard']);
             Route::post('salvar',                   ['as' => 'dashboards.salvar',             'uses' => 'DashboardController@saveDashboard']);
@@ -187,7 +175,7 @@ Route::prefix('portal')->group(function () {
         /*
         * DASHBOARD VIEW
         */
-        Route::group(['prefix' => 'dashboard', 'as' => 'portal.', 'middleware' => 'permissionamento:view_dashboard'], function () {
+        Route::group(['prefix' => 'dashboard', 'as' => 'portal.'], function () {
             Route::get('view/{id}', ['as' => 'dashboard.view', 'uses' => 'DashboardController@view']);
         });
 
@@ -195,7 +183,7 @@ Route::prefix('portal')->group(function () {
         /*
         * CONFIG. TAREFA
         */
-        Route::group(['prefix' => 'config-tarefa', 'as' => 'portal.', 'middleware' => 'permissionamento:mod_tarefas'], function () {
+        Route::group(['prefix' => 'config-tarefa', 'as' => 'portal.'], function () {
             Route::get('',                          ['as' => 'config-tarefa',                    'uses' => 'ConfiguracaoTarefaController@index']);
             Route::get('nova',                      ['as' => 'config-tarefa.criar',              'uses' => 'ConfiguracaoTarefaController@newConfiguracaoTarefa']);
             Route::post('salvar',                   ['as' => 'config-tarefa.salvar',             'uses' => 'ConfiguracaoTarefaController@saveConfiguracaoTarefa']);
@@ -207,7 +195,7 @@ Route::prefix('portal')->group(function () {
         /*
         * TAREFA
         */
-        Route::group(['prefix' => 'tarefa', 'as' => 'portal.', 'middleware' => 'permissionamento:mod_tarefas'], function () {
+        Route::group(['prefix' => 'tarefa', 'as' => 'portal.'], function () {
             Route::get('',                          ['as' => 'tarefa',                    'uses' => 'TarefaController@index']);
             Route::get('nova',                      ['as' => 'tarefa.criar',              'uses' => 'TarefaController@newTarefa']);
             Route::post('salvar',                   ['as' => 'tarefa.salvar',             'uses' => 'TarefaController@saveTarefa']);
@@ -219,7 +207,7 @@ Route::prefix('portal')->group(function () {
         /*
         * EMPRESA PROCESSO GRUPOS
         */
-        Route::group(['prefix' => 'empresa-processo-grupo', 'middleware' => 'permissionamento:mod_base'], function () {
+        Route::group(['prefix' => 'empresa-processo-grupo'], function () {
             Route::get('novo/{empresaProcesso}',    ['as' => 'empresa-processo-grupo.criar',                    'uses' => 'EmpresaProcessoGrupoController@create']);
             Route::post('salvar',                   ['as' => 'empresa-processo-grupo.salvar',                   'uses' => 'EmpresaProcessoGrupoController@store']);
             Route::post('alterar',                  ['as' => 'empresa-processo-grupo.alterar',                  'uses' => 'EmpresaProcessoGrupoController@update']);

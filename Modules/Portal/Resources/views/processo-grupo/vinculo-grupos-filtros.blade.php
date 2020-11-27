@@ -102,7 +102,7 @@
                                             <tbody>
                                                 @foreach ($gruposVinculados as $infoGrupo)
                                                     <tr data-id-empresa-processo-grupo="{{ $infoGrupo->id }}">
-                                                        <td><b> {{ $infoGrupo->portalGrupo->nome}} </b></td>
+                                                        <td><b> {{ $infoGrupo->coreGrupo->nome}} </b></td>
 
                                                         @foreach (json_decode($infoGrupo->portalEmpresaProcesso->indice_filtro_utilizado) as $key => $indice)
                                                         

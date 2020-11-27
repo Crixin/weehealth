@@ -70,9 +70,10 @@
                             <div class="col-md-6">
                                 <div class="form-group{{ $errors->has('tipo_empresa') ? ' has-error' : '' }}">
                                     <label class="control-label">Tipo de empresa</label>
-                                    <select name="tipo_empresa[]" class="form-control selectpicker" multiple id="tipo_empresa" value="{{ old('tipo_empresa') }}" required>
+                                    <select name="tipo_empresa[]" class="form-control selectpicker" multiple data-live-search="true"  data-actions-box="true" id="tipo_empresa"  required>
+                                       
                                         @foreach ($tiposEmpresa as $key => $tipo)
-                                            <option value="{{$tipo}}">{{ucfirst(strtolower($tipo))}}</option>    
+                                            <option value="{{$key}}"  @if (in_array($tipo,old('tipo_empresa')??[] )) selected @endif >{{ucfirst(strtolower($tipo))}}</option>    
                                         @endforeach
                                     </select>
                                     <small class="form-control-feedback"> Selecione o(s) tipo(s) que a empresa pertence. </small> 

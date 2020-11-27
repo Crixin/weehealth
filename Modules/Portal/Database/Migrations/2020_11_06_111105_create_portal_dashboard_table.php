@@ -18,6 +18,7 @@ class CreatePortalDashboardTable extends Migration
             $table->string('nome', 100);
             $table->json('config');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

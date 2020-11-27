@@ -10,7 +10,14 @@ class Empresa extends Model
     public $table = 'core_empresa';
 
     protected $fillable = [
-        'id', 'nome', 'cnpj', 'telefone', 'responsavel_contato', 'pasta_ftp', 'obs', 'cidade_id'
+        'id',
+        'nome',
+        'cnpj',
+        'telefone',
+        'responsavel_contato',
+        'pasta_ftp',
+        'obs',
+        'cidade_id'
     ];
 
 
@@ -20,9 +27,9 @@ class Empresa extends Model
      *
      * PS: usa-se o `withPivot` quando uma tabela de relacionamento possui valores adicionais, ou seja, não apenas as keys de vinculação
      */
-    public function portalGroups()
+    public function coreGroups()
     {
-        return $this->belongsToMany('Modules\Portal\Model\Grupo', 'Modules\Portal\Model\EmpresaGrupo', 'grupo_id', 'id')
+        return $this->belongsToMany('Modules\Core\Model\Grupo', 'Modules\Portal\Model\EmpresaGrupo', 'grupo_id', 'id')
         ->withPivot(
             'permissao_download',
             'permissao_visualizar',
