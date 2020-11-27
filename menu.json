@@ -1,63 +1,113 @@
 {
     "Core": {
         "CADASTROS": {
-            "Icone" :"<i class='mdi mdi-plus-circle-outline'></i>",  
-            "Empresas": {
-                "permissao": ["perm_empresa"],
-                "descricao": "Cadastro/Edição/Exclusão de Empresas",
-                "icone": "",
-                "rota": "core.empresa"
-            },
-            "Usuários": {
-                "permissao": ["perm_user"],
-                "descricao": "Cadastro/Edição/Exclusão de Usuários",
-                "icone": "",
-                "rota": "core.user"
-            },
-            "Perfil": {
-                "permissao": ["perm_perfil"],
-                "descricao": "Cadastro/Edição/Exclusão de Usuários",
-                "icone": "",
-                "rota": "core.user"
+            "icone" :"mdi mdi-plus-circle-outline",
+            "filhos":{
+                "Empresas": {
+                    "permissao": ["core_empresa_cons"],
+                    "descricao": "",
+                    "icone": "",
+                    "route": "empresa",
+                    "itens_perfil": {
+                        "Cadastro": {
+                            "permissao": ["core_empresa_cad"],
+                            "descricao": "Cadastro de Empresas",
+                            "icone": ""
+                        },
+                        "Edição": {
+                            "permissao": ["core_usuario_edit"],
+                            "descricao": "Edição de Usuários",
+                            "icone": ""
+                        },        
+                        "Consulta": {
+                            "permissao": ["core_empresa_cons"],
+                            "descricao": "Consulta de Empresas",
+                            "icone": ""
+                        },        
+                        "Exclusão": {
+                            "permissao": ["core_empresa_exc"],
+                            "descricao": "Exclusão de Empresas",
+                            "icone": ""
+                        }        
+                    }
+                },
+                "Usuários": {
+                    "permissao": ["perm_user"],
+                    "descricao": "",
+                    "icone": "",
+                    "route": "usuario",
+                    "itens_perfil": {
+                        "Cadastro": {
+                            "permissao": ["core_usuario_cad"],
+                            "descricao": "Cadastro de Usuários",
+                            "icone": ""
+                        },        
+                        "Edição": {
+                            "permissao": ["core_usuario_cad"],
+                            "descricao": "Edição de Usuários",
+                            "icone": ""
+                        },        
+                        "Consulta": {
+                            "permissao": ["core_usuario_cons"],
+                            "descricao": "Consulta de Usuários",
+                            "icone": ""
+                        },        
+                        "Exclusão": {
+                            "permissao": ["core_usuario_exc"],
+                            "descricao": "Exclusão de Usuários",
+                            "icone": ""
+                        }        
+                    }
+                },
+                "Perfil": {
+                    "permissao": ["perm_perfil"],
+                    "descricao": "Cadastro/Edição/Exclusão de Usuários",
+                    "icone": "",
+                    "route": "usuario"
+                }
             }
         },
         "CONFIGURAÇÕES": {
-            "Icone" :"<i class='mdi mdi-settings'></i>",  
-            "Empresas": {
-                "permissao": ["perm_administrador"],
-                "descricao": "Cadastro/Edição/Exclusão de Administradores",
-                "icone": "",
-                "rota": "core.configuracao.administradores"
-            },
-            "Parametros": {
-                "permissao": ["perm_parametro"],
-                "descricao": "Cadastro/Edição/Exclusão de Parametros",
-                "icone": "",
-                "rota": "core.configuracao.parametros"
-            },
-            "Setup": {
-                "permissao": ["perm_setup"],
-                "descricao": "Edição de Setup",
-                "icone": "",
-                "rota": "core.configuracao.setup"
+            "icone" :"mdi mdi-settings",
+            "filhos":{
+                "Empresas": {
+                    "permissao": ["perm_administrador"],
+                    "descricao": "Cadastro/Edição/Exclusão de Administradores",
+                    "icone": "",
+                    "route": "configuracao.administradores"
+                },
+                "Parametros": {
+                    "permissao": ["perm_parametro"],
+                    "descricao": "Cadastro/Edição/Exclusão de Parametros",
+                    "icone": "",
+                    "route": "configuracao.parametros"
+                },
+                "Setup": {
+                    "permissao": ["perm_setup"],
+                    "descricao": "Edição de Setup",
+                    "icone": "",
+                    "route": "configuracao.setup.index"
+                }
             }
         }
     },
 
     "Portal": {
         "DASHBOARD": {
-            "Icone" :"<i class='mdi mdi-chart-areaspline'></i>",  
-            "Listar": {
-                "permissao": ["perm_dashboard"],
-                "descricao": "Cadastro/Edição/Exclusão de Dashboard",
-                "icone": "",
-                "rota": "portal.dashboard"
-            },
-            "Visualizar": {
-                "permissao": ["perm_user"],
-                "descricao": "Cadastro/Edição/Exclusão de Usuários",
-                "icone": "",
-                "rota": "core.user"
+            "icone" :"mdi mdi-chart-areaspline", 
+            "filhos":{
+                "Listar": {
+                    "permissao": ["perm_dashboard"],
+                    "descricao": "Cadastro/Edição/Exclusão de Dashboard",
+                    "icone": "",
+                    "route": "dashboards"
+                },
+                "Visualizar": {
+                    "permissao": ["perm_user"],
+                    "descricao": "Cadastro/Edição/Exclusão de Usuários",
+                    "icone": "",
+                    "route": "usuario"
+                }
             }
         }
     }

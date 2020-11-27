@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@extends('layouts.menuCore')
+@extends('layouts.menu')
 @yield('menu')
 
 @section('page_title', 'Página Inicial')

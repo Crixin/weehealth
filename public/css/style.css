@@ -1597,6 +1597,10 @@ form label {
   border-bottom: 1px solid rgba(120, 130, 140, 0.13);
   padding-bottom: 20px; }
 
+.form-group.required .control-label:after {
+  content:"*";
+  color:red; }
+
 /*******************
 Layouts
 ******************/

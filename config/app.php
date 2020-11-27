@@ -222,8 +222,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        
-        
         'Helper' => App\Classes\Helper::class,
         'Constants' => App\Classes\Constants::class,
     ],

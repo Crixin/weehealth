@@ -12,9 +12,7 @@ class PerfilController extends Controller
     protected $perfilRepository;
 
 
-    public function __construct(
-        PerfilRepository $perfil
-    )
+    public function __construct(PerfilRepository $perfil)
     {
         $this->perfilRepository = $perfil;
     }
@@ -50,13 +48,12 @@ class PerfilController extends Controller
     public function store(Request $_request)
     {
         try {
-            if (!$this->validator($_request)) {
-                return redirect()->back()->withInput();
-            }
+            $permissoes = $this->permissaoRepository->findAll([], [['descricao', 'ASC']]);
 
             Helper::setNotify('Novo perfil criado com sucesso!', 'success|check-circle');
             return redirect()->route('core.perfil');
         } catch (\Throwable $th) {
+            dd($th);
             Helper::setNotify("Erro ao criar o perfil", 'danger|close-circle');
             return redirect()->back()->withInput();
         }
@@ -73,7 +70,7 @@ class PerfilController extends Controller
         $perfil = $this->perfilRepository->find($id, ['corePermissoes']);
         $userPermissao = [];
 
-        $userPermissao =[];
+        $userPermissao = [];
         $permissoes = [];
 
         return view('core::perfil.update', compact('perfil', 'permissoes', 'userPermissao'));
@@ -88,8 +85,9 @@ class PerfilController extends Controller
      */
     public function update(Request $_request, $id)
     {
-        if (!$this->validator($_request, $id)) {
-            return redirect()->back()->withInput();
+        [$result, $error] = $this->validator($_request, $id);
+        if (!$result) {
+            return redirect()->back()->withInput()->compact(['error' => $error]);
         }
 
         try {
@@ -103,18 +101,8 @@ class PerfilController extends Controller
                 }
 
                 $deleteArray = array_diff($userPermissao, $_request->permissoes);
-
-                foreach ($deleteArray as $key => $permissao) {
-                    
-                }
-
                 $createArray = array_diff($_request->permissoes, $userPermissao);
-
-                foreach ($createArray as $key => $permissao) {
-                    
-                }
             });
-
             Helper::setNotify('Perfil atualizado com sucesso!', 'success|check-circle');
             return redirect()->route('core.perfil');
         } catch (\Throwable $th) {
@@ -153,10 +141,9 @@ class PerfilController extends Controller
             'nome' => 'required|string|unique:core_perfil,nome' . ($id ? ',' . $id : ''),
             'permissoes' => 'required|exists:core_permissao,id',
         ]);
-
         if ($validator->fails()) {
-            Helper::setNotify($validator->messages()->first(), 'danger|close-circle');
-            return false;
+            Helper::setNotify($validator->messages(), 'danger|close-circle');
+            return [false, $validator];
         }
         return true;
     }
