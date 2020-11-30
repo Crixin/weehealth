@@ -26,12 +26,12 @@ class CreateDocsDocumento extends Migration
             $table->boolean('copia_controlada');
             $table->string('nivel_acesso', 20);
             $table->boolean('finalizado');
-            $table->integer('grupo_id')->unsigned();
-            $table->foreign('grupo_id')->references('id')->on('core_grupo');
+            $table->integer('grupo_treinamento_id')->unsigned();
+            $table->foreign('grupo_treinamento_id')->references('id')->on('core_grupo');
             $table->integer('elaborador_id')->unsigned();
             $table->foreign('elaborador_id')->references('id')->on('core_users');
-            $table->integer('aprovador_id')->unsigned();
-            $table->foreign('aprovador_id')->references('id')->on('core_users');
+            $table->integer('grupo_divulgacao_id')->unsigned();
+            $table->foreign('grupo_divulgacao_id')->references('id')->on('core_grupo');
             $table->boolean('necessita_revisao')->default(false)->nullable();
             $table->integer('id_usuario_solicitante')->nullable();
             $table->string('revisao', 20)->nullable();
