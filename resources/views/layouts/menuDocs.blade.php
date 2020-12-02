@@ -38,6 +38,7 @@
                             <li><a href="{{ route('docs.configuracao') }}"> @lang('sidebar_and_header.docs.uls_li_system.register.configuracao') </a></li>
                             <li><a href="{{ route('docs.plano') }}"> @lang('sidebar_and_header.docs.uls_li_system.register.plano') </a></li>
                             <li><a href="{{ route('docs.tipo-documento') }}"> @lang('sidebar_and_header.docs.uls_li_system.register.tipo-documento') </a></li>
+                            <li><a href="{{ route('docs.fluxo') }}"> @lang('sidebar_and_header.docs.uls_li_system.register.fluxo') </a></li>
                     </ul>
                 </li>
 

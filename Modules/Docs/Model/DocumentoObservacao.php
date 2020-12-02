@@ -3,9 +3,11 @@
 namespace Modules\Docs\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DocumentoObservacao extends Model
 {
+    use SoftDeletes;
 
     protected $table = "docs_documento_observacao";
 
@@ -16,5 +18,4 @@ class DocumentoObservacao extends Model
         'documento_id',
         'usuario_id'
     ];
-
 }

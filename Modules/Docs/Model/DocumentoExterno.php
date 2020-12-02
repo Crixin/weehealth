@@ -4,9 +4,12 @@ namespace Modules\Docs\Model;
 
 use Modules\Core\Model\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DocumentoExterno extends Model
 {
+    use SoftDeletes;
+
     protected $table = "docs_documento_externo";
 
     protected $fillable = [

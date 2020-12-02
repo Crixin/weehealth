@@ -4,9 +4,12 @@ namespace Modules\Docs\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Classes\Constants;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ControleRegistro extends Model
 {
+    use SoftDeletes;
+
     protected $table = "docs_controle_registros";
 
     protected $fillable = [

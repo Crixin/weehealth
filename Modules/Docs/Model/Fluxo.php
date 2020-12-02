@@ -3,9 +3,12 @@
 namespace Modules\Docs\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Fluxo extends Model
 {
+    use SoftDeletes;
+
     protected $table = "docs_fluxo";
 
     protected $fillable = [
@@ -16,5 +19,4 @@ class Fluxo extends Model
         'grupo_id',
         'perfil_id'
     ];
-
 }

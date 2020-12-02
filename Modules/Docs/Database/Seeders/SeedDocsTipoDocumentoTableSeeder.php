@@ -4,6 +4,7 @@ namespace Modules\Docs\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Docs\Model\TipoDocumento;
 
 class SeedDocsTipoDocumentoTableSeeder extends Seeder
 {

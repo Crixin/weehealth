@@ -47,6 +47,21 @@ Route::prefix('docs')->group(function () {
         Route::post('deletar',      ['as' => 'tipo-documento.deletar', 'uses' => 'TipoDocumentoController@destroy']);
     });
 
+    /*
+    * FLUXO
+    */
+    Route::group(['prefix' => 'fluxo' , 'as' => 'docs.'], function () {
+        Route::get('',              ['as' => 'fluxo',         'uses' => 'FluxoController@index']);
+        Route::get('novo',          ['as' => 'fluxo.novo',    'uses' => 'FluxoController@create']);
+        Route::post('salvar',       ['as' => 'fluxo.salvar',  'uses' => 'FluxoController@store']);
+        Route::get('editar/{id}',   ['as' => 'fluxo.editar',  'uses' => 'FluxoController@edit']);
+        Route::post('alterar',      ['as' => 'fluxo.alterar', 'uses' => 'FluxoController@update']);
+        Route::post('deletar',      ['as' => 'fluxo.deletar', 'uses' => 'FluxoController@destroy']);
+
+        Route::get('{id}/etapa',    ['as' => 'fluxo.etapa',    'uses' => 'EtapaFluxoController@index']);
+
+    });
+
 
 
 

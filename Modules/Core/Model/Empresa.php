@@ -3,9 +3,11 @@
 namespace Modules\Core\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Empresa extends Model
 {
+    use SoftDeletes;
 
     public $table = 'core_empresa';
 
@@ -82,5 +84,4 @@ class Empresa extends Model
             'todos_filtros_pesquisaveis'
         );
     }
-
 }

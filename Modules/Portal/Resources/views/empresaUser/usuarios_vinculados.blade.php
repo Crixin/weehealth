@@ -25,7 +25,7 @@
 
 
                 @if(Session::has('message'))
-                    @component('componentes.alert')
+                    @component('components.alert')
                     @endcomponent
 
                     {{ Session::forget('message') }}

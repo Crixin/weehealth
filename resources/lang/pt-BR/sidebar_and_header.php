@@ -109,7 +109,7 @@ return [
                 'configuracao'     => 'Configuração',
                 'plano' => 'Planos',
                 'tipo-documento' => 'Tipo de Documento',
-
+                'fluxo' => 'Fluxo'
             ],
             'documento'        => 'DOCUMENTOS',
             'documento_externo' => 'DOC. EXTERNOS',
