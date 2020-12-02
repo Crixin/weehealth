@@ -38,35 +38,7 @@
                         </ul>
                     </div>
                 @endif
-<<<<<<< Updated upstream
-                
-                <form method="POST" action="{{ route('core.perfil.salvar') }}">
-                    {{ csrf_field() }}
-                    <div class="form-body">
-                        <div class="row p-t-20">
-                            <div class="col-md-6">
-                                <div class="form-group{{ $errors->has('nome') ? ' has-error' : '' }}">
-                                    <label class="control-label">Nome</label>
-                                    <input type="text" id="nome" name="nome" value="{{ old('nome') }}" class="form-control" required autofocus>
-                                    <small class="form-control-feedback"> Digite o nome do perfil. </small> 
-                                    @if ($errors->has('nome'))
-                                        <br/>    
-                                        <span class="help-block text-danger">
-                                            <strong>{{ $errors->first('nome') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group{{ $errors->has('permissoes') ? ' has-error' : '' }}">
-                                    <label class="control-label">Permissões</label>
-                                    <select class="form-control selectpicker" name="permissoes[]" id="permissoes" required data-size="10" data-live-search="true" data-actions-box="true" multiple>
-                                        @foreach ($permissoes as $permissao)
-                                            <option value="{{$permissao->id}}" > {{$permissao->descricao }} </option>
-                                        @endforeach
-                                    </select>
-                                    <small class="form-control-feedback"> Selecione as permissões. </small> 
-=======
+
                 <form method="POST" action="{{ route('perfil.salvar') }}">
                     {{ Form::token() }}
                         
@@ -75,7 +47,6 @@
                         @slot('nome') {{ $nome }} @endslot
                         @slot('modules') {{ $modules }} @endslot
                     @endcomponent
->>>>>>> Stashed changes
 
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>

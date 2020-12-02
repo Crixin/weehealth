@@ -7,7 +7,7 @@
                     "permissao": ["core_empresa_cons"],
                     "descricao": "",
                     "icone": "",
-                    "route": "empresa",
+                    "route": "core.empresa",
                     "itens_perfil": {
                         "Cadastro": {
                             "permissao": ["core_empresa_cad"],
@@ -35,7 +35,7 @@
                     "permissao": ["perm_user"],
                     "descricao": "",
                     "icone": "",
-                    "route": "usuario",
+                    "route": "core.usuario",
                     "itens_perfil": {
                         "Cadastro": {
                             "permissao": ["core_usuario_cad"],
@@ -63,7 +63,7 @@
                     "permissao": ["perm_perfil"],
                     "descricao": "Cadastro/Edição/Exclusão de Usuários",
                     "icone": "",
-                    "route": "usuario"
+                    "route": "core.perfil"
                 }
             }
         },
@@ -74,19 +74,19 @@
                     "permissao": ["perm_administrador"],
                     "descricao": "Cadastro/Edição/Exclusão de Administradores",
                     "icone": "",
-                    "route": "configuracao.administradores"
+                    "route": "core.configuracao.administradores"
                 },
                 "Parametros": {
                     "permissao": ["perm_parametro"],
                     "descricao": "Cadastro/Edição/Exclusão de Parametros",
                     "icone": "",
-                    "route": "configuracao.parametros"
+                    "route": "core.configuracao.parametros"
                 },
                 "Setup": {
                     "permissao": ["perm_setup"],
                     "descricao": "Edição de Setup",
                     "icone": "",
-                    "route": "configuracao.setup.index"
+                    "route": "core.configuracao.setup.index"
                 }
             }
         }
@@ -100,13 +100,13 @@
                     "permissao": ["perm_dashboard"],
                     "descricao": "Cadastro/Edição/Exclusão de Dashboard",
                     "icone": "",
-                    "route": "dashboards"
+                    "route": "portal.dashboards"
                 },
                 "Visualizar": {
                     "permissao": ["perm_user"],
                     "descricao": "Cadastro/Edição/Exclusão de Usuários",
                     "icone": "",
-                    "route": "usuario"
+                    "route": "core.usuario"
                 }
             }
         }
