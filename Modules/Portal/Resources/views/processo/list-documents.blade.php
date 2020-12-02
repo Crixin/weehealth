@@ -26,7 +26,7 @@
 			<div class="card-body">
 				@if($possuiDocumento)
                     @if(Session::has('message'))
-                        @component('componentes.alert')
+                        @component('components.alert')
                         @endcomponent
 
                         {{ Session::forget('message') }}

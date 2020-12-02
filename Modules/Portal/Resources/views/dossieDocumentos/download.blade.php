@@ -40,7 +40,7 @@
             <div class="login-box card">
                 <div class="card-body">     
                     @if(Session::has('message'))
-                        @component('componentes.alert') @endcomponent
+                        @component('components.alert') @endcomponent
                         {{ Session::forget('message') }}
                     @endif
                     <form class="form-horizontal form-material" method="POST" action="{{ route('portal.download.dossie.download') }}">

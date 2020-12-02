@@ -28,7 +28,7 @@
                         <h5 class="text-center text-muted m-b-30">@lang('page_titles.portal.warnings.report-docs')</h5>
 
                         @if(Session::has('message'))
-                            @component('componentes.alert') @endcomponent
+                            @component('components.alert') @endcomponent
                             {{ Session::forget('message') }}
                         @endif
 

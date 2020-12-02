@@ -180,6 +180,12 @@ return [
             'update'          => 'Alterando Plano',
         ],
 
+        'fluxo'        => [
+            'index'           => 'Fluxos',
+            'create'          => 'Nova Fluxo',
+            'update'          => 'Alterando Fluxo',
+        ],
+
         'tipo-documento'        => [
             'index'           => 'Tipos de Documento',
             'create'          => 'Novo Tipo de Documento',

@@ -3,9 +3,12 @@
 namespace Modules\Docs\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ListaPresenca extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'docs_lista_presenca';
 
     protected $fillable = [
@@ -18,5 +21,4 @@ class ListaPresenca extends Model
         'destinatarios_email',
         'revisao_documento'
     ];
-
 }

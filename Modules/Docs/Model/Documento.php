@@ -3,9 +3,12 @@
 namespace Modules\Docs\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Documento extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'docs_documento';
 
     protected $fillable = [
@@ -20,11 +23,11 @@ class Documento extends Model
         'copia_controlada',
         'nivel_acesso',
         'finalizado',
-        'setor_id',
+        'grupo_treinamento_id',
         'elaborador_id',
-        'aprovador_id',
+        'grupo_divulgacao_id',
         'necessita_revisao',
-        'id_usuario_solicitante',
+        'usuario_solicitante_id',
         'revisao',
         'justificativa_cancelar_revisao',
         'obsoleto',
@@ -34,5 +37,4 @@ class Documento extends Model
         'revisao_curta',
         'tipo'
     ];
-
 }

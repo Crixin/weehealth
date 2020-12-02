@@ -19,7 +19,7 @@
         <div class="card">
             <div class="card-body">
                 @if(Session::has('message'))
-                    @component('componentes.alert') @endcomponent
+                    @component('components.alert') @endcomponent
                     {{ Session::forget('message') }}
                 @endif
             

@@ -33,7 +33,7 @@ class CreateDocsDocumento extends Migration
             $table->integer('grupo_divulgacao_id')->unsigned();
             $table->foreign('grupo_divulgacao_id')->references('id')->on('core_grupo');
             $table->boolean('necessita_revisao')->default(false)->nullable();
-            $table->integer('id_usuario_solicitante')->nullable();
+            $table->integer('usuario_solicitante_id')->nullable();
             $table->string('revisao', 20)->nullable();
             $table->string('justificativa_rejeicao_revisao', 200)->nullable();
             $table->boolean('em_revisao');

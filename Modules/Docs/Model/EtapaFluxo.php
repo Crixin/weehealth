@@ -3,9 +3,12 @@
 namespace Modules\Docs\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EtapaFluxo extends Model
 {
+    use SoftDeletes;
+
     protected $table = "docs_etapa_fluxo";
 
     protected $fillable = [
@@ -14,5 +17,4 @@ class EtapaFluxo extends Model
         'descricao',
         'perfil_id'
     ];
-
 }

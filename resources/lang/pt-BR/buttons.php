@@ -120,6 +120,12 @@ return [
             'create'   => 'Criar Plano'
         ],
 
+        /*FLUXO*/
+        'fluxo'    => [
+            'create'   => 'Criar Fluxo',
+            'etapas'   => 'Etapas'
+        ], 
+
         /*TIPO DOCUMENTO*/
         'tipo-documento'    => [
             'create'   => 'Criar Tipo de Documento'

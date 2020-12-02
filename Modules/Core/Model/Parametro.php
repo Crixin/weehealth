@@ -3,10 +3,11 @@
 namespace Modules\Core\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Parametro extends Model
 {
-
+    use SoftDeletes;
     public $table = 'core_parametro';
 
     protected $fillable = [

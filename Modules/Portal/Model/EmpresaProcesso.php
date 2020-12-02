@@ -3,10 +3,12 @@
 namespace Modules\Portal\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmpresaProcesso extends Model
 {
-    
+    use SoftDeletes;
+
     public $table = 'portal_empresa_processo';
 
     protected $fillable = [

@@ -3,9 +3,12 @@
 namespace Modules\Docs\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GrupoPlano extends Model
 {
+    use SoftDeletes;
+
     protected $table = "docs_grupo_plano";
 
     protected $fillable = [
@@ -13,5 +16,4 @@ class GrupoPlano extends Model
         'grupo_id',
         'norma_id'
     ];
-
 }

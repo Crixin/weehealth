@@ -3,9 +3,12 @@
 namespace Modules\Docs\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RegistroImpressoes extends Model
 {
+    use SoftDeletes;
+
     protected $table = "docs_registro_impressoes";
 
     // Não foi colocado 'mensagem' porque qualquer mudança posterior demandará atualização dessa mensagem, entre outras. 
@@ -17,5 +20,4 @@ class RegistroImpressoes extends Model
         'documento_id',
         'user_id'
     ];
-
 }

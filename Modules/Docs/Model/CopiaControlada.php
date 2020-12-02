@@ -3,10 +3,12 @@
 namespace Modules\Docs\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CopiaControlada extends Model
 {
-    
+    use SoftDeletes;
+
     protected $table = 'docs_copia_controlada';
 
     protected $fillable = [

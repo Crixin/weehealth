@@ -31,9 +31,9 @@
                     <li>
                         <a class="has-arrow waves-effect waves-dark" href="#2" aria-expanded="false"><i class="mdi mdi-plus-circle-outline"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.register.collapse') </span></a>
                         <ul aria-expanded="false" class="collapse">
-                            @if (in_array('mod_base', $permissaoMenu))
+                            
                                 <li><a href="{{ route('core.empresa') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item1') </a></li>
-                            @endif
+                            
 
                             @if (Auth::user()->administrador)
                                 <li><a href="{{ route('core.usuario') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item4') </a></li>

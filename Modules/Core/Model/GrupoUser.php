@@ -3,9 +3,11 @@
 namespace Modules\Core\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GrupoUser extends Model
 {
+    use SoftDeletes;
     public $table = 'core_grupo_user';
 
     protected $fillable = [

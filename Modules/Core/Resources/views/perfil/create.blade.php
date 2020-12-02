@@ -23,7 +23,7 @@
                 $modules = ['Core'];
                 @endphp
 {{--                 @if(Session::has('message'))
-                    @component('componentes.alert') @endcomponent
+                    @component('components.alert') @endcomponent
                     {{ Session::forget('message') }}
                 @endif --}}
               {{--   @php
@@ -38,14 +38,17 @@
                         </ul>
                     </div>
                 @endif
-
-                <form method="POST" action="{{ route('perfil.salvar') }}">
+                <form method="POST" action="{{ route('core.perfil.salvar') }}">
                     {{ Form::token() }}
                         
                     
-                    @component('core::components.perfil')
-                        @slot('nome') {{ $nome }} @endslot
-                        @slot('modules') {{ $modules }} @endslot
+                    @component(
+                        'core::components.perfil',
+                        [
+                            'nome' => $nome,
+                            'modules' => $modules
+                        ]
+                    )
                     @endcomponent
 
                     <div class="form-actions">

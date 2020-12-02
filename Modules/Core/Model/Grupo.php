@@ -3,9 +3,11 @@
 namespace Modules\Core\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Grupo extends Model
 {
+    use SoftDeletes;
 
     public $table = 'core_grupo';
 

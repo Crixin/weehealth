@@ -33,7 +33,7 @@
                                     <h5 class="text-center text-muted m-b-30">@lang('page_titles.portal.logs.warning')</h5>
     
                                     @if(Session::has('message'))
-                                        @component('componentes.alert')
+                                        @component('components.alert')
                                         @endcomponent
                     
                                         {{ Session::forget('message') }}
