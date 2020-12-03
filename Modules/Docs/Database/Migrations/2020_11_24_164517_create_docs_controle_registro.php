@@ -20,7 +20,7 @@ class CreateDocsControleRegistro extends Migration
             $table->string('nivel_acesso', 20);
             $table->boolean('avulso');
             $table->integer('documento_id')->nullable();
-            $table->foreign('documento_id')->references('id')->on('docs_documento');
+            $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
             $table->integer('grupo_id')->unsigned();
             $table->foreign('grupo_id')->references('id')->on('core_grupo');
             $table->integer('local_armazenamento_id')->nullable(false);

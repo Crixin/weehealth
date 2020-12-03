@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDocsDocumentoFormulario extends Migration
+class CreateDocsVinculoDocumento extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateDocsDocumentoFormulario extends Migration
      */
     public function up()
     {
-        Schema::create('docs_documento_formulario', function (Blueprint $table) {
+        Schema::create('docs_vinculo_documento', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('documento_id')->unsigned();
-            $table->foreign('documento_id')->references('id')->on('docs_documento');
-            $table->integer('formulario_id')->unsigned();
-            $table->foreign('formulario_id')->references('id')->on('docs_documento');
+            $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete();
+            $table->integer('documento_vinculado_id')->unsigned();
+            $table->foreign('documento_vinculado_id')->references('id')->on('docs_documento');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +31,6 @@ class CreateDocsDocumentoFormulario extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('docs_documento_formulario');
+        Schema::dropIfExists('docs_vinculo_documento');
     }
 }
