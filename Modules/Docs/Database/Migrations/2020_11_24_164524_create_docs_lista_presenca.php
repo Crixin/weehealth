@@ -22,7 +22,7 @@ class CreateDocsListaPresenca extends Migration
             $table->text('destinatarios_email')->nullable();
             $table->string('revisao_documento', 10)->nullable();
             $table->integer('documento_id')->unsigned();
-            $table->foreign('documento_id')->references('id')->on('docs_documento');
+            $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete();
             $table->timestamps();
             $table->softDeletes();
         });

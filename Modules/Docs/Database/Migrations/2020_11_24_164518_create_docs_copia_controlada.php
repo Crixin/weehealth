@@ -16,9 +16,9 @@ class CreateDocsCopiaControlada extends Migration
         Schema::create('docs_copia_controlada', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('documento_id')->unsigned();
-            $table->foreign('documento_id')->references('id')->on('docs_documento');
+            $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
             $table->integer('usuario_id')->unsigned();
-            $table->foreign('usuario_id')->references('id')->on('core_users')->onDelete('cascade');
+            $table->foreign('usuario_id')->references('id')->on('core_users');
             $table->integer('numero_copias')->nullable();
             $table->text('revisao', 10)->nullable();
             $table->text('setor', 35)->nullable();

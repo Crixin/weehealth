@@ -27,7 +27,8 @@ class CreateDocsDocumentoExterno extends Migration
             $table->foreign('user_id')->references('id')->on('core_users');
             $table->integer('grupo_id')->unsigned();
             $table->foreign('grupo_id')->references('id')->on('core_grupo');
-            $table->integer('empresa_id')->nullable(true)->references('id')->on('core_empresa');
+            $table->integer('empresa_id')->nullable(true);
+            $table->foreignId('empresa_id')->constrained('core_empresa');
             $table->string('revisao')->nullable(true);
             $table->date('validade')->nullable(true);
             $table->timestamps();

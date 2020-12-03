@@ -17,8 +17,6 @@ class CreateTablePlanos extends Migration
             $table->increments('id');
             $table->text('nome');
             $table->boolean('ativo');
-            $table->integer('grupo_id')->unsigned();
-            $table->foreign('grupo_id')->references('id')->on('core_grupo');
             $table->timestamps();
             $table->softDeletes();
         });

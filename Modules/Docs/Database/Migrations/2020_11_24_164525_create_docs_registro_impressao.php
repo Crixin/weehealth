@@ -18,7 +18,7 @@ class CreateDocsRegistroImpressao extends Migration
             $table->string('status', 100);
             $table->string('obs', 300)->nullable();
             $table->integer('documento_id')->unsigned();
-            $table->foreign('documento_id')->references('id')->on('docs_documento');
+            $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete();
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('core_users');
             $table->timestamps();

@@ -16,10 +16,9 @@ class CreateDocsTipoDocumentoPlanoTable extends Migration
         Schema::create('docs_tipo_documento_plano', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('plano_id')->unsigned();
-            $table->foreign('plano_id')->references('id')->on('docs_plano');
+            $table->foreign('plano_id')->references('id')->on('docs_plano')->onDelete();
             $table->integer('tipo_documento_id')->unsigned();
             $table->foreign('tipo_documento_id')->references('id')->on('docs_tipo_documento');
-
             $table->timestamps();
             $table->softDeletes();
         });

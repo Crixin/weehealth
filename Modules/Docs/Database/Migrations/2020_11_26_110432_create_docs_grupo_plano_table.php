@@ -15,10 +15,10 @@ class CreateDocsGrupoPlanoTable extends Migration
     {
         Schema::create('docs_grupo_plano', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('plano_id')->unsigned();
+            $table->foreign('plano_id')->references('id')->on('docs_plano')->onDelete();
             $table->integer('grupo_id')->unsigned();
-            $table->foreign('grupo_id')->references('id')->on('core_grupo');
-            $table->integer('norma_id')->unsigned();
-            $table->foreign('norma_id')->references('id')->on('docs_norma');
+            $table->foreign('grupo_id')->references('id')->on('core_grupo')->onDelete();
             $table->timestamps();
             $table->softDeletes();
         });
