@@ -32,7 +32,7 @@ class SeedCoreCreateParametroOrgaoReguladorTableSeeder extends Seeder
         $newParametro = new Parametro();
         $newParametro->identificador_parametro = "CICLO_AUDITORIA";
         $newParametro->descricao = "Ciclo de Auditoria";
-        $newParametro->valor_padrao = 
+        $newParametro->valor_padrao =
         '{
             "1": "Mensal",
             "2": "Bimestre",

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDocsOrientacaoItemNormaTable extends Migration
+class CreateDocsCheckListItemNormaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateDocsOrientacaoItemNormaTable extends Migration
      */
     public function up()
     {
-        Schema::create('docs_orientacao_item_norma', function (Blueprint $table) {
+        Schema::create('docs_check_list_item_norma', function (Blueprint $table) {
             $table->increments('id');
             $table->text('descricao');
             $table->integer('item_norma_id')->unsigned();
-            $table->foreign('item_norma_id')->references('id')->on('docs_item_norma');
+            $table->foreign('item_norma_id')->references('id')->on('docs_item_norma')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

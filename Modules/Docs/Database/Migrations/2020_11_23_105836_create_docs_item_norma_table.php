@@ -17,7 +17,7 @@ class CreateDocsItemNormaTable extends Migration
             $table->increments('id');
             $table->text('descricao');
             $table->integer('norma_id')->unsigned();
-            $table->foreign('norma_id')->references('id')->on('docs_norma');
+            $table->foreign('norma_id')->references('id')->on('docs_norma')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
