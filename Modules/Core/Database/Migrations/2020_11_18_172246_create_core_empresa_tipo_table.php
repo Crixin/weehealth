@@ -13,6 +13,7 @@ class CreateCoreEmpresaTipoTable extends Migration
      */
     public function up()
     {
+        //MUITOS PARA MUITOS
         Schema::create('core_empresa_tipo', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('empresa_id')->unsigned();
