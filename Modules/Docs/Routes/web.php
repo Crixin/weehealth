@@ -58,8 +58,15 @@ Route::prefix('docs')->group(function () {
         Route::post('alterar',      ['as' => 'fluxo.alterar', 'uses' => 'FluxoController@update']);
         Route::post('deletar',      ['as' => 'fluxo.deletar', 'uses' => 'FluxoController@destroy']);
 
-        Route::get('{id}/etapa',    ['as' => 'fluxo.etapa',    'uses' => 'EtapaFluxoController@index']);
-
+        /*
+        * ETAPA
+        */
+        Route::get('{fluxo_id}/etapa',    ['as' => 'fluxo.etapa',              'uses' => 'EtapaFluxoController@index']);
+        Route::get('{fluxo_id}/novo',          ['as' => 'fluxo.etapa.novo',    'uses' => 'EtapaFluxoController@create']);
+        Route::post('{fluxo_id}/salvar',       ['as' => 'fluxo.etapa.salvar',  'uses' => 'EtapaFluxoController@store']);
+        Route::get('{fluxo_id}/editar/{id}',   ['as' => 'fluxo.etapa.editar',  'uses' => 'EtapaFluxoController@edit']);
+        Route::post('{fluxo_id}/alterar',      ['as' => 'fluxo.etapa.alterar', 'uses' => 'EtapaFluxoController@update']);
+        Route::post('{fluxo_id}/deletar',      ['as' => 'fluxo.etapa.deletar', 'uses' => 'EtapaFluxoController@destroy']);
     });
 
 

@@ -17,6 +17,7 @@ class Fluxo extends Model
         'descricao',
         'versao_fluxo',
         'grupo_id',
-        'perfil_id'
+        'perfil_id',
+        'ativo'
     ];
 }

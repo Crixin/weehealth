@@ -183,6 +183,7 @@ class FluxoController extends Controller
             "descricao" => $request->get('descricao'),
             "perfil_id" => $request->get('perfil'),
             "grupo_id"  => $request->get('grupo'),
+            "ativo"     => $request->get('ativo') == 1 ? true : false,
         ];
     }
 }

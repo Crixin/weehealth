@@ -4,13 +4,13 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.docs.fluxo.index'))
+@section('page_title', __('page_titles.docs.etapa-fluxo.index'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('docs.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.docs.fluxo.index') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.docs.etapa-fluxo.index') </li>    
 
 @endsection
 
@@ -29,32 +29,30 @@
                     @endif
                     
                     <div class="col-md-12">
-                        <a href="{{ route('docs.fluxo.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.fluxo.create') </a>
+                        <a href="{{ route('docs.fluxo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('docs.fluxo.etapa.novo', ['fluxo_id' => $fluxo->id]) }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.etapa-fluxo.create') </a>
                     </div>
                 
                     <div class="table-responsive m-t-40">
-                        <table id="dataTable-fluxo" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                        <table id="dataTable-etapa" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th>Ordem</th>
                                     <th>Nome</th>
                                     <th>Descricao</th>
                                     <th>Controle</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($fluxos as $fluxo)
+                                @foreach ($etapas as $etapa)
                                     <tr>
-                                        <td>{{ $fluxo->nome }}</td>
-                                        <td>{{ $fluxo->descricao }}</td>
+                                        <td>{{ $etapa->ordem }}</td>
+                                        <td>{{ $etapa->nome }}</td>
+                                        <td>{{ $etapa->descricao }}</td>
                                         <td>
-                                            <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $fluxo->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
-                                            <a href="{{ route('docs.fluxo.editar', ['id' => $fluxo->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{ route('docs.fluxo.etapa', ['fluxo_id' => $fluxo->id]) }}"> <i class="mdi mdi-format-list-numbers"></i> @lang('buttons.docs.fluxo.etapas') </a>                                                
-                                                </div>
-                                            </div>
+                                            <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $etapa->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
+                                            <a href="{{ route('docs.fluxo.etapa.editar', ['id' => $etapa->id, 'fluxo_id' => $fluxo->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                            
                                         </td>
                                     </tr>
                                 @endforeach
@@ -86,7 +84,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#dataTable-fluxo').DataTable({
+            $('#dataTable-etapa').DataTable({
                 "language": {
                     "sEmptyTable": "Nenhum registro encontrado",
                     "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -130,12 +128,11 @@
             let obj = {'id': id};
 
             deleteIt.then(resolvedValue => {
-                // ajaxMethod('POST', "/plano/" + idPlano, {}).then(response => {
-                ajaxMethod('POST', "{{ URL::route('docs.fluxo.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('docs.fluxo.etapa.deletar', ['fluxo_id' => $fluxo->id]) }}", obj).then(response => {
                     if(response.response != 'erro') {
-                        swal2_success("Excluído!", "Fluxo excluído com sucesso.");
+                        swal2_success("Excluído!", "Etapa do Fluxo excluída com sucesso.");
                     } else {
-                        swal2_alert_error_support("Tivemos um problema ao excluir o fluxo.");
+                        swal2_alert_error_support("Tivemos um problema ao excluir a etapa.");
                     }
                 }, error => {
                     console.log(error);
