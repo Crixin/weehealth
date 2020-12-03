@@ -14,7 +14,9 @@
             @php
                 $menu = (array) json_decode(file_get_contents(base_path() . '/menu.json'));
                 $keysMenu = array_keys($menu);
-                $teste = array_diff_key($menu, array_flip($modules));
+                $teste = array_diff_ukey($menu, array_flip($modules), function(){
+                    
+                });
                 dd($teste);
                 $intersect = array_filter(array_flip($menu), function ($m) use ($modules) {
                    

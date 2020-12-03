@@ -50,6 +50,21 @@ class PerfilController extends Controller
         try {
             $permissoes = $this->permissaoRepository->findAll([], [['descricao', 'ASC']]);
 
+            [$result, $errors] = $this->validator($_request);
+            if (!$result) {
+                return redirect()->back()->withErrors($errors)->withInput();
+            }
+    
+            DB::transaction(function () use ($_request) {
+                $perfil = $this->perfilRepository->create(['nome' => $_request->nome]);
+                foreach ($_request->permissoes as $key => $permissao) {
+                    $this->perfilPermissaoRepository->create([
+                        'perfil_id' => $perfil->id,
+                        'permissao_id' => $permissao
+                    ]);
+                }
+            });
+
             Helper::setNotify('Novo perfil criado com sucesso!', 'success|check-circle');
             return redirect()->route('core.perfil');
         } catch (\Throwable $th) {
