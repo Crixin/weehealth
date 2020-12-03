@@ -101,7 +101,7 @@ class TipoDocumentoController extends Controller
             return redirect()->back()->withInput()->withErrors($error);
         }
 
-        $cadastro = self::montaRequest($request);
+        $cadastro = $this->montaRequest($request);
         try {
             DB::transaction(function () use ($cadastro, $request) {
                 $this->tipoDocumentoRepository->create($cadastro);
@@ -186,7 +186,7 @@ class TipoDocumentoController extends Controller
         }
 
         $tipoDocumento = $request->get('idTipoDocumento');
-        $update  = self::montaRequest($request);
+        $update  = $this->montaRequest($request);
         try {
             DB::transaction(function () use ($update, $tipoDocumento) {
                 $this->tipoDocumentoRepository->update($update, $tipoDocumento);
@@ -246,7 +246,8 @@ class TipoDocumentoController extends Controller
 
     public function montaRequest(Request $request)
     {
-        if ($request->get('documentoModelo')) {
+
+        if ($request->documentoModelo) {
             $mimeType = $request->file('documentoModelo')->getMimeType();
             $imageBase64 = base64_encode(file_get_contents($request->file('documentoModelo')->getRealPath()));
             $imageBase64 = 'data:' . $mimeType . ';base64,' . $imageBase64;
