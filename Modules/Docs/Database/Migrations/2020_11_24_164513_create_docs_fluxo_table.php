@@ -22,6 +22,7 @@ class CreateDocsFluxoTable extends Migration
             $table->foreign('grupo_id')->references('id')->on('core_grupo');
             $table->integer('perfil_id')->unsigned();
             $table->foreign('perfil_id')->references('id')->on('core_perfil');
+            $table->boolean('ativo');
             $table->timestamps();
             $table->softDeletes();
         });

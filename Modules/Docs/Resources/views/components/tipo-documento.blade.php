@@ -71,6 +71,7 @@
             <div class="form-group required{{ $errors->has('documentoModelo') ? ' has-error' : '' }}">
                 {!! Form::label('documentoModelo', 'Modelo de Documento', ['class' => 'control-label']) !!}
                 {!! Form::file('documentoModelo', [empty($tipoDocumentoEdit) ? 'required': '', 'accept' =>'.doc, .xls, .DOC, .XLS']) !!}
+
                 <small class="text-danger">{{ $errors->first('documentoModelo') }}</small>
             </div>
         </div>

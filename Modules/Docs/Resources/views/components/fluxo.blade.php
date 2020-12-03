@@ -24,6 +24,22 @@
                 <small class="text-danger">{{ $errors->first('versao') }}</small>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="checkbox required{{ $errors->has('ativo') ? ' has-error' : '' }}">
+                    {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
+                    <td class="text-center text-nowrap">
+                        <div class="switch">
+                            <label for="ativo">Inativo
+                            {!! Form::checkbox('ativo', '1', !empty($fluxoEdit) ?  $fluxoEdit->ativo : true, ['id' => 'ativo', 'class'=> 'switch-elaborador']) !!}
+                            <span class="lever switch-col-light-blue"></span>Ativo
+                            </label>
+                        </div>
+                    </td>    
+                </div>
+                <small class="text-danger">{{ $errors->first('ativo') }}</small>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-6">

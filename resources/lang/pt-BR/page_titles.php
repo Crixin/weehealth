@@ -186,6 +186,12 @@ return [
             'update'          => 'Alterando Fluxo',
         ],
 
+        'etapa-fluxo'        => [
+            'index'           => 'Etapas Fluxo',
+            'create'          => 'Nova Etapa do Fluxo',
+            'update'          => 'Alterando Etapa do Fluxo',
+        ],
+
         'tipo-documento'        => [
             'index'           => 'Tipos de Documento',
             'create'          => 'Novo Tipo de Documento',

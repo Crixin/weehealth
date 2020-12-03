@@ -124,7 +124,12 @@ return [
         'fluxo'    => [
             'create'   => 'Criar Fluxo',
             'etapas'   => 'Etapas'
-        ], 
+        ],
+
+        /*ETAPA FLUXO*/
+        'etapa-fluxo'    => [
+            'create'   => 'Criar Etapa Fluxo',
+        ],
 
         /*TIPO DOCUMENTO*/
         'tipo-documento'    => [
