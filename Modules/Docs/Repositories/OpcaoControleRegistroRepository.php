@@ -5,7 +5,7 @@ namespace Modules\Docs\Repositories;
 use Modules\Docs\Model\OpcoesControleRegistros;
 use Modules\Core\Repositories\BaseRepository;
 
-class OpcoesControleRegistrosRepository extends BaseRepository
+class OpcaoControleRegistroRepository extends BaseRepository
 {
     protected $model;
 

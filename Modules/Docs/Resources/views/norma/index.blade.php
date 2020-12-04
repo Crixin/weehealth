@@ -1,6 +1,9 @@
+
 @extends('layouts.app')
 
+
 @extends('layouts.menuDocs')
+
 @yield('menu')
 
 

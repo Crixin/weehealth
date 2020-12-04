@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.docs.controle-registro.create'))
+@section('page_title', __('page_titles.docs.opcao-controle-registro.create'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('docs.controle-registro') }}"> @lang('page_titles.docs.controle-registro.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.docs.controle-registro.create') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('docs.opcao-controle') }}"> @lang('page_titles.docs.opcao-controle-registro.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.docs.opcao-controle-registro.create') </li>    
 
 @endsection
 
@@ -32,22 +32,22 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('docs.controle-registro.salvar') }}"> 
+                <form method="POST" action="{{ route('docs.opcao-controle.salvar') }}"> 
                     {{ csrf_field() }}
                     
                     @component(
-                        'docs::components.controle-registro', 
+                        'docs::components.opcao-controle-registro', 
                         [
-                            'controleRegistroEdit' => [],
-                            'codigo' => '',
+                            'opcaoControleEdit' => [],
                             'descricao' => '', 
+                            'tipos' => $tipos
                         ]
                     )
                     @endcomponent
                         
                     <div class="form-actions ">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('docs.controle-registro') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('docs.opcao-controle') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
                 </form>
 

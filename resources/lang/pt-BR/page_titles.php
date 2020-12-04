@@ -216,5 +216,17 @@ return [
             'update'          => 'Alterando Check List',
         ],
 
+        'controle-registro' => [
+            'index'           => 'Controle de Registro',
+            'create'          => 'Novo Controle de Registro',
+            'update'          => 'Alterando Controle de Registro',
+        ],
+
+        'opcao-controle-registro' => [
+            'index'           => 'Opções de Controle de Registro',
+            'create'          => 'Novo Opção Controle de Registro',
+            'update'          => 'Alterando Opção Controle de Registro',
+        ],
+
     ]
 ];

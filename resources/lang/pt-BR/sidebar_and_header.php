@@ -116,7 +116,11 @@ return [
             'documento_externo' => 'DOC. EXTERNOS',
             'workflow'         => 'BPMN 2.0',
             
-            'controle_registro' => 'Controle de Registros',
+            'controle_registro' => [
+                'collapse' => 'Contr. de Registros',
+                'opcao'    => 'Opções',
+                'controle' => 'Controles'
+            ],
             'controle_registros' => 'CONTR. REGISTROS',
             
         ]

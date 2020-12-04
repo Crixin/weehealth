@@ -10,7 +10,7 @@
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('docs.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.docs.controle-registro.index') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.docs.opcao-controle-registro.index') </li>    
 
 @endsection
 
@@ -29,11 +29,11 @@
                     @endif
                     
                     <div class="col-md-12">
-                        <a href="{{ route('docs.controle-registro.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.cotrole-registro.create') </a>
+                        <a href="{{ route('docs.opcao-controle.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.opcao-cotrole-registro.create') </a>
                     </div>
                 
                     <div class="table-responsive m-t-40">
-                        <table id="dataTable-controle-registro" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                        <table id="dataTable-opcao-controle-registro" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th>Descricao</th>
@@ -42,13 +42,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($controles as $controle)
+                                @foreach ($opcoes as $opcao)
                                     <tr>
-                                        <td>{{ $controle->descricao }}</td>
-                                        <td>{{ $controle->ativo == true ? 'Sim' : 'Não' }}</td>
+                                        <td>{{ $opcao->descricao }}</td>
+                                        <td>{{ $opcao->ativo == true ? 'Sim' : 'Não' }}</td>
                                         <td>
-                                            <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $controle->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
-                                            <a href="{{ route('docs.controle-registro.editar', ['id' => $controle->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                            <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $opcao->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
+                                            <a href="{{ route('docs.opcao-controle.editar', ['id' => $opcao->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
                                             
                                         </td>
                                     </tr>
@@ -81,7 +81,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#dataTable-controle-registro').DataTable({
+            $('#dataTable-opcao-controle-registro').DataTable({
                 "language": {
                     "sEmptyTable": "Nenhum registro encontrado",
                     "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -126,7 +126,7 @@
 
             deleteIt.then(resolvedValue => {
                 // ajaxMethod('POST', "/plano/" + idPlano, {}).then(response => {
-                ajaxMethod('POST', "{{ URL::route('docs.controle-registro.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('docs.opcao-controle.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Opção de controle excluída com sucesso.");
                     } else {

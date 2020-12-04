@@ -5,27 +5,31 @@ namespace Modules\Docs\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Docs\Repositories\ControleRegistroRepository;
+use Modules\Core\Repositories\ParametroRepository;
+use Modules\Docs\Repositories\OpcaoControleRegistroRepository;
 use App\Classes\Helper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class ControleRegistroController extends Controller
+class OpcaoControleRegistroController extends Controller
 {
-    protected $controleRegistroRepository;
+    protected $opcaoControleRegistroRepository;
+    protected $parametroRepository;
 
-    public function __construct(ControleRegistroRepository $controleRegistroRepository)
+    public function __construct(OpcaoControleRegistroRepository $opcaoControleRegistroRepository, ParametroRepository $parametroRepository)
     {
-        $this->controleRegistroRepository = $controleRegistroRepository;
+        $this->opcaoControleRegistroRepository = $opcaoControleRegistroRepository;
+        $this->parametroRepository = $parametroRepository;
     }
+
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
     public function index()
     {
-        $controles = $this->controleRegistroRepository->findAll();
-        return view('docs::controle-registro.index', compact('controles'));
+        $opcoes = $this->opcaoControleRegistroRepository->findAll();
+        return view('docs::opcao-controle-registro.index', compact('opcoes'));
     }
 
     /**
@@ -34,7 +38,13 @@ class ControleRegistroController extends Controller
      */
     public function create()
     {
-        return view('docs::controle-registro.create');
+        $buscaTipos = $this->parametroRepository->findOneBy(
+            [
+                ['identificador_parametro','=','TIPO_CONTROLE_REGISTRO']
+            ]
+        );
+        $tipos = json_decode($buscaTipos->valor_padrao);
+        return view('docs::opcao-controle-registro.create', compact('tipos'));
     }
 
     /**
@@ -51,13 +61,13 @@ class ControleRegistroController extends Controller
         $cadastro = $this->montaRequest($request);
         try {
             DB::transaction(function () use ($cadastro) {
-                $this->controleRegistroRepository->create($cadastro);
+                $this->opcaoControleRegistroRepository->create($cadastro);
             });
 
-            Helper::setNotify('Novo controle de registro criado com sucesso!', 'success|check-circle');
-            return redirect()->route('docs.controle-registro');
+            Helper::setNotify('Nova opção de controle de registro criada com sucesso!', 'success|check-circle');
+            return redirect()->route('docs.opcao-controle');
         } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao gravar o controle de registro', 'danger|close-circle');
+            Helper::setNotify('Um erro ocorreu ao gravar a opção de controle de registro', 'danger|close-circle');
             return redirect()->back()->withInput();
         }
     }
@@ -79,7 +89,16 @@ class ControleRegistroController extends Controller
      */
     public function edit($id)
     {
-        return view('docs::controle-registro.edit');
+        $opcao = $this->opcaoControleRegistroRepository->find($id);
+
+        $buscaTipos = $this->parametroRepository->findOneBy(
+            [
+                ['identificador_parametro','=','TIPO_CONTROLE_REGISTRO']
+            ]
+        );
+        $tipos = json_decode($buscaTipos->valor_padrao);
+
+        return view('docs::opcao-controle-registro.edit', compact('opcao', 'tipos'));
     }
 
     /**
@@ -95,16 +114,16 @@ class ControleRegistroController extends Controller
             return redirect()->back()->withInput()->withErrors($error);
         }
 
-        $id = $request->get('idControleregistro');
+        $id = $request->get('idOpcaoControle');
         $update  = $this->montaRequest($request);
         try {
             DB::transaction(function () use ($update, $id) {
-                $this->controleRegistroRepository->update($update, $id);
+                $this->opcaoControleRegistroRepository->update($update, $id);
             });
 
-            Helper::setNotify('Informações do controle de registro atualizadas com sucesso!', 'success|check-circle');
+            Helper::setNotify('Informações da opção do controle de registro atualizadas com sucesso!', 'success|check-circle');
         } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao atualizar o controle de registro', 'danger|close-circle');
+            Helper::setNotify('Um erro ocorreu ao atualizar a opção do controle de registro', 'danger|close-circle');
         }
         return redirect()->back()->withInput();
     }
@@ -119,7 +138,7 @@ class ControleRegistroController extends Controller
         $id = $request = $request->id;
         try {
             DB::transaction(function () use ($id) {
-                $this->controleRegistroRepository->delete($id);
+                $this->opcaoControleRegistroRepository->delete($id);
             });
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {

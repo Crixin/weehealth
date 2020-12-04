@@ -35,11 +35,11 @@
                                 <li><a href="{{ route('core.empresa') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item1') </a></li>
                             
 
-                            @if (Auth::user()->administrador)
+                            
                                 <li><a href="{{ route('core.usuario') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item4') </a></li>
                                 <li><a href="{{ route('core.perfil') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item6') </a></li>
                                 <li><a href="{{ route('core.grupo') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item2') </a></li>
-                            @endif
+                            
                             {{-- <li><a href="{{ route('tarefa') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item7') </a></li> --}}
                         </ul>
                     </li>

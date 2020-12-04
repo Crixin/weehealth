@@ -152,6 +152,16 @@ return [
             'create'   => 'Criar Check List',
         ],
 
+        /*OPCAO CONTROLE REGISTRO*/
+        'opcao-cotrole-registro'    => [
+            'create'   => 'Criar Opção Controle de Registro',
+        ],
+
+        /*CONTROLE REGISTRO*/
+        'cotrole-registro'    => [
+            'create'   => 'Criar Controle de Registro',
+        ],
+
     ],
 
 

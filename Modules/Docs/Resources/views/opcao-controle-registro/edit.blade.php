@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.docs.norma.update'))
+@section('page_title', __('page_titles.docs.opcao-controle-registro.update'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('docs.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('docs.norma') }}"> @lang('page_titles.docs.norma.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.docs.norma.update') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('docs.opcao-controle') }}"> @lang('page_titles.docs.opcao-controle-registro.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.docs.opcao-controle-registro.update') </li>    
 
 @endsection
 
@@ -32,23 +32,22 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('docs.norma.alterar') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('docs.opcao-controle.alterar') }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
-                    <input type="hidden" name="idNorma" value="{{ $norma->id }}">
+                    <input type="hidden" name="idOpcaoControle" value="{{ $opcao->id }}">
                     @component(
-                        'docs::components.norma', 
+                        'docs::components.opcao-controle-registro', 
                         [
-                            'normaEdit' => $norma,
-                            'descricao' => $norma->descricao, 
-                            'orgaos' => $orgaos,
-                            'ciclos' => $ciclos
+                            'opcaoControleEdit' => $opcao,
+                            'descricao' => $opcao->descricao, 
+                            'tipos' => $tipos
                         ]
                     )
                     @endcomponent
                     
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('docs.norma') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('docs.opcao-controle') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
 
                 </form>

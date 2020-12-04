@@ -41,7 +41,7 @@
                     <td class="text-center text-nowrap">
                         <div class="switch">
                             <label for="vigente">Não
-                            {!! Form::checkbox('vigente', '1', !empty($fluxoEdit) ?  $normaEdit->vigente : true, ['id' => 'vigente', 'class'=> 'switch-elaborador']) !!}
+                            {!! Form::checkbox('vigente', '1', !empty($normaEdit) ?  $normaEdit->vigente : true, ['id' => 'vigente', 'class'=> 'switch-elaborador']) !!}
                             <span class="lever switch-col-light-blue"></span>Sim
                             </label>
                         </div>

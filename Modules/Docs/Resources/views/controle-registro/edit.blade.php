@@ -3,67 +3,56 @@
 @extends('layouts.menuDocs')
 @yield('menu')
 
-@section('content')
 
-    <div class="page-wrapper">
-        <div class="container-fluid">
-            
+@section('page_title', __('page_titles.docs.controle-registro.update'))
 
-            <div class="row page-titles">
-                <div class="col-md-5 col-8 align-self-center">
-                    <h3 class="text-themecolor m-b-0 m-t-0">Controle de Registros</h3>
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('controle-registros') }}">Controle de Registros</a></li>
-                        <li class="breadcrumb-item active">Editar Registro</li>
-                    </ol>
-                </div>
-                <div class="col-md-7 col-4 align-self-center">
-                    <div class="">
-                        <button class="right-side-toggle waves-light btn-success btn btn-circle btn-xl pull-right m-l-10  btn-badge badge-top-right" data-count="{{ count(\App\Classes\Helpers::instance()->getNotifications( Auth::user()->id )) }}">
-                            <i class="ti-comment-alt text-white"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
 
-                            <!-- Alertas - Validação do Form -->
-                            @if(Session::has('message'))
-                                <div class="alert alert-{{str_before(Session::get('style'), '|')}}"> <i class="mdi mdi-{{str_after(Session::get('style'), '|')}}"></i> {{ Session::get('message') }}
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                                </div>
-                            @endif
-                            
-                            <div class="col-md-12">
-                                {!! Form::open(['route' => 'controle-registros.update']) !!}
+@section('breadcrumbs')
 
-                                    {{ method_field('PUT') }}
-                                    {!! Form::hidden('id_registro', $registro->id) !!}
-                                    @include('componentes.form_controle_registros', ['registro' => $registro])
-
-                                {!! Form::close() !!}
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-
-        </div>
-    </div>
+    <li class="breadcrumb-item"><a href="{{ route('docs.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('docs.controle-registro') }}"> @lang('page_titles.docs.controle-registro.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.docs.controle-registro.update') </li>    
 
 @endsection
 
 
-@section('footer')
-    <script>
-        $(".select2-selection").css('min-height', '38px');
-        $(".select2-selection__rendered").css('line-height', '38px');
-    </script>
+
+@section('content')
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+
+                @component('components.validation-error', ['errors'])@endcomponent
+
+                @if(Session::has('message'))
+                    @component('components.alert')@endcomponent
+
+                    {{ Session::forget('message') }}
+                @endif
+
+                <form method="POST" action="{{ route('docs.controle-registro.alterar') }}" enctype="multipart/form-data">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="idControleRegistro" value="{{ $controleRegistro->id }}">
+                    @component(
+                        'docs::components.controle-registro', 
+                        [
+                            'controleRegistroEdit' => $controleRegistro,
+                            'descricao' => $controleRegistro->descricao, 
+                        ]
+                    )
+                    @endcomponent
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
+                        <a href="{{ route('docs.controle-registro') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+    
 @endsection

@@ -16,8 +16,11 @@ class NormaController extends Controller
     protected $normaRepository;
     protected $parametroRepository;
 
+    
+
     public function __construct(NormaRepository $normaRepository, ParametroRepository $parametroRepository)
     {
+        $this->middleware('auth');
         $this->normaRepository = $normaRepository;
         $this->parametroRepository = $parametroRepository;
     }
@@ -35,7 +38,7 @@ class NormaController extends Controller
                 ['nome','ASC']
             ]
         );
-
+        
         return view('docs::norma.index', compact('normas'));
     }
 

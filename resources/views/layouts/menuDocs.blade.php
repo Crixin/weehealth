@@ -44,7 +44,11 @@
                 </li>
 
                 <li>
-                    <a class="waves-effect waves-dark" href="{{ route('docs.controle_registro') }}" aria-expanded="false"><i class="mdi mdi-format-list-bulleted-type"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.uls_li_system.controle_registros') </span></a>
+                    <a class="has-arrow waves-effect waves-dark" href="#3" aria-expanded="false" ><i class="mdi mdi-format-list-bulleted-type"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.uls_li_system.controle_registro.collapse') </span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="{{ route('docs.opcao-controle') }}"> @lang('sidebar_and_header.docs.uls_li_system.controle_registro.opcao') </a></li>
+                        <li><a href="{{ route('docs.controle-registro') }}"> @lang('sidebar_and_header.docs.uls_li_system.controle_registro.controle') </a></li>
+                    </ul>
                 </li>
                 
                 <li>
@@ -52,7 +56,7 @@
                 </li>
 
                 <li>
-                    <a class="waves-effect waves-dark" href="{{ route('docs.documentoExterno') }}" aria-expanded="false"><i class="mdi mdi-file-cloud"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.uls_li_system.documento_externo') </span></a>
+                    <a class="waves-effect waves-dark" href="{{ route('docs.documento-externo') }}" aria-expanded="false"><i class="mdi mdi-file-cloud"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.uls_li_system.documento_externo') </span></a>
                 </li>
                 
                 <li>
