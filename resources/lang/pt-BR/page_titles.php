@@ -187,7 +187,7 @@ return [
         ],
 
         'etapa-fluxo'        => [
-            'index'           => 'Etapas Fluxo',
+            'index'           => 'Etapas do Fluxo',
             'create'          => 'Nova Etapa do Fluxo',
             'update'          => 'Alterando Etapa do Fluxo',
         ],
@@ -196,6 +196,24 @@ return [
             'index'           => 'Tipos de Documento',
             'create'          => 'Novo Tipo de Documento',
             'update'          => 'Alterando Tipo de Documento',
+        ],
+
+        'norma'        => [
+            'index'           => 'Normas',
+            'create'          => 'Nova Norma',
+            'update'          => 'Alterando Norma',
+        ],
+
+        'item-norma'        => [
+            'index'           => 'Itens da Norma',
+            'create'          => 'Novo Item da Norma',
+            'update'          => 'Alterando Item da Norma',
+        ],
+
+        'check-list-item-norma'        => [
+            'index'           => 'Check List',
+            'create'          => 'Novo Check List',
+            'update'          => 'Alterando Check List',
         ],
 
     ]

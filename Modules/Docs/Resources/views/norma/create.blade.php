@@ -4,14 +4,14 @@
 @yield('menu')
 
 
-@section('page_title', __('page_titles.docs.etapa-fluxo.create'))
+@section('page_title', __('page_titles.docs.norma.create'))
 
 
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('docs.fluxo.etapa-fluxo', ['fluxo_id' => $fluxo->id]) }}"> @lang('page_titles.docs.etapa-fluxo.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.docs.etapa-fluxo.create') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('docs.norma') }}"> @lang('page_titles.docs.norma.index') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.docs.norma.create') </li>    
 
 @endsection
 
@@ -32,27 +32,23 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('docs.fluxo.etapa-fluxo.salvar', ['fluxo_id' => $fluxo->id]) }}"> 
+                <form method="POST" action="{{ route('docs.norma.salvar') }}"> 
                     {{ csrf_field() }}
                     
                     @component(
-                        'docs::components.etapa-fluxo', 
+                        'docs::components.norma', 
                         [
-                            'etapaEdit' => [],
-                            'nome' => '',
-                            'descricao' => '',
-                            'perfis' => $perfis,
-                            'status' => $status,
-                            'notificacoes' => $notificacoes,
-                            'tiposAprovacao' => $tiposAprovacao,
-                            'etapasRejeicao' => $etapasRejeicao
+                            'normaEdit' => [],
+                            'descricao' => '', 
+                            'orgaos' => $orgaos,
+                            'ciclos' => $ciclos
                         ]
                     )
                     @endcomponent
                         
                     <div class="form-actions ">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('docs.fluxo.etapa-fluxo', ['fluxo_id' => $fluxo->id]) }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('docs.norma') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
                 </form>
 

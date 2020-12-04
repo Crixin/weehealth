@@ -2,19 +2,41 @@
 
 namespace Modules\Docs\Http\Controllers;
 
+use App\Classes\Helper;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Core\Repositories\ParametroRepository;
+use Modules\Docs\Repositories\NormaRepository;
 
 class NormaController extends Controller
 {
+    protected $normaRepository;
+    protected $parametroRepository;
+
+    public function __construct(NormaRepository $normaRepository, ParametroRepository $parametroRepository)
+    {
+        $this->normaRepository = $normaRepository;
+        $this->parametroRepository = $parametroRepository;
+    }
+
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
     public function index()
     {
-        return view('docs::index');
+        $normas = $this->normaRepository->findBy(
+            [],
+            [],
+            [
+                ['nome','ASC']
+            ]
+        );
+
+        return view('docs::norma.index', compact('normas'));
     }
 
     /**
@@ -23,7 +45,22 @@ class NormaController extends Controller
      */
     public function create()
     {
-        return view('docs::create');
+        $buscaOrgaos = $this->parametroRepository->findOneBy(
+            [
+                ['identificador_parametro','=','ORGAO_REGULADOR']
+            ]
+        );
+        $orgaos = json_decode($buscaOrgaos->valor_padrao);
+
+
+        $buscaCicloAuditoria = $this->parametroRepository->findOneBy(
+            [
+                ['identificador_parametro','=','CICLO_AUDITORIA']
+            ]
+        );
+        $ciclos = json_decode($buscaCicloAuditoria->valor_padrao);
+
+        return view('docs::norma.create', compact('orgaos', 'ciclos'));
     }
 
     /**
@@ -33,7 +70,22 @@ class NormaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $error = $this->validador($request);
+        if ($error) {
+            return redirect()->back()->withInput()->withErrors($error);
+        }
+        $cadastro = $this->montaRequest($request);
+        try {
+            DB::transaction(function () use ($cadastro) {
+                $this->normaRepository->create($cadastro);
+            });
+
+            Helper::setNotify('Nova norma criada com sucesso!', 'success|check-circle');
+            return redirect()->route('docs.norma');
+        } catch (\Throwable $th) {
+            Helper::setNotify('Um erro ocorreu ao gravar a norma', 'danger|close-circle');
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
@@ -53,7 +105,24 @@ class NormaController extends Controller
      */
     public function edit($id)
     {
-        return view('docs::edit');
+        $norma = $this->normaRepository->find($id);
+
+        $buscaOrgaos = $this->parametroRepository->findOneBy(
+            [
+                ['identificador_parametro','=','ORGAO_REGULADOR']
+            ]
+        );
+        $orgaos = json_decode($buscaOrgaos->valor_padrao);
+
+
+        $buscaCicloAuditoria = $this->parametroRepository->findOneBy(
+            [
+                ['identificador_parametro','=','CICLO_AUDITORIA']
+            ]
+        );
+        $ciclos = json_decode($buscaCicloAuditoria->valor_padrao);
+
+        return view('docs::norma.edit', compact('norma', 'orgaos', 'ciclos'));
     }
 
     /**
@@ -62,9 +131,25 @@ class NormaController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $error = $this->validador($request);
+        if ($error) {
+            return redirect()->back()->withInput()->withErrors($error);
+        }
+
+        $norma = $request->get('idNorma');
+        $update  = $this->montaRequest($request);
+        try {
+            DB::transaction(function () use ($update, $norma) {
+                $this->normaRepository->update($update, $norma);
+            });
+
+            Helper::setNotify('Informações da norma atualizadas com sucesso!', 'success|check-circle');
+        } catch (\Throwable $th) {
+            Helper::setNotify('Um erro ocorreu ao atualizar a norma', 'danger|close-circle');
+        }
+        return redirect()->back()->withInput();
     }
 
     /**
@@ -72,8 +157,45 @@ class NormaController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request = $request->id;
+        try {
+            DB::transaction(function () use ($id) {
+                $this->normaRepository->delete($id);
+            });
+            return response()->json(['response' => 'sucesso']);
+        } catch (\Exception $th) {
+            return response()->json(['response' => 'erro']);
+        }
+    }
+
+    public function validador(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'descricao'          => empty($request->get('idNorma')) ? 'required|string|min:5|max:100|unique:docs_norma' : '',
+                'orgaoRegulador'     => 'required|numeric',
+                'cicloAuditoria'     => 'required|numeric',
+                'dataAcreditacao'    => 'required|date'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return $validator;
+        }
+        return false;
+    }
+
+    public function montaRequest(Request $request)
+    {
+        return [
+            "descricao"             => $request->get('descricao'),
+            "orgao_regulador_id"    => $request->get('orgaoRegulador'),
+            "ativo"                 => $request->get('vigente') == 1 ? true : false,
+            "ciclo_auditoria_id"    => $request->get('cicloAuditoria'),
+            "data_acreditacao"      => $request->get('dataAcreditacao'),
+        ];
     }
 }

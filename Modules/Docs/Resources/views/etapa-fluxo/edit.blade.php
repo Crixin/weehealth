@@ -10,7 +10,7 @@
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('docs.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('docs.fluxo.etapa', ['id' => $etapaEdit->id, 'fluxo_id' => $etapaEdit->docsFluxo->id] ) }}"> @lang('page_titles.docs.etapa-fluxo.index') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('docs.fluxo.etapa-fluxo', ['id' => $etapaEdit->id, 'fluxo_id' => $etapaEdit->docsFluxo->id] ) }}"> @lang('page_titles.docs.etapa-fluxo.index') </a></li>
     <li class="breadcrumb-item active"> @lang('page_titles.docs.etapa-fluxo.update') </li>    
 
 @endsection
@@ -32,7 +32,7 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('docs.fluxo.etapa.alterar', ['id' => $etapaEdit->id, 'fluxo_id' => $etapaEdit->docsFluxo->id]) }}" >
+                <form method="POST" action="{{ route('docs.fluxo.etapa-fluxo.alterar', ['id' => $etapaEdit->id, 'fluxo_id' => $etapaEdit->docsFluxo->id]) }}" >
                     {{ csrf_field() }}
                     <input type="hidden" name="idEtapa" value="{{ $etapaEdit->id }}">
                     <input type="hidden" name="fluxo_id" value="{{ $etapaEdit->docsFluxo->id }}">
@@ -54,7 +54,7 @@
                     
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('docs.fluxo.etapa', ['fluxo_id' => $etapaEdit->docsFluxo->id]) }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('docs.fluxo.etapa-fluxo', ['fluxo_id' => $etapaEdit->docsFluxo->id]) }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
 
                 </form>

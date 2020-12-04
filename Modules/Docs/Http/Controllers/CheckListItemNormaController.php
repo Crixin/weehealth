@@ -5,47 +5,49 @@ namespace Modules\Docs\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Docs\Repositories\CheckListItemNormaRepository;
 use Modules\Docs\Repositories\ItemNormaRepository;
-use Modules\Docs\Repositories\NormaRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Helper;
 
-class ItemNormaController extends Controller
+class CheckListItemNormaController extends Controller
 {
-    protected $normaRepository;
+    protected $checkListItemNormaRepository;
     protected $itemNormaRepository;
 
-    public function __construct(NormaRepository $normaRepository, ItemNormaRepository $itemNormaRepository)
+    public function __construct(CheckListItemNormaRepository $checkListItemNormaRepository, ItemNormaRepository $itemNormaRepository)
     {
-        $this->normaRepository = $normaRepository;
+        $this->checkListItemNormaRepository = $checkListItemNormaRepository;
         $this->itemNormaRepository = $itemNormaRepository;
     }
+
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index($id)
+    public function index(Request $request)
     {
-        $norma  = $this->normaRepository->find($id);
-
-        $itens = $this->itemNormaRepository->findBy(
+        $itemNorma  = $this->itemNormaRepository->find($request->item_norma_id);
+        $checks = $this->checkListItemNormaRepository->findBy(
             [
-                ['norma_id', '=', $id]
-            ]
+                ['item_norma_id','=', $request->item_norma_id]
+            ],
+            []
         );
 
-        return view('docs::item-norma.index', compact('norma', 'itens'));
+        return view('docs::check-list.index', compact('checks', 'itemNorma'));
     }
 
     /**
      * Show the form for creating a new resource.
      * @return Renderable
      */
-    public function create($id)
+    public function create(Request $request)
     {
-        $norma  = $this->normaRepository->find($id);
-        return view('docs::item-norma.create', compact('norma'));
+        $itemNorma  = $this->itemNormaRepository->find($request->item_norma_id);
+ 
+        return view('docs::check-list.create', compact('itemNorma'));
     }
 
     /**
@@ -53,23 +55,24 @@ class ItemNormaController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request, $id)
+    public function store(Request $request)
     {
+
         $error = $this->validador($request);
         if ($error) {
             return redirect()->back()->withInput()->withErrors($error);
         }
 
-        $cadastro = $this->montaRequest($request, $id);
+        $cadastro = $this->montaRequest($request, $request->item_norma_id);
         try {
             DB::transaction(function () use ($cadastro) {
-                $this->itemNormaRepository->create($cadastro);
+                $this->checkListItemNormaRepository->create($cadastro);
             });
 
-            Helper::setNotify('Novo item da norma criado com sucesso!', 'success|check-circle');
-            return redirect()->route('docs.norma.item-norma', ['norma_id' => $id]);
+            Helper::setNotify('Novo check list criado com sucesso!', 'success|check-circle');
+            return redirect()->route('docs.norma.item-norma.check-list', ['norma_id' => $request->norma_id, 'item_norma_id' => $request->item_norma_id]);
         } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao gravar o item da norma', 'danger|close-circle');
+            Helper::setNotify('Um erro ocorreu ao gravar o check list', 'danger|close-circle');
             return redirect()->back()->withInput();
         }
     }
@@ -89,11 +92,10 @@ class ItemNormaController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function edit($id_norma, $id)
+    public function edit($id_norma, $id_item_norma, $id)
     {
-        $itemNormaEdit = $this->itemNormaRepository->find($id);
-
-        return view('docs::item-norma.edit', compact('itemNormaEdit'));
+        $checkList  = $this->checkListItemNormaRepository->find($id);
+        return view('docs::check-list.edit', compact('checkList'));
     }
 
     /**
@@ -102,26 +104,25 @@ class ItemNormaController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $error = $this->validador($request);
         if ($error) {
             return redirect()->back()->withInput()->withErrors($error);
         }
 
-        $idItemNorma = $request->get('idItemNorma');
-        $idNorma = $request->get('norma_id');
+        $idCheckList = $request->get('idCheckList');
+        $itemNormaId = $request->item_norma_id;
 
-        $update  = $this->montaRequest($request, $idNorma);
+        $update  = $this->montaRequest($request, $itemNormaId);
         try {
-            DB::transaction(function () use ($update, $idItemNorma) {
-                $this->itemNormaRepository->update($update, $idItemNorma);
+            DB::transaction(function () use ($update, $idCheckList) {
+                $this->checkListItemNormaRepository->update($update, $idCheckList);
             });
 
-            Helper::setNotify('Informações do item da norma atualizadas com sucesso!', 'success|check-circle');
+            Helper::setNotify('Informações do check list atualizadas com sucesso!', 'success|check-circle');
         } catch (\Throwable $th) {
-            dd($th);
-            Helper::setNotify('Um erro ocorreu ao atualizar o item da norma', 'danger|close-circle');
+            Helper::setNotify('Um erro ocorreu ao atualizar o check list', 'danger|close-circle');
         }
         return redirect()->back()->withInput();
     }
@@ -136,7 +137,7 @@ class ItemNormaController extends Controller
         $id = $request = $request->id;
         try {
             DB::transaction(function () use ($id) {
-                $this->itemNormaRepository->delete($id);
+                $this->checkListItemNormaRepository->delete($id);
             });
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {
@@ -149,7 +150,7 @@ class ItemNormaController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'descricao'   => 'required|string|min:5|max:100',
+                'descricao'  => 'required|string|min:5|max:100' ,
             ]
         );
 
@@ -160,10 +161,10 @@ class ItemNormaController extends Controller
         return false;
     }
 
-    public function montaRequest(Request $request, $id_norma)
+    public function montaRequest(Request $request, $item_norma_id)
     {
         return [
-            "norma_id"        => $id_norma,
+            "item_norma_id"   => $item_norma_id, 
             "descricao"       => $request->get('descricao'),
         ];
     }

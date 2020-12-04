@@ -61,15 +61,47 @@ Route::prefix('docs')->group(function () {
         /*
         * ETAPA
         */
-        Route::get('{fluxo_id}/etapa',    ['as' => 'fluxo.etapa',              'uses' => 'EtapaFluxoController@index']);
-        Route::get('{fluxo_id}/novo',          ['as' => 'fluxo.etapa.novo',    'uses' => 'EtapaFluxoController@create']);
-        Route::post('{fluxo_id}/salvar',       ['as' => 'fluxo.etapa.salvar',  'uses' => 'EtapaFluxoController@store']);
-        Route::get('{fluxo_id}/editar/{id}',   ['as' => 'fluxo.etapa.editar',  'uses' => 'EtapaFluxoController@edit']);
-        Route::post('{fluxo_id}/alterar',      ['as' => 'fluxo.etapa.alterar', 'uses' => 'EtapaFluxoController@update']);
-        Route::post('{fluxo_id}/deletar',      ['as' => 'fluxo.etapa.deletar', 'uses' => 'EtapaFluxoController@destroy']);
+        Route::get('{fluxo_id}/etapa-fluxo',    ['as' => 'fluxo.etapa-fluxo',              'uses' => 'EtapaFluxoController@index']);
+        Route::get('{fluxo_id}/novo',          ['as' => 'fluxo.etapa-fluxo.novo',    'uses' => 'EtapaFluxoController@create']);
+        Route::post('{fluxo_id}/salvar',       ['as' => 'fluxo.etapa-fluxo.salvar',  'uses' => 'EtapaFluxoController@store']);
+        Route::get('{fluxo_id}/editar/{id}',   ['as' => 'fluxo.etapa-fluxo.editar',  'uses' => 'EtapaFluxoController@edit']);
+        Route::post('{fluxo_id}/alterar',      ['as' => 'fluxo.etapa-fluxo.alterar', 'uses' => 'EtapaFluxoController@update']);
+        Route::post('{fluxo_id}/deletar',      ['as' => 'fluxo.etapa-fluxo.deletar', 'uses' => 'EtapaFluxoController@destroy']);
     });
 
 
+    /*
+    * NORMA
+    */
+    Route::group(['prefix' => 'norma' , 'as' => 'docs.'], function () {
+        Route::get('',              ['as' => 'norma',         'uses' => 'NormaController@index']);
+        Route::get('novo',          ['as' => 'norma.novo',    'uses' => 'NormaController@create']);
+        Route::post('salvar',       ['as' => 'norma.salvar',  'uses' => 'NormaController@store']);
+        Route::get('editar/{id}',   ['as' => 'norma.editar',  'uses' => 'NormaController@edit']);
+        Route::post('alterar',      ['as' => 'norma.alterar', 'uses' => 'NormaController@update']);
+        Route::post('deletar',      ['as' => 'norma.deletar', 'uses' => 'NormaController@destroy']);
+
+        /*
+        * ITEM NORMA
+        */
+        Route::get('{norma_id}/item-norma',    ['as' => 'norma.item-norma',         'uses' => 'ItemNormaController@index']);
+        Route::get('{norma_id}/novo',          ['as' => 'norma.item-norma.novo',    'uses' => 'ItemNormaController@create']);
+        Route::post('{norma_id}/salvar',       ['as' => 'norma.item-norma.salvar',  'uses' => 'ItemNormaController@store']);
+        Route::get('{norma_id}/editar/{id}',   ['as' => 'norma.item-norma.editar',  'uses' => 'ItemNormaController@edit']);
+        Route::post('{norma_id}/alterar',      ['as' => 'norma.item-norma.alterar', 'uses' => 'ItemNormaController@update']);
+        Route::post('{norma_id}/deletar',      ['as' => 'norma.item-norma.deletar', 'uses' => 'ItemNormaController@destroy']);
+
+        /*
+        * CHECK LIST ITEM NORMA
+        */
+        Route::get('{norma_id}/item-norma/{item_norma_id}/check-list',    ['as' => 'norma.item-norma.check-list',         'uses' => 'CheckListItemNormaController@index']);
+        Route::get('{norma_id}/item-norma/{item_norma_id}/novo',          ['as' => 'norma.item-norma.check-list.novo',    'uses' => 'CheckListItemNormaController@create']);
+        Route::post('{norma_id}/item-norma/{item_norma_id}/salvar',       ['as' => 'norma.item-norma.check-list.salvar',  'uses' => 'CheckListItemNormaController@store']);
+        Route::get('{norma_id}/item-norma/{item_norma_id}/editar/{id}',   ['as' => 'norma.item-norma.check-list.editar',  'uses' => 'CheckListItemNormaController@edit']);
+        Route::post('{norma_id}/item-norma/{item_norma_id}/alterar',      ['as' => 'norma.item-norma.check-list.alterar', 'uses' => 'CheckListItemNormaController@update']);
+        Route::post('{norma_id}/item-norma/{item_norma_id}/deletar',      ['as' => 'norma.item-norma.check-list.deletar', 'uses' => 'CheckListItemNormaController@destroy']);
+        
+    });
 
 
     Route::group(['prefix' => 'documento'], function() {

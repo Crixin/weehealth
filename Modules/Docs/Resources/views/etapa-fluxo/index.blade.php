@@ -30,7 +30,7 @@
                     
                     <div class="col-md-12">
                         <a href="{{ route('docs.fluxo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
-                        <a href="{{ route('docs.fluxo.etapa.novo', ['fluxo_id' => $fluxo->id]) }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.etapa-fluxo.create') </a>
+                        <a href="{{ route('docs.fluxo.etapa-fluxo.novo', ['fluxo_id' => $fluxo->id]) }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.etapa-fluxo.create') </a>
                     </div>
                 
                     <div class="table-responsive m-t-40">
@@ -51,7 +51,7 @@
                                         <td>{{ $etapa->descricao }}</td>
                                         <td>
                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $etapa->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
-                                            <a href="{{ route('docs.fluxo.etapa.editar', ['id' => $etapa->id, 'fluxo_id' => $fluxo->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                            <a href="{{ route('docs.fluxo.etapa-fluxo.editar', ['id' => $etapa->id, 'fluxo_id' => $fluxo->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
                                             
                                         </td>
                                     </tr>
@@ -128,7 +128,7 @@
             let obj = {'id': id};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('docs.fluxo.etapa.deletar', ['fluxo_id' => $fluxo->id]) }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('docs.fluxo.etapa-fluxo.deletar', ['fluxo_id' => $fluxo->id]) }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Etapa do Fluxo excluída com sucesso.");
                     } else {

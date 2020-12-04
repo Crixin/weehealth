@@ -104,12 +104,13 @@ return [
     'docs'                 => [
         "uls_li_system"    => [
             'register'          => [
-                'collapse'      => 'CADASTROS',
+                'collapse'         => 'CADASTROS',
                 'setor'            => 'Setor',
                 'configuracao'     => 'Configuração',
-                'plano' => 'Planos',
-                'tipo-documento' => 'Tipo de Documento',
-                'fluxo' => 'Fluxo'
+                'plano'            => 'Planos',
+                'tipo-documento'   => 'Tipos de Documentos',
+                'fluxo'            => 'Fluxos',
+                'norma'            => 'Normas'
             ],
             'documento'        => 'DOCUMENTOS',
             'documento_externo' => 'DOC. EXTERNOS',

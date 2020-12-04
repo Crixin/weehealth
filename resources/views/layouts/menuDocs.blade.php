@@ -39,6 +39,7 @@
                             <li><a href="{{ route('docs.plano') }}"> @lang('sidebar_and_header.docs.uls_li_system.register.plano') </a></li>
                             <li><a href="{{ route('docs.tipo-documento') }}"> @lang('sidebar_and_header.docs.uls_li_system.register.tipo-documento') </a></li>
                             <li><a href="{{ route('docs.fluxo') }}"> @lang('sidebar_and_header.docs.uls_li_system.register.fluxo') </a></li>
+                            <li><a href="{{ route('docs.norma') }}"> @lang('sidebar_and_header.docs.uls_li_system.register.norma') </a></li>
                     </ul>
                 </li>
 

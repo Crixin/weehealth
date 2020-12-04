@@ -16,4 +16,9 @@ class ItemNorma extends Model
         'descricao',
         'norma_id'
     ];
+
+    public function docsNorma()
+    {
+        return $this->hasOne('Modules\Docs\Model\Norma', 'id', 'norma_id');
+    }
 }

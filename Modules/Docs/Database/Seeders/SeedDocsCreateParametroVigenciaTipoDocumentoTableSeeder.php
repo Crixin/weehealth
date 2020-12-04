@@ -13,7 +13,7 @@ class SeedDocsCreateParametroVigenciaTipoDocumentoTableSeeder extends Seeder
      */
     public function run()
     {
-       //ORGAO REGULADOR
+       //PERIODO DE VIGENCIA
         $newParametro = new Parametro();
         $newParametro->identificador_parametro = "PERIODO_VIGENCIA";
         $newParametro->descricao = "Período de Vigência do Documento";
@@ -27,6 +27,29 @@ class SeedDocsCreateParametroVigenciaTipoDocumentoTableSeeder extends Seeder
             {
               "id":2,
               "descricao":"Bimestre",
+              "numero_dias":60
+            }
+        ]';
+        $newParametro->valor_usuario = 1;
+        $newParametro->ativo = true;
+        $newParametro->save();
+
+
+
+        //PERIODO AVISO DE VENCIMENTO
+        $newParametro = new Parametro();
+        $newParametro->identificador_parametro = "PERIODO_AVISO_VENCIMENTO";
+        $newParametro->descricao = "Período de aviso de vencimento";
+        $newParametro->valor_padrao =
+        '[
+            {
+              "id":1,
+              "descricao":"30 Dias Antes",
+              "numero_dias":30
+            },
+            {
+              "id":2,
+              "descricao":"60 Dias Antes",
               "numero_dias":60
             }
         ]';

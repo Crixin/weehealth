@@ -27,7 +27,7 @@
             <div class="form-group required{{ $errors->has('codigoPadrao') ? ' has-error' : '' }}">
                 {!! Form::label('codigoPadrao', 'Padrão de Código', ['class' => 'control-label']) !!}
                 
-                {!! Form::select('codigoPadrao[]', $padroesCodigo, !empty($tipoDocumentoEdit) ?  json_decode($tipoDocumentoEdit->codigo_padrao) : null, ['id' => 'codigoPadrao', 'class' => 'form-control selectpicker', 'required' => 'required', 'multiple']) !!}
+                {!! Form::select('codigoPadrao[]', $padroesCodigo, !empty($tipoDocumentoEdit) ?  json_decode($tipoDocumentoEdit->codigo_padrao) : null, ['id' => 'codigoPadrao', 'class' => 'form-control ', 'required' => 'required', 'multiple']) !!}
                 <small class="text-danger">{{ $errors->first('codigoPadrao') }}</small>
             </div>
         </div>
@@ -148,3 +148,18 @@
     </div>
     
 </div>
+
+@section('footer')
+<link href="{{ asset('plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css">    
+<script src="{{ asset('plugins/select2/dist/js/select2.full.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('plugins/jqueryui/jquery-ui.min.js') }}"></script>
+<script>
+    $(document).ready(function(){
+        var $input = $("#codigoPadrao");
+        $input.select2();
+        $("ul.select2-selection__rendered").sortable({
+        containment: 'parent'
+        });
+    });
+</script>
+@endsection

@@ -2,15 +2,15 @@
 
 namespace Modules\Docs\Repositories;
 
-use Modules\Docs\Model\OrientacaoItemNorma;
+use Modules\Docs\Model\CheckListItemNorma;
 use Modules\Core\Repositories\BaseRepository;
 
-class OrientacaoItemNormaRepository extends BaseRepository
+class CheckListItemNormaRepository extends BaseRepository
 {
     protected $model;
 
     public function __construct()
     {
-        $this->model = new OrientacaoItemNorma();
+        $this->model = new CheckListItemNorma();
     }
 }

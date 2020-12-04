@@ -128,7 +128,7 @@ return [
 
         /*ETAPA FLUXO*/
         'etapa-fluxo'    => [
-            'create'   => 'Criar Etapa Fluxo',
+            'create'   => 'Criar Etapa do Fluxo',
         ],
 
         /*TIPO DOCUMENTO*/
@@ -136,6 +136,21 @@ return [
             'create'   => 'Criar Tipo de Documento'
         ],
 
+        /*NORMA*/
+        'norma'    => [
+            'create'   => 'Criar Norma',
+            'itens'   => 'Itens da Norma'
+        ],
+
+        /*ETAPA FLUXO*/
+        'item-norma'    => [
+            'create'   => 'Criar Item da Norma',
+            'itens'   => 'Check List'
+        ],
+        /*CHECK LIST ITEM NORMA*/
+        'check-list'    => [
+            'create'   => 'Criar Check List',
+        ],
 
     ],
 

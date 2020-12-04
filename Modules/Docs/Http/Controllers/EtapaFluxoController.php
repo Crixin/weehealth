@@ -100,7 +100,7 @@ class EtapaFluxoController extends Controller
             });
 
             Helper::setNotify('Nova etapa criada com sucesso!', 'success|check-circle');
-            return redirect()->route('docs.fluxo.etapa', ['fluxo_id' => $id]);
+            return redirect()->route('docs.fluxo.etapa-fluxo', ['fluxo_id' => $id]);
         } catch (\Throwable $th) {
             Helper::setNotify('Um erro ocorreu ao gravar a etapa do fluxo', 'danger|close-circle');
             return redirect()->back()->withInput();
@@ -209,7 +209,7 @@ class EtapaFluxoController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nome'               => empty($request->get('idFluxo')) ? 'required|string|min:5|max:100' : '',
+                'nome'               => 'required|string|min:5|max:100',
                 'descricao'          => 'required|string|min:5|max:200',
                 'status'             => 'required|numeric',
                 'perfil'             => 'required|numeric',

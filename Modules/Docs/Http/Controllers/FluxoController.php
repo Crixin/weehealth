@@ -76,7 +76,6 @@ class FluxoController extends Controller
             Helper::setNotify('Novo fluxo criado com sucesso!', 'success|check-circle');
             return redirect()->route('docs.fluxo');
         } catch (\Throwable $th) {
-            dd($th);
             Helper::setNotify('Um erro ocorreu ao gravar o fluxo', 'danger|close-circle');
             return redirect()->back()->withInput();
         }
