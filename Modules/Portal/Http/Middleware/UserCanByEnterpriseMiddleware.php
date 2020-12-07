@@ -118,7 +118,7 @@ class UserCanByEnterpriseMiddleware
     private function analyzeBody($_request, $_userProcesses)
     {
         $found = false;
-
+        $identifiers = session('identificadores') ?? '';
         if (array_key_exists('idAreaGED', $_request->all()) || array_key_exists('id-documento', $_request->all())) {
             if (array_key_exists('id-documento', $_request->all())) {
                 try {
@@ -133,17 +133,16 @@ class UserCanByEnterpriseMiddleware
                     $enterpriseProcess = EmpresaProcesso::where('id_area_ged', $_request->idAreaGED)->first();
                     $found = $this->isProcessContained($_userProcesses, $enterpriseProcess);
                 } catch (\Throwable $th) {
-                    Log::error("Erro ao validar o acesso do usuário {" . Auth::user()->id . "} aos registros da área: " . $identifiers['idAreaGED']);
+                    Log::error("Erro ao validar o acesso do usuário {" . Auth::user()->id . "} aos registros da área: " . $identifiers != '' ? $identifiers['idAreaGED'] : '');
                 }
             }
         } else {
             // Aqui é considerado "seguro" utilizar a sessão porque ela é populada apenas se o usuário seguir os passos esperados pela aplicação; os valores da sessão ficam armazenados em um arquivo no disco; e o método aqui é POST, então não é qualquer usuário que tem o conhecimento de tentar 'hackear' a requisição.
             try {
-                $identifiers = session('identificadores');
-                $enterpriseProcess = EmpresaProcesso::where('id_area_ged', $identifiers['idAreaGED'])->first();
+                $enterpriseProcess = EmpresaProcesso::where('id_area_ged', $identifiers != '' ? $identifiers['idAreaGED'] : '')->first();
                 $found = $this->isProcessContained($_userProcesses, $enterpriseProcess);
             } catch (\Throwable $th) {
-                Log::error("Erro ao validar o acesso do usuário {" . Auth::user()->id . "} aos registros da área: " . $identifiers['idAreaGED']);
+                Log::error("Erro ao validar o acesso do usuário {" . Auth::user()->id . "} aos registros da área: " . $identifiers != '' ? $identifiers['idAreaGED'] : '');
             }
         }
 

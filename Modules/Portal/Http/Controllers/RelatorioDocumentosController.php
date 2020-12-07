@@ -2,8 +2,8 @@
 
 namespace Modules\Portal\Http\Controllers;
 
-use Modules\Core\Model\{Empresa};
-use Modules\Portal\Model\{EmpresaGrupo, EmpresaProcesso, EmpresaUser, GrupoUser, Processo};
+use Modules\Core\Model\{Empresa,GrupoUser};
+use Modules\Portal\Model\{EmpresaGrupo, EmpresaProcesso, EmpresaUser,  Processo};
 use App\Exports\DocumentosGEDExports;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

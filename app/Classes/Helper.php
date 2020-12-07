@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Modules\Portal\Model\{Grupo, EmpresaUser, EmpresaGrupo};
 use Modules\Core\Model\{Empresa, Parametro};
 use Modules\Core\Repositories\{EmpresaRepository};
-use Modules\Core\Repositories\{ParametroRepository};
-use Modules\Portal\Repositories\{GrupoUserRepository, EmpresaGrupoRepository, EmpresaUserRepository};
+use Modules\Core\Repositories\{ParametroRepository,GrupoUserRepository};
+use Modules\Portal\Repositories\{EmpresaGrupoRepository, EmpresaUserRepository};
 
 class Helper
 {

@@ -162,6 +162,12 @@ return [
             'create'   => 'Criar Controle de Registro',
         ],
 
+        /*DOCUMENTO*/
+        'documento'    => [
+            'create'   => 'Criar Documento',
+            'edit'     => 'Editar Documento',
+        ],
+
     ],
 
 

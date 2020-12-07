@@ -36,8 +36,13 @@
                         <table id="dataTable-controle-registro" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>Descricao</th>
-                                    <th>Ativo</th>
+                                    <th>Código</th>
+                                    <th>Título</th>
+                                    <th>Responsável</th>
+                                    <th>Meio</th>
+                                    <th>Armazenamento</th>
+                                    <th>Proteção</th>
+                                    <th>Recuperação</th>
                                     <th>Controle</th>
                                 </tr>
                             </thead>
@@ -45,7 +50,7 @@
                                 @foreach ($controles as $controle)
                                     <tr>
                                         <td>{{ $controle->descricao }}</td>
-                                        <td>{{ $controle->ativo == true ? 'Sim' : 'Não' }}</td>
+                                        
                                         <td>
                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $controle->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
                                             <a href="{{ route('docs.controle-registro.editar', ['id' => $controle->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
@@ -130,7 +135,7 @@
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Opção de controle excluída com sucesso.");
                     } else {
-                        swal2_alert_error_support("Tivemos um problema ao a opção de controle.");
+                        swal2_alert_error_support("Tivemos um problema ao excluir a opção de controle.");
                     }
                 }, error => {
                     console.log(error);

@@ -5,11 +5,10 @@ namespace Modules\Portal\Http\Controllers;
 use App\Classes\Helper;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-use Modules\Core\Repositories\{EmpresaRepository};
+use Modules\Core\Repositories\{EmpresaRepository,GrupoUserRepository};
 use Modules\Portal\Repositories\{
     TarefaRepository,
     ConfiguracaoTarefaRepository,
-    GrupoUserRepository,
     EmpresaGrupoRepository,
     EmpresaUserRepository,
     EmpresaProcessoRepository

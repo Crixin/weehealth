@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Modules\Core\Repositories\{GrupoUserRepository};
 use Modules\Portal\Repositories\{
     DashboardRepository,
-    GrupoUserRepository,
     EmpresaGrupoRepository,
     EmpresaUserRepository,
     EmpresaProcessoRepository,

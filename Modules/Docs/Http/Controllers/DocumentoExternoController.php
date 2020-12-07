@@ -14,7 +14,7 @@ class DocumentoExternoController extends Controller
      */
     public function index()
     {
-        return view('docs::index');
+        return view('docs::documento-externo.index');
     }
 
     /**
@@ -23,7 +23,7 @@ class DocumentoExternoController extends Controller
      */
     public function create()
     {
-        return view('docs::create');
+        return view('docs::documento-externo.create');
     }
 
     /**
@@ -53,7 +53,7 @@ class DocumentoExternoController extends Controller
      */
     public function edit($id)
     {
-        return view('docs::edit');
+        return view('docs::documento-externo.edit');
     }
 
     /**

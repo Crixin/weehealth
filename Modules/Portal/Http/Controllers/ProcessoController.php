@@ -7,12 +7,11 @@ use Illuminate\Http\Request;
 use App\Mail\RejectedDocument;
 use App\Classes\{Constants, RESTServices};
 use Modules\Portal\Model\{Processo, EmpresaProcesso};
-use Modules\Core\Model\{Empresa, User};
+use Modules\Core\Model\{User};
+use Modules\Core\Repositories\{GrupoUserRepository};
 use Modules\Portal\Repositories\{
     EmpresaGrupoRepository,
-    EdicaoDocumentoRepository,
-    EmpresaProcessoGrupoRepository,
-    GrupoUserRepository
+    EdicaoDocumentoRepository
 };
 use Illuminate\Support\Facades\{Auth, Mail, Log, Validator};
 

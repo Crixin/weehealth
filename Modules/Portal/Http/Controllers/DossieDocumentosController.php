@@ -9,8 +9,8 @@ use App\Http\Controllers\Auth\JWTController;
 use Illuminate\Support\Facades\{Storage, DB, File};
 use Illuminate\Filesystem\Filesystem;
 use App\Classes\{Constants, RESTServices};
+use Modules\Core\Repositories\{GrupoUserRepository};
 use Modules\Portal\Repositories\{
-    GrupoUserRepository,
     EmpresaGrupoRepository,
     EmpresaUserRepository,
     DossieRepository,

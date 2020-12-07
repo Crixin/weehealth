@@ -60,7 +60,9 @@ class ControleRegistro extends Model
      */
     public function getTituloAttribute($value)
     {
-        return explode(Constants::$SUFIXO_REVISAO_NOS_TITULO_DOCUMENTOS, $value)[0];
+        $opcoes = OpcoesControleRegistros::where('id', '=', $value)->get();
+
+        return $opcoes->descricao;
     }
 
 }

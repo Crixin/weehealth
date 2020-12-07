@@ -228,5 +228,11 @@ return [
             'update'          => 'Alterando Opção Controle de Registro',
         ],
 
+        'documento' => [
+            'index'           => 'Documentos',
+            'create'          => 'Novo Documento',
+            'update'          => 'Alterando Documento',
+        ],
+
     ]
 ];
