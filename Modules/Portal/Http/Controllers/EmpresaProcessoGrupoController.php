@@ -3,8 +3,8 @@
 namespace Modules\Portal\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Modules\Core\Repositories\{GrupoRepository};
 use Modules\Portal\Repositories\{
-    GrupoRepository,
     EmpresaGrupoRepository,
     EmpresaProcessoGrupoRepository,
     EmpresaProcessoRepository
