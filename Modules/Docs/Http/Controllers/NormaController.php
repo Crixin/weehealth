@@ -48,20 +48,12 @@ class NormaController extends Controller
      */
     public function create()
     {
-        $buscaOrgaos = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','ORGAO_REGULADOR']
-            ]
-        );
-        $orgaos = json_decode($buscaOrgaos->valor_padrao);
+        $buscaOrgaos = $this->parametroRepository->getParametro('ORGAO_REGULADOR');
+        $orgaos = json_decode($buscaOrgaos);
 
 
-        $buscaCicloAuditoria = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','CICLO_AUDITORIA']
-            ]
-        );
-        $ciclos = json_decode($buscaCicloAuditoria->valor_padrao);
+        $buscaCicloAuditoria = $this->parametroRepository->getParametro('CICLO_AUDITORIA');
+        $ciclos = json_decode($buscaCicloAuditoria);
 
         return view('docs::norma.create', compact('orgaos', 'ciclos'));
     }
@@ -110,19 +102,11 @@ class NormaController extends Controller
     {
         $norma = $this->normaRepository->find($id);
 
-        $buscaOrgaos = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','ORGAO_REGULADOR']
-            ]
-        );
-        $orgaos = json_decode($buscaOrgaos->valor_padrao);
+        $buscaOrgaos = $this->parametroRepository->getParametro('ORGAO_REGULADOR');
+        $orgaos = json_decode($buscaOrgaos);
 
 
-        $buscaCicloAuditoria = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','CICLO_AUDITORIA']
-            ]
-        );
+        $buscaCicloAuditoria = $this->parametroRepository->getParametro('CICLO_AUDITORIA');
         $ciclos = json_decode($buscaCicloAuditoria->valor_padrao);
 
         return view('docs::norma.edit', compact('norma', 'orgaos', 'ciclos'));

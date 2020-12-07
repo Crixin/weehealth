@@ -9,17 +9,27 @@ use Modules\Docs\Repositories\ControleRegistroRepository;
 use App\Classes\Helper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Modules\Core\Repositories\GrupoRepository;
+use Modules\Core\Repositories\ParametroRepository;
 use Modules\Docs\Repositories\OpcaoControleRegistroRepository;
 
 class ControleRegistroController extends Controller
 {
     protected $controleRegistroRepository;
     protected $opcoesControleRegistroRepository;
+    protected $grupoRepository;
+    protected $parametroRepository;
 
-    public function __construct(ControleRegistroRepository $controleRegistroRepository, OpcaoControleRegistroRepository $opcaoControleRegistroRepository)
-    {
+    public function __construct(
+        ControleRegistroRepository $controleRegistroRepository,
+        OpcaoControleRegistroRepository $opcaoControleRegistroRepository,
+        GrupoRepository $grupoRepository,
+        ParametroRepository $parametroRepository
+    ) {
         $this->controleRegistroRepository = $controleRegistroRepository;
         $this->opcoesControleRegistroRepository = $opcaoControleRegistroRepository;
+        $this->grupoRepository = $grupoRepository;
+        $this->parametroRepository = $parametroRepository;
     }
 
     /**
@@ -38,6 +48,12 @@ class ControleRegistroController extends Controller
      */
     public function create()
     {
+        $id_setor_qualidade = $this->parametroRepository->getParametro('ID_SETOR_QUALIDADE');
+        
+        $responsaveis = $this->grupoRepository->getGrupoUsuario($id_setor_qualidade);
+
+
+
         return view('docs::controle-registro.create');
     }
 

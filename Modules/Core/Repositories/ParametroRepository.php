@@ -13,4 +13,14 @@ class ParametroRepository extends BaseRepository
     {
         $this->model = new Parametro();
     }
+
+    public function getParametro($key)
+    {
+        $consulta = $this->findOneBy(
+            [
+                ['identificador_parametro', '=', $key]
+            ]
+        );
+        return $consulta->valor_padrao;
+    }
 }
