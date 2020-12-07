@@ -40,7 +40,16 @@
                         [
                             'controleRegistroEdit' => [],
                             'codigo' => '',
-                            'descricao' => '', 
+                            'descricao' => '',
+                            'responsaveis' => [],
+                            'meios' => [],
+                            'meiosArmazenamento' => [],
+                            'meiosProtecao' => [],
+                            'meiosRecuperacao' => [],
+                            'niveisAcesso' => [],
+                            'opcoesRetencaoLocal' => [],
+                            'opcoesRetencaoDeposito' => [],
+                            'disposicoes' => [],
                         ]
                     )
                     @endcomponent

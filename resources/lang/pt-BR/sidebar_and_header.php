@@ -117,12 +117,10 @@ return [
             'workflow'         => 'BPMN 2.0',
             
             'controle_registro' => [
-                'collapse' => 'Contr. de Registros',
+                'collapse' => 'CONTR. REGISTROS',
                 'opcao'    => 'Opções',
                 'controle' => 'Controles'
             ],
-            'controle_registros' => 'CONTR. REGISTROS',
-            
         ]
     ]
 

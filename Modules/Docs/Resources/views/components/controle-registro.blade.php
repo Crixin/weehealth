@@ -40,8 +40,8 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group{{ $errors->has('protecao') ? ' has-error' : '' }}">
-                {!! Form::label('protecao', 'Proteção') !!}
+            <div class="form-group required{{ $errors->has('protecao') ? ' has-error' : '' }}">
+                {!! Form::label('protecao', 'Proteção', ['class' => 'control-label']) !!}
                 {!! Form::select('protecao', $meiosProtecao, null, ['id' => 'protecao', 'class' => 'form-control', 'required' => 'required']) !!}
                 <small class="text-danger">{{ $errors->first('protecao') }}</small>
             </div>
@@ -49,15 +49,15 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group{{ $errors->has('recuperacao') ? ' has-error' : '' }}">
-                {!! Form::label('recuperacao', 'Recuperação') !!}
+            <div class="form-group required{{ $errors->has('recuperacao') ? ' has-error' : '' }}">
+                {!! Form::label('recuperacao', 'Recuperação', ['class' => 'control-label']) !!}
                 {!! Form::select('recuperacao',$meiosRecuperacao, null, ['id' => 'recuperacao', 'class' => 'form-control', 'required' => 'required']) !!}
                 <small class="text-danger">{{ $errors->first('recuperacao') }}</small>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group{{ $errors->has('nivelAcesso') ? ' has-error' : '' }}">
-                {!! Form::label('nivelAcesso', 'Nível Acesso') !!}
+            <div class="form-group required{{ $errors->has('nivelAcesso') ? ' has-error' : '' }}">
+                {!! Form::label('nivelAcesso', 'Nível Acesso', ['class' => 'control-label']) !!}
                 {!! Form::select('nivelAcesso', $niveisAcesso, null, ['id' => 'nivelAcesso', 'class' => 'form-control', 'required' => 'required']) !!}
                 <small class="text-danger">{{ $errors->first('nivelAcesso') }}</small>
             </div>
@@ -65,15 +65,15 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group{{ $errors->has('retencaoLocal') ? ' has-error' : '' }}">
-                {!! Form::label('retencaoLocal', 'Retenção Mínima-Local') !!}
+            <div class="form-group required{{ $errors->has('retencaoLocal') ? ' has-error' : '' }}">
+                {!! Form::label('retencaoLocal', 'Retenção Mínima-Local', ['class' => 'control-label']) !!}
                 {!! Form::select('retencaoLocal', $opcoesRetencaoLocal, null, ['id' => 'retencaoLocal', 'class' => 'form-control', 'required' => 'required']) !!}
                 <small class="text-danger">{{ $errors->first('retencaoLocal') }}</small>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group{{ $errors->has('retencaoDeposito') ? ' has-error' : '' }}">
-                {!! Form::label('retencaoDeposito', 'Retenção Mínima-Arquivo Morto') !!}
+            <div class="form-group required{{ $errors->has('retencaoDeposito') ? ' has-error' : '' }}">
+                {!! Form::label('retencaoDeposito', 'Retenção Mínima-Arquivo Morto', ['class' => 'control-label']) !!}
                 {!! Form::select('retencaoDeposito', $opcoesRetencaoDeposito, null, ['id' => 'retencaoDeposito', 'class' => 'form-control', 'required' => 'required']) !!}
                 <small class="text-danger">{{ $errors->first('retencaoDeposito') }}</small>
             </div>
@@ -81,10 +81,10 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group{{ $errors->has('disposicao') ? ' has-error' : '' }}">
-                {!! Form::label('disposicao', 'Input label') !!}
-                {!! Form::select('disposicao', $options, null, ['id' => 'disposicao', 'class' => 'form-control', 'required' => 'required', 'multiple']) !!}
-                <small class="text-danger">{{ $errors->first('disposicao') }}</small>
+            <div class="form-group required{{ $errors->has('disposicao') ? ' has-error' : '' }}">
+            {!! Form::label('disposicao', 'Disposição', ['class' => 'control-label']) !!}
+            {!! Form::select('disposicao',$disposicoes, null, ['id' => 'disposicao', 'class' => 'form-control', 'required' => 'required']) !!}
+            <small class="text-danger">{{ $errors->first('disposicao') }}</small>
             </div>
         </div>
     </div>

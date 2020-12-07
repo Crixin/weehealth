@@ -9,15 +9,19 @@ use Modules\Docs\Repositories\ControleRegistroRepository;
 use App\Classes\Helper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Modules\Docs\Repositories\OpcaoControleRegistroRepository;
 
 class ControleRegistroController extends Controller
 {
     protected $controleRegistroRepository;
+    protected $opcoesControleRegistroRepository;
 
-    public function __construct(ControleRegistroRepository $controleRegistroRepository)
+    public function __construct(ControleRegistroRepository $controleRegistroRepository, OpcaoControleRegistroRepository $opcaoControleRegistroRepository)
     {
         $this->controleRegistroRepository = $controleRegistroRepository;
+        $this->opcoesControleRegistroRepository = $opcaoControleRegistroRepository;
     }
+
     /**
      * Display a listing of the resource.
      * @return Renderable
@@ -132,8 +136,17 @@ class ControleRegistroController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'descricao'          => empty($request->get('idOpcaoControle')) ? 'required|string|min:5|max:100|unique:docs_opcoes_controle_registros' : '',
-                'tipoControle'       => 'required|numeric',
+                'codigo'          => empty($request->get('idControleRegistro')) ? 'required|string|unique:docs_controle_registros' : '',
+                'descricao'       => 'required|string|min:5|max:100',
+                'responsavel'     => 'required|numeric',
+                'meio'            => 'required|numeric',
+                'armazenamento'   => 'required|numeric',
+                'protecao'        => 'required|numeric',
+                'recuperacao'     => 'required|numeric',
+                'nivelAcesso'     => 'required|numeric',
+                'retencaoLocal'   => 'required|numeric',
+                'retencaoDeposito' => 'required|numeric',
+                'disposicao'      => 'required|numeric'
             ]
         );
 
@@ -146,9 +159,40 @@ class ControleRegistroController extends Controller
     public function montaRequest(Request $request)
     {
         return [
-            "descricao"             => $request->get('descricao'),
-            "campo"                 => $request->get('tipoControle'),
-            "ativo"                 => $request->get('ativo') == 1 ? true : false,
+            "codigo"             => $request->get('codigo'),
+            "descricao"          => $request->get('descricao'),
+            "nivelAcesso"        => '',
+            "avulso"             => '',
+            "documento_id"       => '',
+            "setor_id"           => '',
+            "local_armazenamento_id" => '',
+            "disposicao_id"      => '',
+            "meio_distribuicao_id" => '',
+            "protecao_id"         => '',
+            "recuperacao_id"      => '',
+            "tempo_retencao_deposito_id" => '',
+            "tempo_retencao_local_id" => '',
+            "ativo" => '',
+            "meio_distribuicao" => '',
+            "local_armazenamento" => '',
+            "protecao" => '',
+            "recuperacao" => '',
+            "tempo_retencao_deposito" => '',
+            "disposicao" => '',
         ];
+    }
+
+    private function getOption($_key)
+    {
+        $opcao = $this->opcoesControleRegistroRepository->findBy(
+            [
+                ['campo','=', $_key]
+            ],
+            [],
+            [
+                ['descricao', 'ASC']
+            ]
+        );
+        return array_column(json_decode($opcao), 'descricao', 'id');
     }
 }

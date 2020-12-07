@@ -39,7 +39,18 @@
                         'docs::components.controle-registro', 
                         [
                             'controleRegistroEdit' => $controleRegistro,
-                            'descricao' => $controleRegistro->descricao, 
+                            'codigo' => $controleRegistro->codigo,
+                            'descricao' => $controleRegistro->descricao,
+                            'responsaveis' => [],
+                            'meios' => [],
+                            'meiosArmazenamento' => [],
+                            'meiosProtecao' => [],
+                            'meiosRecuperacao' => [],
+                            'niveisAcesso' => [],
+                            'opcoesRetencaoLocal' => [],
+                            'opcoesRetencaoDeposito' => [],
+                            'disposicoes' => [],
+                        ]
                         ]
                     )
                     @endcomponent
