@@ -16,9 +16,9 @@ class CreateDocsUsuarioExtra extends Migration
         Schema::create('docs_usuario_extra', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('usuario_id')->unsigned();
-            $table->foreign('usuario_id')->references('id')->on('core_users')->onDelete();
+            $table->foreign('usuario_id')->references('id')->on('core_users')->onDelete('cascade');
             $table->integer('documento_id')->unsigned();
-            $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete();
+            $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

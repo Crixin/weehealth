@@ -20,7 +20,7 @@ class CreateDocsWorkflow extends Migration
             $table->string('descricao', 100);
             $table->text('justificativa');
             $table->integer('documento_id')->unsigned();
-            $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete();
+            $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
             $table->integer('etapa_fluxo_id')->unsigned();
             $table->foreign('etapa_fluxo_id')->references('id')->on('docs_etapa_fluxo');
             $table->timestamps();

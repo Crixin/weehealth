@@ -18,7 +18,7 @@ class CreateDocsEtapaFluxoTable extends Migration
             $table->text('nome');
             $table->text('descricao');
             $table->integer('fluxo_id')->unsigned();
-            $table->foreign('fluxo_id')->references('id')->on('docs_fluxo')->onDelete();
+            $table->foreign('fluxo_id')->references('id')->on('docs_fluxo')->onDelete('cascade');
             $table->integer('perfil_id')->unsigned();
             $table->foreign('perfil_id')->references('id')->on('core_perfil');
             $table->integer('status_id');

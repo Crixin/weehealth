@@ -16,7 +16,7 @@ class CreateDocsVinculoDocumento extends Migration
         Schema::create('docs_vinculo_documento', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('documento_id')->unsigned();
-            $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete();
+            $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
             $table->integer('documento_vinculado_id')->unsigned();
             $table->foreign('documento_vinculado_id')->references('id')->on('docs_documento');
             $table->timestamps();
