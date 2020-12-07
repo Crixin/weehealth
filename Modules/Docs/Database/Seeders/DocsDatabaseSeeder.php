@@ -14,7 +14,6 @@ class DocsDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(\Modules\Docs\Database\Seeders\SeedCoreCreateParametroOrgaoReguladorTableSeeder::class);
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroStatusEtapaFluxoTableSeeder::class);
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroTipoControleRegistroTableSeeder::class);
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroVigenciaTipoDocumentoTableSeeder::class);
