@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(\Modules\Portal\Database\Seeders\SeedPortalProcessoTableSeeder::class);
 
         /**MODULO DOCS */
-        $this->call(\Modules\Docs\Database\Seeders\SeedCoreCreateParametroOrgaoReguladorTableSeeder::class);
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroStatusEtapaFluxoTableSeeder::class);
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroTipoControleRegistroTableSeeder::class);
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroVigenciaTipoDocumentoTableSeeder::class);
