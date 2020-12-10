@@ -21,8 +21,8 @@ class CreateDocsControleRegistro extends Migration
             $table->boolean('avulso');
             $table->integer('documento_id')->nullable();
             $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
-            $table->integer('grupo_id')->unsigned();
-            $table->foreign('grupo_id')->references('id')->on('core_grupo');
+            $table->integer('setor_id')->unsigned();
+            $table->foreign('setor_id')->references('id')->on('core_setor');
             $table->integer('local_armazenamento_id')->nullable(false);
             $table->foreign('local_armazenamento_id')->references('id')->on('docs_opcoes_controle_registros');
             $table->integer('disposicao_id')->nullable(false);

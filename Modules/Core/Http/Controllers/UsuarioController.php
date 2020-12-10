@@ -6,17 +6,19 @@ use App\Classes\Helper;
 use Modules\Core\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Modules\Core\Repositories\{UserRepository, PerfilRepository};
+use Modules\Core\Repositories\{UserRepository, PerfilRepository, SetorRepository};
 
 class UsuarioController extends Controller
 {
 
     protected $userRepository;
+    protected $setorRepository;
 
-    public function __construct(UserRepository $user, PerfilRepository $perfil)
+    public function __construct(UserRepository $user, PerfilRepository $perfil, SetorRepository $setorRepository)
     {
         $this->userRepository = $user;
         $this->perfilRepository = $perfil;
+        $this->setorRepository = $setorRepository;
     }
 
 
@@ -31,9 +33,10 @@ class UsuarioController extends Controller
     public function editUser($_id)
     {
         $perfis = $this->perfilRepository->findAll();
+        $setores = $this->setorRepository->findAll();
 
         $usuario = $this->userRepository->find($_id);
-        return view('core::usuario.update', compact('usuario', 'perfis'));
+        return view('core::usuario.update', compact('usuario', 'perfis', 'setores'));
     }
 
 
@@ -69,6 +72,7 @@ class UsuarioController extends Controller
         $usuario->username = $request->get('username');
         $usuario->email = $request->get('email');
         $usuario->perfil_id = $request->get('perfil');
+        $usuario->setor_id = $request->get('setor');
         $usuario->save();
 
         Helper::setNotify('Informações pessoais alteradas com sucesso!', 'success|check-circle');

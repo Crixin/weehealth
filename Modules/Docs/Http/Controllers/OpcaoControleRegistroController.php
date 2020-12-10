@@ -144,7 +144,7 @@ class OpcaoControleRegistroController extends Controller
             $request->all(),
             [
                 'descricao'          => empty($request->get('idOpcaoControle')) ? 'required|string|min:5|max:100|unique:docs_opcoes_controle_registros' : '',
-                'tipoControle'       => 'required|numeric',
+                'tipoControle'       => 'required|string',
             ]
         );
 

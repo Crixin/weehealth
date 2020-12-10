@@ -55,12 +55,6 @@ class TipoDocumentoController extends Controller
 
         $fluxos = $fluxos->count() > 0 ? array_column(json_decode(json_encode($fluxos), true), 'nome', 'id') : [];
 
-        $periodosVigencia = $this->parametroRepository->getParametro('PERIODO_VIGENCIA');
-
-        $periodosVigencia = array_column(json_decode($periodosVigencia), 'descricao', 'id');
-
-        $periodosAviso = $this->parametroRepository->getParametro('PERIODO_AVISO_VENCIMENTO');
-        $periodosAviso = array_column(json_decode($periodosAviso), 'descricao', 'id');
 
         $tiposDocumento = $this->tipoDocumentoRepository->findBy(
             [
@@ -70,10 +64,9 @@ class TipoDocumentoController extends Controller
         $tiposDocumento = $tiposDocumento ? array_column(json_decode(json_encode($tiposDocumento), true), 'nome', 'id') : [];
 
         $padroesCodigo = $this->parametroRepository->getParametro('PADRAO_CODIGO');
-
-        $padroesCodigo = $padroesCodigo ? array_column(json_decode($padroesCodigo), 'descricao', 'id') : [];
-
-        return view('docs::tipo-documento.create', compact('fluxos', 'periodosVigencia', 'periodosAviso', 'tiposDocumento', 'padroesCodigo')
+        $padroesCodigo = $padroesCodigo ? array_column(json_decode($padroesCodigo), 'DESCRICAO', 'ID') : [];
+  
+        return view('docs::tipo-documento.create', compact('fluxos', 'tiposDocumento', 'padroesCodigo')
         );
     }
 
@@ -125,13 +118,6 @@ class TipoDocumentoController extends Controller
 
         $fluxos = $fluxos->count() > 0 ? array_column(json_decode(json_encode($fluxos), true), 'nome', 'id') : [];
 
-        $periodosVigencia = $this->parametroRepository->getParametro('PERIODO_VIGENCIA');
-
-        $periodosVigencia = array_column(json_decode($periodosVigencia), 'descricao', 'id');
-
-        $periodosAviso = $this->parametroRepository->getParametro('PERIODO_AVISO_VENCIMENTO');
-        $periodosAviso = array_column(json_decode($periodosAviso), 'descricao', 'id');
-
         $tiposDocumento = $this->tipoDocumentoRepository->findBy(
             [
                 ['ativo', '=', true],
@@ -139,12 +125,19 @@ class TipoDocumentoController extends Controller
         );
         $tiposDocumento = $tiposDocumento ? array_column(json_decode(json_encode($tiposDocumento), true), 'nome', 'id') : [];
 
-        $padroesCodigo = $this->parametroRepository->getParametro('PADRAO_CODIGO');
 
-        $padroesCodigo = $padroesCodigo ? array_column(json_decode($padroesCodigo), 'descricao', 'id') : [];
+        $padroesCodigoParametro = json_decode($this->parametroRepository->getParametro('PADRAO_CODIGO'));
+        $padroesCodigoParametro = $padroesCodigoParametro ? array_column($padroesCodigoParametro, 'DESCRICAO', 'ID') : [];
+
+        $padroesCodigo = array();
+        foreach (json_decode($tipoDocumento->codigo_padrao) as $key => $value) {
+            $padroesCodigo += [
+                $value => $padroesCodigoParametro[$value]
+            ];
+        }
 
         return view('docs::tipo-documento.edit',
-            compact('tipoDocumento', 'fluxos', 'periodosVigencia', 'periodosAviso', 'tiposDocumento', 'padroesCodigo')
+            compact('tipoDocumento', 'fluxos', 'tiposDocumento', 'padroesCodigo')
         );
     }
 
@@ -163,6 +156,7 @@ class TipoDocumentoController extends Controller
 
         $tipoDocumento = $request->get('idTipoDocumento');
         $update  = $this->montaRequest($request);
+ 
         try {
             DB::transaction(function () use ($update, $tipoDocumento) {
                 $this->tipoDocumentoRepository->update($update, $tipoDocumento);
@@ -205,6 +199,7 @@ class TipoDocumentoController extends Controller
                 'periodoVigencia'       => 'required|numeric',
                 'ativo'                 => 'required|',
                 'vinculoObrigatorio'    => 'required|',
+                'vinculoObrigatorioOutrosDocs' => 'required|',
                 'permitirDownload'      => 'required|',
                 'permitirImpressao'     => 'required|',
                 'periodoAviso'          => 'required|numeric',
@@ -231,7 +226,6 @@ class TipoDocumentoController extends Controller
             $buscaTipoDocumento = $this->tipoDocumentoRepository->find($request->get('idTipoDocumento'));
             $imageBase64 = $buscaTipoDocumento->documento_modelo ?? null;
         }
-
         return [
             "nome"                  => $request->get('nome'),
             "descricao"             => $request->get('descricao'),
@@ -241,6 +235,7 @@ class TipoDocumentoController extends Controller
             "periodo_vigencia_id"   => $request->get('periodoVigencia'),
             "ativo"                 => $request->get('ativo') == 1 ? true : false,
             "vinculo_obrigatorio"   => $request->get('vinculoObrigatorio') == 1 ? true : false,
+            'vinculo_obrigatorio_outros_documento' => $request->get('vinculoObrigatorioOutrosDocs') == 1 ? true : false,
             "permitir_download"     => $request->get('permitirDownload') == 1 ? true : false,
             "permitir_impressao"    => $request->get('permitirImpressao') == 1 ? true : false,
             "periodo_aviso_id"      => $request->get('periodoAviso'),

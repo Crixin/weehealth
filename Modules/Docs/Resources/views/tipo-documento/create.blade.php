@@ -43,8 +43,8 @@
                             'sigla' => '',
                             'tipo_documento_pai' => '',
                             'fluxos' => $fluxos,
-                            'periodosVigencia' => $periodosVigencia,
-                            'periodosAviso' => $periodosAviso,
+                            'periodosVigencia' => '',
+                            'periodosAviso' => '',
                             'tiposDocumento' => $tiposDocumento,
                             'padroesCodigo' => $padroesCodigo
                         ]

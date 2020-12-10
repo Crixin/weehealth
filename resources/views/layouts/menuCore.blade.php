@@ -32,13 +32,15 @@
                         <a class="has-arrow waves-effect waves-dark" href="#2" aria-expanded="false"><i class="mdi mdi-plus-circle-outline"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.register.collapse') </span></a>
                         <ul aria-expanded="false" class="collapse">
                             
-                                <li><a href="{{ route('core.empresa') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item1') </a></li>
+                                <li><a href="{{ route('core.empresa') }}"> @lang('sidebar_and_header.core.uls_li_system.register.item1') </a></li>
                             
 
-                            
-                                <li><a href="{{ route('core.usuario') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item4') </a></li>
-                                <li><a href="{{ route('core.perfil') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item6') </a></li>
-                                <li><a href="{{ route('core.grupo') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item2') </a></li>
+                                <li><a href="{{ route('core.usuario') }}"> @lang('sidebar_and_header.core.uls_li_system.register.item2') </a></li>
+                                <li><a href="{{ route('core.grupo') }}"> @lang('sidebar_and_header.core.uls_li_system.register.item3') </a></li>
+                                <li><a href="{{ route('core.perfil') }}"> @lang('sidebar_and_header.core.uls_li_system.register.item4') </a></li>
+                                <li><a href="{{ route('core.setor') }}"> @lang('sidebar_and_header.core.uls_li_system.register.item5') </a></li>
+                                
+                               
                             
                             {{-- <li><a href="{{ route('tarefa') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item7') </a></li> --}}
                         </ul>

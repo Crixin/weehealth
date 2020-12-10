@@ -96,8 +96,9 @@
                                 <div class="form-group{{ $errors->has('perfil') ? ' has-error' : '' }}">
                                     <label class="control-label">Perfil</label>
                                     <select name="perfil" id="perfil" class="form-control text-center selectpicker" required data-size="10" data-live-search="true">
+                                            <option value="">Nenhum Selecionado</option>
                                         @foreach ($perfis as $perfil)
-                                            <option value="{{ $perfil->id }}" {{$perfil->id == ($usuario->perfil->id ?? "") ? "selected" : ""}}> {{ $perfil->nome }} </option>
+                                            <option value="{{ $perfil->id }}" {{$perfil->id == ($usuario->corePerfil->id ?? "") ? "selected" : ""}}> {{ $perfil->nome }} </option>
                                         @endforeach
                                     </select>
                                     <small class="form-control-feedback"> Selecione o perfil. </small> 
@@ -106,6 +107,25 @@
                                         <br/>
                                         <span class="help-block text-danger">
                                             <strong>{{ $errors->first('perfil') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('setor') ? ' has-error' : '' }}">
+                                    <label class="control-label">Setor</label>
+                                    <select name="setor" id="setor" class="form-control text-center selectpicker" required data-size="10" data-live-search="true">
+                                            <option value="">Nenhum Selecionado</option>
+                                        @foreach ($setores as $setor)
+                                            <option value="{{ $setor->id }}" {{$setor->id == ($usuario->coreSetor->id ?? "") ? "selected" : ""}}> {{ $setor->nome }} </option>
+                                        @endforeach
+                                    </select>
+                                    <small class="form-control-feedback"> Selecione o setor. </small> 
+
+                                    @if ($errors->has('setor'))
+                                        <br/>
+                                        <span class="help-block text-danger">
+                                            <strong>{{ $errors->first('setor') }}</strong>
                                         </span>
                                     @endif
                                 </div>

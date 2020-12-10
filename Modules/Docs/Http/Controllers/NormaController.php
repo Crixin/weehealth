@@ -107,7 +107,7 @@ class NormaController extends Controller
 
 
         $buscaCicloAuditoria = $this->parametroRepository->getParametro('CICLO_AUDITORIA');
-        $ciclos = json_decode($buscaCicloAuditoria->valor_padrao);
+        $ciclos = json_decode($buscaCicloAuditoria);
 
         return view('docs::norma.edit', compact('norma', 'orgaos', 'ciclos'));
     }

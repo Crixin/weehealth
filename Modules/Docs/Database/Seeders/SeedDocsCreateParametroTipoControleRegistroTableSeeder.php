@@ -21,13 +21,13 @@ class SeedDocsCreateParametroTipoControleRegistroTableSeeder extends Seeder
         $newParametro->descricao = "Tipo Controle de Registro";
         $newParametro->valor_padrao =
         '{
-            "1": "Armazenamento",
-            "2": "Disposição",
-            "3": "Meio",
-            "4": "Proteção",
-            "5": "Recuperação",
-            "6": "Retenção Mínima - Arquivo Morto",
-            "7": "Retenção Mínima - Local"
+            "LOCAL_ARMAZENAMENTO": "Armazenamento",
+            "DISPOSICAO": "Disposição",
+            "MEIO_DISTRIBUICAO": "Meio de Distribuição",
+            "MEIO_PROTECAO": "Proteção",
+            "RECUPERACAO": "Recuperação",
+            "TEMPO_RETENCAO_DEPOSITO": "Retenção Mínima - Arquivo Morto",
+            "TEMPO_RETENCAO_LOCAL": "Retenção Mínima - Local"
         }';
         $newParametro->valor_usuario = 1;
         $newParametro->ativo = true;

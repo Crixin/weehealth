@@ -26,7 +26,8 @@ class User extends Authenticatable
         'password',
         'administrador',
         'foto',
-        'perfil_id'
+        'perfil_id',
+        'setor_id'
     ];
 
     /**
@@ -44,7 +45,7 @@ class User extends Authenticatable
      */
     public function coreGroups()
     {
-        return $this->belongsToMany('Modules\Portal\Model\Grupo', 'Modules\Portal\Model\GrupoUser');
+        return $this->belongsToMany('Modules\Core\Model\Grupo', 'Modules\Core\Model\GrupoUser');
     }
 
 
@@ -81,6 +82,11 @@ class User extends Authenticatable
     public function corePerfil()
     {
         return $this->belongsTo('Modules\Core\Model\Perfil', 'perfil_id');
+    }
+
+    public function coreSetor()
+    {
+        return $this->belongsTo('Modules\Core\Model\Setor', 'setor_id');
     }
 
 

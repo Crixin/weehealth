@@ -58,6 +58,9 @@ return [
             'create'    => 'Criar Grupo',
             'users'     => 'Usuários'
         ],
+        'setor'          => [
+            'create'    => 'Criar Setor',
+        ],
     ],
 
 

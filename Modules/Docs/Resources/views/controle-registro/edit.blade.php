@@ -40,18 +40,18 @@
                         [
                             'controleRegistroEdit' => $controleRegistro,
                             'codigo' => $controleRegistro->codigo,
-                            'descricao' => $controleRegistro->descricao,
-                            'responsaveis' => [],
-                            'meios' => [],
-                            'meiosArmazenamento' => [],
-                            'meiosProtecao' => [],
-                            'meiosRecuperacao' => [],
-                            'niveisAcesso' => [],
-                            'opcoesRetencaoLocal' => [],
-                            'opcoesRetencaoDeposito' => [],
-                            'disposicoes' => [],
+                            'descricao' => $controleRegistro->titulo,
+                            'responsaveis' => $responsaveis,
+                            'meios' => $meios,
+                            'meiosArmazenamento' => $meiosArmazenamento,
+                            'meiosProtecao' => $meiosProtecao,
+                            'meiosRecuperacao' => $meiosRecuperacao,
+                            'niveisAcesso' => $niveisAcesso,
+                            'opcoesRetencaoLocal' => $opcoesRetencaoLocal,
+                            'opcoesRetencaoDeposito' => $opcoesRetencaoDeposito,
+                            'disposicoes' => $disposicoes,
                         ]
-                        ]
+                        
                     )
                     @endcomponent
                     
