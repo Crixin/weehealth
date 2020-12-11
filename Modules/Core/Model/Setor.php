@@ -21,11 +21,11 @@ class Setor extends Model
 
 
     /**
-     * Os usuários que pertencem ao grupo.
+     * Os usuários que pertencem ao setor.
      */
     public function coreUsers()
     {
-        return $this->belongsToMany('Modules\Core\Model\User', 'Modules\Core\Model\Setor');
+        return $this->hasMany('Modules\Core\Model\User', 'setor_id', 'id');
     }
 
 }

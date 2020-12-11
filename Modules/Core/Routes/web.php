@@ -71,9 +71,10 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('novo',          ['as' => 'core.setor.novo',    'uses' => 'SetorController@create']);
             Route::post('salvar',       ['as' => 'core.setor.salvar',  'uses' => 'SetorController@store']);
             Route::get('editar/{id}',   ['as' => 'core.setor.editar',  'uses' => 'SetorController@edit']);
-            Route::post('alterar', ['as' => 'core.setor.alterar', 'uses' => 'SetorController@update']);
+            Route::post('alterar',      ['as' => 'core.setor.alterar', 'uses' => 'SetorController@update']);
             Route::post('deletar',      ['as' => 'core.setor.deletar', 'uses' => 'SetorController@destroy']);
-        
+            Route::get('usuarios-vinculados/{id}',  ['as' => 'core.setor.usuariosVinculados',    'uses' => 'SetorController@linkedUsers']);
+            Route::post('vincular-usuarios',        ['as' => 'core.setor.vincularUsuarios',      'uses' => 'SetorController@updateLinkedUsers']);
         });
 
         

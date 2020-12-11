@@ -9,14 +9,17 @@ use Modules\Core\Repositories\SetorRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Helper;
+use Modules\Core\Repositories\UserRepository;
 
 class SetorController extends Controller
 {
     protected $setorRepository;
+    protected $userRepository;
 
-    public function __construct(SetorRepository $setorRepository)
+    public function __construct(SetorRepository $setorRepository, UserRepository $userRepository)
     {
         $this->setorRepository = $setorRepository;
+        $this->userRepository  = $userRepository;
     }
 
     /**
@@ -129,6 +132,38 @@ class SetorController extends Controller
         }
     }
 
+    public function linkedUsers($_id)
+    {
+        $setor = $this->setorRepository->find($_id);
+        $todosUsuarios = $this->userRepository->findBy(
+            [
+                ['setor_id', '=', null],
+                ['setor_id', '=', $_id, 'or']
+            ],
+            [],
+            [
+                ['name', 'ASC']
+            ]
+        );
+        return view('core::setor.usuarios_vinculados', compact('setor', 'todosUsuarios'));
+    }
+
+
+    public function updateLinkedUsers(Request $request)
+    {
+        $setor = $this->setorRepository->find($request->get('idSetor'));
+
+        if ($request->usuarios_setor !== null) {
+            foreach ($request->get('usuarios_setor') as $key => $value) {
+                $update = ['setor_id' => $request->get('idSetor')];
+                $this->userRepository->update($update, $value);
+            }
+        }
+
+        Helper::setNotify('Usuários vinculados ao setor ' . $setor->nome . ' atualizados com sucesso!', 'success|check-circle');
+        return redirect()->back()->withInput();
+    }
+
     public function validador(Request $request)
     {
         $validator = Validator::make(
@@ -153,7 +188,7 @@ class SetorController extends Controller
             "nome"      => $request->get('nome'),
             "descricao" => $request->get('descricao'),
             "sigla"     => $request->get('sigla'),
-           
+
         ];
     }
 }

@@ -60,6 +60,7 @@ return [
         ],
         'setor'          => [
             'create'    => 'Criar Setor',
+            'users'     => 'Usuários'
         ],
     ],
 

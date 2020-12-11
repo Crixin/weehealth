@@ -49,7 +49,12 @@
                                         <td>
                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $setor->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
                                             <a href="{{ route('core.setor.editar', ['id' => $setor->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
-
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="{{ route('core.setor.usuariosVinculados', ['id' => $setor->id]) }}"> <i class="mdi mdi-account-settings-variant"></i> @lang('buttons.core.setor.users') </a>  
+                                                </div>
+                                            </div>
                                             
                                         </td>
                                     </tr>
