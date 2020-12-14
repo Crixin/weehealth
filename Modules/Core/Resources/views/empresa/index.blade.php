@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@extends('layouts.menuCore')
+@extends('layouts.menu')
 @yield('menu')
 
 @section('page_title', __('page_titles.core.enterprise.index'))
@@ -35,7 +35,7 @@
                     <table id="dataTable-empresas" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th>Nome</th>
+                                <th>Nomessss</th>
                                 <th>CNPJ</th>
                                 <th>Telefone</th>
                                 <th>Controle</th>

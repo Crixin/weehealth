@@ -68,7 +68,6 @@ class PerfilController extends Controller
             Helper::setNotify('Novo perfil criado com sucesso!', 'success|check-circle');
             return redirect()->route('core.perfil');
         } catch (\Throwable $th) {
-            dd($th);
             Helper::setNotify("Erro ao criar o perfil", 'danger|close-circle');
             return redirect()->back()->withInput();
         }

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@extends('layouts.menuPortal')
+@extends('layouts.menu')
 @yield('menu')
 
 @section('page_title', __('page_titles.portal.enterprise.index'))

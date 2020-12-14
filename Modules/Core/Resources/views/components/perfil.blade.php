@@ -10,22 +10,16 @@
             </div>
         </div>
         <ul>
-            <li class="nav-small-cap"> @lang('sidebar_and_header.li_system') </li> 
             @php
-                $menu = (array) json_decode(file_get_contents(base_path() . '/menu.json'));
-                $keysMenu = array_keys($menu);
-                $teste = array_diff_ukey($menu, array_flip($modules), function(){
-                    
-                });
-                dd($teste);
-                $intersect = array_filter(array_flip($menu), function ($m) use ($modules) {
-                   
-                    return array_intersect($modules, $m);
-                });
-                
-
+                $menus = (array) json_decode(file_get_contents(base_path() . '/menu.json'));
+                $menus = array_intersect_key($menus, array_flip($modules));
             @endphp
-
+            @foreach ($menus as $key => $menu)
+                <h3> {{$key}} </h3>
+                <div class="ml-5">
+                    @include('core::components.perfil-item-permissao', ['menus' => $menu])
+                </div>
+            @endforeach
         </ul>
     </div>
 </div>

@@ -1,14 +1,7 @@
 
 @extends('layouts.app')
 
-
-@extends('layouts.menuDocs')
-
-@yield('menu')
-
-
 @section('page_title', __('page_titles.docs.norma.index'))
-
 
 @section('breadcrumbs')
 

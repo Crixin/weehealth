@@ -89,8 +89,8 @@
                     <li> 
                         <a class="has-arrow waves-effect waves-dark" href="#5" aria-expanded="false"><i class="mdi mdi-file-import"></i><span class="hide-menu"> @lang('sidebar_and_header.portal.uls_li_system.dossie.main') </span></a>
                         <ul aria-expanded="false" class="collapse">
-                            <li><a href="{{ route('portal.dossieDocumentos.novo') }}"> @lang('sidebar_and_header.portal.uls_li_system.dossie.generate') </a></li>
-                            <li><a href="{{ route('portal.dossieDocumentos.list') }}"> @lang('sidebar_and_header.portal.uls_li_system.dossie.sended') </a></li>
+                            <li><a href="{{ route('portal.dossie-documentos.novo') }}"> @lang('sidebar_and_header.portal.uls_li_system.dossie.generate') </a></li>
+                            <li><a href="{{ route('portal.dossie-documentos.list') }}"> @lang('sidebar_and_header.portal.uls_li_system.dossie.sended') </a></li>
                         </ul>
                     </li>
 
@@ -122,7 +122,7 @@
     <!-- End Sidebar scroll-->
 
     <!-- Bottom points-->
-    <div class="sidebar-footer">
+    <div class="sidebar-footer mt-5">
         <!-- item-->
         <a href="{{ route('portal.home') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.tooltip_home')"><i class="mdi mdi-home"></i></a>
         <!-- item-->

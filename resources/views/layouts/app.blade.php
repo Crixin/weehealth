@@ -103,13 +103,13 @@
                     <ul class="nav nav-tabs customtab mr-start " role="tablist">
                        
                         @php
-                            $url = $_SERVER["REQUEST_URI"];
-                            $accessing = explode('/', $url)[1];
+                            // PEGA PELA URL QUAL MODULO O USUARIO ESTA ACESSANDO
+                            $url = explode('/', str_replace(env("APP_URL"), "", $_SERVER["REQUEST_URI"]))[1];
                         @endphp
                        
                         @foreach (json_decode(file_get_contents(base_path() . '/modules_statuses.json')) as $key => $module)
                             @if ($module)
-                                <li class="nav-item"> <a class="nav-link @if ($accessing == strtolower($key)) active @endif" href="{{route(strtolower($key) . '.home')}}" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down"><b>{{ $key }}</b></span></a></li>   
+                                <li class="nav-item"> <a class="nav-link @if ($url == strtolower($key)) active @endif" href="{{route(strtolower($key) . '.home')}}" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down"><b>{{ $key }}</b></span></a></li>   
                             @endif
                         @endforeach
                         
@@ -214,7 +214,7 @@
         <!-- ============================================================== -->
         <aside class="left-sidebar">
             
-           @yield('menu')
+           @include('layouts.menu')
         </aside>
         <!-- ============================================================== -->
         <!-- End Left Sidebar - style you can find in sidebar.scss  -->

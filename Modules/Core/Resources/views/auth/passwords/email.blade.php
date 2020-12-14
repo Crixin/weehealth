@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
-@extends('layouts.menuPortal')
-@yield('menu')
+
 
 @section('content')
 <div class="container">

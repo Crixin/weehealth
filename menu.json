@@ -1,114 +1,719 @@
 {
     "Core": {
         "CADASTROS": {
-            "icone" :"mdi mdi-plus-circle-outline",
-            "filhos":{
+            "icone": "mdi mdi-plus-circle-outline",
+            "descricao": "CADASTROS",
+            "filhos_perfil": {
                 "Empresas": {
-                    "permissao": ["core_empresa_cons"],
-                    "descricao": "",
+                    "descricao": "Empresas",
                     "icone": "",
-                    "route": "core.empresa",
-                    "itens_perfil": {
+                    "filhos_perfil": {
                         "Cadastro": {
-                            "permissao": ["core_empresa_cad"],
-                            "descricao": "Cadastro de Empresas",
-                            "icone": ""
+                            "name": "core_empresa_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
                         },
                         "Edição": {
-                            "permissao": ["core_usuario_edit"],
-                            "descricao": "Edição de Usuários",
-                            "icone": ""
-                        },        
+                            "name": "core_empresa_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
                         "Consulta": {
-                            "permissao": ["core_empresa_cons"],
-                            "descricao": "Consulta de Empresas",
-                            "icone": ""
-                        },        
+                            "name": "core_empresa_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
                         "Exclusão": {
-                            "permissao": ["core_empresa_exc"],
-                            "descricao": "Exclusão de Empresas",
-                            "icone": ""
-                        }        
+                            "name": "core_empresa_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
                     }
                 },
                 "Usuários": {
-                    "permissao": ["perm_user"],
-                    "descricao": "",
+                    "descricao": "Usuários",
                     "icone": "",
-                    "route": "core.usuario",
-                    "itens_perfil": {
+                    "filhos_perfil": {
                         "Cadastro": {
-                            "permissao": ["core_usuario_cad"],
-                            "descricao": "Cadastro de Usuários",
-                            "icone": ""
-                        },        
+                            "name": "core_usuario_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
                         "Edição": {
-                            "permissao": ["core_usuario_cad"],
-                            "descricao": "Edição de Usuários",
-                            "icone": ""
-                        },        
+                            "name": "core_usuario_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
                         "Consulta": {
-                            "permissao": ["core_usuario_cons"],
-                            "descricao": "Consulta de Usuários",
-                            "icone": ""
-                        },        
+                            "name": "core_usuario_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
                         "Exclusão": {
-                            "permissao": ["core_usuario_exc"],
-                            "descricao": "Exclusão de Usuários",
-                            "icone": ""
-                        }        
+                            "name": "core_usuario_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
                     }
                 },
                 "Perfil": {
-                    "permissao": ["perm_perfil"],
-                    "descricao": "Cadastro/Edição/Exclusão de Usuários",
+                    "descricao": "Perfil",
+                    "icone": "",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "core_perfil_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "core_perfil_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "core_perfil_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "core_perfil_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
+                },
+                "Grupo": {
+                    "descricao": "Grupo",
+                    "icone": "",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "core_grupo_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "core_grupo_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "core_grupo_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "core_grupo_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
+                }
+            },
+            "filhos_menu": {
+                "Empresas": {
+                    "permissao_menu": ["core_empresa_cons"],
+                    "descricao": "Empresas",
+                    "icone": "",
+                    "route": "core.empresa"
+                },
+                "Usuários": {
+                    "permissao_menu": ["core_usuario_cons"],
+                    "descricao": "Usuários",
+                    "icone": "",
+                    "route": "core.usuario"
+                },
+                "Perfil": {
+                    "permissao_menu": ["core_perfil_cons"],
+                    "descricao": "Perfil",
                     "icone": "",
                     "route": "core.perfil"
+                },
+                "Grupo": {
+                    "permissao_menu": ["core_grupo_cons"],
+                    "descricao": "Grupo",
+                    "icone": "",
+                    "route": "core.grupo"
                 }
             }
         },
-        "CONFIGURAÇÕES": {
-            "icone" :"mdi mdi-settings",
-            "filhos":{
-                "Empresas": {
-                    "permissao": ["perm_administrador"],
-                    "descricao": "Cadastro/Edição/Exclusão de Administradores",
-                    "icone": "",
-                    "route": "core.configuracao.administradores"
-                },
+        "CONFIGURACAO": {
+            "icone": "mdi mdi-settings",
+            "descricao": "CONFIGURAÇÃO",
+            "filhos_perfil": {
                 "Parametros": {
-                    "permissao": ["perm_parametro"],
-                    "descricao": "Cadastro/Edição/Exclusão de Parametros",
+                    "descricao": "Parâmetros",
+                    "name": "core_grupo_cad",
+                    "icone": "mdi mdi-pencil"
+                }
+            },
+            "filhos_menu": {
+                "Grupo": {
+                    "permissao_menu": ["core_config_param"],
+                    "descricao": "Parâmetros",
                     "icone": "",
                     "route": "core.configuracao.parametros"
-                },
-                "Setup": {
-                    "permissao": ["perm_setup"],
-                    "descricao": "Edição de Setup",
-                    "icone": "",
-                    "route": "core.configuracao.setup.index"
                 }
             }
         }
     },
-
     "Portal": {
-        "DASHBOARD": {
-            "icone" :"mdi mdi-chart-areaspline", 
-            "filhos":{
-                "Listar": {
-                    "permissao": ["perm_dashboard"],
-                    "descricao": "Cadastro/Edição/Exclusão de Dashboard",
+        "DASHBOARDS": {
+            "icone": "mdi mdi-chart-areaspline",
+            "descricao": "DASHBOARDS",
+            "route": "core.empresa",
+            "filhos_perfil": {
+                "Dashboard": {
+                    "descricao": "Dashboard",
+                    "icone": "",
+                    "route": "portal.dashboards",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "portal_dashboard_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "portal_dashboard_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "portal_dashboard_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "portal_dashboard_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
+                },
+                "Visualizar": {
+                    "permissao_menu": ["portal_dashboard_view"],
+                    "descricao": "Visualização",
+                    "icone": "",
+                    "route": "portal.dashboards",
+                    "filhos_perfil": {
+                        "Visualizar": {
+                            "name": "portal_dashboard_view",
+                            "permissao": ["portal_dashboard_view"],
+                            "descricao": "Visualizar",
+                            "icone": "mdi mdi-magnify"
+                        }
+                    }
+                }
+            }, 
+            "filhos_menu": {
+                "Listar-Cadastrar": {
+                    "permissao_menu": ["portal_dashboard_cons"],
+                    "descricao": "Listar/Cadastrar",
                     "icone": "",
                     "route": "portal.dashboards"
                 },
                 "Visualizar": {
-                    "permissao": ["perm_user"],
-                    "descricao": "Cadastro/Edição/Exclusão de Usuários",
+                    "permissao_menu": ["portal_dashboard_view"],
+                    "descricao": "Visualizar",
                     "icone": "",
-                    "route": "core.usuario"
+                    "route": false
+                }
+            }
+        },
+        "CADASTROS": {
+            "icone": "mdi mdi-plus-circle-outline",
+            "descricao": "CADASTROS",
+            "filhos_perfil": {
+                "Empresas": {
+                    "descricao": "Vínculos da Empresa",
+                    "icone": "",
+                    "filhos_perfil": {
+                        "User": {
+                            "name": "portal_emp_vinc_user",
+                            "descricao": "Usuário",
+                            "icone": "mdi mdi-link-variant"
+                        },
+                        "Grupo": {
+                            "name": "portal_emp_vinc_grupo",
+                            "descricao": "Grupo",
+                            "icone": "mdi mdi-link-variant"
+                        },
+                        "Processo": {
+                            "name": "portal_emp_vinc_proc",
+                            "descricao": "Processo",
+                            "icone": "mdi mdi-link-variant"
+                        }
+                    }
+                },
+                "Processo": {
+                    "permissao_menu": ["portal_processo_cons"],
+                    "descricao": "Processos",
+                    "icone": "",
+                    "route": "portal.processo",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "portal_processo_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "portal_processo_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "portal_processo_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "portal_processo_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
+                }
+            },
+            "filhos_menu": {
+                "Empresas": {
+                    "permissao_menu": ["portal_emp_vinc_user", "portal_emp_vinc_grupo", "portal_emp_vinc_proc"],
+                    "descricao": "Vínculos da Empresa",
+                    "icone": "",
+                    "route": "portal.empresa"
+                },
+                "Processo": {
+                    "permissao_menu": ["portal_processo_cons"],
+                    "descricao": "Processos",
+                    "icone": "",
+                    "route": "portal.processo"
+                }
+            }
+        },
+        "PROCESSOS": {
+            "icone": "mdi mdi-image-filter-none ",
+            "class": "processos-user",
+            "descricao": "PROCESSOS",
+            "route": false,
+            "permissao": ["portal_processo_ger"],
+            "filhos_menu": false,
+            "filhos_perfil": {
+                "Gerenciamento": {
+                    "name": "portal_processo_ger",
+                    "descricao": "Gerenciamento", 
+                    "icone": "mdi mdi-image-filter-none"
+                }
+            }
+        },
+        "DOCS_EM_EDIT": {
+            "icone": "mdi mdi-file-import",
+            "route": "portal.edicaoDocumento.index",
+            "permissao": ["portal_docs_edit_ger"],
+            "descricao": "DOCS EM EDIÇÃO",
+            "filhos_perfil": {
+                "Consulta": {
+                    "name": "portal_docs_edit_ger",
+                    "descricao": "Gerenciamento", 
+                    "icone": "mdi mdi-image-filter-none"
+                }
+            }
+        },
+        "DOSSIE": {
+            "icone": "mdi mdi-file-import",
+            "descricao": "DOSSIÊ DE DOC.",
+            "filhos_menu": {
+                "Gerar": {
+                    "permissao_menu": ["portal_dossie_cad"],
+                    "descricao": "Gerar",
+                    "icone": "",
+                    "route": "portal.dossie-documentos.novo"
+                },
+                "Enviados": {
+                    "permissao_menu": ["portal_dossie_cons"],
+                    "descricao": "Enviados",
+                    "icone": "",
+                    "route": "portal.dossie-documentos.list"
+                }
+            },
+            "filhos_perfil": {
+                "Gerar": {
+                    "name": "portal_dossie_cad",
+                    "descricao": "Gerar",
+                    "icone": "mdi mdi-pencil"
+                },
+                "Enviados": {
+                    "name": "portal_dossie_cons",
+                    "descricao": "Enviados",
+                    "icone": "mdi mdi-magnify"
+                }
+            }
+        },
+        "TAREFAS": {
+            "icone": "mdi mdi-calendar-clock",
+            "descricao": "TAREFAS",
+            "filhos_menu": {
+                "Gerar": {
+                    "permissao_menu": ["portal_tarefa_cons"],
+                    "descricao": "Listar/Cadastrar",
+                    "icone": "",
+                    "route": "portal.tarefa"
+                },
+                "Configuracao": {
+                    "permissao_menu": ["portal_config_tarefa_cons"],
+                    "descricao": "Configuração",
+                    "icone": "",
+                    "route": "portal.config-tarefa"
+                }
+            },
+            "filhos_perfil": {
+                "Cadastro": {
+                    "name": "portal_tarefa_cad",
+                    "descricao": "Cadastro",
+                    "icone": "mdi mdi-pencil"
+                },
+                "Edição": {
+                    "name": "portal_tarefa_edit",
+                    "descricao": "Edição",
+                    "icone": "mdi mdi-pencil"
+                },
+                "Consulta": {
+                    "name": "portal_tarefa_cons",
+                    "descricao": "Consulta",
+                    "icone": "mdi mdi-magnify"
+                },
+                "Exclusão": {
+                    "name": "portal_tarefa_exc",
+                    "descricao": "Exclusão",
+                    "icone": "mdi mdi-delete"
+                },
+                "Configuração": {
+                    "name": "portal_dossie_cons",
+                    "descricao": "Configuração",
+                    "icone": "mdi mdi-magnify",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "portal_confg_tarefa_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "portal_confg_tarefa_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "portal_confg_tarefa_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "portal_confg_tarefa_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
+                }
+            }
+        },
+        "GED": {
+            "icone": "mdi mdi-file-import",
+            "descricao": "REGISTROS DO GED",
+            "permissao": ["portal_ged_cons"],
+            "filhos_menu": false,
+            "route": "portal.ged.search-view",
+            "filhos_perfil": {
+                "Cadastro": {
+                    "name": "portal_ged_cad",
+                    "descricao": "Cadastro",
+                    "icone": "mdi mdi-pencil"
+                },
+                "Edição": {
+                    "name": "portal_ged_edit",
+                    "descricao": "Edição",
+                    "icone": "mdi mdi-pencil"
+                },
+                "Consulta": {
+                    "name": "portal_ged_cons",
+                    "descricao": "Consulta",
+                    "icone": "mdi mdi-magnify"
+                },
+                "Exclusão": {
+                    "name": "portal_ged_exc",
+                    "descricao": "Exclusão",
+                    "icone": "mdi mdi-delete"
+                }
+            }
+        }
+    },
+    "Docs": {
+        "CADASTROS": {
+            "icone": "mdi mdi-plus-circle-outline",
+            "descricao": "CADASTROS",
+            "filhos_perfil": {
+                "Planos": {
+                    "descricao": "Planos",
+                    "icone": "",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "docs_plano_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "docs_plano_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "docs_plano_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "docs_plano_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
+                },
+                "Tipo-Documento": {
+                    "descricao": "Tipos de Documentos",
+                    "icone": "",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "docs_tipo_doc_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "docs_tipo_doc_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "docs_tipo_doc_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "docs_tipo_doc_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
+                },
+                "Fluxos": {
+                    "descricao": "Fluxos",
+                    "icone": "",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "docs_fluxo_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "docs_fluxo_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "docs_fluxo_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "docs_fluxo_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
+                },
+                "Normas": {
+                    "descricao": "Normas",
+                    "icone": "",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "docs_norma_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "docs_norma_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "docs_norma_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "docs_norma_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
+                }
+            },
+            "filhos_menu": {
+                "Planos": {
+                    "permissao_menu": ["docs_plano_cons"],
+                    "descricao": "Planos",
+                    "icone": "",
+                    "route": "docs.plano"
+                },
+                "Tipos-Documento": {
+                    "permissao_menu": ["docs_tipo_doc_cons"],
+                    "descricao": "Tipo de Documento",
+                    "icone": "",
+                    "route": "docs.tipo-documento"
+            
+                },
+                "Fluxos": {
+                    "permissao_menu": ["docs_fluxo_cons"],
+                    "descricao": "Fluxos",
+                    "icone": "",
+                    "route": "docs.fluxo"
+                },
+                "Normas": {
+                    "permissao_menu": ["docs_norma_cons"],
+                    "descricao": "Normas",
+                    "icone": "",
+                    "route": "docs.norma"
+                }
+            }
+        },
+        "CONTROLE-REGISTRO": {
+            "icone": "mdi mdi-plus-circle-outline",
+            "descricao": "CONTR. REGISTROS",
+            "filhos_perfil": {
+                "Opcao": {
+                    "descricao": "Opções",
+                    "icone": "",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "docs_opcao_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "docs_opcao_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "docs_opcao_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "docs_opcao_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
+                },
+                "Controle": {
+                    "descricao": "Controles",
+                    "icone": "",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "docs_controle_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "docs_controle_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "docs_controle_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "docs_controle_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
+                }
+            },
+            "filhos_menu": {
+                "Opcao": {
+                    "permissao_menu": ["docs_opcao_cons"],
+                    "descricao": "Opções",
+                    "icone": "",
+                    "route": "docs.opcao-controle"
+                },
+                "Controle": {
+                    "permissao_menu": ["docs_controle_cons"],
+                    "descricao": "Controles",
+                    "icone": "",
+                    "route": "docs.controle-registro"
+            
+                }
+            }
+        },
+        "DOCUMENTOS": {
+            "icone": "mdi mdi-library-books",
+            "descricao": "DOCUMENTOS",
+            "permissao": ["docs_documento_cons"],
+            "route": "docs.documento",
+            "filhos_perfil": {
+                "filhos_perfil": {
+                    "Cadastro": {
+                        "name": "docs_documento_cad",
+                        "descricao": "Cadastro",
+                        "icone": "mdi mdi-pencil"
+                    },
+                    "Edição": {
+                        "name": "docs_documento_edit",
+                        "descricao": "Edição",
+                        "icone": "mdi mdi-pencil"
+                    },
+                    "Consulta": {
+                        "name": "docs_documento_cons",
+                        "descricao": "Consulta",
+                        "icone": "mdi mdi-magnify"
+                    },
+                    "Exclusão": {
+                        "name": "docs_documento_exc",
+                        "descricao": "Exclusão",
+                        "icone": "mdi mdi-delete"
+                    }
+                }
+            }
+        },
+        "DOCUMENTOS-EXTERNOS": {
+            "icone": "mdi mdi-library-books",
+            "descricao": "DOC. EXTERNO",
+            "permissao": ["docs_documento_externo_cons"],
+            "route": "docs.documento",
+            "filhos_perfil": {
+                "filhos_perfil": {
+                    "Cadastro": {
+                        "name": "docs_documento_externo_cad",
+                        "descricao": "Cadastro",
+                        "icone": "mdi mdi-pencil"
+                    },
+                    "Edição": {
+                        "name": "docs_documento_externo_edit",
+                        "descricao": "Edição",
+                        "icone": "mdi mdi-pencil"
+                    },
+                    "Consulta": {
+                        "name": "docs_documento_externo_cons",
+                        "descricao": "Consulta",
+                        "icone": "mdi mdi-magnify"
+                    },
+                    "Exclusão": {
+                        "name": "docs_documento_externo_exc",
+                        "descricao": "Exclusão",
+                        "icone": "mdi mdi-delete"
+                    }
                 }
             }
         }
     }
 }
+ 
