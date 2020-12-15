@@ -15,10 +15,6 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                @php
-                $nome = "adasasdsaSlider";
-                $modules = ['Core', "Portal"];
-                @endphp
 
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -35,7 +31,6 @@
                     @component(
                         'core::components.perfil',
                         [
-                            'nome' => $nome,
                             'modules' => $modules
                         ]
                     )

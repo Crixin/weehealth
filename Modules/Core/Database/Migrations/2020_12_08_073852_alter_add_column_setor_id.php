@@ -15,7 +15,7 @@ class AlterAddColumnSetorId extends Migration
     {
         Schema::table('core_users', function (Blueprint $table) {
             $table->integer('setor_id')->unsigned()->nullable();
-            $table->foreign('setor_id')->references('id')->on('core_setor');
+            $table->foreign('setor_id')->references('id')->on('docs_setor');
         });
     }
 
@@ -26,7 +26,7 @@ class AlterAddColumnSetorId extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('core_users', function (Blueprint $table) {
             $table->dropForeign('core_user_setor_id_foreign');
             $table->dropColumn('setor_id');
         });

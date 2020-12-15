@@ -17,6 +17,7 @@ class PerfilController extends Controller
         $this->perfilRepository = $perfil;
     }
 
+
     /**
      * Display a listing of the resource.
      *
@@ -28,6 +29,7 @@ class PerfilController extends Controller
         return view('core::perfil.index', compact('perfis'));
     }
 
+
     /**
      * Show the form for creating a new resource.
      *
@@ -35,9 +37,11 @@ class PerfilController extends Controller
      */
     public function create()
     {
-        $permissoes = [];
-        return view('core::perfil.create', compact('permissoes'));
+        $modules = array_keys(\Module::allEnabled());
+
+        return view('core::perfil.create', compact('modules'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -45,24 +49,24 @@ class PerfilController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $_request)
+    public function store(Request $request)
     {
         try {
-            $permissoes = $this->permissaoRepository->findAll([], [['descricao', 'ASC']]);
-
-            [$result, $errors] = $this->validator($_request);
+            [$result, $errors] = $this->validator($request);
             if (!$result) {
                 return redirect()->back()->withErrors($errors)->withInput();
             }
     
-            DB::transaction(function () use ($_request) {
-                $perfil = $this->perfilRepository->create(['nome' => $_request->nome]);
-                foreach ($_request->permissoes as $key => $permissao) {
-                    $this->perfilPermissaoRepository->create([
-                        'perfil_id' => $perfil->id,
-                        'permissao_id' => $permissao
-                    ]);
-                }
+            DB::transaction(function () use ($request) {
+                
+                $nome = $request->nome;
+
+                $permissoes = $request->all();
+                unset($permissoes["_token"]);
+                unset($permissoes["nome"]);
+                dd($permissoes);
+
+                $perfil = $this->perfilRepository->create(['nome' => $nome]);
             });
 
             Helper::setNotify('Novo perfil criado com sucesso!', 'success|check-circle');
@@ -153,7 +157,6 @@ class PerfilController extends Controller
     {
         $validator = Validator::make($_request->all(), [
             'nome' => 'required|string|unique:core_perfil,nome' . ($id ? ',' . $id : ''),
-            'permissoes' => 'required|exists:core_permissao,id',
         ]);
         if ($validator->fails()) {
             Helper::setNotify($validator->messages(), 'danger|close-circle');

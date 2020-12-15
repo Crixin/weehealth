@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <div class="form-group required{{ $errors->has('nome') ? ' has-error' : '' }}">
                     {!! Form::label('nome', 'Nome', ['class' => 'control-label']) !!}
-                    {!! Form::text('nome', $nome, ['class' => 'form-control', 'required' => 'required']) !!}
+                    {!! Form::text('nome', $nome ?? "", ['class' => 'form-control', 'required' => 'required']) !!}
                     <small class="text-danger">{{ $errors->first('nome') }}</small>
                 </div>
             </div>

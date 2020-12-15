@@ -657,60 +657,54 @@
         "DOCUMENTOS": {
             "icone": "mdi mdi-library-books",
             "descricao": "DOCUMENTOS",
-            "permissao": ["docs_documento_cons"],
             "route": "docs.documento",
             "filhos_perfil": {
-                "filhos_perfil": {
-                    "Cadastro": {
-                        "name": "docs_documento_cad",
-                        "descricao": "Cadastro",
-                        "icone": "mdi mdi-pencil"
-                    },
-                    "Edição": {
-                        "name": "docs_documento_edit",
-                        "descricao": "Edição",
-                        "icone": "mdi mdi-pencil"
-                    },
-                    "Consulta": {
-                        "name": "docs_documento_cons",
-                        "descricao": "Consulta",
-                        "icone": "mdi mdi-magnify"
-                    },
-                    "Exclusão": {
-                        "name": "docs_documento_exc",
-                        "descricao": "Exclusão",
-                        "icone": "mdi mdi-delete"
-                    }
+                "Cadastro": {
+                    "name": "docs_documento_cad",
+                    "descricao": "Cadastro",
+                    "icone": "mdi mdi-pencil"
+                },
+                "Edição": {
+                    "name": "docs_documento_edit",
+                    "descricao": "Edição",
+                    "icone": "mdi mdi-pencil"
+                },
+                "Consulta": {
+                    "name": "docs_documento_cons",
+                    "descricao": "Consulta",
+                    "icone": "mdi mdi-magnify"
+                },
+                "Exclusão": {
+                    "name": "docs_documento_exc",
+                    "descricao": "Exclusão",
+                    "icone": "mdi mdi-delete"
                 }
             }
         },
         "DOCUMENTOS-EXTERNOS": {
             "icone": "mdi mdi-library-books",
             "descricao": "DOC. EXTERNO",
-            "permissao": ["docs_documento_externo_cons"],
             "route": "docs.documento",
             "filhos_perfil": {
-                "filhos_perfil": {
-                    "Cadastro": {
-                        "name": "docs_documento_externo_cad",
-                        "descricao": "Cadastro",
-                        "icone": "mdi mdi-pencil"
-                    },
-                    "Edição": {
-                        "name": "docs_documento_externo_edit",
-                        "descricao": "Edição",
-                        "icone": "mdi mdi-pencil"
-                    },
-                    "Consulta": {
-                        "name": "docs_documento_externo_cons",
-                        "descricao": "Consulta",
-                        "icone": "mdi mdi-magnify"
-                    },
-                    "Exclusão": {
-                        "name": "docs_documento_externo_exc",
-                        "descricao": "Exclusão",
-                        "icone": "mdi mdi-delete"
-                    }
+                "Cadastro": {
+                    "name": "docs_documento_externo_cad",
+                    "descricao": "Cadastro",
+                    "icone": "mdi mdi-pencil"
+                },
+                "Edição": {
+                    "name": "docs_documento_externo_edit",
+                    "descricao": "Edição",
+                    "icone": "mdi mdi-pencil"
+                },
+                "Consulta": {
+                    "name": "docs_documento_externo_cons",
+                    "descricao": "Consulta",
+                    "icone": "mdi mdi-magnify"
+                },
+                "Exclusão": {
+                    "name": "docs_documento_externo_exc",
+                    "descricao": "Exclusão",
+                    "icone": "mdi mdi-delete"
                 }
             }
         }
