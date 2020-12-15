@@ -54,6 +54,15 @@ return [
             'linked_users'      => 'Usuários Vinculados',
             'linked_users_to'   => 'Usuários Vinculados ao Grupo: '
         ],
+
+        //SETOR
+        'setor'        => [
+            'index'           => 'Setores',
+            'create'          => 'Novo Setor',
+            'update'          => 'Alterando Setor',
+            'linked_users'      => 'Usuários Vinculados',
+            'linked_users_to'   => 'Usuários Vinculados ao Setor: '
+        ],
     ],
 
     'portal'        => [

@@ -9,17 +9,28 @@ use Modules\Docs\Repositories\ControleRegistroRepository;
 use App\Classes\Helper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Modules\Core\Repositories\GrupoRepository;
+use Modules\Core\Repositories\ParametroRepository;
+use Modules\Core\Repositories\SetorRepository;
 use Modules\Docs\Repositories\OpcaoControleRegistroRepository;
 
 class ControleRegistroController extends Controller
 {
     protected $controleRegistroRepository;
     protected $opcoesControleRegistroRepository;
+    protected $setorRepository;
+    protected $parametroRepository;
 
-    public function __construct(ControleRegistroRepository $controleRegistroRepository, OpcaoControleRegistroRepository $opcaoControleRegistroRepository)
-    {
+    public function __construct(
+        ControleRegistroRepository $controleRegistroRepository,
+        OpcaoControleRegistroRepository $opcaoControleRegistroRepository,
+        SetorRepository $setorRepository,
+        ParametroRepository $parametroRepository
+    ) {
         $this->controleRegistroRepository = $controleRegistroRepository;
         $this->opcoesControleRegistroRepository = $opcaoControleRegistroRepository;
+        $this->setorRepository = $setorRepository;
+        $this->parametroRepository = $parametroRepository;
     }
 
     /**
@@ -29,6 +40,7 @@ class ControleRegistroController extends Controller
     public function index()
     {
         $controles = $this->controleRegistroRepository->findAll();
+        
         return view('docs::controle-registro.index', compact('controles'));
     }
 
@@ -38,7 +50,33 @@ class ControleRegistroController extends Controller
      */
     public function create()
     {
-        return view('docs::controle-registro.create');
+        $idSetorQualidade = $this->parametroRepository->getParametro('ID_SETOR_QUALIDADE');
+        $responsaveis = $this->setorRepository->getSetorUsuario($idSetorQualidade);
+
+        $buscaNivelAcesso = $this->parametroRepository->getParametro('NIVEL_ACESSO');
+        $niveisAcesso    = json_decode($buscaNivelAcesso);
+
+        $meiosArmazenamento       = $this->getOption('LOCAL_ARMAZENAMENTO');
+        $disposicoes              = $this->getOption('DISPOSICAO');
+        $meios                    = $this->getOption('MEIO_DISTRIBUICAO');
+        $meiosProtecao            = $this->getOption('PROTECAO');
+        $meiosRecuperacao         = $this->getOption('RECUPERACAO');
+        $opcoesRetencaoDeposito   = $this->getOption('TEMPO_RETENCAO_DEPOSITO');
+        $opcoesRetencaoLocal      = $this->getOption('TEMPO_RETENCAO_LOCAL');
+
+        return view('docs::controle-registro.create',
+            [
+                'responsaveis'           => $responsaveis,
+                'meiosArmazenamento'     => $meiosArmazenamento,
+                'niveisAcesso'           => $niveisAcesso,
+                'disposicoes'            => $disposicoes,
+                'meios'                  => $meios,
+                'meiosProtecao'          => $meiosProtecao,
+                'meiosRecuperacao'       => $meiosRecuperacao,
+                'opcoesRetencaoDeposito' => $opcoesRetencaoDeposito,
+                'opcoesRetencaoLocal'    => $opcoesRetencaoLocal
+            ]
+        );
     }
 
     /**
@@ -53,6 +91,7 @@ class ControleRegistroController extends Controller
             return redirect()->back()->withInput()->withErrors($error);
         }
         $cadastro = $this->montaRequest($request);
+        //dd($cadastro);
         try {
             DB::transaction(function () use ($cadastro) {
                 $this->controleRegistroRepository->create($cadastro);
@@ -83,7 +122,35 @@ class ControleRegistroController extends Controller
      */
     public function edit($id)
     {
-        return view('docs::controle-registro.edit');
+        $controleRegistro = $this->controleRegistroRepository->find($id);
+        $idSetorQualidade = $this->parametroRepository->getParametro('ID_SETOR_QUALIDADE');
+        $responsaveis = $this->setorRepository->getSetorUsuario($idSetorQualidade);
+
+        $buscaNivelAcesso = $this->parametroRepository->getParametro('NIVEL_ACESSO');
+        $niveisAcesso    = json_decode($buscaNivelAcesso);
+
+        $meiosArmazenamento       = $this->getOption('LOCAL_ARMAZENAMENTO');
+        $disposicoes              = $this->getOption('DISPOSICAO');
+        $meios                    = $this->getOption('MEIO_DISTRIBUICAO');
+        $meiosProtecao            = $this->getOption('PROTECAO');
+        $meiosRecuperacao         = $this->getOption('RECUPERACAO');
+        $opcoesRetencaoDeposito   = $this->getOption('TEMPO_RETENCAO_DEPOSITO');
+        $opcoesRetencaoLocal      = $this->getOption('TEMPO_RETENCAO_LOCAL');
+
+        return view('docs::controle-registro.edit',
+            [
+                'controleRegistro'       => $controleRegistro,
+                'responsaveis'           => $responsaveis,
+                'meiosArmazenamento'     => $meiosArmazenamento,
+                'niveisAcesso'           => $niveisAcesso,
+                'disposicoes'            => $disposicoes,
+                'meios'                  => $meios,
+                'meiosProtecao'          => $meiosProtecao,
+                'meiosRecuperacao'       => $meiosRecuperacao,
+                'opcoesRetencaoDeposito' => $opcoesRetencaoDeposito,
+                'opcoesRetencaoLocal'    => $opcoesRetencaoLocal
+            ]
+        );
     }
 
     /**
@@ -159,26 +226,20 @@ class ControleRegistroController extends Controller
     public function montaRequest(Request $request)
     {
         return [
-            "codigo"             => $request->get('codigo'),
-            "descricao"          => $request->get('descricao'),
-            "nivelAcesso"        => '',
-            "avulso"             => '',
-            "documento_id"       => '',
-            "setor_id"           => '',
-            "local_armazenamento_id" => '',
-            "disposicao_id"      => '',
-            "meio_distribuicao_id" => '',
-            "protecao_id"         => '',
-            "recuperacao_id"      => '',
-            "tempo_retencao_deposito_id" => '',
-            "tempo_retencao_local_id" => '',
-            "ativo" => '',
-            "meio_distribuicao" => '',
-            "local_armazenamento" => '',
-            "protecao" => '',
-            "recuperacao" => '',
-            "tempo_retencao_deposito" => '',
-            "disposicao" => '',
+            "codigo"                      => $request->get('codigo'),
+            "titulo"                      => $request->get('descricao'),
+            "nivel_acesso"                 => $request->get('nivelAcesso'),
+            "avulso"                      => true,
+            "documento_id"                => null,
+            "setor_id"                    => $request->get('responsavel'),
+            "local_armazenamento_id"      => $request->get('armazenamento'),
+            "disposicao_id"               => $request->get('disposicao'),
+            "meio_distribuicao_id"        => $request->get('meio'),
+            "protecao_id"                 => $request->get('protecao'),
+            "recuperacao_id"              => $request->get('recuperacao'),
+            "tempo_retencao_deposito_id"  => $request->get('retencaoDeposito'),
+            "tempo_retencao_local_id"     => $request->get('retencaoLocal'),
+            "ativo"                       => $request->get('ativo') == 1 ? true : false,
         ];
     }
 

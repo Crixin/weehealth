@@ -38,12 +38,8 @@ class OpcaoControleRegistroController extends Controller
      */
     public function create()
     {
-        $buscaTipos = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','TIPO_CONTROLE_REGISTRO']
-            ]
-        );
-        $tipos = json_decode($buscaTipos->valor_padrao);
+        $buscaTipos = $this->parametroRepository->getParametro('TIPO_CONTROLE_REGISTRO');
+        $tipos = json_decode($buscaTipos);
         return view('docs::opcao-controle-registro.create', compact('tipos'));
     }
 
@@ -91,12 +87,8 @@ class OpcaoControleRegistroController extends Controller
     {
         $opcao = $this->opcaoControleRegistroRepository->find($id);
 
-        $buscaTipos = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','TIPO_CONTROLE_REGISTRO']
-            ]
-        );
-        $tipos = json_decode($buscaTipos->valor_padrao);
+        $buscaTipos = $this->parametroRepository->getParametro('TIPO_CONTROLE_REGISTRO');
+        $tipos = json_decode($buscaTipos);
 
         return view('docs::opcao-controle-registro.edit', compact('opcao', 'tipos'));
     }
@@ -152,7 +144,7 @@ class OpcaoControleRegistroController extends Controller
             $request->all(),
             [
                 'descricao'          => empty($request->get('idOpcaoControle')) ? 'required|string|min:5|max:100|unique:docs_opcoes_controle_registros' : '',
-                'tipoControle'       => 'required|numeric',
+                'tipoControle'       => 'required|string',
             ]
         );
 

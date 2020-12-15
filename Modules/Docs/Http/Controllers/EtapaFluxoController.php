@@ -55,21 +55,13 @@ class EtapaFluxoController extends Controller
         $buscaPerfil = $this->perfilRepository->findAll();
         $perfis = array_column(json_decode(json_encode($buscaPerfil), true), 'nome', 'id');
 
-        $statusEtapa = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','STATUS_ETAPA_FLUXO']
-            ]
-        );
-        $status = json_decode($statusEtapa->valor_padrao);
+        $statusEtapa = $this->parametroRepository->getParametro('STATUS_ETAPA_FLUXO');
+        $status = json_decode($statusEtapa);
 
         $notificacoes = [];
 
-        $statusTipoAprovacao = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','TIPO_APROVACAO_ETAPA']
-            ]
-        );
-        $tiposAprovacao = json_decode($statusTipoAprovacao->valor_padrao);
+        $statusTipoAprovacao = $this->parametroRepository->getParametro('TIPO_APROVACAO_ETAPA');
+        $tiposAprovacao = json_decode($statusTipoAprovacao);
 
         $etapasRejeicao  = $this->etapaRepository->findBy(
             [
@@ -129,21 +121,13 @@ class EtapaFluxoController extends Controller
         $buscaPerfil = $this->perfilRepository->findAll();
         $perfis = array_column(json_decode(json_encode($buscaPerfil), true), 'nome', 'id');
 
-        $statusEtapa = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','STATUS_ETAPA_FLUXO']
-            ]
-        );
-        $status = json_decode($statusEtapa->valor_padrao);
+        $statusEtapa = $this->parametroRepository->getParametro('STATUS_ETAPA_FLUXO');
+        $status = json_decode($statusEtapa);
 
         $notificacoes = [];
 
-        $statusTipoAprovacao = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','TIPO_APROVACAO_ETAPA']
-            ]
-        );
-        $tiposAprovacao = json_decode($statusTipoAprovacao->valor_padrao);
+        $statusTipoAprovacao = $this->parametroRepository->getParametro('TIPO_APROVACAO_ETAPA');
+        $tiposAprovacao = json_decode($statusTipoAprovacao);
 
         $etapasRejeicao  = $this->etapaRepository->findBy(
             [

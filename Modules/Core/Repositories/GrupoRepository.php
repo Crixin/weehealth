@@ -13,4 +13,5 @@ class GrupoRepository extends BaseRepository
     {
         $this->model = new Grupo();
     }
+
 }

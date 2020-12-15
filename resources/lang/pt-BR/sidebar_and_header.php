@@ -30,7 +30,12 @@ return [
     'core' => [
         'uls_li_system'         => [
             'register'          => [
-                'collapse'      => 'CADASTROS'
+                'collapse'      => 'CADASTROS',
+                'item1'         => 'Empresa',
+                'item2'         => 'Usuário',
+                'item3'         => 'Grupo',
+                'item4'         => 'Perfil',
+                'item5'         => 'Setor',
             ],
             'configs'           => [
                 'collapse'      => 'CONFIGURAÇÕES'
@@ -42,12 +47,8 @@ return [
         'uls_li_system'         => [
             'register'          => [
                 'collapse'      => 'CADASTROS',
-                'item1'         => 'Empresa',
-                'item2'         => 'Grupo',
                 'item3'         => 'Processo',
-                'item4'         => 'Usuário',
                 'item5'         => 'Dashboard',
-                'item6'         => 'Perfil',
                 'item7'         => 'Tarefa',
             ],
             'tarefa'        => [

@@ -25,6 +25,7 @@ class TipoDocumento extends Model
         'permitir_impressao',
         'periodo_aviso_id',
         'documento_modelo',
-        'codigo_padrao'
+        'codigo_padrao',
+        'vinculo_obrigatorio_outros_documento'
     ];
 }

@@ -131,6 +131,25 @@
                                     @endif
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group{{ $errors->has('setor') ? ' has-error' : '' }}">
+                                    <label class="control-label">Setor</label>
+                                    <select name="setor" id="setor" class="form-control text-center selectpicker" required data-size="10" data-live-search="true">
+                                        <option value=""> Selecione </option>
+                                        @foreach ($setores as $setor)
+                                            <option value="{{ $setor->id }}"> {{ $setor->nome }} </option>
+                                        @endforeach
+                                    </select>
+                                    <small class="form-control-feedback"> Selecione o setor. </small> 
+
+                                    @if ($errors->has('setor'))
+                                        <br/>
+                                        <span class="help-block text-danger">
+                                            <strong>{{ $errors->first('setor') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-actions">

@@ -55,14 +55,29 @@ class ControleRegistro extends Model
         return $this->belongsTo('Modules\Docs\Model\Documento');
     }
 
-    /**
-     * Mutator - Título do formulário
-     */
-    public function getTituloAttribute($value)
+    public function coreSetor()
     {
-        $opcoes = OpcoesControleRegistros::where('id', '=', $value)->get();
+        return $this->hasOne('Modules\Core\Model\Setor', 'id', 'setor_id');
+    }
 
-        return $opcoes->descricao;
+    public function docsOcoesControleRegistroMeio()
+    {
+        return $this->hasOne('Modules\Docs\Model\OpcoesControleRegistros', 'id', 'meio_distribuicao_id');
+    }
+
+    public function docsOcoesControleRegistroArmazenamento()
+    {
+        return $this->hasOne('Modules\Docs\Model\OpcoesControleRegistros', 'id', 'local_armazenamento_id');
+    }
+
+    public function docsOcoesControleRegistroProtecao()
+    {
+        return $this->hasOne('Modules\Docs\Model\OpcoesControleRegistros', 'id', 'protecao_id');
+    }
+
+    public function docsOcoesControleRegistroRecuperacao()
+    {
+        return $this->hasOne('Modules\Docs\Model\OpcoesControleRegistros', 'id', 'recuperacao_id');
     }
 
 }

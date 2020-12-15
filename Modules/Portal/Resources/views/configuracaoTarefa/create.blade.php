@@ -148,7 +148,7 @@
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('portel.config-tarefa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                        <a href="{{ route('portal.config-tarefa') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
                 </form>
             

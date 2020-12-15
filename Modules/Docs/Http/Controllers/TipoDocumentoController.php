@@ -55,37 +55,18 @@ class TipoDocumentoController extends Controller
 
         $fluxos = $fluxos->count() > 0 ? array_column(json_decode(json_encode($fluxos), true), 'nome', 'id') : [];
 
-        $periodosVigencia = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','PERIODO_VIGENCIA']
-            ]
-        );
-
-        $periodosVigencia = array_column(json_decode($periodosVigencia->valor_padrao), 'descricao', 'id');
-
-        $periodosAviso = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','PERIODO_AVISO_VENCIMENTO']
-            ]
-        );
-        $periodosAviso = array_column(json_decode($periodosAviso->valor_padrao), 'descricao', 'id');
 
         $tiposDocumento = $this->tipoDocumentoRepository->findBy(
             [
                 ['ativo', '=', true],
             ]
         );
-        $tiposDocumento = $tiposDocumento->count() > 0 ? array_column(json_decode(json_encode($tiposDocumento), true), 'nome', 'id') : [];
+        $tiposDocumento = $tiposDocumento ? array_column(json_decode(json_encode($tiposDocumento), true), 'nome', 'id') : [];
 
-        $padroesCodigo = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','PADRAO_CODIGO']
-            ]
-        );
-
-        $padroesCodigo = $padroesCodigo->count() > 0 ? array_column(json_decode($padroesCodigo->valor_padrao), 'descricao', 'id') : [];
-
-        return view('docs::tipo-documento.create', compact('fluxos', 'periodosVigencia', 'periodosAviso', 'tiposDocumento', 'padroesCodigo')
+        $padroesCodigo = $this->parametroRepository->getParametro('PADRAO_CODIGO');
+        $padroesCodigo = $padroesCodigo ? array_column(json_decode($padroesCodigo), 'DESCRICAO', 'ID') : [];
+  
+        return view('docs::tipo-documento.create', compact('fluxos', 'tiposDocumento', 'padroesCodigo')
         );
     }
 
@@ -131,44 +112,32 @@ class TipoDocumentoController extends Controller
      * @return Renderable
      */
     public function edit($id)
-    { 
+    {
         $tipoDocumento = $this->tipoDocumentoRepository->find($id);
         $fluxos = $this->fluxoRepository->findAll();
 
         $fluxos = $fluxos->count() > 0 ? array_column(json_decode(json_encode($fluxos), true), 'nome', 'id') : [];
-
-        $periodosVigencia = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','PERIODO_VIGENCIA']
-            ]
-        );
-
-        $periodosVigencia = array_column(json_decode($periodosVigencia->valor_padrao), 'descricao', 'id');
-
-        $periodosAviso = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','PERIODO_AVISO_VENCIMENTO']
-            ]
-        );
-        $periodosAviso = array_column(json_decode($periodosAviso->valor_padrao), 'descricao', 'id');
 
         $tiposDocumento = $this->tipoDocumentoRepository->findBy(
             [
                 ['ativo', '=', true],
             ]
         );
-        $tiposDocumento = $tiposDocumento->count() > 0 ? array_column(json_decode(json_encode($tiposDocumento), true), 'nome', 'id') : [];
+        $tiposDocumento = $tiposDocumento ? array_column(json_decode(json_encode($tiposDocumento), true), 'nome', 'id') : [];
 
-        $padroesCodigo = $this->parametroRepository->findOneBy(
-            [
-                ['identificador_parametro','=','PADRAO_CODIGO']
-            ]
-        );
 
-        $padroesCodigo = $padroesCodigo->count() > 0 ? array_column(json_decode($padroesCodigo->valor_padrao), 'descricao', 'id') : [];
+        $padroesCodigoParametro = json_decode($this->parametroRepository->getParametro('PADRAO_CODIGO'));
+        $padroesCodigoParametro = $padroesCodigoParametro ? array_column($padroesCodigoParametro, 'DESCRICAO', 'ID') : [];
+
+        $padroesCodigo = array();
+        foreach (json_decode($tipoDocumento->codigo_padrao) as $key => $value) {
+            $padroesCodigo += [
+                $value => $padroesCodigoParametro[$value]
+            ];
+        }
 
         return view('docs::tipo-documento.edit',
-            compact('tipoDocumento', 'fluxos', 'periodosVigencia', 'periodosAviso', 'tiposDocumento', 'padroesCodigo')
+            compact('tipoDocumento', 'fluxos', 'tiposDocumento', 'padroesCodigo')
         );
     }
 
@@ -187,6 +156,7 @@ class TipoDocumentoController extends Controller
 
         $tipoDocumento = $request->get('idTipoDocumento');
         $update  = $this->montaRequest($request);
+ 
         try {
             DB::transaction(function () use ($update, $tipoDocumento) {
                 $this->tipoDocumentoRepository->update($update, $tipoDocumento);
@@ -229,6 +199,7 @@ class TipoDocumentoController extends Controller
                 'periodoVigencia'       => 'required|numeric',
                 'ativo'                 => 'required|',
                 'vinculoObrigatorio'    => 'required|',
+                'vinculoObrigatorioOutrosDocs' => 'required|',
                 'permitirDownload'      => 'required|',
                 'permitirImpressao'     => 'required|',
                 'periodoAviso'          => 'required|numeric',
@@ -255,7 +226,6 @@ class TipoDocumentoController extends Controller
             $buscaTipoDocumento = $this->tipoDocumentoRepository->find($request->get('idTipoDocumento'));
             $imageBase64 = $buscaTipoDocumento->documento_modelo ?? null;
         }
-
         return [
             "nome"                  => $request->get('nome'),
             "descricao"             => $request->get('descricao'),
@@ -265,6 +235,7 @@ class TipoDocumentoController extends Controller
             "periodo_vigencia_id"   => $request->get('periodoVigencia'),
             "ativo"                 => $request->get('ativo') == 1 ? true : false,
             "vinculo_obrigatorio"   => $request->get('vinculoObrigatorio') == 1 ? true : false,
+            'vinculo_obrigatorio_outros_documento' => $request->get('vinculoObrigatorioOutrosDocs') == 1 ? true : false,
             "permitir_download"     => $request->get('permitirDownload') == 1 ? true : false,
             "permitir_impressao"    => $request->get('permitirImpressao') == 1 ? true : false,
             "periodo_aviso_id"      => $request->get('periodoAviso'),

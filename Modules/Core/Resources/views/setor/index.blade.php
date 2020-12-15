@@ -1,15 +1,16 @@
 @extends('layouts.app')
 
+@extends('layouts.menuCore')
+@yield('menu')
 
 
-
-@section('page_title', __('page_titles.docs.opcao-controle-registro.index'))
+@section('page_title', __('page_titles.core.setor.index'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('docs.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.docs.controle-registro.index') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.core.setor.index') </li>    
 
 @endsection
 
@@ -28,39 +29,32 @@
                     @endif
                     
                     <div class="col-md-12">
-                        <a href="{{ route('docs.controle-registro.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.cotrole-registro.create') </a>
+                        <a href="{{ route('core.setor.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.core.setor.create') </a>
                     </div>
                 
                     <div class="table-responsive m-t-40">
-                        <table id="dataTable-controle-registro" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                        <table id="dataTable-setor" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>Código</th>
-                                    <th>Título</th>
-                                    <th>Responsável</th>
-                                    <th>Meio</th>
-                                    <th>Armazenamento</th>
-                                    <th>Proteção</th>
-                                    <th>Recuperação</th>
+                                    <th>Nome</th>
+                                    <th>Descrição</th>
                                     <th>Controle</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($controles as $controle)
+                                @foreach ($setores as $setor)
                                     <tr>
-                                        <td>{{ $controle->codigo }}</td>
-                                        <td>{{ $controle->titulo }}</td>
-                                        <td>{{ $controle->coreSetor->nome }}</td>
-                                        <td>{{ $controle->docsOcoesControleRegistroMeio->descricao }}</td>
-                                        <td>{{ $controle->docsOcoesControleRegistroArmazenamento->descricao }}</td>
-                                        <td>{{ $controle->docsOcoesControleRegistroProtecao->descricao }}</td>
-                                        <td>{{ $controle->docsOcoesControleRegistroRecuperacao->descricao }}</td>
-                                        
-                                        
-                                        
+                                        <td>{{ $setor->nome }}</td>
+                                        <td>{{ $setor->descricao }}</td>
                                         <td>
-                                            <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $controle->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
-                                            <a href="{{ route('docs.controle-registro.editar', ['id' => $controle->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                            <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $setor->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
+                                            <a href="{{ route('core.setor.editar', ['id' => $setor->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="{{ route('core.setor.usuariosVinculados', ['id' => $setor->id]) }}"> <i class="mdi mdi-account-settings-variant"></i> @lang('buttons.core.setor.users') </a>  
+                                                </div>
+                                            </div>
                                             
                                         </td>
                                     </tr>
@@ -93,7 +87,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#dataTable-controle-registro').DataTable({
+            $('#dataTable-setor').DataTable({
                 "language": {
                     "sEmptyTable": "Nenhum registro encontrado",
                     "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -130,19 +124,19 @@
     <!-- SweetAlert2 -->
     <script>
         
-        // Exclusão do norma
+        // Exclusão de setor
         $('.sa-warning').click(function(){
-            let id = $(this).data('id');
+            let idSetor = $(this).data('id');
             let deleteIt = swal2_warning("Essa ação é irreversível!");
-            let obj = {'id': id};
+            let obj = {'setor_id': idSetor};
 
             deleteIt.then(resolvedValue => {
-                // ajaxMethod('POST', "/plano/" + idPlano, {}).then(response => {
-                ajaxMethod('POST', "{{ URL::route('docs.controle-registro.deletar') }}", obj).then(response => {
+                
+                ajaxMethod('POST', "{{ URL::route('core.setor.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
-                        swal2_success("Excluído!", "Opção de controle excluída com sucesso.");
+                        swal2_success("Excluído!", "Setor excluído com sucesso.");
                     } else {
-                        swal2_alert_error_support("Tivemos um problema ao excluir a opção de controle.");
+                        swal2_alert_error_support("Tivemos um problema ao excluir o setor.");
                     }
                 }, error => {
                     console.log(error);
