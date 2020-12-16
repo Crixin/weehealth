@@ -17,7 +17,13 @@
             @foreach ($menus as $key => $menu)
                 <h3> {{$key}} </h3>
                 <div class="ml-5">
-                    @include('core::components.perfil-item-permissao', ['menus' => $menu])
+                    @include(
+                        'core::components.perfil-item-permissao',
+                        [
+                            'menus' => $menu, 
+                            'permissoes' => $permissoes ?? []
+                        ]
+                    )
                 </div>
             @endforeach
         </ul>

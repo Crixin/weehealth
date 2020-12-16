@@ -13,8 +13,15 @@ class Perfil extends Model
 
     protected $fillable = [
         'id',
-        'nome'
+        'nome',
+        'permissoes'
     ];
+
+    
+    protected $casts = [
+        'permissoes' => 'array'
+    ];
+
 
     public function coreUsers()
     {

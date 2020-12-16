@@ -415,4 +415,29 @@ class Helper
         
         return $empresas;
     }
+
+
+    public static function makeMenuPermissions(&$menuMaster, $first = true)
+    {
+        if ($menuMaster->filhos_menu ?? false) {
+            $perm = [];
+            foreach ($menuMaster->filhos_menu as $key => $menu) {
+                if ($menu->filhos_menu ?? false) {
+                    \Helper::makeMenuPermissions($menu, false);
+                }
+                $perm = array_merge($menu->permissao_menu, $perm);
+            }
+            $menuMaster->permissao_menu = $perm;
+            return;
+        }
+
+        if ($first) {
+            foreach ($menuMaster ?? [] as $key => $menus) {
+                foreach ($menus ?? [] as $key => $menu) {
+                    \Helper::makeMenuPermissions($menu, false);
+                }
+            }
+            return $menuMaster;
+        }
+    }
 }

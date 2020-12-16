@@ -1,5 +1,5 @@
 @php 
-    $setup = \Modules\Core\Model\Setup::find(1); 
+    $setup = \Modules\Core\Model\Setup::find(1);
 @endphp
 
 <!-- Sidebar scroll-->
@@ -26,8 +26,8 @@
             @php
                 // PEGA PELA URL QUAL MODULO O USUARIO ESTA ACESSANDO
                 $url = explode('/', str_replace(env("APP_URL"), "", $_SERVER["REQUEST_URI"]))[1];
-
-                $menus = (array) json_decode(file_get_contents(base_path() . '/menu.json'));
+                $menuJSON = (array) json_decode(file_get_contents(base_path() . '/menu.json'));
+                $menus = \Helper::makeMenuPermissions($menuJSON);
 
                 $menuModulo[ucfirst($url)] = $menus[ucfirst($url)];
 

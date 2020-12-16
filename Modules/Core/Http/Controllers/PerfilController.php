@@ -25,6 +25,7 @@ class PerfilController extends Controller
      */
     public function index()
     {
+        $menuModules = (array) json_decode(file_get_contents(base_path() . '/menu.json'));
         $perfis = $this->perfilRepository->findAll(['coreUsers']);
         return view('core::perfil.index', compact('perfis'));
     }
@@ -52,21 +53,25 @@ class PerfilController extends Controller
     public function store(Request $request)
     {
         try {
-            [$result, $errors] = $this->validator($request);
-            if (!$result) {
+            $errors = $this->validator($request);
+            
+            if ($errors) {
                 return redirect()->back()->withErrors($errors)->withInput();
             }
-    
+
             DB::transaction(function () use ($request) {
                 
                 $nome = $request->nome;
-
+                
                 $permissoes = $request->all();
                 unset($permissoes["_token"]);
                 unset($permissoes["nome"]);
-                dd($permissoes);
+                $permissoes = array_keys($permissoes);
 
-                $perfil = $this->perfilRepository->create(['nome' => $nome]);
+                $perfil = $this->perfilRepository->create([
+                    'nome' => $nome,
+                    'permissoes' => $permissoes
+                ]);
             });
 
             Helper::setNotify('Novo perfil criado com sucesso!', 'success|check-circle');
@@ -85,13 +90,10 @@ class PerfilController extends Controller
      */
     public function edit($id)
     {
-        $perfil = $this->perfilRepository->find($id, ['corePermissoes']);
-        $userPermissao = [];
+        $perfil = $this->perfilRepository->find($id);
+        $modules = array_keys(\Module::allEnabled());
 
-        $userPermissao = [];
-        $permissoes = [];
-
-        return view('core::perfil.update', compact('perfil', 'permissoes', 'userPermissao'));
+        return view('core::perfil.update', compact('perfil', 'modules'));
     }
 
     /**
@@ -101,25 +103,31 @@ class PerfilController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $_request, $id)
+    public function update(Request $request, $id)
     {
-        [$result, $error] = $this->validator($_request, $id);
-        if (!$result) {
+        $error = $this->validator($request, $id);
+        if (!$error) {
             return redirect()->back()->withInput()->compact(['error' => $error]);
         }
 
         try {
-            DB::transaction(function () use ($_request, $id) {
-                $this->perfilRepository->update(['nome' => $_request->nome], $id);
-                $perfil = $this->perfilRepository->find($id, ['corePermissoes']);
-                $userPermissao = [];
+            DB::transaction(function () use ($request, $id) {
+                $nome = $request->nome;
+                
+                $permissoes = $request->all();
+                unset($permissoes["_token"]);
+                unset($permissoes["nome"]);
+                $permissoes = array_keys($permissoes);
 
-                foreach ($perfil->corePermissoes as $key => $value) {
-                    $userPermissao[] = $value->pivot->permissao_id;
-                }
+                $this->perfilRepository->update(
+                    [
+                        'nome' => $nome,
+                        'permissoes' => $permissoes
+                    ],
+                    $id
+                );
 
-                $deleteArray = array_diff($userPermissao, $_request->permissoes);
-                $createArray = array_diff($_request->permissoes, $userPermissao);
+
             });
             Helper::setNotify('Perfil atualizado com sucesso!', 'success|check-circle');
             return redirect()->route('core.perfil');
@@ -153,15 +161,15 @@ class PerfilController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Responsevalidator
      */
-    public function validator(Request $_request, $id = "")
+    public function validator(Request $_request)
     {
         $validator = Validator::make($_request->all(), [
-            'nome' => 'required|string|unique:core_perfil,nome' . ($id ? ',' . $id : ''),
+            'nome' => 'sometimes|required|string|unique:core_perfil,nome',
         ]);
         if ($validator->fails()) {
             Helper::setNotify($validator->messages(), 'danger|close-circle');
-            return [false, $validator];
+            return $validator;
         }
-        return true;
+        return false;
     }
 }

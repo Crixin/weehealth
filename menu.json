@@ -293,7 +293,6 @@
             "class": "processos-user",
             "descricao": "PROCESSOS",
             "route": false,
-            "permissao": ["portal_processo_ger"],
             "filhos_menu": false,
             "filhos_perfil": {
                 "Gerenciamento": {
@@ -306,7 +305,6 @@
         "DOCS_EM_EDIT": {
             "icone": "mdi mdi-file-import",
             "route": "portal.edicaoDocumento.index",
-            "permissao": ["portal_docs_edit_ger"],
             "descricao": "DOCS EM EDIÇÃO",
             "filhos_perfil": {
                 "Consulta": {
@@ -658,6 +656,7 @@
             "icone": "mdi mdi-library-books",
             "descricao": "DOCUMENTOS",
             "route": "docs.documento",
+            "permissao_menu": ["docs_documento_cons"],
             "filhos_perfil": {
                 "Cadastro": {
                     "name": "docs_documento_cad",
@@ -685,6 +684,7 @@
             "icone": "mdi mdi-library-books",
             "descricao": "DOC. EXTERNO",
             "route": "docs.documento",
+            "permissao_menu": ["docs_documento_externo_cons"],
             "filhos_perfil": {
                 "Cadastro": {
                     "name": "docs_documento_externo_cad",
