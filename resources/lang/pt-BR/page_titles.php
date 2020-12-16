@@ -241,6 +241,8 @@ return [
             'index'           => 'Documentos',
             'create'          => 'Novo Documento',
             'update'          => 'Alterando Documento',
+            'import'          => 'Importação de Documento',
+            'factory'         => 'Criação do Documento'
         ],
 
     ]

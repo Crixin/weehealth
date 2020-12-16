@@ -150,6 +150,7 @@ class ItemNormaController extends Controller
             $request->all(),
             [
                 'descricao'   => 'required|string|min:5|max:100',
+                'numero'      => 'required|string' 
             ]
         );
 
@@ -165,6 +166,7 @@ class ItemNormaController extends Controller
         return [
             "norma_id"        => $id_norma,
             "descricao"       => $request->get('descricao'),
+            "numero"          => $request->get('numero')
         ];
     }
 }

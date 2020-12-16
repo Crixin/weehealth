@@ -16,13 +16,15 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="form-group required{{ $errors->has('descricao') ? ' has-error' : '' }}">
                 {!! Form::label('descricao', 'Descrição', ['class' => 'control-label']) !!}
                 {!! Form::text('descricao', $descricao, ['class' => 'form-control', 'required' => 'required']) !!}
                 <small class="text-danger">{{ $errors->first('descricao') }}</small>
             </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <div class="form-group required{{ $errors->has('codigoPadrao') ? ' has-error' : '' }}">
                 
@@ -32,7 +34,34 @@
                 <small class="text-danger">{{ $errors->first('codigoPadrao') }}</small>
             </div>
         </div>
-        
+        <div class="col-md-6">
+           <div class="form-group required{{ $errors->has('numeroPadrao') ? ' has-error' : '' }}">
+                {!! Form::label('numeroPadrao', 'Padrão de Número' , ['class' => 'control-label']) !!}
+                {!! Form::select('numeroPadrao',$padroesNumero, !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->numero_padrao : null, ['id' => 'numeroPadrao', 'class' => 'form-control', 'required' => 'required', 'placeholder' => __('components.selectepicker-default')]) !!}
+                <small class="text-danger">{{ $errors->first('numeroPadrao') }}</small>
+           </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group required{{ $errors->has('ultimoDocumento') ? ' has-error' : '' }}">
+                {!! Form::label('ultimoDocumento', 'Último Documento', ['class' => 'control-label']) !!}
+                {!! Form::number('ultimoDocumento',$ultimoDocumento, ['class' => 'form-control', 'required' => 'required', 'min' => 0]) !!}
+                <small class="text-danger">{{ $errors->first('ultimoDocumento') }}</small>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="alert alert-info">
+                <span><b>Exemplos de valores aceitos:</b></span>
+                <ul>
+                    <li>0       <span class="text-muted">- Código gerado será [1, 2, 3....]</span></li>
+                    <li>00       <span class="text-muted">- Código gerado será [1, 2, 3....]</span></li>
+                    <li>000     <span class="text-muted">- Código gerado será [001, 002, 003....]</span></li>
+                    <li>0000    <span class="text-muted">- Código gerado será [001.01, 002.01, 003.01....]</span></li>
+                </ul>
+                <small><b>Lembre-se:</b> são aceitos apenas 4 dígitos!</small>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-6">

@@ -46,8 +46,10 @@
                             'fluxos' => $fluxos,
                             'periodosVigencia' => $tipoDocumento->periodo_vigencia_id,
                             'periodosAviso' => $tipoDocumento->periodo_aviso_id,
+                            'ultimoDocumento' => $tipoDocumento->ultimo_documento,
                             'tiposDocumento' => $tiposDocumento,
                             'padroesCodigo' => $padroesCodigo,
+                            'padroesNumero' => $padroesNumero
                         ]
                     )
                     @endcomponent

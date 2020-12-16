@@ -14,7 +14,8 @@ class ItemNorma extends Model
     protected $fillable = [
         'id',
         'descricao',
-        'norma_id'
+        'norma_id',
+        'numero'
     ];
 
     public function docsNorma()

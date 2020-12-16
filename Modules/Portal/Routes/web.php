@@ -207,7 +207,7 @@ Route::prefix('portal')->group(function () {
         /*
         * EMPRESA PROCESSO GRUPOS
         */
-        Route::group(['prefix' => 'empresa-processo-grupo'], function () {
+        Route::group(['prefix' => 'empresa-processo-grupo', 'as' => 'portal.'], function () {
             Route::get('novo/{empresaProcesso}',    ['as' => 'empresa-processo-grupo.criar',                    'uses' => 'EmpresaProcessoGrupoController@create']);
             Route::post('salvar',                   ['as' => 'empresa-processo-grupo.salvar',                   'uses' => 'EmpresaProcessoGrupoController@store']);
             Route::post('alterar',                  ['as' => 'empresa-processo-grupo.alterar',                  'uses' => 'EmpresaProcessoGrupoController@update']);

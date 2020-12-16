@@ -17,8 +17,8 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group{{ $errors->has('tituloDocumento') ? ' has-error' : '' }}">
-            {!! Form::label('tituloDocumento', 'Título do Documento') !!}
+            <div class="form-group required{{ $errors->has('tituloDocumento') ? ' has-error' : '' }}">
+            {!! Form::label('tituloDocumento', 'Título do Documento', ['class' => 'control-label']) !!}
             {!! Form::text('tituloDocumento', $tituloDocumento, ['class' => 'form-control', 'required' => 'required']) !!}
             <small class="text-danger">{{ $errors->first('tituloDocumento') }}</small>
             </div>
@@ -56,9 +56,9 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group required{{ $errors->has('classificacao') ? ' has-error' : '' }}">
-                {!! Form::label('classificacao', 'Classificação', ['class' => 'control-label']) !!}
-                {!! Form::select('classificacao',$classificacoes, !empty($documentoEdit) ?  $documentoEdit->classificacao_id : null, ['id' => 'classificacao', 'class' => 'form-control selectpicker', 'required' => 'required', 'placeholder' => __('components.selectepicker-default')]) !!}
+            <div class="form-group {{ $errors->has('classificacao') ? ' has-error' : '' }}">
+                {!! Form::label('classificacao', 'Classificação') !!}
+                {!! Form::select('classificacao',$classificacoes, !empty($documentoEdit) ?  $documentoEdit->classificacao_id : null, ['id' => 'classificacao', 'class' => 'form-control selectpicker', 'placeholder' => __('components.selectepicker-default')]) !!}
                 <small class="text-danger">{{ $errors->first('classificacao') }}</small>
             </div>
         </div>
@@ -106,21 +106,233 @@
             </div>
         </div>
     </div>
+    <legend>Aprovadores</legend>
+    <hr>
+    <div class="row aprovadores" >
+        <div class="col-md-12 mb-3">
+            <b>Selecione um tipo de documento</b>
+        </div>
+    </div>
     <legend>Grupos</legend>
     <hr>
     <div class="row">
-        
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-10 control-label font-bold">
+                    {!! Form::label('grupoTreinamentoDoc', 'GRUPO DE TREINAMENTO') !!}
+                </div>
+                <div class="col-md-12">
+                    <select multiple class="optgroup" id="optgroup-newGrupoTreinamentoDoc" name="grupoTreinamentoDoc[]">
+                        @foreach($setoresUsuarios as $key => $su)
+                            <optgroup label="{{ $key }}">
+                                @foreach($su as $key2 => $user)
+                                    <option value="{{ $key2 }}">{{ $user }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+                </div>
+            </div>   
+        </div>       
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-10 control-label font-bold">
+                    {!! Form::label('grupoDivulgacaoDoc', 'GRUPO DE DIVULGAÇÃO') !!}
+                </div>
+                <div class="col-md-12">
+                    <select multiple class="optgroup" id="optgroup-newGrupoDivulgacaoDoc" name="grupoDivulgacaoDoc[]">
+                        @foreach($setoresUsuarios as $key => $su)
+                            <optgroup label="{{ $key }}">
+                                @foreach($su as $key2 => $user)
+                                    <option value="{{ $key2 }}">{{ $user }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+                </div>
+            </div>   
+        </div>       
     </div>
     
     <legend>Normas</legend>
     <hr>
     <div class="row">
-
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-10 control-label font-bold">
+                    {!! Form::label('normaDoc', 'NORMAS') !!}
+                </div>
+                <div class="col-md-12">
+                    <select multiple  id="optgroup-newNormaDoc" name="grupoNorma[]">
+                        @foreach($normas as $key => $norma)
+                            <optgroup label="{{ $norma->descricao }}">
+                                @foreach($norma->docsItemNorma as $key2 => $itemNorma)
+                                    <option value="{{ $itemNorma->id }}">{{ $itemNorma->descricao }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+                </div>
+            </div>   
+        </div>       
     </div>
 
-    <legend>Aprovadores</legend>
-    <hr>
-    <div class="row">
-        
-    </div>
+    
 </div>
+
+
+@section('footer')
+<script>
+    $(document).ready(function() {
+        /*
+        * MultiSelect 
+        */
+        carregaOptGroup();
+        
+
+        $('#optgroup-newNormaDoc').multiSelect({
+            selectableOptgroup: true,
+            selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Pesquisar item da norma'>",
+            selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Pesquisar item da norma'>",
+            afterInit: function(ms){
+                var that = this,
+                    $selectableSearch = that.$selectableUl.prev(),
+                    $selectionSearch = that.$selectionUl.prev(),
+                    selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+                    selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                .on('keydown', function(e){
+                if (e.which === 40){
+                    that.$selectableUl.focus();
+                    return false;
+                }
+                });
+
+                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                .on('keydown', function(e){
+                if (e.which == 40){
+                    that.$selectionUl.focus();
+                    return false;
+                }
+                });
+            },
+            afterSelect: function(){
+                this.qs1.cache();
+                this.qs2.cache();
+            },
+            afterDeselect: function(values){
+                this.qs1.cache();
+                this.qs2.cache();
+            }
+        });
+
+
+        $('#tipoDocumento').on('change', function(){
+            var id = $(this).val();
+            let obj = {'id': id};
+            console.log('adfgsdfg');
+            $('.aprovadores').empty();
+            ajaxMethod('POST', "{{ URL::route('docs.tipo-documento.etapa-fluxo') }}", obj).then(response => {
+                let linha = '';
+                if(response.response == 'erro') {
+                    swal2_alert_error_support("Tivemos um problema ao buscar as informações das etapas.");
+                }else{
+                    let retorno = response.data;
+                    for (let index = 0; index < retorno.length; index++) {
+                        const element = retorno[index];
+                        console.log(element);
+                        linha += "<div class='col-md-12'>";
+                        linha += "<div class='form-group'>";
+                        linha += "<div class='col-md-10 control-label font-bold'>";
+                        linha += "<label for="+element.nome+">Etapa: "+element.nome.toUpperCase()+"</label>";
+                        linha += "</div>";
+                        linha += "<div class='col-md-12'>";
+                        
+                        let obrigatorio = element.obrigatorio == true ? "required='required'" : "";
+
+                        linha += "<select multiple class='optgroup' "+obrigatorio+"  id='optgroup-newGrupo"+element.nome+"' name='grupo"+element.nome+"[]''>";
+                        @foreach($setoresUsuarios as $key => $su)
+                        linha += "<optgroup label='{{ $key }}'>";
+                                @foreach($su as $key2 => $user)
+                                linha += "<option value='{{ $key2 }}'>{{ $user }}</option>";
+                                @endforeach
+                        linha += "</optgroup>";
+                        @endforeach
+                        linha += "</select>";   
+                        linha += "</div>";
+                        linha += "</div>";
+                        linha += "</div>";
+                        linha += "</div>";
+                    }
+                    
+                    $('.aprovadores').append(linha);
+
+                    carregaOptGroup();
+                } 
+            }, error => {
+                console.log(error);
+            });
+            
+            
+        });
+
+
+        $('#radio1, #radio2').on('change', function(){
+            if($('#radio1').prop('checked') == true){
+                document.createDocumento.action = "{{ route('docs.documento.importar-documento') }}";
+            }else if($('#radio2').prop('checked') == true){
+                document.createDocumento.action = "{{ route('docs.documento.criar-documento') }}";
+            }
+        });
+        
+
+    });
+
+    function carregaOptGroup()
+    {
+        $('.optgroup').multiSelect({
+            selectableOptgroup: true,
+            selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Pesquisar usuários'>",
+            selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Pesquisar usuários'>",
+            afterInit: function(ms){
+                var that = this,
+                    $selectableSearch = that.$selectableUl.prev(),
+                    $selectionSearch = that.$selectionUl.prev(),
+                    selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+                    selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                .on('keydown', function(e){
+                if (e.which === 40){
+                    that.$selectableUl.focus();
+                    return false;
+                }
+                });
+
+                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                .on('keydown', function(e){
+                if (e.which == 40){
+                    that.$selectionUl.focus();
+                    return false;
+                }
+                });
+            },
+            afterSelect: function(){
+                this.qs1.cache();
+                this.qs2.cache();
+            },
+            afterDeselect: function(values){
+                this.qs1.cache();
+                this.qs2.cache();
+            }
+        });
+    }
+
+   
+
+</script>
+    
+@endsection

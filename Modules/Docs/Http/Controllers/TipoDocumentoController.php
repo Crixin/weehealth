@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Modules\Core\Repositories\ParametroRepository;
 use Modules\Docs\Repositories\FluxoRepository;
 use Modules\Docs\Repositories\TipoDocumentoRepository;
+use Modules\Docs\Services\TipoDocumentoService;
 
 class TipoDocumentoController extends Controller
 {
@@ -64,10 +65,12 @@ class TipoDocumentoController extends Controller
         $tiposDocumento = $tiposDocumento ? array_column(json_decode(json_encode($tiposDocumento), true), 'nome', 'id') : [];
 
         $padroesCodigo = $this->parametroRepository->getParametro('PADRAO_CODIGO');
-        $padroesCodigo = $padroesCodigo ? array_column(json_decode($padroesCodigo), 'DESCRICAO', 'ID') : [];
-  
-        return view('docs::tipo-documento.create', compact('fluxos', 'tiposDocumento', 'padroesCodigo')
-        );
+        $padroesCodigo = $padroesCodigo ? array_column((array)json_decode($padroesCodigo), 'DESCRICAO', 'ID') : [];
+
+        $padroesNumero = $this->parametroRepository->getParametro('PADRAO_NUMERO');
+        $padroesNumero = $padroesNumero ? array_column((array)json_decode($padroesNumero), 'DESCRICAO', 'ID') : [];
+
+        return view('docs::tipo-documento.create', compact('fluxos', 'tiposDocumento', 'padroesCodigo', 'padroesNumero'));
     }
 
     /**
@@ -126,18 +129,32 @@ class TipoDocumentoController extends Controller
         $tiposDocumento = $tiposDocumento ? array_column(json_decode(json_encode($tiposDocumento), true), 'nome', 'id') : [];
 
 
-        $padroesCodigoParametro = json_decode($this->parametroRepository->getParametro('PADRAO_CODIGO'));
+        $padroesCodigoParametro = (array)json_decode($this->parametroRepository->getParametro('PADRAO_CODIGO'));
         $padroesCodigoParametro = $padroesCodigoParametro ? array_column($padroesCodigoParametro, 'DESCRICAO', 'ID') : [];
 
         $padroesCodigo = array();
+        $resto = array();
+        foreach ($padroesCodigoParametro as $key => $value) {
+            if (!in_array($key, json_decode ( $tipoDocumento->codigo_padrao ) )) {
+                $resto += [
+                    $key => $value
+                ];
+            }
+        }
         foreach (json_decode($tipoDocumento->codigo_padrao) as $key => $value) {
             $padroesCodigo += [
                 $value => $padroesCodigoParametro[$value]
             ];
         }
+        $padroesCodigo += $resto;
+
+        $padroesNumero = $this->parametroRepository->getParametro('PADRAO_NUMERO');
+        $padroesNumero = $padroesNumero ? array_column((array)json_decode($padroesNumero), 'DESCRICAO', 'ID') : [];
+
+
 
         return view('docs::tipo-documento.edit',
-            compact('tipoDocumento', 'fluxos', 'tiposDocumento', 'padroesCodigo')
+            compact('tipoDocumento', 'fluxos', 'tiposDocumento', 'padroesCodigo', 'padroesNumero')
         );
     }
 
@@ -156,7 +173,7 @@ class TipoDocumentoController extends Controller
 
         $tipoDocumento = $request->get('idTipoDocumento');
         $update  = $this->montaRequest($request);
- 
+
         try {
             DB::transaction(function () use ($update, $tipoDocumento) {
                 $this->tipoDocumentoRepository->update($update, $tipoDocumento);
@@ -187,6 +204,20 @@ class TipoDocumentoController extends Controller
         }
     }
 
+
+    public function getEtapaFluxo(Request $request)
+    {
+        try {
+            $id = $request->id;
+            $tipoDocumento = new TipoDocumentoService();
+            $etapas = $tipoDocumento->getEtapasFluxosPorComportamento($id, 'comportamento_aprovacao');
+            ksort($etapas);
+            return response()->json(['response' => 'sucesso', 'data' => $etapas]);
+        } catch (\Exception $th) {
+            return response()->json(['response' => 'erro']);
+        }
+    }
+
     public function validador(Request $request)
     {
         $validator = Validator::make(
@@ -197,14 +228,11 @@ class TipoDocumentoController extends Controller
                 'sigla'                 => 'required|string|min:1|max:5',
                 'fluxo'                 => 'required|string|max:50',
                 'periodoVigencia'       => 'required|numeric',
-                'ativo'                 => 'required|',
-                'vinculoObrigatorio'    => 'required|',
-                'vinculoObrigatorioOutrosDocs' => 'required|',
-                'permitirDownload'      => 'required|',
-                'permitirImpressao'     => 'required|',
                 'periodoAviso'          => 'required|numeric',
                 'documentoModelo'       => empty($request->get('idTipoDocumento')) ? 'required|mimes:xls,doc' : '',
                 'codigoPadrao'          => 'required',
+                'numeroPadrao'          => 'required',
+                'ultimoDocumento'       => 'required|numeric|min:0'
             ]
         );
 
@@ -240,7 +268,9 @@ class TipoDocumentoController extends Controller
             "permitir_impressao"    => $request->get('permitirImpressao') == 1 ? true : false,
             "periodo_aviso_id"      => $request->get('periodoAviso'),
             "documento_modelo"      => $imageBase64,
-            "codigo_padrao"         => $request->get('codigoPadrao')
+            "codigo_padrao"         => $request->get('codigoPadrao'),
+            "numero_padrao"         => $request->get('numeroPadrao'),
+            "ultimo_documento"      => $request->get('ultimoDocumento') ?? 0
         ];
     }
 }

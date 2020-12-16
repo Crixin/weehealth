@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('editar/{id}',   ['as' => 'tipo-documento.editar',  'uses' => 'TipoDocumentoController@edit']);
             Route::post('alterar',      ['as' => 'tipo-documento.alterar', 'uses' => 'TipoDocumentoController@update']);
             Route::post('deletar',      ['as' => 'tipo-documento.deletar', 'uses' => 'TipoDocumentoController@destroy']);
+            Route::post('etapa-fluxo',  ['as' => 'tipo-documento.etapa-fluxo', 'uses' => 'TipoDocumentoController@getEtapaFluxo']);
         });
 
         /*
@@ -111,6 +112,8 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('editar/{id}',   ['as' => 'documento.editar',  'uses' => 'DocumentoController@edit']);
             Route::post('alterar',      ['as' => 'documento.alterar', 'uses' => 'DocumentoController@update']);
             Route::post('deletar',      ['as' => 'documento.deletar', 'uses' => 'DocumentoController@destroy']);
+            Route::post('importar-documento',      ['as' => 'documento.importar-documento', 'uses' => 'DocumentoController@importarDocumento']);
+            Route::post('criar-documento',      ['as' => 'documento.criar-documento', 'uses' => 'DocumentoController@criarDocumento']);
         });
 
         Route::group(['prefix' => 'documento-externo', 'as' => 'docs.'], function() {

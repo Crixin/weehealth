@@ -26,6 +26,13 @@ class TipoDocumento extends Model
         'periodo_aviso_id',
         'documento_modelo',
         'codigo_padrao',
-        'vinculo_obrigatorio_outros_documento'
+        'vinculo_obrigatorio_outros_documento',
+        'numero_padrao',
+        'ultimo_documento'
     ];
+
+    public function docsFluxo()
+    {
+        return $this->hasOne('Modules\docs\Model\Fluxo', 'id', 'fluxo_id');
+    }
 }
