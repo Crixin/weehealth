@@ -1,8 +1,5 @@
 @extends('layouts.app')
 
-@extends('layouts.menuCore')
-@yield('menu')
-
 @section('page_title', 'Página Inicial')
 
 @section('breadcrumbs')

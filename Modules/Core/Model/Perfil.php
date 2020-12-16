@@ -8,15 +8,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Perfil extends Model
 {
     use SoftDeletes;
+
     public $table = 'core_perfil';
 
     protected $fillable = [
         'id',
-        'nome'
+        'nome',
+        'permissoes'
     ];
 
-
-   
+    
+    protected $casts = [
+        'permissoes' => 'array'
+    ];
 
 
     public function coreUsers()

@@ -59,7 +59,7 @@ Route::prefix('portal')->group(function () {
             Route::get('getIndicesComumAreas', ['as' => 'getIndicesComumAreas', 'uses' => 'AjaxController@getIndicesComumAreas']);
             Route::get('getPrestadores',       ['as' => 'getPrestadores',       'uses' => 'AjaxController@getPrestadores']);
 
-            Route::get('',              ['as' => '',           'uses' => 'GedController@index']);
+            //Route::get('',              ['as' => 'index',           'uses' => 'GedController@index']);
             Route::get('novo',          ['as' => 'novo',       'uses' => 'GedController@create']);
             Route::post('salvar',       ['as' => 'salvar',     'uses' => 'GedController@store']);
             Route::get('editar',        ['as' => 'editar',     'uses' => 'GedController@edit']);
@@ -101,7 +101,7 @@ Route::prefix('portal')->group(function () {
         /*
         * DOSSIÊ DOCUMENTOS
         */
-        Route::group(['prefix' => 'dossieDocumentos','as' => 'portal.dossieDocumentos.'], function () {
+        Route::group(['prefix' => 'dossie-documentos','as' => 'portal.dossie-documentos.'], function () {
             Route::get('',          ['as' => 'novo',            'uses' => 'DossieDocumentosController@novo']);
             Route::get('list',      ['as' => 'list',            'uses' => 'DossieDocumentosController@list']);
             Route::post('download', ['as' => 'download',        'uses' => 'DossieDocumentosController@downloadDossie']);

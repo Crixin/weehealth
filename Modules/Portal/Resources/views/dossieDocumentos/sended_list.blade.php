@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
-@extends('layouts.menuPortal')
-@yield('menu')
+
 
 @section('page_title', __('page_titles.portal.enterprise.index'))
 
@@ -24,7 +23,7 @@
                 @endif
             
                 <div class="col-md-12">
-                    <a href="{{ route('portal.dossieDocumentos.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.portal.dossie.create') </a>
+                    <a href="{{ route('portal.dossie-documentos.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.portal.dossie.create') </a>
                 </div>
             
                 <div class="table-responsive m-t-40">
@@ -139,7 +138,7 @@
             let obj = {'dossie': $(this).data('id')};
 
             deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('portal.dossieDocumentos.dossie.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('portal.dossie-documentos.dossie.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Dossiê excluído com sucesso.");
                     } else {

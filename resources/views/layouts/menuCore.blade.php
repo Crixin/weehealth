@@ -63,19 +63,20 @@
 
             </ul>
         </nav>
+        
         <!-- End Sidebar navigation -->
-
+        <div class="sidebar-footer">
+            <!-- item-->
+            <a href="{{ route('core.home') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.tooltip_home')"><i class="mdi mdi-home"></i></a>
+            <!-- item-->
+            <a href="{{ route('core.configuracao.parametros') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.portal.uls_li_system.configs.item2')"><i class="ti-settings"></i></a>
+            <!-- item-->
+            <a href="{{ route('logout') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.tooltip_logout')"><i class="mdi mdi-power"></i></a>
+        </div>
     </div>
     <!-- End Sidebar scroll-->
 
     <!-- Bottom points-->
-    <div class="sidebar-footer">
-        <!-- item-->
-        <a href="{{ route('core.home') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.tooltip_home')"><i class="mdi mdi-home"></i></a>
-        <!-- item-->
-        <a href="{{ route('core.configuracao.parametros') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.portal.uls_li_system.configs.item2')"><i class="ti-settings"></i></a>
-        <!-- item-->
-        <a href="{{ route('logout') }}" class="link" data-toggle="tooltip" title="@lang('sidebar_and_header.tooltip_logout')"><i class="mdi mdi-power"></i></a>
-    </div>
+   
     <!-- End Bottom points-->
 @endsection

@@ -1,8 +1,5 @@
 @extends('layouts.app')
 
-@extends('layouts.menuCore')
-@yield('menu')
-
 @section('page_title', __('page_titles.core.perfil.create'))
 
 @section('breadcrumbs')
@@ -18,17 +15,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                @php
-                $nome = "adasasdsaSlider";
-                $modules = ['Core'];
-                @endphp
-{{--                 @if(Session::has('message'))
-                    @component('components.alert') @endcomponent
-                    {{ Session::forget('message') }}
-                @endif --}}
-              {{--   @php
-                    dd(Session::get('message')->all());
-                @endphp --}}
+
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
@@ -40,12 +27,10 @@
                 @endif
                 <form method="POST" action="{{ route('core.perfil.salvar') }}">
                     {{ Form::token() }}
-                        
                     
                     @component(
                         'core::components.perfil',
                         [
-                            'nome' => $nome,
                             'modules' => $modules
                         ]
                     )

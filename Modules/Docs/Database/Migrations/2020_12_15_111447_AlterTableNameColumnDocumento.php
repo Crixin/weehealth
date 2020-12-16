@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterAddClassificacaoIdDocsDocumento extends Migration
+class AlterTableNameColumnDocumento extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AlterAddClassificacaoIdDocsDocumento extends Migration
      */
     public function up()
     {
-        \DB::statement('ALTER TABLE docs_documento ALTER COLUMN nivel_acesso TYPE integer USING (nivel_acesso::integer)');
         Schema::table('docs_documento', function (Blueprint $table) {
-            $table->boolean('classificacao_id')->default(false);
+            $table->rename('nivel_acesso, nivel_acesso_id');
         });
     }
 
@@ -27,8 +26,7 @@ class AlterAddClassificacaoIdDocsDocumento extends Migration
     public function down()
     {
         Schema::table('docs_documento', function (Blueprint $table) {
-            $table->dropColumn('classificacao_id');
-            $table->string('nivel_acesso', 20)->change();
+            $table->rename('nivel_acesso_id, nivel_acesso');
         });
     }
 }

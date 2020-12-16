@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
-@extends('layouts.menuDocs')
-@yield('menu')
+
 
 @section('content')  
     <!-- O que fazer nesta situação? -->

@@ -13,7 +13,7 @@ class CreateDocsSetorTable extends Migration
      */
     public function up()
     {
-        Schema::create('docs_setor', function (Blueprint $table) {
+        Schema::create('core_setor', function (Blueprint $table) {
             $table->increments('id');
             $table->text('nome');
             $table->string('sigla', 5);
@@ -31,6 +31,6 @@ class CreateDocsSetorTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('docs_setor');
+        Schema::dropIfExists('core_setor');
     }
 }

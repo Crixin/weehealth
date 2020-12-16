@@ -17,6 +17,7 @@ class PerfilController extends Controller
         $this->perfilRepository = $perfil;
     }
 
+
     /**
      * Display a listing of the resource.
      *
@@ -24,9 +25,11 @@ class PerfilController extends Controller
      */
     public function index()
     {
+        $menuModules = (array) json_decode(file_get_contents(base_path() . '/menu.json'));
         $perfis = $this->perfilRepository->findAll(['coreUsers']);
         return view('core::perfil.index', compact('perfis'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,9 +38,11 @@ class PerfilController extends Controller
      */
     public function create()
     {
-        $permissoes = [];
-        return view('core::perfil.create', compact('permissoes'));
+        $modules = array_keys(\Module::allEnabled());
+
+        return view('core::perfil.create', compact('modules'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -45,30 +50,33 @@ class PerfilController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $_request)
+    public function store(Request $request)
     {
         try {
-            $permissoes = $this->permissaoRepository->findAll([], [['descricao', 'ASC']]);
-
-            [$result, $errors] = $this->validator($_request);
-            if (!$result) {
+            $errors = $this->validator($request);
+            
+            if ($errors) {
                 return redirect()->back()->withErrors($errors)->withInput();
             }
-    
-            DB::transaction(function () use ($_request) {
-                $perfil = $this->perfilRepository->create(['nome' => $_request->nome]);
-                foreach ($_request->permissoes as $key => $permissao) {
-                    $this->perfilPermissaoRepository->create([
-                        'perfil_id' => $perfil->id,
-                        'permissao_id' => $permissao
-                    ]);
-                }
+
+            DB::transaction(function () use ($request) {
+                
+                $nome = $request->nome;
+                
+                $permissoes = $request->all();
+                unset($permissoes["_token"]);
+                unset($permissoes["nome"]);
+                $permissoes = array_keys($permissoes);
+
+                $perfil = $this->perfilRepository->create([
+                    'nome' => $nome,
+                    'permissoes' => $permissoes
+                ]);
             });
 
             Helper::setNotify('Novo perfil criado com sucesso!', 'success|check-circle');
             return redirect()->route('core.perfil');
         } catch (\Throwable $th) {
-            dd($th);
             Helper::setNotify("Erro ao criar o perfil", 'danger|close-circle');
             return redirect()->back()->withInput();
         }
@@ -82,13 +90,10 @@ class PerfilController extends Controller
      */
     public function edit($id)
     {
-        $perfil = $this->perfilRepository->find($id, ['corePermissoes']);
-        $userPermissao = [];
+        $perfil = $this->perfilRepository->find($id);
+        $modules = array_keys(\Module::allEnabled());
 
-        $userPermissao = [];
-        $permissoes = [];
-
-        return view('core::perfil.update', compact('perfil', 'permissoes', 'userPermissao'));
+        return view('core::perfil.update', compact('perfil', 'modules'));
     }
 
     /**
@@ -98,25 +103,31 @@ class PerfilController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $_request, $id)
+    public function update(Request $request, $id)
     {
-        [$result, $error] = $this->validator($_request, $id);
-        if (!$result) {
+        $error = $this->validator($request, $id);
+        if (!$error) {
             return redirect()->back()->withInput()->compact(['error' => $error]);
         }
 
         try {
-            DB::transaction(function () use ($_request, $id) {
-                $this->perfilRepository->update(['nome' => $_request->nome], $id);
-                $perfil = $this->perfilRepository->find($id, ['corePermissoes']);
-                $userPermissao = [];
+            DB::transaction(function () use ($request, $id) {
+                $nome = $request->nome;
+                
+                $permissoes = $request->all();
+                unset($permissoes["_token"]);
+                unset($permissoes["nome"]);
+                $permissoes = array_keys($permissoes);
 
-                foreach ($perfil->corePermissoes as $key => $value) {
-                    $userPermissao[] = $value->pivot->permissao_id;
-                }
+                $this->perfilRepository->update(
+                    [
+                        'nome' => $nome,
+                        'permissoes' => $permissoes
+                    ],
+                    $id
+                );
 
-                $deleteArray = array_diff($userPermissao, $_request->permissoes);
-                $createArray = array_diff($_request->permissoes, $userPermissao);
+
             });
             Helper::setNotify('Perfil atualizado com sucesso!', 'success|check-circle');
             return redirect()->route('core.perfil');
@@ -150,16 +161,15 @@ class PerfilController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Responsevalidator
      */
-    public function validator(Request $_request, $id = "")
+    public function validator(Request $_request)
     {
         $validator = Validator::make($_request->all(), [
-            'nome' => 'required|string|unique:core_perfil,nome' . ($id ? ',' . $id : ''),
-            'permissoes' => 'required|exists:core_permissao,id',
+            'nome' => 'sometimes|required|string|unique:core_perfil,nome',
         ]);
         if ($validator->fails()) {
             Helper::setNotify($validator->messages(), 'danger|close-circle');
-            return [false, $validator];
+            return $validator;
         }
-        return true;
+        return false;
     }
 }
