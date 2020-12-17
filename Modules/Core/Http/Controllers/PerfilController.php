@@ -25,7 +25,6 @@ class PerfilController extends Controller
      */
     public function index()
     {
-        $menuModules = (array) json_decode(file_get_contents(base_path() . '/menu.json'));
         $perfis = $this->perfilRepository->findAll(['coreUsers']);
         return view('core::perfil.index', compact('perfis'));
     }
@@ -104,11 +103,11 @@ class PerfilController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        $error = $this->validator($request, $id);
-        if (!$error) {
-            return redirect()->back()->withInput()->compact(['error' => $error]);
-        }
+    {   
+   /*      $errors = $this->validator($request);
+        if ($errors) {
+            return redirect()->back()->withErrors($errors)->withInput();
+        } */
 
         try {
             DB::transaction(function () use ($request, $id) {
@@ -157,13 +156,10 @@ class PerfilController extends Controller
         }
     }
 
-   /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Responsevalidator
-     */
-    public function validator(Request $_request)
+
+ /*    public function validator($data)
     {
-        $validator = Validator::make($_request->all(), [
+        $validator = Validator::make($data->all(), [
             'nome' => 'sometimes|required|string|unique:core_perfil,nome',
         ]);
         if ($validator->fails()) {
@@ -171,5 +167,5 @@ class PerfilController extends Controller
             return $validator;
         }
         return false;
-    }
+    } */
 }
