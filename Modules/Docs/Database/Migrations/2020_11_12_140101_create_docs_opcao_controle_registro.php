@@ -15,8 +15,8 @@ class CreateDocsOpcaoControleRegistro extends Migration
     {
         Schema::create('docs_opcoes_controle_registros', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('campo', 100);
-            $table->string('descricao', 350);
+            $table->text('campo_id')->nullable();
+            $table->text('descricao')->nullable();
             $table->boolean('ativo');
             $table->timestamps();
             $table->softDeletes();

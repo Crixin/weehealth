@@ -39,8 +39,7 @@ class ControleRegistroController extends Controller
      */
     public function index()
     {
-        $controles = $this->controleRegistroRepository->findAll();
-        
+        $controles = $this->controleRegistroRepository->findAll(); 
         return view('docs::controle-registro.index', compact('controles'));
     }
 
@@ -51,7 +50,7 @@ class ControleRegistroController extends Controller
     public function create()
     {
         $idSetorQualidade = $this->parametroRepository->getParametro('ID_SETOR_QUALIDADE');
-        $responsaveis = $this->setorRepository->getSetorUsuario($idSetorQualidade);
+        $responsaveis = $this->setorRepository->getSetorUsuario($idSetorQualidade) ?? [];
 
         $buscaNivelAcesso = $this->parametroRepository->getParametro('NIVEL_ACESSO');
         $niveisAcesso    = json_decode($buscaNivelAcesso);
@@ -228,7 +227,7 @@ class ControleRegistroController extends Controller
         return [
             "codigo"                      => $request->get('codigo'),
             "titulo"                      => $request->get('descricao'),
-            "nivel_acesso"                 => $request->get('nivelAcesso'),
+            "nivel_acesso_id"             => $request->get('nivelAcesso'),
             "avulso"                      => true,
             "documento_id"                => null,
             "setor_id"                    => $request->get('responsavel'),
@@ -247,7 +246,7 @@ class ControleRegistroController extends Controller
     {
         $opcao = $this->opcoesControleRegistroRepository->findBy(
             [
-                ['campo','=', $_key]
+                ['campo_id','=', $_key]
             ],
             [],
             [

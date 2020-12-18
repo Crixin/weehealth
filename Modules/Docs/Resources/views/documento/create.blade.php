@@ -31,7 +31,7 @@
                     {{ Session::forget('message') }}
                 @endif
 
-                <form method="POST" action="{{ route('docs.documento.salvar') }}"> 
+                <form method="POST" action="{{route('docs.documento.importar-documento')}}" name="createDocumento" id="createDocumento"> 
                     {{ csrf_field() }}
                     
                     @component(
@@ -41,19 +41,35 @@
                             'tituloDocumento' => '',
                             'codigo' => '',
                             'validade' => '',
-                            'setores' => [],
-                            'tiposDocumento' => [],
-                            'documentosPais' => [],
-                            'niveisAcesso' => [],
-                            'classificacoes' => [],
-                            'documentosVinvulados' => [],
-                            'setoresUsuarios' => []
+                            'setores' => $setores,
+                            'tiposDocumento' => $tiposDocumento,
+                            'documentosPais' => $documentos,
+                            'niveisAcesso' => $niveisAcesso,
+                            'classificacoes' => $classificacoes,
+                            'documentosVinvulados' => $documentos,
+                            'setoresUsuarios' => $setoresUsuarios,
+                            'normas' => $normas
                         ]
                     )
                     @endcomponent
+
+                    <legend>Ação</legend>
+                    <hr>
+                    <div class="col-md-12">
+                        <div class="radio{{ $errors->has('acao') ? ' has-error' : '' }}">
+                        <label for="acao">
+                            <div id="radioset">
+                                <input  type="radio" id="radio1" name="radio" checked="checked"><label for="radio1">Importar Documento</label>
+                                <input  type="radio" id="radio2" name="radio" ><label for="radio2">Criar Documento</label>
+                            </div>
+                        </label>
+                        <small class="text-danger">{{ $errors->first('acao') }}</small>
+                        </div>
+                    </div>
+                    
                         
                     <div class="form-actions ">
-                        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
+                        <button type="submit" class="btn btn-success"> <i class="mdi mdi-chevron-double-right"></i> @lang('buttons.general.next')</button>
                         <a href="{{ route('docs.documento') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
                 </form>
@@ -61,57 +77,5 @@
             </div>
         </div>
     </div>
-    
-@endsection
-
-@section('footer')
-
-<script src="{{ asset('plugins/multiselect/js/jquery.multi-select.js') }}"></script>
-<script src="{{ asset('plugins/quicksearch/jquery.quicksearch.js') }}"></script>
-<script>
-    $(function(){
-
-        /*
-        * MultiSelect de NOVO GRUPO DE TREINAMENTO PARA O DOCUMENTO
-        */
-        $('#optgroup-newGrupoTreinamentoDoc').multiSelect({
-            selectableOptgroup: true,
-            selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Pesquisar usuários'>",
-            selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Pesquisar usuários'>",
-            afterInit: function(ms){
-                var that = this,
-                    $selectableSearch = that.$selectableUl.prev(),
-                    $selectionSearch = that.$selectionUl.prev(),
-                    selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-                    selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
-
-                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-                .on('keydown', function(e){
-                if (e.which === 40){
-                    that.$selectableUl.focus();
-                    return false;
-                }
-                });
-
-                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-                .on('keydown', function(e){
-                if (e.which == 40){
-                    that.$selectionUl.focus();
-                    return false;
-                }
-                });
-            },
-            afterSelect: function(){
-                this.qs1.cache();
-                this.qs2.cache();
-            },
-            afterDeselect: function(values){
-                this.qs1.cache();
-                this.qs2.cache();
-            }
-        });
-
-    });
-</script>
     
 @endsection

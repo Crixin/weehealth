@@ -39,6 +39,7 @@
                         [
                             'itemNormaEdit' => [],
                             'descricao' => '',
+                            'numero' => ''
                         ]
                     )
                     @endcomponent

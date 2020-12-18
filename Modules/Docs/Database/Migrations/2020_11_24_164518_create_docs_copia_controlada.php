@@ -17,11 +17,10 @@ class CreateDocsCopiaControlada extends Migration
             $table->increments('id');
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
-            $table->integer('usuario_id')->unsigned();
-            $table->foreign('usuario_id')->references('id')->on('core_users');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('core_users');
             $table->integer('numero_copias')->nullable();
-            $table->text('revisao', 10)->nullable();
-            $table->text('setor', 35)->nullable();
+            $table->text('revisao')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

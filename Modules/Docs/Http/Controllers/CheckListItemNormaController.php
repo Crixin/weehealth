@@ -164,7 +164,7 @@ class CheckListItemNormaController extends Controller
     public function montaRequest(Request $request, $item_norma_id)
     {
         return [
-            "item_norma_id"   => $item_norma_id, 
+            "item_norma_id"   => $item_norma_id,
             "descricao"       => $request->get('descricao'),
         ];
     }

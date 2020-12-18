@@ -15,14 +15,15 @@ class CreateDocsWorkflow extends Migration
     {
         Schema::create('docs_workflow', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('etapa_num')->unsigned();
-            $table->string('etapa', 50);
-            $table->string('descricao', 100);
+            $table->text('descricao');
             $table->text('justificativa');
+            $table->boolean('justificativa_lida');
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
             $table->integer('etapa_fluxo_id')->unsigned();
             $table->foreign('etapa_fluxo_id')->references('id')->on('docs_etapa_fluxo');
+            $table->foreignId('user_id')->constrained('core_users');
+            $table->text('versao_documento');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDocsDocumentoPai extends Migration
+class CreateDocsDocumentoItemNorma extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateDocsDocumentoPai extends Migration
      */
     public function up()
     {
-        Schema::create('docs_documento_pai', function (Blueprint $table) {
+        Schema::create('docs_documento_item_norma', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
-            $table->integer('documento_pai_id')->unsigned();
-            $table->foreign('documento_pai_id')->references('id')->on('docs_documento')->onDelete('cascade');
-            $table->softDeletes();
+            $table->integer('item_norma_id')->unsigned();
+            $table->foreign('item_norma_id')->references('id')->on('docs_item_norma')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -31,6 +31,6 @@ class CreateDocsDocumentoPai extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('docs_documento_pai');
+        Schema::dropIfExists('docs_documento_item_norma');
     }
 }

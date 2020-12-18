@@ -13,11 +13,11 @@ class Workflow extends Model
 
     protected $fillable = [
         'id',
-        'etapa_num',
-        'etapa',
         'descricao',
         'justificativa',
         'documento_id',
-        'etapa_fluxo_id'
+        'etapa_fluxo_id',
+        'user_id',
+        'versao_documento'
     ];
 }

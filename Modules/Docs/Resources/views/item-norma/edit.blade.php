@@ -38,6 +38,7 @@
                         'docs::components.item-norma', 
                         [
                             'descricao' => $itemNormaEdit->descricao,
+                            'numero' => $itemNormaEdit->numero
                         ]
                     )
                     @endcomponent

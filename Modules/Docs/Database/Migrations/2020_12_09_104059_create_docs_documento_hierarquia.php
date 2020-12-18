@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDocsHistorico extends Migration
+class CreateDocsDocumentoHierarquia extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateDocsHistorico extends Migration
      */
     public function up()
     {
-        Schema::create('docs_historico', function (Blueprint $table) {
+        Schema::create('docs_hierarquia_documento', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('descricao');
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
-            $table->integer('usuario_id')->unsigned();
-            $table->foreign('usuario_id')->references('id')->on('core_users');
-            $table->timestamps();
+            $table->integer('documento_pai_id')->unsigned();
+            $table->foreign('documento_pai_id')->references('id')->on('docs_documento')->onDelete('cascade');
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -32,6 +31,6 @@ class CreateDocsHistorico extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('docs_historico');
+        Schema::dropIfExists('docs_hierarquia_documento');
     }
 }

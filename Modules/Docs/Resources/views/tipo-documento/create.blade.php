@@ -44,8 +44,10 @@
                             'fluxos' => $fluxos,
                             'periodosVigencia' => '',
                             'periodosAviso' => '',
+                            'ultimoDocumento' => 0,
                             'tiposDocumento' => $tiposDocumento,
-                            'padroesCodigo' => $padroesCodigo
+                            'padroesCodigo' => $padroesCodigo,
+                            'padroesNumero' => $padroesNumero
                         ]
                     )
                     @endcomponent

@@ -15,9 +15,9 @@ class CreateDocsFluxoTable extends Migration
     {
         Schema::create('docs_fluxo', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('nome');
-            $table->text('descricao');
-            $table->text('versao_fluxo');
+            $table->text('nome')->nullable();
+            $table->text('descricao')->nullable();
+            $table->text('versao')->nullable();
             $table->integer('grupo_id')->unsigned();
             $table->foreign('grupo_id')->references('id')->on('core_grupo');
             $table->integer('perfil_id')->unsigned();

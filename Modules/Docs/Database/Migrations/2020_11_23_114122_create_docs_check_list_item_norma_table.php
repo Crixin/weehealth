@@ -15,7 +15,7 @@ class CreateDocsCheckListItemNormaTable extends Migration
     {
         Schema::create('docs_check_list_item_norma', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('descricao');
+            $table->text('descricao')->nullable();
             $table->integer('item_norma_id')->unsigned();
             $table->foreign('item_norma_id')->references('id')->on('docs_item_norma')->onDelete('cascade');
             $table->timestamps();

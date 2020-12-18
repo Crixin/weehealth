@@ -19,4 +19,9 @@ class Norma extends Model
         'ciclo_auditoria_id',
         'data_acreditacao'
     ];
+
+    public function docsItemNorma()
+    {
+        return $this->hasMany('Modules\docs\Model\ItemNorma', 'norma_id', 'id');
+    }
 }

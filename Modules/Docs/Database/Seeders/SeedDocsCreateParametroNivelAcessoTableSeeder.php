@@ -28,5 +28,28 @@ class SeedDocsCreateParametroNivelAcessoTableSeeder extends Seeder
         $newParametro->valor_usuario = 1;
         $newParametro->ativo = true;
         $newParametro->save();
+
+        //CLASSIFICACAO
+        $newParametro = new Parametro();
+        $newParametro->identificador_parametro = "CLASSIFICACAO";
+        $newParametro->descricao = "Classificação do Documento";
+        $newParametro->valor_padrao =
+        '{
+            "1": "Qualidade",
+        }';
+        $newParametro->valor_usuario = 1;
+        $newParametro->ativo = true;
+        $newParametro->save();
+
+
+        //ID_SETOR_QUALIDADE
+        $newParametro = new Parametro();
+        $newParametro->identificador_parametro = "ID_SETOR_QUALIDADE";
+        $newParametro->descricao = "Id Setor de Qualidade";
+        $newParametro->valor_padrao = 1;
+        $newParametro->valor_usuario = 1;
+        $newParametro->ativo = true;
+        $newParametro->save();
+
     }
 }

@@ -13,7 +13,7 @@ class UsuarioExtra extends Model
 
     protected $fillable = [
         'id',
-        'usuario_id',
+        'user_id',
         'documento_id'
     ];
 }

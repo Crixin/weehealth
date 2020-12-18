@@ -431,9 +431,15 @@
                 }
                 });
             $('.selectonfocus').mask("00/00/0000", {selectOnFocus: true});
-            $('.versao').mask('##0.00', {reverse: true});     
+            $('.versao').mask('##0.00', {reverse: true});
+            $('.padrao-numero').mask('0000', {reverse: true});    
         });
     </script>
+
+    <!-- Grup Select -->
+    <link href="{{asset('plugins/multiselect/css/multi-select.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ asset('plugins/multiselect/js/jquery.multi-select.js') }}"></script>
+    <script src="{{ asset('plugins/quicksearch/jquery.quicksearch.js') }}"></script>
 
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="{{ asset('plugins/sweetalert/sweetalert.css') }}">

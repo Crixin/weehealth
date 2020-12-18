@@ -158,7 +158,7 @@ class OpcaoControleRegistroController extends Controller
     {
         return [
             "descricao"             => $request->get('descricao'),
-            "campo"                 => $request->get('tipoControle'),
+            "campo_id"              => $request->get('tipoControle'),
             "ativo"                 => $request->get('ativo') == 1 ? true : false,
         ];
     }

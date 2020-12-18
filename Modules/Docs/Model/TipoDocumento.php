@@ -18,14 +18,21 @@ class TipoDocumento extends Model
         'sigla',
         'fluxo_id',
         'tipo_documento_pai_id',
-        'periodo_vigencia_id',
+        'periodo_vigencia',
         'ativo',
         'vinculo_obrigatorio',
         'permitir_download',
         'permitir_impressao',
-        'periodo_aviso_id',
-        'documento_modelo',
+        'periodo_aviso',
+        'modelo_documento',
         'codigo_padrao',
-        'vinculo_obrigatorio_outros_documento'
+        'vinculo_obrigatorio_outros_documento',
+        'numero_padrao_id',
+        'ultimo_documento'
     ];
+
+    public function docsFluxo()
+    {
+        return $this->hasOne('Modules\docs\Model\Fluxo', 'id', 'fluxo_id');
+    }
 }

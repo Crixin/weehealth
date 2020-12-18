@@ -15,9 +15,9 @@ class CreateDocsControleRegistro extends Migration
     {
         Schema::create('docs_controle_registros', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('codigo', 20);
-            $table->string('titulo', 350);
-            $table->string('nivel_acesso', 20);
+            $table->text('codigo');
+            $table->text('titulo');
+            $table->integer('nivel_acesso_id');
             $table->boolean('avulso');
             $table->integer('documento_id')->nullable();
             $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
@@ -38,13 +38,6 @@ class CreateDocsControleRegistro extends Migration
             $table->integer('tempo_retencao_local_id')->nullable(false);
             $table->foreign('tempo_retencao_local_id')->references('id')->on('docs_opcoes_controle_registros');
             $table->boolean('ativo')->default(true);
-            $table->string('meio_distribuicao')->nullable();
-            $table->string('local_armazenamento')->nullable();
-            $table->string('protecao')->nullable();
-            $table->string('recuperacao')->nullable();
-            $table->string('tempo_retencao_local')->nullable();
-            $table->string('tempo_retencao_deposito')->nullable();
-            $table->string('disposicao')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

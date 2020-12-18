@@ -28,9 +28,9 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group required{{ $errors->has('dataAcreditacao') ? ' has-error' : '' }}">
-            {!! Form::label('dataAcreditacao', 'Data Acreditação' , ['class' => 'control-label']) !!}
-            {!! Form::date('dataAcreditacao', !empty($normaEdit) ?  $normaEdit->data_acreditacao : null, ['class' => 'form-control', 'required' => 'required']) !!}
+            <div class="form-group {{ $errors->has('dataAcreditacao') ? ' has-error' : '' }}">
+            {!! Form::label('dataAcreditacao', 'Data Acreditação' ) !!}
+            {!! Form::date('dataAcreditacao', !empty($normaEdit) ?  $normaEdit->data_acreditacao : null, ['class' => 'form-control']) !!}
             <small class="text-danger">{{ $errors->first('dataAcreditacao') }}</small>
             </div>
         </div>

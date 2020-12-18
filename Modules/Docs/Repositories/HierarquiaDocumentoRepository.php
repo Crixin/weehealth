@@ -2,15 +2,15 @@
 
 namespace Modules\Docs\Repositories;
 
-use Modules\Docs\Model\DocumentoPai;
+use Modules\Docs\Model\HierarquiaDocumento;
 use Modules\Core\Repositories\BaseRepository;
 
-class DocumentoPaiRepository extends BaseRepository
+class HierarquiaDocumentoRepository extends BaseRepository
 {
     protected $model;
 
     public function __construct()
     {
-        $this->model = new DocumentoPai();
+        $this->model = new HierarquiaDocumento();
     }
 }

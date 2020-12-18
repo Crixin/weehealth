@@ -14,7 +14,7 @@ class ListaPresenca extends Model
     protected $fillable = [
         'id',
         'nome',
-        'extensao',
+        'ged_documento_id',
         'data',
         'descricao',
         'documento_id',

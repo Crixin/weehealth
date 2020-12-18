@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(\Modules\Core\Database\Seeders\SeedCoreSetupTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\SeedCoreUserTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateParametroTableSeeder::class);
+        $this->call(\Modules\Core\Database\Seeders\SeedCoreSetorTableSeeder::class);
 
         /**PORTAL */
         $this->call(\Modules\Portal\Database\Seeders\SeedPortalProcessoTableSeeder::class);
@@ -27,7 +28,7 @@ class DatabaseSeeder extends Seeder
         /**MODULO DOCS */
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroStatusEtapaFluxoTableSeeder::class);
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroTipoControleRegistroTableSeeder::class);
-        $this->call(\Modules\Docs\Database\Seeders\SeedDocsSetorTableSeeder::class);
-        $this->call(\Modules\Docs\Database\Seeders\SeedDocsTipoDocumentoTableSeeder::class);
+        $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroPadraoNumeroTableSeeder::class);
+        $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroNivelAcessoTableSeeder::class);
     }
 }

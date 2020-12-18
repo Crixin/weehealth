@@ -5,15 +5,16 @@ namespace Modules\Docs\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DocumentoPai extends Model
+class UserEtapaDocumento extends Model
 {
     use SoftDeletes;
 
-    protected $table = "docs_documento_pai";
+    protected $table = "docs_user_etapa_documento";
 
     protected $fillable = [
         'id',
+        'user_id',
         'documento_id',
-        'documento_pai_id'
+        'etapa_fluxo_id'
     ];
 }

@@ -107,6 +107,32 @@
                             "icone": "mdi mdi-delete"
                         }
                     }
+                },
+                "Setor": {
+                    "descricao": "Setor",
+                    "icone": "",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "core_setor_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "core_setor_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "core_setor_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "core_setor_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
                 }
             },
             "filhos_menu": {
@@ -133,6 +159,12 @@
                     "descricao": "Grupo",
                     "icone": "",
                     "route": "core.grupo"
+                },
+                "Setor": {
+                    "permissao": ["core_setor_cons"],
+                    "descricao": "Setor",
+                    "icone": "",
+                    "route": "core.setor"
                 }
             }
         },

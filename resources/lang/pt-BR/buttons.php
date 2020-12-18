@@ -39,6 +39,8 @@ return [
         'resend'         => 'Reenviar',
         'update'         => 'Atualizar',
         'link'           => 'Vincular',
+        'import'         => 'Importar',
+        'next'           => 'Proximo'
 
     ],
 

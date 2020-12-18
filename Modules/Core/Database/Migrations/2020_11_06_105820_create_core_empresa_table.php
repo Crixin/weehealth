@@ -17,9 +17,9 @@ class CreateCoreEmpresaTable extends Migration
             $table->increments('id');
             $table->string('nome', 100);
             $table->string('cnpj', 18);
-            $table->string('telefone', 15);
-            $table->string('responsavel_contato', 50);
-            $table->string('pasta_ftp', 150);
+            $table->string('telefone', 15)->nullable();
+            $table->string('responsavel_contato', 50)->nullable();
+            $table->string('pasta_ftp', 150)->nullable();
             $table->text('obs')->nullable();
             $table->integer('cidade_id')->unsigned();
             $table->foreign('cidade_id')->references('id')->on('core_cidade');

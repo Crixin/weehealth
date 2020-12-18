@@ -16,8 +16,7 @@ class CreateDocsAnexo extends Migration
         Schema::create('docs_anexo', function (Blueprint $table) {
             $table->increments('id');
             $table->text('nome');
-            $table->string('hash');
-            $table->string('extensao');
+            $table->text('ged_documento_id');
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
             $table->timestamps();
