@@ -26,7 +26,8 @@
              
             @php
                 // PEGA PELA URL QUAL MODULO O USUARIO ESTA ACESSANDO
-                $url = explode('/', str_replace(env("APP_URL"), "", $_SERVER["REQUEST_URI"]))[1];
+                $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+                $url = explode('/', str_replace(env("APP_URL"), "", $actual_link))[1];
                 $menuJSON = (array) json_decode(file_get_contents(base_path() . '/menu.json'));
                 $menus = \Helper::makeMenuPermissions($menuJSON);
                 $menuModulo[ucfirst($url)] = $menus[ucfirst($url)];
