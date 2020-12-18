@@ -20,7 +20,7 @@ class ControleRegistro extends Model
         'local_armazenamento',
         'protecao',
         'recuperacao',
-        'nivel_acesso',
+        'nivel_acesso_id',
         'tempo_retencao_local',
         'tempo_retencao_deposito',
         'disposicao',

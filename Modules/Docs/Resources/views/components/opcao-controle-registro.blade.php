@@ -4,7 +4,7 @@
             <div class="form-group required{{ $errors->has('tipoControle') ? ' has-error' : '' }}">
                 {!! Form::label('tipoControle', 'Tipo Controle de Registro', ['class' => 'control-label']) !!}
             
-                {!! Form::select('tipoControle', $tipos, !empty($opcaoControleEdit) ?  $opcaoControleEdit->campo : null, ['id' => 'tipoControle', 'class' => 'form-control selectpicker ', 'required' => true, 'placeholder' => __('components.selectepicker-default') ]) !!}
+                {!! Form::select('tipoControle', $tipos, !empty($opcaoControleEdit) ?  $opcaoControleEdit->campo_id : null, ['id' => 'tipoControle', 'class' => 'form-control selectpicker ', 'required' => true, 'placeholder' => __('components.selectepicker-default') ]) !!}
                 <small class="text-danger">{{ $errors->first('tipoControle') }}</small>
             </div>
         </div>

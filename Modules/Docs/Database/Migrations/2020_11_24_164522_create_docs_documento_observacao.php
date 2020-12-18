@@ -16,11 +16,10 @@ class CreateDocsDocumentoObservacao extends Migration
         Schema::create('docs_documento_observacao', function (Blueprint $table) {
             $table->increments('id');
             $table->text('observacao');
-            $table->string('nome_usuario_responsavel', 100);
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
-            $table->integer('usuario_id')->unsigned();
-            $table->foreign('usuario_id')->references('id')->on('core_users');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('core_users');
             $table->timestamps();
             $table->softDeletes();
         });

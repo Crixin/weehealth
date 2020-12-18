@@ -14,7 +14,7 @@ class AgrupamentoUserDocumento extends Model
     protected $fillable = [
         'id',
         'documento_id',
-        'usuario_id',
+        'user_id',
         'tipo'
     ];
 

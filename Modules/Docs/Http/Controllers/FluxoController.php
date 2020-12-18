@@ -178,7 +178,7 @@ class FluxoController extends Controller
     {
         return [
             "nome"      => $request->get('nome'),
-            "versao_fluxo"    => $request->get('versao'),
+            "versao"    => $request->get('versao'),
             "descricao" => $request->get('descricao'),
             "perfil_id" => $request->get('perfil'),
             "grupo_id"  => $request->get('grupo'),

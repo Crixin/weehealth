@@ -2,15 +2,15 @@
 
 namespace Modules\Docs\Repositories;
 
-use Modules\Docs\Model\Historico;
+use Modules\Docs\Model\HierarquiaDocumento;
 use Modules\Core\Repositories\BaseRepository;
 
-class HistoricoRepository extends BaseRepository
+class HierarquiaDocumentoRepository extends BaseRepository
 {
     protected $model;
 
     public function __construct()
     {
-        $this->model = new Historico();
+        $this->model = new HierarquiaDocumento();
     }
 }

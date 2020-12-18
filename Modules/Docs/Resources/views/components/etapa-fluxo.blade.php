@@ -221,7 +221,7 @@
             <div class="form-group required{{ $errors->has('tipoAprovacao') ? ' has-error' : '' }}">
                 {!! Form::label('tipoAprovacao', 'Tipo Aprovação', ['class' => 'control-label']) !!}
             
-                {!! Form::select('tipoAprovacao', $tiposAprovacao, !empty($etapaEdit) ?  $etapaEdit->tipo_aprovacao : null, ['id' => 'tipoAprovacao', 'class' => 'form-control selectpicker ', 'required' => true, 'placeholder' => __('components.selectepicker-default') ]) !!}
+                {!! Form::select('tipoAprovacao', $tiposAprovacao, !empty($etapaEdit) ?  $etapaEdit->tipo_aprovacao_id : null, ['id' => 'tipoAprovacao', 'class' => 'form-control selectpicker ', 'required' => true, 'placeholder' => __('components.selectepicker-default') ]) !!}
                 <small class="text-danger">{{ $errors->first('tipoAprovacao') }}</small>
             </div>
         </div>

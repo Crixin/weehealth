@@ -15,7 +15,8 @@ class CreateDocsItemNormaTable extends Migration
     {
         Schema::create('docs_item_norma', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('descricao');
+            $table->text('descricao')->nullable();
+            $table->text('numero')->nullable();
             $table->integer('norma_id')->unsigned();
             $table->foreign('norma_id')->references('id')->on('docs_norma')->onDelete('cascade');
             $table->timestamps();

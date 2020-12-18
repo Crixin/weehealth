@@ -18,7 +18,7 @@ class CreateCoreGrupoTable extends Migration
             $table->string('nome', 100);
             $table->string('descricao', 300);
             $table->string('sigla', 5);
-            $table->integer('tipo_id');
+            $table->integer('tipo_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

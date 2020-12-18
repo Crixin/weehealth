@@ -15,8 +15,6 @@ class CreateDocsRegistroImpressao extends Migration
     {
         Schema::create('docs_registro_impressoes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('status', 100);
-            $table->string('obs', 300)->nullable();
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
             $table->integer('user_id')->unsigned();

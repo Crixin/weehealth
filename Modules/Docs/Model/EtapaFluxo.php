@@ -18,6 +18,7 @@ class EtapaFluxo extends Model
         'descricao',
         'perfil_id',
         'fluxo_id',
+        'versao_fluxo',
         'status_id',
         'ordem',
         'enviar_notificacao',
@@ -29,7 +30,7 @@ class EtapaFluxo extends Model
         'comportamento_visualizacao',
         'comportamento_divulgacao',
         'comportamento_treinamento',
-        'tipo_aprovacao',
+        'tipo_aprovacao_id',
         'obrigatorio',
         'etapa_rejeicao_id',
         'exigir_lista_presenca'

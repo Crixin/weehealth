@@ -37,7 +37,7 @@
         <div class="col-md-6">
            <div class="form-group required{{ $errors->has('numeroPadrao') ? ' has-error' : '' }}">
                 {!! Form::label('numeroPadrao', 'Padrão de Número' , ['class' => 'control-label']) !!}
-                {!! Form::select('numeroPadrao',$padroesNumero, !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->numero_padrao : null, ['id' => 'numeroPadrao', 'class' => 'form-control', 'required' => 'required', 'placeholder' => __('components.selectepicker-default')]) !!}
+                {!! Form::select('numeroPadrao',$padroesNumero, !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->numero_padrao_id : null, ['id' => 'numeroPadrao', 'class' => 'form-control', 'required' => 'required', 'placeholder' => __('components.selectepicker-default')]) !!}
                 <small class="text-danger">{{ $errors->first('numeroPadrao') }}</small>
            </div>
         </div>

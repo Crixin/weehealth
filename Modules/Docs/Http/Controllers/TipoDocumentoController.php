@@ -173,7 +173,6 @@ class TipoDocumentoController extends Controller
 
         $tipoDocumento = $request->get('idTipoDocumento');
         $update  = $this->montaRequest($request);
-
         try {
             DB::transaction(function () use ($update, $tipoDocumento) {
                 $this->tipoDocumentoRepository->update($update, $tipoDocumento);
@@ -260,16 +259,16 @@ class TipoDocumentoController extends Controller
             "sigla"                 => $request->get('sigla'),
             "fluxo_id"              => $request->get('fluxo'),
             "tipo_documento_pai_id" => $request->get('tipoDocumentoPai') ?? null,
-            "periodo_vigencia_id"   => $request->get('periodoVigencia'),
+            "periodo_vigencia"      => $request->get('periodoVigencia'),
             "ativo"                 => $request->get('ativo') == 1 ? true : false,
             "vinculo_obrigatorio"   => $request->get('vinculoObrigatorio') == 1 ? true : false,
             'vinculo_obrigatorio_outros_documento' => $request->get('vinculoObrigatorioOutrosDocs') == 1 ? true : false,
             "permitir_download"     => $request->get('permitirDownload') == 1 ? true : false,
             "permitir_impressao"    => $request->get('permitirImpressao') == 1 ? true : false,
-            "periodo_aviso_id"      => $request->get('periodoAviso'),
-            "documento_modelo"      => $imageBase64,
-            "codigo_padrao"         => $request->get('codigoPadrao'),
-            "numero_padrao"         => $request->get('numeroPadrao'),
+            "periodo_aviso"         => $request->get('periodoAviso'),
+            "modelo_documento"      => $imageBase64,
+            "codigo_padrao"         => json_encode($request->get('codigoPadrao')),
+            "numero_padrao_id"      => $request->get('numeroPadrao'),
             "ultimo_documento"      => $request->get('ultimoDocumento') ?? 0
         ];
     }

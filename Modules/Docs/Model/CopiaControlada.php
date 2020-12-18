@@ -15,15 +15,14 @@ class CopiaControlada extends Model
         'id',
         'numero_copias',
         'revisao',
-        'setor',
         'documento_id',
-        'usuario_id'
+        'user_id'
     ];
 
     /** O usuário 'responsável' pela substituição da cópia física */
     public function coreUser()
     {
-        return $this->belongsTo('Modules\Core\Model\User', 'usuario_id');
+        return $this->belongsTo('Modules\Core\Model\User', 'user_id');
     }
 
     public function getResponsavelAttribute()

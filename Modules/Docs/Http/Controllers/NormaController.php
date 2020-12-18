@@ -165,7 +165,6 @@ class NormaController extends Controller
                 'descricao'          => empty($request->get('idNorma')) ? 'required|string|min:5|max:100|unique:docs_norma' : '',
                 'orgaoRegulador'     => 'required|numeric',
                 'cicloAuditoria'     => 'required|numeric',
-                'dataAcreditacao'    => 'required|date'
             ]
         );
 
@@ -182,7 +181,7 @@ class NormaController extends Controller
             "orgao_regulador_id"    => $request->get('orgaoRegulador'),
             "ativo"                 => $request->get('vigente') == 1 ? true : false,
             "ciclo_auditoria_id"    => $request->get('cicloAuditoria'),
-            "data_acreditacao"      => $request->get('dataAcreditacao'),
+            "data_acreditacao"      => $request->get('dataAcreditacao') ?? null,
         ];
     }
 }

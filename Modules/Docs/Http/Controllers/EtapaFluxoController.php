@@ -57,7 +57,6 @@ class EtapaFluxoController extends Controller
 
         $statusEtapa = $this->parametroRepository->getParametro('STATUS_ETAPA_FLUXO');
         $status = json_decode($statusEtapa);
-
         $notificacoes = [];
 
         $statusTipoAprovacao = $this->parametroRepository->getParametro('TIPO_APROVACAO_ETAPA');
@@ -222,6 +221,7 @@ class EtapaFluxoController extends Controller
             "descricao"                  => $request->get('descricao'),
             "perfil_id"                  => $request->get('perfil'),
             "fluxo_id"                   => $id_fluxo,
+            "versao_fluxo"               => '',
             "status_id"                  => $request->get('status'),
             "ordem"                      => $request->get('ordem') ? $request->get('ordem') : $buscaUltimaEtapa->count() + 1,
             "enviar_notificacao"         => $request->get('enviarNotificacao') == 1 ? true : false,
@@ -233,7 +233,7 @@ class EtapaFluxoController extends Controller
             "comportamento_visualizacao" => $request->get('comportamentoVizualizacao') == 1 ? true : false,
             "comportamento_divulgacao"   => $request->get('comportamentoDivulgacao') == 1 ? true : false,
             "comportamento_treinamento"  => $request->get('comportamentoTreinamento') == 1 ? true : false,
-            "tipo_aprovacao"             => $request->get('tipoAprovacao'),
+            "tipo_aprovacao_id"          => $request->get('tipoAprovacao'),
             "obrigatorio"                => $request->get('obrigatoria') == 1 ? true : false,
             "etapa_rejeicao_id"          => $request->get('etapaRejeicao'),
             "exigir_lista_presenca"      => $request->get('listaPresenca') == 1 ? true : false,

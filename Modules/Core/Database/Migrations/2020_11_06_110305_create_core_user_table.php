@@ -23,6 +23,8 @@ class CreateCoreUserTable extends Migration
             $table->boolean('administrador')->default(false);
             $table->integer('perfil_id')->nullable();
             $table->foreign('perfil_id')->references('id')->on('core_perfil');
+            $table->integer('setor_id')->unsigned()->nullable();
+            $table->foreign('setor_id')->references('id')->on('core_setor');
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

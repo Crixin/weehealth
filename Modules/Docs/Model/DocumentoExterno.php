@@ -14,11 +14,11 @@ class DocumentoExterno extends Model
 
     protected $fillable = [
         'id',
-        'id_documento',
-        'id_registro',
-        'id_area',
+        'ged_documento_id',
+        'ged_registro_id',
+        'ged_area_id',
         'validado',
-        'responsavel_upload_id',
+        'user_responsavel_upload_id',
         'user_id',
         'setor_id',
         'empresa_id',
@@ -34,7 +34,7 @@ class DocumentoExterno extends Model
 
     public function getResponsavelUploadAttribute()
     {
-        return User::find($this->responsavel_upload_id)->name;
+        return User::find($this->user_responsavel_upload_id)->name;
     }
 
 

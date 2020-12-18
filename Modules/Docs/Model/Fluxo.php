@@ -16,7 +16,7 @@ class Fluxo extends Model
         'id',
         'nome',
         'descricao',
-        'versao_fluxo',
+        'versao',
         'grupo_id',
         'perfil_id',
         'ativo'

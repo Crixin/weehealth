@@ -35,21 +35,21 @@ class DocumentoService
         foreach ($codigoPadrao as $key => $value) {
 
             switch ($buscaParametros[$value]->VARIAVEL) {
-                case '$SIGLA':
+                case 'SIGLA':
                     $codigoFinal .= trim($buscaTipoDocumento->sigla);
                     break;
-                case '$NUMEROPADRAO':
+                case 'NUMEROPADRAO':
                     $codigoFinal .= self::gerarPadraoNumero(
                         $buscaSetor->ultimo_codigo + 1,
                         $buscaTipoDocumento->numero_padrao
                     );
                     break;
 
-                case '$SETOR':
+                case 'SETOR':
                     $codigoFinal .= trim($buscaSetor->sigla);
                     break;
 
-                case '$SEPARADOR':
+                case 'SEPARADOR':
                     $codigoFinal .= trim($buscaParametros[$value]->DESCRICAO);
                     break;
             }

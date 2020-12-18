@@ -15,7 +15,7 @@ class SeedDocsCreateParametroPadraoNumeroTableSeeder extends Seeder
      */
     public function run()
     {
-        //ORGAO REGULADOR
+        //PADRAO CRIACAO DO CODIGO DO DOCUMENTO
         $newParametro = new Parametro();
         $newParametro->identificador_parametro = "PADRAO_NUMERO";
         $newParametro->descricao = "Padrão Número";
@@ -41,6 +41,43 @@ class SeedDocsCreateParametroPadraoNumeroTableSeeder extends Seeder
             "ID": "4",
             "DESCRICAO": "0000",
             "GERADO" : "001.01, 002.01, 003.01...."
+          }
+        }';
+        $newParametro->valor_usuario = 1;
+        $newParametro->ativo = true;
+        $newParametro->save();
+
+
+        //FORMATO DO CODIGO 
+        $newParametro = new Parametro();
+        $newParametro->identificador_parametro = "PADRAO_CODIGO";
+        $newParametro->descricao = "Padrão da formação do código do documento";
+        $newParametro->valor_padrao =
+        '{
+          "1": {
+            "ID": "1",
+            "DESCRICAO": "SIGLA",
+            "VARIAVEL" : "SIGLA"
+          },
+          "2": {
+            "ID": "2",
+            "DESCRICAO": "NÚMERO",
+            "VARIAVEL" : "NUMEROPADRAO"
+          },
+          "3": {
+            "ID": "3",
+            "DESCRICAO": "SETOR",
+            "VARIAVEL" : "SETOR"
+          },
+          "4": {
+            "ID": "4",
+            "DESCRICAO": "- ",
+            "VARIAVEL" : "SEPARADOR"
+          },
+          "5": {
+            "ID": "5",
+            "DESCRICAO": " -",
+            "VARIAVEL" : "SEPARADOR"
           }
         }';
         $newParametro->valor_usuario = 1;

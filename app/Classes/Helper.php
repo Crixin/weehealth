@@ -425,9 +425,9 @@ class Helper
                 if ($menu->filhos_menu ?? false) {
                     \Helper::makeMenuPermissions($menu, false);
                 }
-                $perm = array_merge($menu->permissao_menu, $perm);
+                $perm = array_merge($menu->permissao, $perm);
             }
-            $menuMaster->permissao_menu = $perm;
+            $menuMaster->permissao = $perm;
             return;
         }
 

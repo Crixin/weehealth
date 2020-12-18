@@ -14,8 +14,7 @@ class DocumentoObservacao extends Model
     protected $fillable = [
         'id',
         'observacao',
-        'nome_usuario_responsavel',
         'documento_id',
-        'usuario_id'
+        'user_id'
     ];
 }

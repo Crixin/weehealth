@@ -5,15 +5,15 @@ namespace Modules\Docs\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DocumentoVinculado extends Model
+class HierarquiaDocumento extends Model
 {
     use SoftDeletes;
 
-    protected $table = "docs_documento_vinculado";
+    protected $table = "docs_hierarquia_documento";
 
     protected $fillable = [
         'id',
         'documento_id',
-        'documento_vinculado_id'
+        'documento_pai_id'
     ];
 }

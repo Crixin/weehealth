@@ -17,8 +17,8 @@ class CreateDocsUserEtapaDocumento extends Migration
             $table->increments('id');
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
-            $table->integer('usuario_id')->unsigned();
-            $table->foreign('usuario_id')->references('id')->on('core_users')->onDelete('cascade');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('core_users')->onDelete('cascade');
             $table->integer('etapa_fluxo_id')->unsigned();
             $table->foreign('etapa_fluxo_id')->references('id')->on('docs_etapa_fluxo')->onDelete('cascade');
             $table->timestamps();

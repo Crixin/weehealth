@@ -54,7 +54,7 @@ class SeedDocsCreateParametroStatusEtapaFluxoTableSeeder extends Seeder
             "1": "EM ELABORACAO",
             "2": "EM APROVACAO",
             "3": "EM TREINAMENTO",
-            "4": "FINALIZADO",
+            "4": "FINALIZADO"
         }';
         $newParametro->valor_usuario = 1;
         $newParametro->ativo = true;

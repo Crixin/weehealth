@@ -58,7 +58,7 @@
         <div class="col-md-6">
             <div class="form-group required{{ $errors->has('nivelAcesso') ? ' has-error' : '' }}">
                 {!! Form::label('nivelAcesso', 'Nível Acesso', ['class' => 'control-label']) !!}
-                {!! Form::select('nivelAcesso', $niveisAcesso, !empty($controleRegistroEdit) ?  $controleRegistroEdit->nivel_acesso : null, ['id' => 'nivelAcesso', 'class' => 'form-control', 'required' => 'required','placeholder' => __('components.selectepicker-default')]) !!}
+                {!! Form::select('nivelAcesso', $niveisAcesso, !empty($controleRegistroEdit) ?  $controleRegistroEdit->nivel_acesso_id : null, ['id' => 'nivelAcesso', 'class' => 'form-control', 'required' => 'required','placeholder' => __('components.selectepicker-default')]) !!}
                 <small class="text-danger">{{ $errors->first('nivelAcesso') }}</small>
             </div>
         </div>

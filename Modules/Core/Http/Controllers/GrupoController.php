@@ -46,7 +46,6 @@ class GrupoController extends Controller
             Helper::setNotify('Grupo criado com sucesso!', 'success|check-circle');
             return redirect()->route('core.grupo');
         } catch (\Throwable $th) {
-            dd($th);
             Helper::setNotify('Um erro ocorreu ao gravar o grupo.', 'danger|close-circle');
             return redirect()->back()->withInput();
         }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDocsSetorTable extends Migration
+class CreateCoreSetorTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class CreateDocsSetorTable extends Migration
             $table->text('nome');
             $table->string('sigla', 5);
             $table->text('descricao');
-            $table->integer('tipo_setor_id');
+            $table->integer('tipo_setor_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

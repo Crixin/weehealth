@@ -15,12 +15,12 @@ class CreateDocsListaPresenca extends Migration
     {
         Schema::create('docs_lista_presenca', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nome', 80);
-            $table->string('extensao', 10);
+            $table->text('nome');
+            $table->text('ged_documento_id');
             $table->date('data');
             $table->text('descricao');
             $table->text('destinatarios_email')->nullable();
-            $table->string('revisao_documento', 10)->nullable();
+            $table->text('revisao_documento');
             $table->integer('documento_id')->unsigned();
             $table->foreign('documento_id')->references('id')->on('docs_documento')->onDelete('cascade');
             $table->timestamps();

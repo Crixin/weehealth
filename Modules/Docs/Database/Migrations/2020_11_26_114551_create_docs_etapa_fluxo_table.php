@@ -19,12 +19,13 @@ class CreateDocsEtapaFluxoTable extends Migration
             $table->text('descricao');
             $table->integer('fluxo_id')->unsigned();
             $table->foreign('fluxo_id')->references('id')->on('docs_fluxo')->onDelete('cascade');
+            $table->text('versao_fluxo');
             $table->integer('perfil_id')->unsigned();
             $table->foreign('perfil_id')->references('id')->on('core_perfil');
             $table->integer('status_id');
             $table->integer('ordem');
             $table->boolean('enviar_notificacao');
-            $table->integer('notificacao_id')->unsigned();
+            $table->integer('notificacao_id')->unsigned()->nullable();
             $table->foreign('notificacao_id')->references('id')->on('docs_notificacao');
             $table->boolean('permitir_anexo');
             $table->boolean('comportamento_criacao');
@@ -33,9 +34,9 @@ class CreateDocsEtapaFluxoTable extends Migration
             $table->boolean('comportamento_visualizacao');
             $table->boolean('comportamento_divulgacao');
             $table->boolean('comportamento_treinamento');
-            $table->integer('tipo_aprovacao');
+            $table->integer('tipo_aprovacao_id')->nullable();
             $table->boolean('obrigatorio');
-            $table->integer('etapa_rejeicao_id')->unsigned();
+            $table->integer('etapa_rejeicao_id')->unsigned()->nullable();
             $table->foreign('etapa_rejeicao_id')->references('id')->on('docs_etapa_fluxo');
             $table->boolean('exigir_lista_presenca');
             $table->timestamps();

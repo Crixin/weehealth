@@ -13,8 +13,7 @@ class Plano extends Model
     [
         'id',
         'nome',
-        'ativo',
-        'grupo_id'
+        'ativo'
     ];
 
     protected $table = "docs_plano";

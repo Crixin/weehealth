@@ -15,8 +15,6 @@ class RegistroImpressoes extends Model
     // Então, basicamente, se dejarmos criar uma mensagem como "O usuário {x}, às {data/hora}, acessou a opção de impressão do documento {y}", isso é possível de ser feito em tempo de execução, sem problema algum.
     protected $fillable = [
         'id',
-        'status',
-        'obs',
         'documento_id',
         'user_id'
     ];

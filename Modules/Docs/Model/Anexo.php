@@ -14,8 +14,7 @@ class Anexo extends Model
     protected $fillable = [
         'id',
         'nome',
-        'hash',
-        'extensao',
+        'ged_documento_id',
         'documento_id'
     ];
 

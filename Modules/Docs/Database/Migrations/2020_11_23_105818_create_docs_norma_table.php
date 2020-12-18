@@ -16,10 +16,10 @@ class CreateDocsNormaTable extends Migration
         Schema::create('docs_norma', function (Blueprint $table) {
             $table->increments('id');
             $table->text('descricao');
-            $table->text('orgao_regulador_id');
+            $table->integer('orgao_regulador_id')->nullable();
             $table->boolean('ativo');
-            $table->text('ciclo_auditoria_id');
-            $table->date('data_acreditacao');
+            $table->integer('ciclo_auditoria_id')->nullable();
+            $table->date('data_acreditacao')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
