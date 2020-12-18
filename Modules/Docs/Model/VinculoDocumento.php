@@ -5,7 +5,7 @@ namespace Modules\Docs\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DocumentoFormulario extends Model
+class VinculoDocumento extends Model
 {
     use SoftDeletes;
 

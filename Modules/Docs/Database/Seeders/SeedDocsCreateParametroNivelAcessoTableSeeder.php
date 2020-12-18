@@ -35,7 +35,7 @@ class SeedDocsCreateParametroNivelAcessoTableSeeder extends Seeder
         $newParametro->descricao = "Classificação do Documento";
         $newParametro->valor_padrao =
         '{
-            "1": "Qualidade",
+            "1": "Qualidade"
         }';
         $newParametro->valor_usuario = 1;
         $newParametro->ativo = true;

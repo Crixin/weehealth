@@ -15,11 +15,12 @@ use Modules\Core\Repositories\SetorRepository;
 use Modules\Core\Repositories\UserRepository;
 use Modules\Docs\Repositories\AgrupamentoUserDocumentoRepository;
 use Modules\Docs\Repositories\DocumentoItemNormaRepository;
-use Modules\Docs\Repositories\DocumentoPaiRepository;
+use Modules\Docs\Repositories\HierarquiaDocumentoRepository;
 use Modules\Docs\Repositories\DocumentoVinculadoRepository;
 use Modules\Docs\Repositories\NormaRepository;
 use Modules\Docs\Repositories\TipoDocumentoRepository;
 use Modules\Docs\Repositories\UserEtapaDocumentoRepository;
+use Modules\Docs\Repositories\VinculoDocumentoRepository;
 use Modules\Docs\Services\DocumentoService;
 use Modules\Docs\Services\TipoDocumentoService;
 
@@ -36,8 +37,10 @@ class DocumentoController extends Controller
     protected $userEtapaDocumentoRepository;
     protected $documentoItemNormaRepository;
     protected $agrupamentoUserDocumentoRepository;
-    protected $documentoVinculadoRepository;
-    protected $documentoPairepository;
+    protected $vinculoDocumentoRepository;
+    protected $hierarquiaDocumentorepository;
+
+   
 
     public function __construct(
         DocumentoRepository $documentoRepository,
@@ -49,8 +52,8 @@ class DocumentoController extends Controller
         UserEtapaDocumentoRepository $userEtapaDocumentoRepository,
         DocumentoItemNormaRepository $documentoItemNormaRepository,
         AgrupamentoUserDocumentoRepository $agrupamentoUserDocumentoRepository,
-        DocumentoVinculadoRepository $documentoVinculadoRepository,
-        DocumentoPaiRepository $documentoPaiRepository
+        VinculoDocumentoRepository $vinculoDocumentoRepository,
+        HierarquiaDocumentoRepository $hierarquiaDocumentoRepository
     ){
         $this->documentoRepository = $documentoRepository;
         $this->setorRepository = $setorRepository;
@@ -61,8 +64,10 @@ class DocumentoController extends Controller
         $this->userEtapaDocumentoRepository = $userEtapaDocumentoRepository;
         $this->documentoItemNormaRepository = $documentoItemNormaRepository;
         $this->agrupamentoUserDocumentoRepository = $agrupamentoUserDocumentoRepository;
-        $this->documentoVinculadoRepository = $documentoVinculadoRepository;
-        $this->documentoPairepository = $documentoPaiRepository;
+        $this->vinculoDocumentoRepository = $vinculoDocumentoRepository;
+        $this->hierarquiaDocumentorepository = $hierarquiaDocumentoRepository;
+
+
     }
 
     /**
@@ -165,93 +170,14 @@ class DocumentoController extends Controller
             return redirect()->back()->withInput()->withErrors($error);
         }
         $cadastro = $this->montaRequest($request);
-        
+
         try {
-            DB::transaction(function () use ($cadastro, $request) {
-                $criarDocumento = new DocumentoService();
-                $documentoCriado = $criarDocumento->create($cadastro);
-
-                /**Documentos Pai */
-                if (!empty($request->documentoPai)) {
-                    foreach (json_decode($request->documentoPai) as $key => $valueDocumentoPai) {
-                        $montaRequestDocumentoPai = [
-                            'documento_id'     =>  $documentoCriado->id,
-                            'documento_pai_id' => $valueDocumentoPai
-                        ];
-                        $this->documentoPairepository->create($montaRequestDocumentoPai);
-                    }
-                }
-
-                /**Documentos Vinculados */
-                if (!empty($request->documentoVinculado)) {
-                    foreach (json_decode($request->documentoVinculado) as $key => $valueDocumentosVinculados) {
-                        $montaRequestDocumentosVinculados = [
-                            'documento_id'           =>  $documentoCriado->id,
-                            'documento_vinculado_id' => $valueDocumentosVinculados
-                        ];
-                        $this->documentoVinculadoRepository->create($montaRequestDocumentosVinculados);
-                    }
-                }
-
-                /**Grupo Treinamento */
-                if (!empty($request->grupoTreinamentoDoc)) {
-                    foreach (json_decode($request->grupoTreinamentoDoc) as $key => $valueUserTreinamento) {
-                        $montaRequestTreinamento = [
-                            "tipo" => 'TREINAMENTO',
-                            "documento_id" => $documentoCriado->id,
-                            "user_id" => $valueUserTreinamento
-                        ];
-                        $this->agrupamentoUserDocumentoRepository->create($montaRequestTreinamento);
-                    }
-                }
-
-                /**Grupo Divulgacao */
-                if (!empty($request->grupoDivulgacaoDoc)) {
-                    foreach (json_decode($request->grupoDivulgacaoDoc) as $key => $valueUserDivulgacao) {
-                        $montaRequestDivulgacao = [
-                            "tipo" => 'DIVULGACAO',
-                            "documento_id" => $documentoCriado->id,
-                            "user_id" => $valueUserDivulgacao
-                        ];
-                        $this->agrupamentoUserDocumentoRepository->create($montaRequestDivulgacao);
-                    }
-                }
-
-                /**Normas */
-                if (!empty($request->grupoNorma)) {
-                    foreach (json_decode($request->grupoNorma) as $key => $valueNormas) {
-                        $montaRequestNorma = [
-                            "documento_id" => $documentoCriado->id,
-                            "item_norma_id" => $valueNormas
-                        ];
-                        $this->documentoItemNormaRepository->create($montaRequestNorma);
-                    }
-                }
-
-                /**Etapas de Aprovacao */
-                $tipoDocumentoService = new TipoDocumentoService();
-                $etapas = $tipoDocumentoService->getEtapasFluxosPorComportamento(
-                    $request->tipoDocumento,
-                    'comportamento_aprovacao'
-                );
-                foreach ($etapas as $key => $value) {
-                    $variavel = 'grupo' . $value['nome'];
-                    if (!empty($request->$variavel)) {
-                        foreach (json_decode($request->$variavel) as $key => $idAprovadores) {
-                            $montaRequestEtapa = [
-                                "user_id" => $idAprovadores,
-                                "etapa_id" => $value['id'],
-                                "documento_id" => $documentoCriado->id
-                            ];
-                            $this->userEtapaDocumentoRepository->create($montaRequestEtapa);
-                        }
-                    }
-                }
+            DB::transaction(function () use ($request) {
+                DocumentoService::create($request);
             });
             Helper::setNotify('Novo documento criado com sucesso!', 'success|check-circle');
             return redirect()->route('docs.documento');
         } catch (\Throwable $th) {
-            dd($th);
             Helper::setNotify('Um erro ocorreu ao gravar o documento', 'danger|close-circle');
             return redirect()->back()->withInput();
         }
@@ -438,26 +364,17 @@ class DocumentoController extends Controller
         return [
             "nome"                           => $request->get('tituloDocumento'),
             "codigo"                         => $request->get('codigoDocumento'),
-            "validade"                       => date('Y-m-d'),
-            "observacao"                     => "Criação do Documento",
+            "validade"                       => null,
             "tipo_documento_id"              => (int) $request->get('tipoDocumento'),
-            "status"                         => true,
             "copia_controlada"               => $request->get('copiaControlada') == 1 ? true : false,
-            "nivel_acesso"                   => (int) $request->get('nivelAcesso'),
+            "nivel_acesso_id"                => (int) $request->get('nivelAcesso'),
             "setor_id"                       => (int) $request->get('setor'),
             "obsoleto"                       => $request->get('obsoleto') == 1 ? true : false,
             "elaborador_id"                  => Auth::user()->id,
-            "aprovador_id"                   => Auth::user()->id,
-            "classificacao"                  => (int) $request->classificacao,
-            "necessita_revisao"              => false,
-            "aprovador_id"                   => null,
-            "justificativa_rejeicao_revisao" => null,
-            "em_revisao"                     => false,
-            "justificativa_cancelar_revisao" => null,
-            "finalizado"                     => true,
-            "revisao_curta"                  => false,
-            "tipo"                           => '',
-            "extensao"                       => ''
+            "classificacao_id"               => (int) $request->classificacao,
+            "justificativa_rejeicao_etapa"   => null,
+            "justificativa_cancelar_etapa"   => null,
+            "ged_documento_id"               => null
         ];
     }
 }
