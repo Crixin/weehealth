@@ -11,6 +11,7 @@ class Perfil extends Model
 
     public $table = 'core_perfil';
 
+    
     protected $fillable = [
         'id',
         'nome',
@@ -22,9 +23,11 @@ class Perfil extends Model
         'permissoes' => 'array'
     ];
 
-    protected $roles = [
+
+    public $rules = [
         'nome' => 'required|string|unique:core_perfil,nome'
     ];
+
 
     public function coreUsers()
     {

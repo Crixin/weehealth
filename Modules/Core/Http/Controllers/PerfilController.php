@@ -6,15 +6,18 @@ use App\Classes\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Validator, DB};
 use Modules\Core\Repositories\{PerfilRepository};
+use Modules\Core\Services\PerfilService;
 
 class PerfilController extends Controller
 {
     protected $perfilRepository;
+    protected $perfilService;
 
 
-    public function __construct(PerfilRepository $perfil)
+    public function __construct(PerfilRepository $perfil, PerfilService $perfilService)
     {
         $this->perfilRepository = $perfil;
+        $this->perfilService = $perfilService;
     }
 
 
@@ -51,34 +54,30 @@ class PerfilController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $errors = $this->validator($request);
-            
-            if ($errors) {
-                return redirect()->back()->withErrors($errors)->withInput();
-            }
-
-            DB::transaction(function () use ($request) {
+        $nome = $request->nome;
                 
-                $nome = $request->nome;
-                
-                $permissoes = $request->all();
-                unset($permissoes["_token"]);
-                unset($permissoes["nome"]);
-                $permissoes = array_keys($permissoes);
+        $permissoes = $request->all();
+        unset($permissoes["_token"], $permissoes["nome"]);
+        $permissoes = array_keys($permissoes);
+        
+        $data = [
+            'nome' => $nome,
+            'permissoes' => $permissoes,
+        ];
 
-                $perfil = $this->perfilRepository->create([
-                    'nome' => $nome,
-                    'permissoes' => $permissoes
-                ]);
-            });
+        $reponse = $this->perfilService->store($data);
 
+        if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
+            return $reponse;
+        }
+
+        if ($reponse) {
             Helper::setNotify('Novo perfil criado com sucesso!', 'success|check-circle');
             return redirect()->route('core.perfil');
-        } catch (\Throwable $th) {
-            Helper::setNotify("Erro ao criar o perfil", 'danger|close-circle');
-            return redirect()->back()->withInput();
         }
+
+        Helper::setNotify("Erro ao criar o perfil. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+        return redirect()->back();
     }
 
     /**
@@ -103,37 +102,32 @@ class PerfilController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {   
-   /*      $errors = $this->validator($request);
-        if ($errors) {
-            return redirect()->back()->withErrors($errors)->withInput();
-        } */
+    {
+        $nome = $request->nome;
 
-        try {
-            DB::transaction(function () use ($request, $id) {
-                $nome = $request->nome;
-                
-                $permissoes = $request->all();
-                unset($permissoes["_token"]);
-                unset($permissoes["nome"]);
-                $permissoes = array_keys($permissoes);
+        $permissoes = $request->all();
+        unset($permissoes["_token"], $permissoes["nome"]);
+        $permissoes = array_keys($permissoes);
+        
+        $data = [
+            'id' => $id,
+            'nome' => $nome,
+            'permissoes' => $permissoes,
+        ];
 
-                $this->perfilRepository->update(
-                    [
-                        'nome' => $nome,
-                        'permissoes' => $permissoes
-                    ],
-                    $id
-                );
+        $reponse = $this->perfilService->update($data);
 
+        if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
+            return $reponse;
+        }
 
-            });
+        if ($reponse) {
             Helper::setNotify('Perfil atualizado com sucesso!', 'success|check-circle');
             return redirect()->route('core.perfil');
-        } catch (\Throwable $th) {
-            Helper::setNotify("Erro ao atualizar o perfil", 'danger|close-circle');
-            return redirect()->back()->withInput();
         }
+
+        Helper::setNotify("Erro ao atualizar o perfil. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+        return redirect()->back();
     }
 
     /**
