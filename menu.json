@@ -111,25 +111,25 @@
             },
             "filhos_menu": {
                 "Empresas": {
-                    "permissao_menu": ["core_empresa_cons"],
+                    "permissao": ["core_empresa_cons"],
                     "descricao": "Empresas",
                     "icone": "",
                     "route": "core.empresa"
                 },
                 "Usuários": {
-                    "permissao_menu": ["core_usuario_cons"],
+                    "permissao": ["core_usuario_cons"],
                     "descricao": "Usuários",
                     "icone": "",
                     "route": "core.usuario"
                 },
                 "Perfil": {
-                    "permissao_menu": ["core_perfil_cons"],
+                    "permissao": ["core_perfil_cons"],
                     "descricao": "Perfil",
                     "icone": "",
                     "route": "core.perfil"
                 },
                 "Grupo": {
-                    "permissao_menu": ["core_grupo_cons"],
+                    "permissao": ["core_grupo_cons"],
                     "descricao": "Grupo",
                     "icone": "",
                     "route": "core.grupo"
@@ -142,13 +142,13 @@
             "filhos_perfil": {
                 "Parametros": {
                     "descricao": "Parâmetros",
-                    "name": "core_grupo_cad",
+                    "name": "core_config_param",
                     "icone": "mdi mdi-pencil"
                 }
             },
             "filhos_menu": {
                 "Grupo": {
-                    "permissao_menu": ["core_config_param"],
+                    "permissao": ["core_config_param"],
                     "descricao": "Parâmetros",
                     "icone": "",
                     "route": "core.configuracao.parametros"
@@ -190,7 +190,7 @@
                     }
                 },
                 "Visualizar": {
-                    "permissao_menu": ["portal_dashboard_view"],
+                    "permissao": ["portal_dashboard_view"],
                     "descricao": "Visualização",
                     "icone": "",
                     "route": "portal.dashboards",
@@ -206,13 +206,13 @@
             }, 
             "filhos_menu": {
                 "Listar-Cadastrar": {
-                    "permissao_menu": ["portal_dashboard_cons"],
+                    "permissao": ["portal_dashboard_cons"],
                     "descricao": "Listar/Cadastrar",
                     "icone": "",
                     "route": "portal.dashboards"
                 },
                 "Visualizar": {
-                    "permissao_menu": ["portal_dashboard_view"],
+                    "permissao": ["portal_dashboard_view"],
                     "descricao": "Visualizar",
                     "icone": "",
                     "route": false
@@ -245,7 +245,7 @@
                     }
                 },
                 "Processo": {
-                    "permissao_menu": ["portal_processo_cons"],
+                    "permissao": ["portal_processo_cons"],
                     "descricao": "Processos",
                     "icone": "",
                     "route": "portal.processo",
@@ -275,13 +275,13 @@
             },
             "filhos_menu": {
                 "Empresas": {
-                    "permissao_menu": ["portal_emp_vinc_user", "portal_emp_vinc_grupo", "portal_emp_vinc_proc"],
+                    "permissao": ["portal_emp_vinc_user", "portal_emp_vinc_grupo", "portal_emp_vinc_proc"],
                     "descricao": "Vínculos da Empresa",
                     "icone": "",
                     "route": "portal.empresa"
                 },
                 "Processo": {
-                    "permissao_menu": ["portal_processo_cons"],
+                    "permissao": ["portal_processo_cons"],
                     "descricao": "Processos",
                     "icone": "",
                     "route": "portal.processo"
@@ -290,10 +290,10 @@
         },
         "PROCESSOS": {
             "icone": "mdi mdi-image-filter-none ",
+            "route": false,
             "class": "processos-user",
             "descricao": "PROCESSOS",
-            "route": false,
-            "filhos_menu": false,
+            "permissao": ["portal_processo_ger"],
             "filhos_perfil": {
                 "Gerenciamento": {
                     "name": "portal_processo_ger",
@@ -306,6 +306,7 @@
             "icone": "mdi mdi-file-import",
             "route": "portal.edicaoDocumento.index",
             "descricao": "DOCS EM EDIÇÃO",
+            "permissao": ["portal_docs_edit_ger"],
             "filhos_perfil": {
                 "Consulta": {
                     "name": "portal_docs_edit_ger",
@@ -319,13 +320,13 @@
             "descricao": "DOSSIÊ DE DOC.",
             "filhos_menu": {
                 "Gerar": {
-                    "permissao_menu": ["portal_dossie_cad"],
+                    "permissao": ["portal_dossie_cad"],
                     "descricao": "Gerar",
                     "icone": "",
                     "route": "portal.dossie-documentos.novo"
                 },
                 "Enviados": {
-                    "permissao_menu": ["portal_dossie_cons"],
+                    "permissao": ["portal_dossie_cons"],
                     "descricao": "Enviados",
                     "icone": "",
                     "route": "portal.dossie-documentos.list"
@@ -349,13 +350,13 @@
             "descricao": "TAREFAS",
             "filhos_menu": {
                 "Gerar": {
-                    "permissao_menu": ["portal_tarefa_cons"],
+                    "permissao": ["portal_tarefa_cons"],
                     "descricao": "Listar/Cadastrar",
                     "icone": "",
                     "route": "portal.tarefa"
                 },
                 "Configuracao": {
-                    "permissao_menu": ["portal_config_tarefa_cons"],
+                    "permissao": ["portal_config_tarefa_cons"],
                     "descricao": "Configuração",
                     "icone": "",
                     "route": "portal.config-tarefa"
@@ -553,26 +554,26 @@
             },
             "filhos_menu": {
                 "Planos": {
-                    "permissao_menu": ["docs_plano_cons"],
+                    "permissao": ["docs_plano_cons"],
                     "descricao": "Planos",
                     "icone": "",
                     "route": "docs.plano"
                 },
                 "Tipos-Documento": {
-                    "permissao_menu": ["docs_tipo_doc_cons"],
+                    "permissao": ["docs_tipo_doc_cons"],
                     "descricao": "Tipo de Documento",
                     "icone": "",
                     "route": "docs.tipo-documento"
             
                 },
                 "Fluxos": {
-                    "permissao_menu": ["docs_fluxo_cons"],
+                    "permissao": ["docs_fluxo_cons"],
                     "descricao": "Fluxos",
                     "icone": "",
                     "route": "docs.fluxo"
                 },
                 "Normas": {
-                    "permissao_menu": ["docs_norma_cons"],
+                    "permissao": ["docs_norma_cons"],
                     "descricao": "Normas",
                     "icone": "",
                     "route": "docs.norma"
@@ -638,13 +639,13 @@
             },
             "filhos_menu": {
                 "Opcao": {
-                    "permissao_menu": ["docs_opcao_cons"],
+                    "permissao": ["docs_opcao_cons"],
                     "descricao": "Opções",
                     "icone": "",
                     "route": "docs.opcao-controle"
                 },
                 "Controle": {
-                    "permissao_menu": ["docs_controle_cons"],
+                    "permissao": ["docs_controle_cons"],
                     "descricao": "Controles",
                     "icone": "",
                     "route": "docs.controle-registro"
@@ -656,7 +657,7 @@
             "icone": "mdi mdi-library-books",
             "descricao": "DOCUMENTOS",
             "route": "docs.documento",
-            "permissao_menu": ["docs_documento_cons"],
+            "permissao": ["docs_documento_cons"],
             "filhos_perfil": {
                 "Cadastro": {
                     "name": "docs_documento_cad",
@@ -684,7 +685,7 @@
             "icone": "mdi mdi-library-books",
             "descricao": "DOC. EXTERNO",
             "route": "docs.documento",
-            "permissao_menu": ["docs_documento_externo_cons"],
+            "permissao": ["docs_documento_externo_cons"],
             "filhos_perfil": {
                 "Cadastro": {
                     "name": "docs_documento_externo_cad",

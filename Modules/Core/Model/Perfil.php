@@ -22,6 +22,9 @@ class Perfil extends Model
         'permissoes' => 'array'
     ];
 
+    protected $roles = [
+        'nome' => 'required|string|unique:core_perfil,nome'
+    ];
 
     public function coreUsers()
     {
