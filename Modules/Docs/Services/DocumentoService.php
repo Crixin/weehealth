@@ -81,6 +81,7 @@ class DocumentoService
                 $documento = $this->documentoRepository->create($createDocumento);
 
                 $requestWorkflow = $this->montaRequestWorkflow($data['tipo_documento_id'], $documento->id, $data['revisao']);
+               
                 $this->workflowService->create($requestWorkflow);
 
                 /**Cria Hierarquia Documento */
@@ -364,11 +365,11 @@ class DocumentoService
     public function montaRequestWorkflow($tipoDocumento, $documentoId, $versaoDocumento)
     {
         $etapas = $this->tipoDocumentoService->getEtapasFluxo($tipoDocumento);
-        $etapaId = $etapas[0]->id;
+        $etapaId = $etapas[0]['id'];
 
         return [
-            "descrição" => 'Documento em elaboração',
-            "justificativa" => null,
+            "descricao" => 'Documento em elaboração',
+            "justificativa" => '',
             "justificativa_lida" => false,
             "documento_id" => $documentoId,
             "etapa_fluxo_id" => $etapaId,
