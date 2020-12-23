@@ -131,7 +131,7 @@ class ControleRegistroController extends Controller
         $meiosArmazenamento       = $this->getOption('LOCAL_ARMAZENAMENTO');
         $disposicoes              = $this->getOption('DISPOSICAO');
         $meios                    = $this->getOption('MEIO_DISTRIBUICAO');
-        $meiosProtecao            = $this->getOption('PROTECAO');
+        $meiosProtecao            = $this->getOption('MEIO_PROTECAO');
         $meiosRecuperacao         = $this->getOption('RECUPERACAO');
         $opcoesRetencaoDeposito   = $this->getOption('TEMPO_RETENCAO_DEPOSITO');
         $opcoesRetencaoLocal      = $this->getOption('TEMPO_RETENCAO_LOCAL');
