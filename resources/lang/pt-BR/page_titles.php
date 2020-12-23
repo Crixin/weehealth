@@ -63,6 +63,12 @@ return [
             'linked_users'      => 'Usuários Vinculados',
             'linked_users_to'   => 'Usuários Vinculados ao Setor: '
         ],
+        //PARAMETRO
+        'parametro'        => [
+            'index'           => 'Parametros',
+            'create'          => 'Novo Parametro',
+            'update'          => 'Alterando Parametro'
+        ],
     ],
 
     'portal'        => [
