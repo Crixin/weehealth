@@ -23,7 +23,7 @@ class UserEtapaDocumentoService
         return $this->userEtapaDocumentoRepository->update($dados, $id);
     }
 
-    public function delete (int $delete)
+    public function delete(int $delete)
     {
         return $this->userEtapaDocumentoRepository->delete($delete);
     }

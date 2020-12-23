@@ -62,7 +62,6 @@ class DocumentoService
         $this->documentoItemNormaService = $documentoItemNormaService;
         $this->tipoDocumentoService = $tipoDocumentoService;
         $this->workflowService = $workFlowService;
-        
     }
 
     public function create($data)
@@ -81,7 +80,6 @@ class DocumentoService
                 $documento = $this->documentoRepository->create($createDocumento);
 
                 $requestWorkflow = $this->montaRequestWorkflow($data['tipo_documento_id'], $documento->id, $data['revisao']);
-               
                 $this->workflowService->create($requestWorkflow);
 
                 /**Cria Hierarquia Documento */
@@ -277,6 +275,7 @@ class DocumentoService
             //Cria
             foreach ($data['etapa_aprovacao'] as $value) {
                 $value['documento_id'] = (int) $id;
+                dd($value);
                 $this->userEtapaDocumentoService->create($value);
             }
             return true;
