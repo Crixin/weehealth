@@ -349,7 +349,7 @@
             });
             
             let obrigatorio = element.obrigatorio == true ? "required='required'" : "";
-            linha += "<select multiple class='optgroup' "+obrigatorio+"  id='optgroup-newGrupo"+element.nome+"' name='grupo"+element.nome+"[]''>";
+            linha += "<select multiple class='optgroup' "+obrigatorio+"  id='optgroup-newGrupo"+element.id+"' name='grupo"+element.id+"[]''>";
             
             @foreach($setoresUsuarios as $key => $su)
             linha += "<optgroup label='{{ $key }}'>";

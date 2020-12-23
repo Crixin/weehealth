@@ -516,7 +516,7 @@ class DocumentoController extends Controller
         );
 
         foreach ($etapas as $key => $value) {
-            $variavel = 'grupo' . $value['nome'];
+            $variavel = 'grupo' . $value['id'];
             if (!empty($request->$variavel)) {
                 $foreach = !is_array($request->$variavel) ? json_decode($request->$variavel) : $request->$variavel;
                 foreach ($foreach as $key => $idAprovadores) {

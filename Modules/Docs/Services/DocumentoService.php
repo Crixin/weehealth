@@ -129,7 +129,6 @@ class DocumentoService
 
     public function update($data, $id)
     {
-        dd($data);
         $updateDocumento = $data;
         unset(
             $updateDocumento['codigo'],
