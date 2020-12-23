@@ -129,6 +129,7 @@ class DocumentoService
 
     public function update($data, $id)
     {
+        dd($data);
         $updateDocumento = $data;
         unset(
             $updateDocumento['codigo'],
@@ -275,7 +276,6 @@ class DocumentoService
             //Cria
             foreach ($data['etapa_aprovacao'] as $value) {
                 $value['documento_id'] = (int) $id;
-                dd($value);
                 $this->userEtapaDocumentoService->create($value);
             }
             return true;
