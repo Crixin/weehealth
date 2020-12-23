@@ -110,7 +110,7 @@ class ItemNormaController extends Controller
         }
 
         $idItemNorma = $request->get('idItemNorma');
-        $idNorma = $request->get('norma_id');
+        $idNorma = $request->get('idNorma');
 
         $update  = $this->montaRequest($request, $idNorma);
         try {
@@ -120,7 +120,6 @@ class ItemNormaController extends Controller
 
             Helper::setNotify('Informações do item da norma atualizadas com sucesso!', 'success|check-circle');
         } catch (\Throwable $th) {
-            dd($th);
             Helper::setNotify('Um erro ocorreu ao atualizar o item da norma', 'danger|close-circle');
         }
         return redirect()->back()->withInput();
@@ -149,8 +148,8 @@ class ItemNormaController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'descricao'   => 'required|string|min:5|max:100',
-                'numero'      => 'required|string' 
+                'descricao'   => 'required|string|min:5|max:300',
+                'numero'      => 'required|string'
             ]
         );
 

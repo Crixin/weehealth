@@ -116,6 +116,11 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('criar-documento',      ['as' => 'documento.criar-documento', 'uses' => 'DocumentoController@criarDocumento']);
         });
 
+        Route::group(['prefix' => 'user-etapa-documento','as' => 'docs.'], function() {
+            Route::post('aprovadores',      ['as' => 'user-etapa-documento.aprovadores', 'uses' => 'UserEtapaDocumentoController@aprovadores']);
+        });
+
+
         Route::group(['prefix' => 'documento-externo', 'as' => 'docs.'], function() {
             Route::get('',              ['as' => 'documento-externo',         'uses' => 'DocumentoExternoController@index']);
             Route::get('novo',          ['as' => 'documento-externo.novo',    'uses' => 'DocumentoExternoController@create']);

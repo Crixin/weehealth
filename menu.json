@@ -176,15 +176,27 @@
                     "descricao": "Parâmetros",
                     "name": "core_config_param",
                     "icone": "mdi mdi-pencil"
+                },
+                "Setup": {
+                    "descricao": "Setup",
+                    "name": "core_config_setup",
+                    "icone": "mdi mdi-pencil"
                 }
             },
             "filhos_menu": {
-                "Grupo": {
+                "Parametros": {
                     "permissao": ["core_config_param"],
                     "descricao": "Parâmetros",
                     "icone": "",
                     "route": "core.configuracao.parametros"
+                },
+                "Setup": {
+                    "permissao": ["core_config_setup"],
+                    "descricao": "Setup",
+                    "icone": "",
+                    "route": "core.configuracao.setup.index"
                 }
+                
             }
         }
     },
@@ -716,7 +728,7 @@
         "DOCUMENTOS-EXTERNOS": {
             "icone": "mdi mdi-library-books",
             "descricao": "DOC. EXTERNO",
-            "route": "docs.documento",
+            "route": "docs.documento-externo",
             "permissao": ["docs_documento_externo_cons"],
             "filhos_perfil": {
                 "Cadastro": {

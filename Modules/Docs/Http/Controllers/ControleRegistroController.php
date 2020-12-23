@@ -253,7 +253,7 @@ class ControleRegistroController extends Controller
                 ['descricao', 'ASC']
             ]
         );
-        
+
         return array_column(json_decode($opcao), 'descricao', 'id');
     }
 }

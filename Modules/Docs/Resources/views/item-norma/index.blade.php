@@ -36,6 +36,7 @@
                         <table id="dataTable-item-norma" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th>Item</th>
                                     <th>Descricao</th>
                                     <th>Controle</th>
                                 </tr>
@@ -43,6 +44,7 @@
                             <tbody>
                                 @foreach ($itens as $item)
                                     <tr>
+                                        <td>{{ $item->numero }}</td>
                                         <td>{{ $item->descricao }}</td>
                                         <td>
                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $item->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>

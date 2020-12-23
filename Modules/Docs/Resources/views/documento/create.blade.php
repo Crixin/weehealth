@@ -25,11 +25,7 @@
 
                 @component('components.validation-error', ['errors'])@endcomponent
 
-                @if(Session::has('message'))
-                    @component('components.alert')@endcomponent
-
-                    {{ Session::forget('message') }}
-                @endif
+                
 
                 <form method="POST" action="{{route('docs.documento.importar-documento')}}" name="createDocumento" id="createDocumento"> 
                     {{ csrf_field() }}
@@ -48,7 +44,13 @@
                             'classificacoes' => $classificacoes,
                             'documentosVinvulados' => $documentos,
                             'setoresUsuarios' => $setoresUsuarios,
-                            'normas' => $normas
+                            'normas' => $normas,
+
+                            'documentosPaiSelecionados' => [],
+                            'documentosVinculadosSelecionados' => [],
+                            'normasSelecionados' => [],
+                            'grupoTreinamentoSelecionado' => [],
+                            'grupoDivulgacaoSelecionado' => []
                         ]
                     )
                     @endcomponent

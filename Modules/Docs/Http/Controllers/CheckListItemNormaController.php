@@ -150,7 +150,7 @@ class CheckListItemNormaController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'descricao'  => 'required|string|min:5|max:100' ,
+                'descricao'  => 'required|string|min:5|max:500' ,
             ]
         );
 

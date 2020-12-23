@@ -61,6 +61,17 @@
                             ]
                         )
                         @endcomponent
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>Novo Documento:</h3>
+
+                                    <!-- Editor -->
+                                    <div class="row iframe_box">
+                                        <iframe width="100%" id="speed-onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
+                                    </div>
+
+                            </div>
+                        </div>
                         {!! Form::open(['route' => 'docs.documento.salvar', 'method' => 'POST', 'id' => 'form-upload-document', 'enctype' => 'multipart/form-data']) !!}
                             {{ csrf_field() }}
 
@@ -75,19 +86,7 @@
                             <!--Fim campos do formulario anterior -->
 
 
-                            <div class="card">
-                                <div class="card-body">
-                                    <h3>Novo Documento:</h3>
-
-                                        <!-- Editor -->
-                                        <div class="container">
-                                            <iframe width="100%" id="speed-onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?&user=&fileID=').$docPath }}"> </iframe>
-                                        </div>
-                                        <!-- End Editor -->
-                                                
-                                        
-                                </div>
-                            </div>
+                            
                             <div class="form-actions ">
                                 <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
                                 <a href="{{ route('docs.documento.novo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>

@@ -55,11 +55,11 @@ class PerfilController extends Controller
     public function store(Request $request)
     {
         $nome = $request->nome;
-                
+
         $permissoes = $request->all();
         unset($permissoes["_token"], $permissoes["nome"]);
         $permissoes = array_keys($permissoes);
-        
+
         $data = [
             'nome' => $nome,
             'permissoes' => $permissoes,

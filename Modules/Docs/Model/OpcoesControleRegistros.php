@@ -15,6 +15,7 @@ class OpcoesControleRegistros extends Model
         'id',
         'campo',
         'descricao',
-        'ativo'
+        'ativo',
+        'campo_id'
     ];
 }

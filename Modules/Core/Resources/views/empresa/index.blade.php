@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@extends('layouts.menu')
-@yield('menu')
 
 @section('page_title', __('page_titles.core.enterprise.index'))
 

@@ -37,7 +37,7 @@
                                 <tr>
                                     <th>Código</th>
                                     <th>Título do Documento</th>
-                                    <th>Última Revisão</th>
+                                    <th>Vencimento</th>
                                     <th>Revisão</th>
                                     <th>Status</th>
                                     <th>Nível Acesso</th>
@@ -50,15 +50,15 @@
                                     <tr>
                                         <td>{{ $documento->codigo }}</td>
                                         <td>{{ $documento->nome }}</td>
-                                        <td>{{ $documento->data_revisao_anterior }}</td>
-                                        <td>{{ $documento->data_revisao }}</td>
+                                        <td>{{ $documento->vencimento }}</td>
+                                        <td>{{ $documento->revisao }}</td>
                                         <td>{{ $documento->status }}</td>
-                                        <td>{{ $documento->nivel_acesso }}</td>
+                                        <td>{{ $documento->docsNivelAcesso($documento->nivel_acesso_id) }}</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{ route('docs.documento.edit', ['id' => $documento->id]) }}"> <i class="mdi mdi-format-list-numbers"></i> @lang('buttons.docs.documento.edit') </a>                                                
+                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="mdi mdi-format-list-numbers"></i> @lang('buttons.docs.documento.edit') </a>                                                
                                                 </div>
                                             </div>
                                         </td>

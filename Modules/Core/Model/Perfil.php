@@ -11,14 +11,14 @@ class Perfil extends Model
 
     public $table = 'core_perfil';
 
-    
+
     protected $fillable = [
         'id',
         'nome',
         'permissoes'
     ];
 
-    
+
     protected $casts = [
         'permissoes' => 'array'
     ];
