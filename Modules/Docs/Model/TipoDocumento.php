@@ -33,6 +33,6 @@ class TipoDocumento extends Model
 
     public function docsFluxo()
     {
-        return $this->hasOne('Modules\docs\Model\Fluxo', 'id', 'fluxo_id');
+        return $this->hasOne('Modules\Docs\Model\Fluxo', 'id', 'fluxo_id');
     }
 }
