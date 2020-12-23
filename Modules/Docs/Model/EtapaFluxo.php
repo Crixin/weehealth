@@ -38,6 +38,6 @@ class EtapaFluxo extends Model
 
     public function docsFluxo()
     {
-        return $this->hasOne('Modules\Docs\Model\Fluxo', 'id', 'fluxo_id');
+        return $this->hasOne(Fluxo::class, 'id', 'fluxo_id');
     }
 }
