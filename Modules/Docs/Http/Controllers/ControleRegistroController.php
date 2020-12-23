@@ -165,7 +165,7 @@ class ControleRegistroController extends Controller
             return redirect()->back()->withInput()->withErrors($error);
         }
 
-        $id = $request->get('idControleregistro');
+        $id = $request->get('idControleRegistro');
         $update  = $this->montaRequest($request);
         try {
             DB::transaction(function () use ($update, $id) {
