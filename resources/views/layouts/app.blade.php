@@ -431,7 +431,7 @@
                 }
                 });
             $('.selectonfocus').mask("00/00/0000", {selectOnFocus: true});
-            $('.versao').mask('##0.00', {reverse: true});
+            $('.versao').mask('##0.0', {reverse: true});
             $('.padrao-numero').mask('0000', {reverse: true});    
         });
     </script>

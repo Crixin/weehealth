@@ -251,5 +251,11 @@ return [
             'factory'         => 'Criação do Documento'
         ],
 
+        'documento-externo' => [
+            'index'           => 'Documentos Externos',
+            'create'          => 'Novo Documento Externo',
+            'update'          => 'Alterando Documento Externo'
+        ],
+
     ]
 ];
