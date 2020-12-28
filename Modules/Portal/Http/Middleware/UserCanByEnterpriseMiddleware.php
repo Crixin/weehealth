@@ -4,7 +4,7 @@ namespace Modules\Portal\Http\Middleware;
 
 use Closure;
 use Modules\Portal\Model\EmpresaProcesso;
-use App\Classes\{GEDServices, Helper};
+use App\Classes\{RESTServices, Helper};
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\{Auth, Log};
 
@@ -17,7 +17,7 @@ class UserCanByEnterpriseMiddleware
     */
     public function __construct()
     {
-        $this->ged = new GEDServices(['id_user' => env('ID_GED_USER'), 'server' => env('URL_GED_WSDL')]);
+        $this->ged = new RESTServices();
     }
 
     /**
@@ -94,13 +94,13 @@ class UserCanByEnterpriseMiddleware
                 } catch (\Throwable $th) {
                     Log::error("Erro ao validar o acesso do usuário {" . Auth::user()->id . "} a todos documentos do registro: " . $params['_idRegistro']);
                 }
-            } elseif (array_key_exists('_idDocumento', $params)) {
+            } elseif (array_key_exists('idDocumento', $params)) {
                 try {
-                    $document = $this->ged->pesquisaDocumento($params['_idDocumento'])->return;
+                    $document = $this->ged->pesquisaDocumento($params['idDocumento'])->return;
                     $enterpriseProcess = EmpresaProcesso::where('id_area_ged', $document->idArea)->first();
                     $found = $this->isProcessContained($_userProcesses, $enterpriseProcess);
                 } catch (\Throwable $th) {
-                    Log::error("Erro ao validar o acesso do usuário {" . Auth::user()->id . "} ao documento: " . $params['_idDocumento']);
+                    Log::error("Erro ao validar o acesso do usuário {" . Auth::user()->id . "} ao documento: " . $params['idDocumento']);
                 }
             }
         }

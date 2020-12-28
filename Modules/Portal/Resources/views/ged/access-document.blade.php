@@ -81,36 +81,5 @@
 
 
 @section('footer')
-    <!-- SweetAlert2 -->
-    <script>
-    
-        // Exclusão de documento
-        $('.sa-warning').click(function(){ 
-            let idDocumento = $(this).data('id-documento');
-            let deleteIt    = swal2_warning("Essa ação é irreversível!");
-            let baseURL     = "{{ url('/') }}";
-            let idRegistro  = "{{ $documento->idRegistro }}";
-            let obj = {'documento_id': idDocumento};
-
-            deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('portal.deletar.documento') }}", obj).then(response => {
-                    if(response.response != 'erro') {
-                        swal({   
-                            title: "Excluído!",   
-                            text: "Documento excluído com sucesso.",
-                            type: "success"
-                        }, function(){   
-                            window.location.href = baseURL + '/processo/listarDocumentos/' + idRegistro;
-                        });
-                    } else {
-                        swal2_alert_error_support("Tivemos um problema ao excluir o documento.");
-                    }
-                }, error => {
-                    console.log(error);
-                });
-            }, error => {
-                swal.close();
-            });
-        });
-    </script>
+  
 @endsection

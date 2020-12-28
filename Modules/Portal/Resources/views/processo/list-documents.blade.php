@@ -62,7 +62,7 @@
                                             @endif
                                             
                                             {{-- Visualizar estará sempre disponível --}}
-                                            <a href="{{ route('portal.processo.acessarDocumento', ['_idDocumento' => $documento->id]) }}" class="btn waves-effect waves-light btn-secondary m-l-10"> <i class="mdi mdi-file-document"></i> @lang('buttons.general.access') </button>
+                                            <a href="{{ route('portal.processo.acessarDocumento', ['idDocumento' => $documento->id]) }}" class="btn waves-effect waves-light btn-secondary m-l-10"> <i class="mdi mdi-file-document"></i> @lang('buttons.general.access') </button>
                                         </td>
 									</tr>
 								@endforeach	

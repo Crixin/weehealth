@@ -235,7 +235,7 @@
                         }
                     }
                 }
-            }, 
+            },
             "filhos_menu": {
                 "Listar-Cadastrar": {
                     "permissao": ["portal_dashboard_cons"],
@@ -247,7 +247,8 @@
                     "permissao": ["portal_dashboard_view"],
                     "descricao": "Visualizar",
                     "icone": "",
-                    "route": false
+                    "route": false,
+                    "function": "userDashboards"
                 }
             }
         },
@@ -323,13 +324,13 @@
         "PROCESSOS": {
             "icone": "mdi mdi-image-filter-none ",
             "route": false,
-            "class": "processos-user",
+            "function": "userProcess",
             "descricao": "PROCESSOS",
             "permissao": ["portal_processo_ger"],
             "filhos_perfil": {
                 "Gerenciamento": {
                     "name": "portal_processo_ger",
-                    "descricao": "Gerenciamento", 
+                    "descricao": "Gerenciamento",
                     "icone": "mdi mdi-image-filter-none"
                 }
             }
@@ -342,7 +343,7 @@
             "filhos_perfil": {
                 "Consulta": {
                     "name": "portal_docs_edit_ger",
-                    "descricao": "Gerenciamento", 
+                    "descricao": "Gerenciamento",
                     "icone": "mdi mdi-image-filter-none"
                 }
             }
@@ -596,7 +597,7 @@
                     "descricao": "Tipo de Documento",
                     "icone": "",
                     "route": "docs.tipo-documento"
-            
+
                 },
                 "Fluxos": {
                     "permissao": ["docs_fluxo_cons"],
@@ -681,7 +682,7 @@
                     "descricao": "Controles",
                     "icone": "",
                     "route": "docs.controle-registro"
-            
+
                 }
             }
         },
@@ -743,4 +744,3 @@
         }
     }
 }
- 

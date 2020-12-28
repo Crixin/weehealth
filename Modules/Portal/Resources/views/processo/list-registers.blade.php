@@ -43,7 +43,7 @@
                                                                                         <td>{{ $indice->valor ?? '' }}</td>
                                         @endforeach
                                         <td style="white-space: nowrap">
-                                            <a href="{{ route('portal.processo.listarDocumentos', ['_idRegistro' => $registro->id]) }}" class="btn btn-info"> <i class="mdi mdi-eye"></i> @lang('buttons.general.view') </a>
+                                            <a href="{{ route('portal.processo.listarDocumentos', ['idRegistro' => $registro->id]) }}" class="btn btn-info"> <i class="mdi mdi-eye"></i> @lang('buttons.general.view') </a>
                                             <a href='#' class="btn btn-info buscaDocs" data-carregado="false" data-visible="false" data-registro="{{$registro->id}}"> <i class="mdi mdi-view-list"></i> @lang('buttons.general.preview')</a>
                                         </td>
                                     </tr>

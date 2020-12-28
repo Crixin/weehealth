@@ -47,9 +47,6 @@
                         <ul aria-expanded="false" class="collapse">
                                 <li><a href="{{ route('portal.empresa') }}"> @lang('sidebar_and_header.core.uls_li_system.register.item1') </a></li>
                                 <li><a href="{{ route('portal.processo') }}"> @lang('sidebar_and_header.portal.uls_li_system.register.item3') </a></li>
-
-                           
-                            
                         </ul>
                     </li>
 

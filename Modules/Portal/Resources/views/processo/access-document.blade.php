@@ -93,7 +93,7 @@
                                             <div class="col-md-12 text-center">
                                                 <form action="{{ route('portal.processo.documento.aprovar') }}" method="post">
                                                     {{ csrf_field() }}
-                                                    <input type="hidden" name="id-documento" value="{{ $documento->id }}">
+                                                    <input type="hidden" name="idDocumento" value="{{ $documento->id }}">
                                                     <button type="submit" class="btn btn-lg btn-success"> @lang('document.approval.approve_document') </button>
                                                 </form>
                                             </div>
@@ -111,7 +111,7 @@
                                                         <label> @lang('document.document.justification') </label>
                                                         <textarea name="justificativa-rejeicao" class="form-control" rows="4" required ></textarea>
                                                     </div>
-                                                    <input type="hidden" name="id-documento" value="{{ $documento->id }}">
+                                                    <input type="hidden" name="idDocumento" value="{{ $documento->id }}">
                                                     <button type="submit" class="btn btn-lg btn-warning"> @lang('document.approval.reject_document') </button>
                                                 </div>
                                             </form>
@@ -135,7 +135,7 @@
                 
                 <div class="col-md-12 m-t-40">
                     <div class="col-md-2 pull-right">
-                        <a href="{{ route('portal.processo.listarDocumentos', ['_idRegistro' => $documento->idRegistro]) }}" class="btn btn-secondary btn-lg btn-block pull-right" id="botao-voltar-detalhes-doc"> @lang('buttons.general.back') </a>
+                        <a href="{{ route('portal.processo.listarDocumentos', ['idRegistro' => $documento->idRegistro]) }}" class="btn btn-secondary btn-lg btn-block pull-right" id="botao-voltar-detalhes-doc"> @lang('buttons.general.back') </a>
                     </div>
 
                     @if ($permissoes['usa_excluir'])

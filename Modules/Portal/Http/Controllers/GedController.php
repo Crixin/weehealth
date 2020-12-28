@@ -346,9 +346,9 @@ class GedController extends Controller
     }
 
 
-    public function accessDocument(string $_empresaProcesso, string $_idDocumento)
+    public function accessDocument(string $_empresaProcesso, string $idDocumento)
     {
-        $documento = $this->ged->get(env('GED_URL') . "/documento/" . $_idDocumento)['response'];
+        $documento = $this->ged->get(env('GED_URL') . "/documento/" . $idDocumento)['response'];
         $idRegistro = $documento->idRegistro;
         $empresaProcesso = $_empresaProcesso;
 

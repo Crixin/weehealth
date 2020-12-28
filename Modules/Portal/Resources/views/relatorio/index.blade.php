@@ -113,7 +113,7 @@
 									<td>{{ $log->nomeProcesso }}</td>
 									<td><?php echo(Helper::stylizeString($log->descricao)); ?></td>
 									<td><?php echo(Helper::stylizeString($log->complemento)); ?></td>
-									<td> <a href="{{ route('portal.processo.listarDocumentos', ['_idRegistro' => $log->idRegistro]) }}" target="_blank" class="btn waves-effect waves-light btn-secondary m-l-10"> <i class="mdi mdi-file-document"></i> @lang('buttons.general.list_documents') </button> </td>
+									<td> <a href="{{ route('portal.processo.listarDocumentos', ['idRegistro' => $log->idRegistro]) }}" target="_blank" class="btn waves-effect waves-light btn-secondary m-l-10"> <i class="mdi mdi-file-document"></i> @lang('buttons.general.list_documents') </button> </td>
 								</tr>
 							@empty
 								<tr>
