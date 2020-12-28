@@ -82,7 +82,6 @@
 <script src="{{ asset('plugins/datatables-edit/js/dataTables.buttons.js') }}" ></script>
 <script src="{{ asset('plugins/datatables-edit/js/dataTables.select.js') }}" ></script>
 <script src="{{ asset('plugins/datatables-edit/js/dataTables.responsive.js') }}" ></script>
-
 <script src="{{ asset('plugins/datatables-edit/dataTables.altEditor.free.js') }}"></script>
 <script>
     var itens = {!!json_encode($itens)!!};
