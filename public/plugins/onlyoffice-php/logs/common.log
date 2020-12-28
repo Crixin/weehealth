@@ -5784,3 +5784,113 @@ getVirtualPath virtPath: http://10.4.4.4:8000/plugins/onlyoffice-php/Storage/
 getStoragePath result: C:\wamp64\www\Portal\public\plugins\onlyoffice-php\Storage\teste.docx
 getVirtualPath virtPath: http://10.4.4.4:8000/plugins/onlyoffice-php/Storage/
 getStoragePath result: C:\wamp64\www\Portal\public\plugins\onlyoffice-php\Storage\teste.docx
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento27.docx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento27.docx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento27.docx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento27.docx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento27.docx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento27.docx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento27.xlsx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento27.xlsx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento29_rev00.docx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento29_rev00.docx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\docx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\docx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\doc
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\doc
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento30_rev00.xlsx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento30_rev00.xlsx
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento30_rev00.doc
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento30_rev00.doc
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento30_rev00.doc
+getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento30_rev00.doc

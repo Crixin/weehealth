@@ -52,3 +52,144 @@
         </div>
     </div>
 </div>
+<legend>@lang('page_titles.docs.item-norma.index')</legend>
+<hr>
+<div class="table-responsive m-t-40">
+    <table id="example" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Descricao</th>
+                <th>Checklist</th>           
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+</div>
+@section('footer')
+
+
+<link rel="stylesheet" href="{{ asset('plugins/dataTables-edit/css/jquery.dataTables.css') }}" />
+<link rel="stylesheet" href="{{ asset('plugins/dataTables-edit/css/buttons.dataTables.css') }}" />
+<link rel="stylesheet" href="{{ asset('plugins/dataTables-edit/css/select.dataTables.css') }}" />
+<link rel="stylesheet" href="{{ asset('plugins/dataTables-edit/css/responsive.dataTables.css') }}" />
+
+<script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+
+<script src="{{ asset('plugins/dataTables-edit/js/jquery.dataTables.js') }}" ></script>
+<script src="{{ asset('plugins/dataTables-edit/js/dataTables.buttons.js') }}" ></script>
+<script src="{{ asset('plugins/dataTables-edit/js/dataTables.select.js') }}" ></script>
+<script src="{{ asset('plugins/dataTables-edit/js/dataTables.responsive.js') }}" ></script>
+
+<script src="{{ asset('plugins/dataTables-edit/dataTables.altEditor.free.js') }}"></script>
+<script>
+    var itens = {!!json_encode($itens)!!};
+    var objeto = {};
+    var array = [];
+    for(var i=0;i<itens.length;i++){
+        objeto = {
+            0 : itens[i][0],
+            1 : itens[i][1],
+            2 : itens[i][2],
+        }
+        array.push(objeto);
+    }
+    var arrayDataTable = array;
+    $('#arrayDataTable').val(JSON.stringify(array));
+    
+    $(document).ready(function() {
+        var dataSet = {!!json_encode($itens)!!};
+        var columnDefs = [{
+            title: "Id",
+            type: "text",
+            required: true,
+            unique: true
+        }, {
+            title: "Descrição",
+            type: "textarea",
+            required: true,
+        },{
+            title: "CheckList",
+            type: "textarea"
+        }];
+
+        var myTable;
+
+        myTable = $('#example').DataTable({
+            "language": {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": "Próximo",
+                    "sPrevious": "Anterior",
+                    "sFirst": "Primeiro",
+                    "sLast": "Último"
+                },
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                },
+                "altEditor" : {
+                    "modalClose" : "Cancelar",
+                    "edit" : {
+                        "title" : "Alterar",
+                        "button" : "Alterar"
+                    },
+                    "add" : {
+                        "title" : "Novo item da norma",
+                        "button" : "Criar"
+                    },
+                    "delete" : {
+                        "title" : "Deletar",
+                        "button" : "Deletar"
+                    },
+                    "success" : "Sucesso.",
+                    "error" : {
+                        "message" : "Favor verificar os erros.",
+                        "label" : "Erros",
+                        "responseCode" : "Response code:",
+                        "required" : "Valor Obrigatório",
+                        "unique" : "Valor Duplicado"
+                    }
+                }
+            },
+            "sPaginationType": "full_numbers",
+            data: dataSet,
+            columns: columnDefs,
+            dom: 'Bfrtip',        // Needs button container
+            select: 'single',
+            responsive: true,
+            altEditor: true,     // Enable altEditor
+            buttons: [
+                {
+                text: 'Novo',
+                name: 'add'        // do not change name
+                },
+                {
+                extend: 'selected', // Bind to Selected row
+                text: 'Editar',
+                name: 'edit'        // do not change name
+                },
+                {
+                extend: 'selected', // Bind to Selected row
+                text: 'Deletar',
+                name: 'delete'      // do not change name
+                }
+            ]
+        });
+    });
+
+</script>
+
+@endsection

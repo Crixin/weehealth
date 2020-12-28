@@ -34,13 +34,15 @@
                 <form method="POST" action="{{ route('docs.norma.alterar') }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <input type="hidden" name="idNorma" value="{{ $norma->id }}">
+                    <input type="hidden" name="arrayDataTable[]" id="arrayDataTable" >
                     @component(
                         'docs::components.norma', 
                         [
                             'normaEdit' => $norma,
                             'descricao' => $norma->descricao, 
                             'orgaos' => $orgaos,
-                            'ciclos' => $ciclos
+                            'ciclos' => $ciclos,
+                            'itens'  => $itens
                         ]
                     )
                     @endcomponent
