@@ -12,7 +12,6 @@ class UserEtapaDocumento extends Model
     protected $table = "docs_user_etapa_documento";
 
     protected $fillable = [
-        'id',
         'user_id',
         'documento_id',
         'etapa_fluxo_id'

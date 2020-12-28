@@ -20,11 +20,15 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body">
+                @if(Session::has('message'))
+                    @component('components.alert')@endcomponent
 
+                    {{ Session::forget('message') }}
+                @endif
                 <div class="alert alert-info">
                     <ul>
-                        <li>Você pode inserir os valores que desejar na coluna <span class="font-weight-bold" style="color: cornflowerblue">Valor Customizado</span>. Para isso, basta clicar sobre a tabela!</li>
-                        <li>Além disso, você pode ativar ou inativar um parâmetro na coluna <span class="font-weight-bold" style="color: cornflowerblue">Ativo</span>!</li>
+                        
+                        <li>Você pode ativar ou inativar um parâmetro na coluna <span class="font-weight-bold" style="color: cornflowerblue">Ativo</span>!</li>
                     </ul>
                 </div>
             
@@ -34,28 +38,29 @@
                             <th>Identificador Parâmetro</th>
                             <th>Descrição</th>
                             <th>Valor Padrão</th>
-                            <th style="color: cornflowerblue">Valor Customizado</th>
-                            <th style="color: cornflowerblue">Ativo</th>
+                            
+                            <th>Controle</th>
                         </tr>
                     </thead>
                     <tbody>
 
                         @foreach ($params as $p)
                             <tr id="tr_param-{{ $p->id }}" data-id="{{ $p->id }}" class="{{ ($p->ativo) ? 'text-black' : 'text-muted' }}">
-                                <td id="identificador_parametro-{{ $p->id }}" class="edit-disabled">
+                                <td id="identificador_parametro-{{ $p->id }}" >
                                     {{ $p->identificador_parametro }} 
                                 </td>
-                                <td id="descricao-{{ $p->id }}" class="edit-disabled">
+                                <td id="descricao-{{ $p->id }}" >
                                     {{ $p->descricao }} 
                                 </td>
                                 <td  id="valor_padrao-{{ $p->id }}">
                                     {{ trim($p->valor_padrao) }}  
                                 </td>
-                                <td id="valor_usuario-{{ $p->id }}"> {{ trim($p->valor_usuario) }} </td>
-                                <td id="ativo-{{ $p->id }}" class="edit-disabled"> 
-                                    <button type="button" class="btn btn-block waves-effect waves-light btn-{{ ($p->ativo) ? 'danger' : 'success' }} changeParamValue" data-id="{{ $p->id }}" data-value="{{ !$p->ativo }}"> 
-                                        {{ ($p->ativo) ? 'Inativar' : 'Ativar' }} 
-                                    </button>
+            
+                                <td> 
+                                    
+                                    <a href="#" class="btn btn-block waves-effect waves-light btn-{{ ($p->ativo) ? 'danger' : 'success' }} changeParamValue" data-id="{{ $p->id }}" data-value="{{ !$p->ativo }}" style="width: 85px">  {{ ($p->ativo) ? 'Inativar' : 'Ativar' }}  </a>
+                                    <a href="{{ route('core.configuracao.parametros.editar', ['id' => $p->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                        
                                 </td>
                             </tr>
                         @endforeach
@@ -127,7 +132,7 @@
     <script src="{{ asset('plugins/tiny-editable/numeric-input-example.js') }}"></script>
 
     <script>
-        $('#editable-datatable').editableTableWidget({editor: $('<textarea>'), disableClass: "edit-disabled"});
+        //$('#editable-datatable').editableTableWidget({editor: $('<textarea>'), disableClass: "edit-disabled"});
         
         $(document).ready(function() {
             $('#editable-datatable').DataTable();
@@ -155,6 +160,7 @@
 
 
          // Alteração na coluna 'valor_usuario'
+         /*
         $(document).on("change","table td", function(evt, newValue) {
             let idParametro = $(this).closest('tr').data('id');
             let coluna = $(this).attr('id').split('-')[0];
@@ -170,6 +176,7 @@
                 console.log(error);
             });
         });
+        */
 
     </script>
 @endsection

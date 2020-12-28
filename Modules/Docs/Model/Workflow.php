@@ -18,6 +18,7 @@ class Workflow extends Model
         'documento_id',
         'etapa_fluxo_id',
         'user_id',
-        'versao_documento'
+        'versao_documento',
+        'justificativa_lida'
     ];
 }

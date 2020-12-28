@@ -22,6 +22,6 @@ class Norma extends Model
 
     public function docsItemNorma()
     {
-        return $this->hasMany('Modules\docs\Model\ItemNorma', 'norma_id', 'id');
+        return $this->hasMany('Modules\Docs\Model\ItemNorma', 'norma_id', 'id');
     }
 }

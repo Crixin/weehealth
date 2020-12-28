@@ -90,7 +90,18 @@ Route::group(['middleware' => ['auth']], function () {
         * CONFIGURAÇÃO
         */
         Route::group(['prefix' => 'configuracao'], function () {
-            Route::get('parametros',        ['as' => 'core.configuracao.parametros',         'uses' => 'ConfiguracaoController@indexParameters'])->middleware('onlyAllowSuperAdmins');
+
+            Route::group(['prefix' => 'parametros'], function () {
+                Route::get('',                          ['as' => 'core.configuracao.parametros',                       'uses' => 'ConfiguracaoController@index'])->middleware('onlyAllowSuperAdmins');
+                //Route::get('novo',                      ['as' => 'core.configuracao.parametros.novo',                  'uses' => 'ConfiguracaoController@create']);
+                //Route::post('salvar',                   ['as' => 'core.configuracao.parametros.salvar',                'uses' => 'ConfiguracaoController@store']);
+                Route::get('editar/{id}',               ['as' => 'core.configuracao.parametros.editar',                'uses' => 'ConfiguracaoController@edit']);
+                Route::post('alterar',                  ['as' => 'core.configuracao.parametros.alterar',               'uses' => 'ConfiguracaoController@update']);
+                Route::post('deletar',	                ['as' => 'core.configuracao.parametros.deletar',               'uses' => 'ConfiguracaoController@destroy']);
+            });
+
+
+
             Route::get('administradores',   ['as' => 'core.configuracao.administradores',    'uses' => 'ConfiguracaoController@indexAdministrators'])->middleware('onlyAllowSuperAdmins');
         
             Route::group(['prefix' => 'setup'], function () {

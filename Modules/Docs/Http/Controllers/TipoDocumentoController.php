@@ -18,15 +18,18 @@ class TipoDocumentoController extends Controller
     protected $tipoDocumentoRepository;
     protected $fluxoRepository;
     protected $parametroRepository;
+    protected $tipoDocumentoService;
 
     public function __construct(
         TipoDocumentoRepository $tipoDocumentoRepository,
         FluxoRepository $fluxoRepository,
-        ParametroRepository $parametroRepository
+        ParametroRepository $parametroRepository,
+        TipoDocumentoService $tipoDocumentoService
     ){
         $this->tipoDocumentoRepository = $tipoDocumentoRepository;
         $this->fluxoRepository = $fluxoRepository;
         $this->parametroRepository = $parametroRepository;
+        $this->tipoDocumentoService = $tipoDocumentoService;
     }
 
     /**
@@ -208,8 +211,7 @@ class TipoDocumentoController extends Controller
     {
         try {
             $id = $request->id;
-            $tipoDocumento = new TipoDocumentoService();
-            $etapas = $tipoDocumento->getEtapasFluxosPorComportamento($id, 'comportamento_aprovacao');
+            $etapas = $this->tipoDocumentoService->getEtapasFluxosPorComportamento($id, 'comportamento_aprovacao');
             ksort($etapas);
             return response()->json(['response' => 'sucesso', 'data' => $etapas]);
         } catch (\Exception $th) {
@@ -228,7 +230,7 @@ class TipoDocumentoController extends Controller
                 'fluxo'                 => 'required|string|max:50',
                 'periodoVigencia'       => 'required|numeric',
                 'periodoAviso'          => 'required|numeric',
-                'documentoModelo'       => empty($request->get('idTipoDocumento')) ? 'required|mimes:xls,doc' : '',
+                'documentoModelo'       => empty($request->get('idTipoDocumento')) ? 'required|mimes:xlsx,xls,docx,doc' : '',
                 'codigoPadrao'          => 'required',
                 'numeroPadrao'          => 'required',
                 'ultimoDocumento'       => 'required|numeric|min:0'

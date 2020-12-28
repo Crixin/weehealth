@@ -42,7 +42,7 @@
         <div class="col-md-6">
             <div class="form-group{{ $errors->has('documentoPai') ? ' has-error' : '' }}">
                 {!! Form::label('documentoPai', 'Documento(s) Pai') !!}
-                {!! Form::select('documentoPai',$documentosPais, null, ['id' => 'documentoPai', 'class' => 'form-control selectpicker', 'multiple']) !!}
+                {!! Form::select('documentoPai',$documentosPais, !empty($documentoEdit) ?  $documentosPaiSelecionados : null, ['id' => 'documentoPai', 'name'=>'documentoPai[]', 'class' => 'form-control selectpicker', 'multiple']) !!}
                 <small class="text-danger">{{ $errors->first('documentoPai') }}</small>
             </div>
         </div>
@@ -67,7 +67,7 @@
         <div class="col-md-6">
             <div class="form-group{{ $errors->has('documentoVinculado') ? ' has-error' : '' }}">
                 {!! Form::label('documentoVinculado', 'Documento(s) Vinculado(s)') !!}
-                {!! Form::select('documentoVinculado',$documentosVinvulados, !empty($documentoEdit) ?  $documentoEdit->documento_vinculado : null, ['id' => 'documentoVinculado', 'class' => 'form-control selectpicker', 'multiple']) !!}
+                {!! Form::select('documentoVinculado',$documentosVinvulados, !empty($documentoEdit) ?  $documentosVinculadosSelecionados : null, ['id' => 'documentoVinculado', 'name'=>'documentoVinculado[]', 'class' => 'form-control selectpicker', 'multiple']) !!}
                 <small class="text-danger">{{ $errors->first('documentoVinculado') }}</small>
             </div>
         </div>
@@ -126,7 +126,7 @@
                         @foreach($setoresUsuarios as $key => $su)
                             <optgroup label="{{ $key }}">
                                 @foreach($su as $key2 => $user)
-                                    <option value="{{ $key2 }}">{{ $user }}</option>
+                                    <option value="{{ $key2 }}" @if (in_array($key2, $grupoTreinamentoSelecionado)) selected="selected"@endif >{{ $user }}</option>
                                 @endforeach
                             </optgroup>
                         @endforeach
@@ -146,7 +146,7 @@
                         @foreach($setoresUsuarios as $key => $su)
                             <optgroup label="{{ $key }}">
                                 @foreach($su as $key2 => $user)
-                                    <option value="{{ $key2 }}">{{ $user }}</option>
+                                    <option value="{{ $key2 }}" @if (in_array($key2, $grupoDivulgacaoSelecionado)) selected="selected"@endif>{{ $user }}</option>
                                 @endforeach
                             </optgroup>
                         @endforeach
@@ -169,7 +169,7 @@
                         @foreach($normas as $key => $norma)
                             <optgroup label="{{ $norma->descricao }}">
                                 @foreach($norma->docsItemNorma as $key2 => $itemNorma)
-                                    <option value="{{ $itemNorma->id }}">{{ $itemNorma->descricao }}</option>
+                                    <option value="{{ $itemNorma->id }}" @if (in_array($itemNorma->id, $normasSelecionados)) selected="selected"@endif >{{ $itemNorma->descricao }}</option>
                                 @endforeach
                             </optgroup>
                         @endforeach
@@ -191,6 +191,7 @@
         */
         carregaOptGroup();
         
+        buscaEtapas();
 
         $('#optgroup-newNormaDoc').multiSelect({
             selectableOptgroup: true,
@@ -231,52 +232,7 @@
 
 
         $('#tipoDocumento').on('change', function(){
-            var id = $(this).val();
-            let obj = {'id': id};
-            console.log('adfgsdfg');
-            $('.aprovadores').empty();
-            ajaxMethod('POST', "{{ URL::route('docs.tipo-documento.etapa-fluxo') }}", obj).then(response => {
-                let linha = '';
-                if(response.response == 'erro') {
-                    swal2_alert_error_support("Tivemos um problema ao buscar as informações das etapas.");
-                }else{
-                    let retorno = response.data;
-                    for (let index = 0; index < retorno.length; index++) {
-                        const element = retorno[index];
-                        console.log(element);
-                        linha += "<div class='col-md-12'>";
-                        linha += "<div class='form-group'>";
-                        linha += "<div class='col-md-10 control-label font-bold'>";
-                        linha += "<label for="+element.nome+">Etapa: "+element.nome.toUpperCase()+"</label>";
-                        linha += "</div>";
-                        linha += "<div class='col-md-12'>";
-                        
-                        let obrigatorio = element.obrigatorio == true ? "required='required'" : "";
-
-                        linha += "<select multiple class='optgroup' "+obrigatorio+"  id='optgroup-newGrupo"+element.nome+"' name='grupo"+element.nome+"[]''>";
-                        @foreach($setoresUsuarios as $key => $su)
-                        linha += "<optgroup label='{{ $key }}'>";
-                                @foreach($su as $key2 => $user)
-                                linha += "<option value='{{ $key2 }}'>{{ $user }}</option>";
-                                @endforeach
-                        linha += "</optgroup>";
-                        @endforeach
-                        linha += "</select>";   
-                        linha += "</div>";
-                        linha += "</div>";
-                        linha += "</div>";
-                        linha += "</div>";
-                    }
-                    
-                    $('.aprovadores').append(linha);
-
-                    carregaOptGroup();
-                } 
-            }, error => {
-                console.log(error);
-            });
-            
-            
+            buscaEtapas();
         });
 
 
@@ -290,6 +246,27 @@
         
 
     });
+
+    function buscaEtapas()
+    {
+        var id = $('#tipoDocumento').val();
+        var documento = $('#idDocumento').val();
+        let obj = {'id': id};
+        if(id != ''){
+            $('.aprovadores').empty();
+            ajaxMethod('POST', "{{ URL::route('docs.tipo-documento.etapa-fluxo') }}", obj).then(response => {
+                
+                if(response.response == 'erro') {
+                    swal2_alert_error_support("Tivemos um problema ao buscar as informações das etapas.");
+                }else{
+                    monta(response, documento);
+                } 
+            }, error => {
+                console.log(error);
+            });
+        }
+        
+    }
 
     function carregaOptGroup()
     {
@@ -329,6 +306,69 @@
                 this.qs2.cache();
             }
         });
+    }
+
+    function buscaAprovadores(etapa, documento)
+    {
+        return new Promise(function (resolve, reject) {
+            let obj = {'etapa': etapa, 'documento': documento};
+            ajaxMethod('POST', "{{ URL::route('docs.user-etapa-documento.aprovadores') }}", obj).then(response => {
+                if(response.response == 'erro') {
+                    reject();
+                    swal2_alert_error_support("Tivemos um problema ao buscar as informações das etapas.");
+                }else{
+                    let retorno = response.data;
+                    resolve(retorno);
+                }
+            });
+        });
+
+    }
+
+    async function monta(response, documento)
+    {
+        let linha = '';
+        let retorno = response.data;
+        for (let index = 0; index < retorno.length; index++) {
+            const element = retorno[index];
+            linha += "<div class='col-md-12'>";
+            linha += "<div class='form-group'>";
+            linha += "<div class='col-md-10 control-label font-bold'>";
+            linha += "<label for="+element.nome+">Etapa: "+element.nome.toUpperCase()+"</label>";
+            linha += "</div>";
+            linha += "<div class='col-md-12'>";
+            
+            let aprovadores = [];    
+            await buscaAprovadores(element.id, documento).then(response=>{
+                if(response != undefined){
+                    for (let index = 0; index < response.length; index++) {
+                        aprovadores.push(response[index]);
+                    }
+                }
+                
+            });
+            
+            let obrigatorio = element.obrigatorio == true ? "required='required'" : "";
+            linha += "<select multiple class='optgroup' "+obrigatorio+"  id='optgroup-newGrupo"+element.id+"' name='grupo"+element.id+"[]''>";
+            
+            @foreach($setoresUsuarios as $key => $su)
+            linha += "<optgroup label='{{ $key }}'>";
+                    @foreach($su as $key2 => $user)
+                    exist = aprovadores.indexOf({{$key2}}) > -1 ? "selected='selected'": "";
+                    linha += "<option value='{{ $key2 }}' "+exist+">{{ $user }}</option>";
+                    @endforeach
+            linha += "</optgroup>";
+            @endforeach
+            linha += "</select>";   
+            linha += "</div>";
+            linha += "</div>";
+            linha += "</div>";
+            linha += "</div>";
+        }
+        
+        $('.aprovadores').append(linha);
+
+        carregaOptGroup();
     }
 
    

@@ -39,8 +39,8 @@ class DocumentoController extends Controller
     protected $agrupamentoUserDocumentoRepository;
     protected $vinculoDocumentoRepository;
     protected $hierarquiaDocumentorepository;
-
-   
+    protected $documentoService;
+    protected $tipoDocumentoService;
 
     public function __construct(
         DocumentoRepository $documentoRepository,
@@ -53,7 +53,9 @@ class DocumentoController extends Controller
         DocumentoItemNormaRepository $documentoItemNormaRepository,
         AgrupamentoUserDocumentoRepository $agrupamentoUserDocumentoRepository,
         VinculoDocumentoRepository $vinculoDocumentoRepository,
-        HierarquiaDocumentoRepository $hierarquiaDocumentoRepository
+        HierarquiaDocumentoRepository $hierarquiaDocumentoRepository,
+        DocumentoService $documentoService,
+        TipoDocumentoService $tipoDocumentoService
     ){
         $this->documentoRepository = $documentoRepository;
         $this->setorRepository = $setorRepository;
@@ -66,7 +68,8 @@ class DocumentoController extends Controller
         $this->agrupamentoUserDocumentoRepository = $agrupamentoUserDocumentoRepository;
         $this->vinculoDocumentoRepository = $vinculoDocumentoRepository;
         $this->hierarquiaDocumentorepository = $hierarquiaDocumentoRepository;
-
+        $this->documentoService = $documentoService;
+        $this->tipoDocumentoService = $tipoDocumentoService;
 
     }
 
@@ -144,6 +147,7 @@ class DocumentoController extends Controller
                 ['nome', 'ASC']
             ]
         );
+        $documentos = array_column(json_decode(json_encode($documentos), true), 'nome', 'id');
 
         return view('docs::documento.create',
             compact(
@@ -165,22 +169,15 @@ class DocumentoController extends Controller
      */
     public function store(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
-        }
         $cadastro = $this->montaRequest($request);
-
-        try {
-            DB::transaction(function () use ($request) {
-                DocumentoService::create($request);
-            });
+        $retorno = $this->documentoService->create($cadastro);
+        if ($retorno) {
             Helper::setNotify('Novo documento criado com sucesso!', 'success|check-circle');
             return redirect()->route('docs.documento');
-        } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao gravar o documento', 'danger|close-circle');
-            return redirect()->back()->withInput();
         }
+
+        Helper::setNotify("Um erro ocorreu ao gravar o documento. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+        return redirect()->route('docs.documento');
     }
 
     /**
@@ -200,7 +197,127 @@ class DocumentoController extends Controller
      */
     public function edit($id)
     {
-        return view('docs::documento.edit');
+        $documento = $this->documentoRepository->find($id);
+
+        /**Setores */
+        $setores = $this->setorRepository->findBy(
+            [
+                ['nome', '!=', 'Sem Setor']
+            ],
+            [],
+            [
+                ['nome', 'ASC']
+            ]
+        );
+        foreach ($setores as $key => $setor) {
+            $arrUsers = [];
+            $users = $this->userRepository->findBy(
+                [
+                    ['setor_id', '=', $setor->id]
+                ]
+            );
+            foreach ($users as $key => $user) {
+                $arrUsers[$user->id] = $user->name;
+            }
+            $setoresUsuarios[$setor->nome] = $arrUsers;
+        }
+        $setores = array_column(json_decode(json_encode($setores), true), 'nome', 'id');
+
+        /**TIPO DOCUMENTO */
+        $tiposDocumento = $this->tipoDocumentorepository->findBy(
+            [
+                ['ativo', '=', true]
+            ],
+            [],
+            [
+                ['nome', 'ASC']
+            ]
+        );
+        $tiposDocumento = array_column(json_decode(json_encode($tiposDocumento), true), 'nome', 'id');
+
+        /**NIVEL ACESSO*/
+        $buscaNivelAcesso = $this->parametroRepository->getParametro('NIVEL_ACESSO');
+        $niveisAcesso    = json_decode($buscaNivelAcesso);
+
+        /**CLASSIFICACAO*/
+        $buscaClassificacao = $this->parametroRepository->getParametro('CLASSIFICACAO');
+        $classificacoes     = json_decode($buscaClassificacao);
+
+        /**NORMAS */
+        $normas  = $this->normaRepositorty->findBy(
+            [
+                ['ativo', '=', true]
+            ]
+        );
+
+        $documentos = $this->documentoRepository->findBy(
+            [
+                ['codigo', '!=', $documento->codigo]
+            ],
+            [],
+            [
+                ['nome', 'ASC']
+            ]
+        );
+        $documentos = array_column(json_decode(json_encode($documentos), true), 'nome', 'id');
+
+        /**Selecionados */
+        $buscaPaiSelecionados = $this->hierarquiaDocumentorepository->findBy(
+            [
+                ['documento_id', '=', $id]
+            ]
+        );
+        $documentosPaiSelecionados  = array_column(json_decode(json_encode($buscaPaiSelecionados), true), 'documento_pai_id');
+
+        $buscaVinculadosSelecionados = $this->vinculoDocumentoRepository->findBy(
+            [
+                ['documento_id', '=', $id]
+            ]
+        );
+        $documentosVinculadosSelecionados = array_column(json_decode(json_encode($buscaVinculadosSelecionados), true), 'documento_vinculado_id');
+
+        $buscaNormasSelecionadas = $this->documentoItemNormaRepository->findBy(
+            [
+                ['documento_id', '=', $id]
+            ]
+        );
+        $normasSelecionados = array_column(json_decode(json_encode($buscaNormasSelecionadas), true), 'item_norma_id');
+
+        $buscaGrupoTreinamentoSelecionado = $this->agrupamentoUserDocumentoRepository->findBy(
+            [
+                ['documento_id', '=', $id],
+                ['tipo', '=', 'TREINAMENTO', 'AND']
+            ]
+        );
+        $grupoTreinamentoSelecionado = array_column(json_decode(json_encode($buscaGrupoTreinamentoSelecionado), true), 'user_id');
+
+        $buscaGrupoDivulgacaoSelecionado = $this->agrupamentoUserDocumentoRepository->findBy(
+            [
+                ['documento_id', '=', $id],
+                ['tipo', '=', 'DIVULGACAO', 'AND']
+            ]
+        );
+        $grupoDivulgacaoSelecionado = array_column(json_decode(json_encode($buscaGrupoDivulgacaoSelecionado), true), 'user_id');
+
+
+        return view('docs::documento.edit',
+            compact(
+                'documento',
+                'documentos',
+                'setores',
+                'tiposDocumento',
+                'niveisAcesso',
+                'classificacoes',
+                'setoresUsuarios',
+                'normas',
+
+                'documentosPaiSelecionados',
+                'documentosVinculadosSelecionados',
+                'normasSelecionados',
+                'grupoTreinamentoSelecionado',
+                'grupoDivulgacaoSelecionado'
+            )
+        );
     }
 
     /**
@@ -211,24 +328,15 @@ class DocumentoController extends Controller
      */
     public function update(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
-        }
-
+        $update = $this->montaRequest($request);
         $id = $request->get('idDocumento');
-
-        $update  = $this->montaRequest($request, $id);
-        try {
-            DB::transaction(function () use ($update, $id) {
-                $this->documentoRepository->update($update, $id);
-            });
-
+        $retorno = $this->documentoService->update($update, $id);
+        if ($retorno) {
             Helper::setNotify('Informações do documento atualizadas com sucesso!', 'success|check-circle');
-        } catch (\Throwable $th) {
-            dd($th);
-            Helper::setNotify('Um erro ocorreu ao atualizar o documento', 'danger|close-circle');
+            return redirect()->back()->withInput();
         }
+
+        Helper::setNotify("Um erro ocorreu ao atualizar o documento. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
         return redirect()->back()->withInput();
     }
 
@@ -252,7 +360,7 @@ class DocumentoController extends Controller
 
     public function importarDocumento(Request $request)
     {
-        $error = $this->validador($request);
+        $error = $this->documentoService->validador($request);
         if ($error) {
             return redirect()->back()->withInput()->withErrors($error);
         }
@@ -276,8 +384,7 @@ class DocumentoController extends Controller
             ]
         );
 
-        $documentoService = new DocumentoService();
-        $codigo = $documentoService::gerarCodigoDocumento($request->tipoDocumento, $buscaSetores->id);
+        $codigo = $this->documentoService->gerarCodigoDocumento($request->tipoDocumento, $buscaSetores->id);
 
         return view('docs::documento.import',
             [
@@ -296,12 +403,11 @@ class DocumentoController extends Controller
 
     public function criarDocumento(Request $request)
     {
-        $error = $this->validador($request);
+        $error = $this->documentoService->validador($request);
         if ($error) {
             return redirect()->back()->withInput()->withErrors($error);
         }
- 
-        $docPath = '';
+
         $buscaNivelAcesso = $this->parametroRepository->getParametro('NIVEL_ACESSO');
         $niveisAcesso    = (array) json_decode($buscaNivelAcesso);
 
@@ -321,9 +427,11 @@ class DocumentoController extends Controller
             ]
         );
 
-        $documentoService = new DocumentoService();
-        $codigo = $documentoService::gerarCodigoDocumento($request->tipoDocumento, $buscaSetores->id);
+        $tipoArquivo = substr($buscaTipoDocumento->modelo_documento, 11, strpos($buscaTipoDocumento->modelo_documento, ';') - 11);
+        $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
 
+        $codigo = $this->documentoService->gerarCodigoDocumento($request->tipoDocumento, $buscaSetores->id);
+        $docPath = $request->tituloDocumento . $buscaPrefixo . '00.' . ($tipoArquivo == 'ation/vnd.ms-excel' ? 'xlsx' : 'docx');
         return view('docs::documento.factoryDoc',
             [
                 'titulo'          => $request->tituloDocumento,
@@ -334,47 +442,115 @@ class DocumentoController extends Controller
                 'tipoDocumento'   => $buscaTipoDocumento->nome,
                 'validade'        => $buscaTipoDocumento->periodo_vigencia_id . " Meses",
                 'codigo'          => $codigo,
+                'request'         => $request,
                 'docPath'         => $docPath,
-                'request'         => $request
             ]
         );
-    }
-
-    public function validador(Request $request)
-    {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'tituloDocumento'    => 'required|string|min:5|max:100',
-                'setor'              => 'required|numeric',
-                'tipoDocumento'      => 'required|numeric',
-                'nivelAcesso'        => 'required|numeric',
-            ]
-        );
-
-        if ($validator->fails()) {
-            return $validator;
-        }
-
-        return false;
     }
 
     public function montaRequest(Request $request)
     {
+
+        #Hierarquia Documentos
+        $montaRequestHierarquiaDocumento = [];
+        if (!empty($request->documentoPai)) {
+            $foreach = !is_array($request->documentoPai) ? json_decode($request->documentoPai) : $request->documentoPai;
+            foreach ($foreach as $key => $valueDocumentoPai) {
+                $montaRequestHierarquiaDocumento[$key] = [
+                    'documento_pai_id' => (int) $valueDocumentoPai
+                ];
+            }
+        }
+
+        #Documentos Vinculados 
+        $montaRequestVinculoDocumento = [];
+        if (!empty($request->documentoVinculado)) {
+            $foreach = !is_array($request->documentoVinculado) ? json_decode($request->documentoVinculado) : $request->documentoVinculado;
+            foreach ($foreach as $key => $valueDocumentosVinculados) {
+                $montaRequestVinculoDocumento[$key] = [
+                    'documento_vinculado_id' => (int) $valueDocumentosVinculados
+                ];
+            }
+        }
+
+        #Grupo Treinamento 
+        $montaRequestTreinamento = [];
+        if (!empty($request->grupoTreinamentoDoc)) {
+            $foreach = !is_array($request->grupoTreinamentoDoc) ? json_decode($request->grupoTreinamentoDoc) : $request->grupoTreinamentoDoc;
+            foreach ($foreach as $key => $valueUserTreinamento) {
+                $montaRequestTreinamento[$key] = [
+                    "user_id" => (int) $valueUserTreinamento,
+                    "tipo"    => 'TREINAMENTO'
+                ];
+            }
+        }
+
+        #Grupo Divulgacao
+        $montaRequestDivulgacao = [];
+        if (!empty($request->grupoDivulgacaoDoc)) {
+            $foreach = !is_array($request->grupoDivulgacaoDoc) ? json_decode($request->grupoDivulgacaoDoc) : $request->grupoDivulgacaoDoc;
+            foreach ($foreach as $key => $valueUserDivulgacao) {
+                $montaRequestDivulgacao[$key] = [
+                    "user_id" => (int) $valueUserDivulgacao,
+                    "tipo"    => 'DIVULGACAO'
+                ];
+            }
+        }
+
+        #Normas
+        $montaRequestNorma = [];
+        if (!empty($request->grupoNorma)) {
+            $foreach = !is_array($request->grupoNorma) ? json_decode($request->grupoNorma) : $request->grupoNorma;
+            foreach ($foreach as $key => $valueNormas) {
+                $montaRequestNorma[$key] = [
+                    "item_norma_id" => (int) $valueNormas
+                ];
+            }
+        }
+
+        #Etapas de Aprovacao
+        $montaRequestEtapa = [];
+        $etapas = $this->tipoDocumentoService->getEtapasFluxosPorComportamento(
+            $request->tipoDocumento,
+            'comportamento_aprovacao'
+        );
+
+        foreach ($etapas as $key => $value) {
+            $variavel = 'grupo' . $value['id'];
+            if (!empty($request->$variavel)) {
+                $foreach = !is_array($request->$variavel) ? json_decode($request->$variavel) : $request->$variavel;
+                foreach ($foreach as $key => $idAprovadores) {
+                    $montaRequestEtapa[$key] = [
+                        "user_id" => $idAprovadores,
+                        "etapa_fluxo_id" => $value['id']
+                    ];
+                }
+            }
+        }
+
         return [
             "nome"                           => $request->get('tituloDocumento'),
             "codigo"                         => $request->get('codigoDocumento'),
             "validade"                       => null,
-            "tipo_documento_id"              => (int) $request->get('tipoDocumento'),
+            "tipo_documento_id"              => (int) $request->get('tipoDocumento') ?? null,
             "copia_controlada"               => $request->get('copiaControlada') == 1 ? true : false,
-            "nivel_acesso_id"                => (int) $request->get('nivelAcesso'),
-            "setor_id"                       => (int) $request->get('setor'),
+            "nivel_acesso_id"                => (int) $request->get('nivelAcesso') ?? null,
+            "setor_id"                       => (int) $request->get('setor') ?? null,
             "obsoleto"                       => $request->get('obsoleto') == 1 ? true : false,
-            "elaborador_id"                  => Auth::user()->id,
-            "classificacao_id"               => (int) $request->classificacao,
+            "elaborador_id"                  => Auth::user()->id ?? null,
+            "classificacao_id"               => (int) $request->classificacao ?? null,
+            "etapa_id"                       => (int) $request->setor ?? null,
             "justificativa_rejeicao_etapa"   => null,
             "justificativa_cancelar_etapa"   => null,
-            "ged_documento_id"               => null
+            "ged_documento_id"               => null,
+            "revisao"                        => '1.0',
+            "hierarquia_documento"           => $montaRequestHierarquiaDocumento,
+            "vinculo_documento"              => $montaRequestVinculoDocumento,
+            "grupo_treinamento"              => $montaRequestTreinamento,
+            "grupo_divulgacao"               => $montaRequestDivulgacao,
+            "item_normas"                    => $montaRequestNorma,
+            "etapa_aprovacao"                => $montaRequestEtapa
+
         ];
     }
 }

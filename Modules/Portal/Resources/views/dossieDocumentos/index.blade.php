@@ -113,7 +113,7 @@
                                 </div>
                             </div>             
                                                         
-                            <form method="POST" action="{{ route('portal.dossieDocumentos.download') }}" id="formDossie" name="formDossie" >
+                            <form method="POST" action="{{ route('portal.dossie-documentos.download') }}" id="formDossie" name="formDossie" >
                                 {{ csrf_field() }}
                                 <input type="hidden" name="filters" id="filters"> 
                                 <input type="hidden" name="identificador" id="identificador">

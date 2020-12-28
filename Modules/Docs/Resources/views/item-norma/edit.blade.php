@@ -34,6 +34,7 @@
                 <form method="POST" action="{{ route('docs.norma.item-norma.alterar', ['id' => $itemNormaEdit->id, 'norma_id' => $itemNormaEdit->docsNorma->id]) }}" >
                     {{ csrf_field() }}
                     <input type="hidden" name="idItemNorma" value="{{ $itemNormaEdit->id }}">
+                    <input type="hidden" name="idNorma" value="{{$itemNormaEdit->norma_id}}">
                     @component(
                         'docs::components.item-norma', 
                         [

@@ -15,12 +15,12 @@ class ValidacaoService
         $this->rules = $rules;
         $this->data = $data;
     }
-    
-    
+
+
     public function make()
     {
         $validator = Validator::make($this->data, $this->rules);
-        
+
         if ($validator->fails()) {
             Helper::setNotify($validator->messages(), 'danger|close-circle');
             return $validator;

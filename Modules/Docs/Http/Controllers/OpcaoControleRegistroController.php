@@ -115,6 +115,7 @@ class OpcaoControleRegistroController extends Controller
 
             Helper::setNotify('Informações da opção do controle de registro atualizadas com sucesso!', 'success|check-circle');
         } catch (\Throwable $th) {
+
             Helper::setNotify('Um erro ocorreu ao atualizar a opção do controle de registro', 'danger|close-circle');
         }
         return redirect()->back()->withInput();
