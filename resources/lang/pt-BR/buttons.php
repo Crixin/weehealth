@@ -174,6 +174,11 @@ return [
             'edit'     => 'Editar Documento',
         ],
 
+        /*DOCUMENTO EXTERNO*/
+        'documento-externo'    => [
+            'create'   => 'Criar Documento Externo'
+        ],
+
     ],
 
 
