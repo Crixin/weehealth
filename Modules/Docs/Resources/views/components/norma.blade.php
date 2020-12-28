@@ -71,19 +71,19 @@
 @section('footer')
 
 
-<link rel="stylesheet" href="{{ asset('plugins/dataTables-edit/css/jquery.dataTables.css') }}" />
-<link rel="stylesheet" href="{{ asset('plugins/dataTables-edit/css/buttons.dataTables.css') }}" />
-<link rel="stylesheet" href="{{ asset('plugins/dataTables-edit/css/select.dataTables.css') }}" />
-<link rel="stylesheet" href="{{ asset('plugins/dataTables-edit/css/responsive.dataTables.css') }}" />
+<link rel="stylesheet" href="{{ asset('plugins/datatables-edit/css/jquery.dataTables.css') }}" />
+<link rel="stylesheet" href="{{ asset('plugins/datatables-edit/css/buttons.dataTables.css') }}" />
+<link rel="stylesheet" href="{{ asset('plugins/datatables-edit/css/select.dataTables.css') }}" />
+<link rel="stylesheet" href="{{ asset('plugins/datatables-edit/css/responsive.dataTables.css') }}" />
 
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
 
-<script src="{{ asset('plugins/dataTables-edit/js/jquery.dataTables.js') }}" ></script>
-<script src="{{ asset('plugins/dataTables-edit/js/dataTables.buttons.js') }}" ></script>
-<script src="{{ asset('plugins/dataTables-edit/js/dataTables.select.js') }}" ></script>
-<script src="{{ asset('plugins/dataTables-edit/js/dataTables.responsive.js') }}" ></script>
+<script src="{{ asset('plugins/datatables-edit/js/jquery.dataTables.js') }}" ></script>
+<script src="{{ asset('plugins/datatables-edit/js/dataTables.buttons.js') }}" ></script>
+<script src="{{ asset('plugins/datatables-edit/js/dataTables.select.js') }}" ></script>
+<script src="{{ asset('plugins/datatables-edit/js/dataTables.responsive.js') }}" ></script>
 
-<script src="{{ asset('plugins/dataTables-edit/dataTables.altEditor.free.js') }}"></script>
+<script src="{{ asset('plugins/datatables-edit/dataTables.altEditor.free.js') }}"></script>
 <script>
     var itens = {!!json_encode($itens)!!};
     var objeto = {};
