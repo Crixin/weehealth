@@ -22,4 +22,9 @@ class ItemNorma extends Model
     {
         return $this->hasOne('Modules\Docs\Model\Norma', 'id', 'norma_id');
     }
+
+    public function docsCheckListItemNorma()
+    {
+        return $this->hasMany('Modules\Docs\Model\CheckListItemNorma', 'item_norma_id', 'id');
+    }
 }

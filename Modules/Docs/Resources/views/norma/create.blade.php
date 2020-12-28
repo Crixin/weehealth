@@ -33,17 +33,20 @@
 
                 <form method="POST" action="{{ route('docs.norma.salvar') }}"> 
                     {{ csrf_field() }}
-                    
+                    <input type="hidden" name="arrayDataTable[]" id="arrayDataTable">
                     @component(
                         'docs::components.norma', 
                         [
                             'normaEdit' => [],
                             'descricao' => '', 
                             'orgaos' => $orgaos,
-                            'ciclos' => $ciclos
+                            'ciclos' => $ciclos,
+                            'itens'  => []
                         ]
                     )
                     @endcomponent
+
+                    
                         
                     <div class="form-actions ">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>

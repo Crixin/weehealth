@@ -10,7 +10,7 @@
 
     <li class="breadcrumb-item"><a href="{{ route('docs.home') }}"> @lang('page_titles.general.home') </a></li>
     <li class="breadcrumb-item"><a href="{{ route('docs.norma.item-norma', ['id' => $itemNormaEdit->id, 'norma_id' => $itemNormaEdit->docsNorma->id] ) }}"> @lang('page_titles.docs.item-norma.index') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.docs.item-norma.update') </li>    
+    <li class="breadcrumb-item active"> @lang('page_titles.docs.item-norma.index') </li>    
 
 @endsection
 

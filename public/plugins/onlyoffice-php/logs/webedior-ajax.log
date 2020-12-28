@@ -2810,3 +2810,33 @@ Track START
 _GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:10:"teste.docx";s:11:"userAddress";s:7:"Storage";}
 InputStream data: a:4:{s:3:"key";s:10:"2533554230";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1586443057435";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1586443057435";}}}
 track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:22:"Teste documento27.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:22:"Teste documento27.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:10:"3673226670";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1608666184971";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1608666184971";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:22:"Teste documento27.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:22:"Teste documento27.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:10:"3673226670";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1608666471510";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1608666471510";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:22:"Teste documento27.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:22:"Teste documento27.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:10:"3673226670";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1608666528289";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1608666528289";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:22:"Teste documento27.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:22:"Teste documento27.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:10:"2294004097";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1608666579249";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1608666579249";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:28:"Teste documento29_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:28:"Teste documento29_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:10:"2482927926";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1608667749195";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1608667749195";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:28:"Teste documento30_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:28:"Teste documento30_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:10:"2173361677";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1608668426635";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1608668426635";}}}
+track result: a:1:{s:5:"error";i:0;}

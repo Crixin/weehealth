@@ -9,20 +9,36 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Core\Repositories\ParametroRepository;
+use Modules\Docs\Repositories\CheckListItemNormaRepository;
+use Modules\Docs\Repositories\ItemNormaRepository;
 use Modules\Docs\Repositories\NormaRepository;
+use Modules\Docs\Services\CheckListItemNormaService;
+use Modules\Docs\Services\ItemNormaService;
 
 class NormaController extends Controller
 {
     protected $normaRepository;
     protected $parametroRepository;
+    protected $checkListItemNormaRepository;
+    protected $itemNormaRepository;
+    protected $itemNormaService;
 
-    
-
-    public function __construct(NormaRepository $normaRepository, ParametroRepository $parametroRepository)
+    public function __construct(
+        NormaRepository $normaRepository,
+        ParametroRepository $parametroRepository,
+        CheckListItemNormaRepository $checkListItemNormaRepository,
+        ItemNormaRepository $itemNormaRepository,
+        ItemNormaService $itemNormaService,
+        CheckListItemNormaService $checkListItemNormaService
+    )
     {
         $this->middleware('auth');
         $this->normaRepository = $normaRepository;
         $this->parametroRepository = $parametroRepository;
+        $this->itemNormaService = $itemNormaService;
+        $this->checkListItemNormaService = $checkListItemNormaService;
+        $this->checkListItemNormaRepository = $checkListItemNormaRepository;
+        $this->itemNormaRepository = $itemNormaRepository; 
     }
 
     /**
@@ -38,7 +54,7 @@ class NormaController extends Controller
                 ['nome','ASC']
             ]
         );
-        
+
         return view('docs::norma.index', compact('normas'));
     }
 
@@ -55,7 +71,9 @@ class NormaController extends Controller
         $buscaCicloAuditoria = $this->parametroRepository->getParametro('CICLO_AUDITORIA');
         $ciclos = json_decode($buscaCicloAuditoria);
 
-        return view('docs::norma.create', compact('orgaos', 'ciclos'));
+        $itens = [];
+
+        return view('docs::norma.create', compact('orgaos', 'ciclos', 'itens'));
     }
 
     /**
@@ -71,8 +89,27 @@ class NormaController extends Controller
         }
         $cadastro = $this->montaRequest($request);
         try {
-            DB::transaction(function () use ($cadastro) {
-                $this->normaRepository->create($cadastro);
+            DB::transaction(function () use ($cadastro, $request) {
+                $norma = $this->normaRepository->create($cadastro);
+                if (!empty($request->arrayDataTable[0])) {
+                    foreach (json_decode($request->arrayDataTable[0]) as $key => $value) {
+                        $value = (array) $value;
+                        $requestItemNorma = [
+                            "norma_id" => $norma->id,
+                            "numero"   => $value[0],
+                            "descricao" => $value[1]
+                        ];
+                        $itemNorma = $this->itemNormaService->create($requestItemNorma);
+ 
+                        if ($value[2] != '') {
+                            $requestCheckList = [
+                                "item_norma_id" => $itemNorma->id,
+                                "descricao" => $value[2]
+                            ];
+                            $this->checkListItemNormaService->create($requestCheckList);
+                        }
+                    }
+                }
             });
 
             Helper::setNotify('Nova norma criada com sucesso!', 'success|check-circle');
@@ -102,14 +139,27 @@ class NormaController extends Controller
     {
         $norma = $this->normaRepository->find($id);
 
+        $itens = [];
+
+        foreach ($norma->docsItemNorma as $key => $value) {
+            $checkList = $this->checkListItemNormaRepository->findOneBy(
+                [
+                    ['item_norma_id', '=', $value->id]
+                ]
+            );
+            $aux = [
+                $value->numero,
+                $value->descricao,
+                $checkList->descricao ?? ''
+            ];
+            array_push($itens, $aux);
+        }
         $buscaOrgaos = $this->parametroRepository->getParametro('ORGAO_REGULADOR');
         $orgaos = json_decode($buscaOrgaos);
 
-
         $buscaCicloAuditoria = $this->parametroRepository->getParametro('CICLO_AUDITORIA');
         $ciclos = json_decode($buscaCicloAuditoria);
-
-        return view('docs::norma.edit', compact('norma', 'orgaos', 'ciclos'));
+        return view('docs::norma.edit', compact('norma', 'orgaos', 'ciclos', 'itens'));
     }
 
     /**
@@ -128,8 +178,49 @@ class NormaController extends Controller
         $norma = $request->get('idNorma');
         $update  = $this->montaRequest($request);
         try {
-            DB::transaction(function () use ($update, $norma) {
+            DB::transaction(function () use ($update, $norma, $request) {
                 $this->normaRepository->update($update, $norma);
+
+                //delete itens da norma e Checklist
+                $buscaItensNorma = $this->itemNormaRepository->findBy(
+                    [
+                        ['norma_id', '=', $norma]
+                    ]
+                );
+                foreach ($buscaItensNorma as $key => $valueItem) {
+                    $buscaChecklist = $this->checkListItemNormaRepository->findBy(
+                        [
+                            ['item_norma_id', '=', $valueItem->id]
+                        ]
+                    );
+                    foreach ($buscaChecklist as $key => $valueCheckList) {
+                        $this->checkListItemNormaRepository->delete($valueCheckList->id);
+                    }
+                    $this->itemNormaRepository->delete($valueItem->id);
+                }
+
+
+                //cria
+                if (!empty($request->arrayDataTable[0])) {
+                    foreach (json_decode($request->arrayDataTable[0]) as $key => $value) {
+                        $value = (array) $value;
+                        $requestItemNorma = [
+                            "norma_id" => $norma,
+                            "numero"   => $value[0],
+                            "descricao" => $value[1]
+                        ];
+                        $itemNorma = $this->itemNormaService->create($requestItemNorma);
+ 
+                        if ($value[2] != '') {
+                            $requestCheckList = [
+                                "item_norma_id" => $itemNorma->id,
+                                "descricao" => $value[2]
+                            ];
+                            $this->checkListItemNormaService->create($requestCheckList);
+                        }
+                    }
+                }
+
             });
 
             Helper::setNotify('Informações da norma atualizadas com sucesso!', 'success|check-circle');
@@ -184,4 +275,6 @@ class NormaController extends Controller
             "data_acreditacao"      => $request->get('dataAcreditacao') ?? null,
         ];
     }
+
+    
 }
