@@ -353,7 +353,11 @@
     <!-- End Wrapper -->
     <!-- ============================================================== -->
 
+    <div class="hide lista-processos">
+        <ul aria-expanded="false" class="collapse">  
 
+        </ul>
+    </div>
 
 
 
@@ -492,6 +496,12 @@
 
     </script>
 
+    <script>
+        //BUSCANDO DASH E PROCESSO
+        ajaxMethod().then(resp => {
+            
+        })
+    </script>
      
     
     @yield('footer')

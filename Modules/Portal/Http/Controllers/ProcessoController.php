@@ -251,7 +251,7 @@ class ProcessoController extends Controller
     }
 
 
-    public function listDocuments($_idRegistro)
+    public function listDocuments($idRegistro)
     {
         $cabecalho = [];
         $documentos = [];
@@ -263,7 +263,7 @@ class ProcessoController extends Controller
         ];
 
         $registro = $this->ged->get(
-            env('GED_URL') . "/registro/pesquisa/" . $identificadores['idAreaGED'] . '/' . $_idRegistro,
+            env('GED_URL') . "/registro/pesquisa/" . $identificadores['idAreaGED'] . '/' . $idRegistro,
             $params
         )['response'];
 
@@ -291,14 +291,14 @@ class ProcessoController extends Controller
     }
 
 
-    public function accessDocument($_idDocumento)
+    public function accessDocument($idDocumento)
     {
         $identificadores = session('identificadores');
 
         // Mantém apenas os índices que devem ser visualizados na propriedade 'listaIndice' do documento
-        //$documento = $this->ged->pesquisaDocumento($_idDocumento)->return;
+        //$documento = $this->ged->pesquisaDocumento($idDocumento)->return;
 
-        $documento = $this->ged->get(env('GED_URL') . "/documento/" . $_idDocumento)['response'];
+        $documento = $this->ged->get(env('GED_URL') . "/documento/" . $idDocumento)['response'];
 
         $documento->listaIndice = array_filter($documento->listaIndice, function ($v, $k) use ($documento) {
             if ($v->identificador == 'status') {
@@ -371,9 +371,9 @@ class ProcessoController extends Controller
 
     public function approveDocument(Request $request)
     {
-        $_idDocumento = $request->get('id-documento');
+        $idDocumento = $request->get('idDocumento');
 
-        $documentoCompleto = $this->ged->get(env('GED_URL') . "/documento/" . $_idDocumento)['response'];
+        $documentoCompleto = $this->ged->get(env('GED_URL') . "/documento/" . $idDocumento)['response'];
 
         $arrIndicesDoc = $this->createIndexArray($documentoCompleto->listaIndice, Constants::$VALOR_DOCUMENTO_APROVADO);
 
@@ -415,10 +415,10 @@ class ProcessoController extends Controller
 
     public function rejectDocument(Request $request)
     {
-        $_idDocumento   = $request->get('id-documento');
+        $idDocumento   = $request->get('idDocumento');
         $_justificativa = $request->get('justificativa-rejeicao');
 
-        $documentoCompleto = $this->ged->get(env('GED_URL') . "/documento/" . $_idDocumento)['response'];
+        $documentoCompleto = $this->ged->get(env('GED_URL') . "/documento/" . $idDocumento)['response'];
 
         $arrIndicesDoc     = $this->createIndexArray(
             $documentoCompleto->listaIndice,
@@ -738,6 +738,6 @@ class ProcessoController extends Controller
                 );
             }
         }
-        return redirect()->route('portal.processo.listarDocumentos', ['_idRegistro' => $documentoCompleto->idRegistro]);
+        return redirect()->route('portal.processo.listarDocumentos', ['idRegistro' => $documentoCompleto->idRegistro]);
     }
 }

@@ -132,13 +132,13 @@ Route::prefix('portal')->group(function () {
         /**
          * PROCESSO - documentos
          */
-        Route::group(['prefix' => 'processo', 'as' => 'portal.processo.', 'middleware' => 'userCanByEntreprise'], function () {
-             Route::get('buscar/{idEmpresa}/{idProcesso}',  ['as' => 'buscar',             'uses' => 'ProcessoController@search']);
+        Route::group(['prefix' => 'processo', 'as' => 'portal.processo.', 'middleware' => 'permissao'], function () {
+             Route::get('buscar/{idEmpresa}/{idProcesso}',  ['as' => 'buscar',             'uses' => 'ProcessoController@search', 'middleware' => 'userCan:processo']);
              Route::post('listarRegistros',                 ['as' => 'listarRegistros',    'uses' => 'ProcessoController@listRegisters']);
-             Route::get('listarDocumentos/{_idRegistro}',   ['as' => 'listarDocumentos',   'uses' => 'ProcessoController@listDocuments']);
-             Route::get('documento/{_idDocumento}',         ['as' => 'acessarDocumento',   'uses' => 'ProcessoController@accessDocument']);
-             Route::post('documento/aprovar',               ['as' => 'documento.aprovar',  'uses' => 'ProcessoController@approveDocument']);
-             Route::post('documento/rejeitar',              ['as' => 'documento.rejeitar', 'uses' => 'ProcessoController@rejectDocument']);
+             Route::get('listarDocumentos/{idRegistro}',   ['as' => 'listarDocumentos',   'uses' => 'ProcessoController@listDocuments', 'middleware' => 'userCan:registroGed']);
+             Route::get('documento/{idDocumento}',         ['as' => 'acessarDocumento',   'uses' => 'ProcessoController@accessDocument', 'middleware' => 'userCan:documentoGed']);
+             Route::post('documento/aprovar',               ['as' => 'documento.aprovar',  'uses' => 'ProcessoController@approveDocument', 'middleware' => 'userCan:documentoGed']);
+             Route::post('documento/rejeitar',              ['as' => 'documento.rejeitar', 'uses' => 'ProcessoController@rejectDocument', 'middleware' => 'userCan:documentoGed']);
              Route::post('documento/update',                ['as' => 'documento.update',   'uses' => 'ProcessoController@updateDocument']);
              Route::get('upload/{idEmpresa}/{idProcesso}',  ['as' => 'upload',             'uses' => 'ProcessoController@upload']);
              Route::post('realizarUpload',                  ['as' => 'realizarUpload',     'uses' => 'ProcessoController@makeUpload']);

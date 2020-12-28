@@ -417,13 +417,63 @@ class Helper
     }
 
 
-    public static function makeMenuPermissions(&$menuMaster, $first = true)
+    public static function userDashboards()
+    {
+        $obj = [];
+
+        foreach (Auth::user()->portalDashboards as $key => $userDashboard) {
+            $obj[$userDashboard->portalDashboard->nome] = [
+                "descricao" => $userDashboard->portalDashboard->nome,
+                "permissao" => ["portal_dashboard_view"],
+                "icone" => "",
+                "route" => "portal.dashboard.view",
+                "routeParams" => ['id' => $userDashboard->dashboard_id]
+            ];
+        }
+
+        return json_decode(json_encode($obj), false);
+    }
+
+    public static function userProcess()
+    {
+        $obj = [];
+
+        foreach (Helper::getUserProcesses() as $key => $empresa) {
+            if (count($empresa->processos)) {
+                $obj[$empresa->nome] = [
+                    "descricao" => $empresa->nome,
+                    "permissao" => ["portal_processo_ger"],
+                    "icone" => "",
+                    "route" => false
+                ];
+                foreach ($empresa->processos as $processo) {
+                    $obj[$empresa->nome]['filhos_menu'][$processo->nome] = [
+                        "descricao" => $processo->nome,
+                        "permissao" => ["portal_processo_ger"],
+                        "icone" => "",
+                        "route" => "portal.processo.buscar",
+                        "routeParams" => ['idEmpresa' => $empresa->id, 'idProcesso' => $processo->id]
+                    ];
+                }
+            }
+        }
+        return json_decode(json_encode($obj), false);
+    }
+
+
+    public static function makeMenuPermissions(&$menuMaster, bool $first = true)
     {
         if ($menuMaster->filhos_menu ?? false) {
             $perm = [];
             foreach ($menuMaster->filhos_menu as $key => $menu) {
                 if ($menu->filhos_menu ?? false) {
                     \Helper::makeMenuPermissions($menu, false);
+
+                //CASO TENHA FUNÇÃO ULTIMO NODO
+                } elseif ($menu->function ?? false) {
+                    if ($menu->function == "userDashboards") {
+                        $menu->filhos_menu = \Helper::userDashboards();
+                    }
                 }
                 $perm = array_merge($menu->permissao, $perm);
             }
@@ -434,7 +484,14 @@ class Helper
         if ($first) {
             foreach ($menuMaster ?? [] as $key => $menus) {
                 foreach ($menus ?? [] as $key => $menu) {
-                    \Helper::makeMenuPermissions($menu, false);
+                    //CASO TENHA FUNÇÃO NO NODO PAI
+                    if ($menu->function ?? false) {
+                        if ($menu->function == "userProcess") {
+                            $menu->filhos_menu = \Helper::userProcess();
+                        }
+                    } else {
+                        \Helper::makeMenuPermissions($menu, false);
+                    }
                 }
             }
             return $menuMaster;

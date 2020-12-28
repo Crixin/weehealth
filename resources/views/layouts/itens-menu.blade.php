@@ -13,8 +13,8 @@
         @endif
     @else
         @if (count(array_intersect($menu->permissao ?? [], Auth::user()->corePerfil->permissoes)))
-            <li>
-                <a class="waves-effect waves-dark" href="{{ ($menu->route) ? route($menu->route) : '#' }}" aria-expanded="false"> <i class="{{ $menu->icone }}"></i> <span>{{$menu->descricao}}</span> </a>
+            <li class="{{ $menu->class ?? '' }}">
+                <a class="waves-effect waves-dark" href="{{ ($menu->route) ? route($menu->route, (array) ($menu->routeParams ?? [])) : '#' }}" > <i class="{{ $menu->icone }}"></i> <span>{{$menu->descricao}}</span> </a>
             </li>  
         @endif
     @endif

@@ -68,7 +68,6 @@ class RESTServices
                 return ['error' => false, 'response' => $body];
             }
         } catch (RequestException $e) {
-            dd($e);
             return ['error' => true, 'response' => $e->getMessage()];
         }
     }

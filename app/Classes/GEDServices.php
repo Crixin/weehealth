@@ -276,7 +276,7 @@ class GEDServices
         $_arrIndicesDoc,
         $_bytes,
         $_nomeArquivo,
-        $_idDocumento,
+        $idDocumento,
         $_idArea,
         $_idRegistro,
         $_removido
@@ -288,7 +288,7 @@ class GEDServices
                 'arg0' => array (
                     'bytes'         => $_bytes,
                     'endereco'      => $_nomeArquivo,
-                    'id'            => $_idDocumento,
+                    'id'            => $idDocumento,
                     'idArea'        => $_idArea,
                     'idRegistro'    => $_idRegistro,
                     'idUsuario'     => $this->idUserGED,
@@ -346,10 +346,10 @@ class GEDServices
     }
 
 
-    public function removerDocumento($_idDocumento)
+    public function removerDocumento($idDocumento)
     {
         // requisição para remover um documento do GED
-        $request = array('removerDocumento' => ['arg0' => $_idDocumento] );
+        $request = array('removerDocumento' => ['arg0' => $idDocumento] );
 
         $options = array('location' => str_replace('?wsdl', '', $this->serverGED));
         $client = new SoapClient($this->serverGED);
@@ -363,10 +363,10 @@ class GEDServices
     }
 
 
-    public function pesquisaDocumento($_idDocumento)
+    public function pesquisaDocumento($idDocumento)
     {
         // requisição para pesquisar um documento específico do GED
-        $request = array('pesquisarDocumento' => ['arg0' => $_idDocumento] );
+        $request = array('pesquisarDocumento' => ['arg0' => $idDocumento] );
 
         $options = array('location' => str_replace('?wsdl', '', $this->serverGED));
         $client = new SoapClient($this->serverGED);

@@ -61,5 +61,7 @@ class Kernel extends HttpKernel
         'administrativeArea' => \Modules\Portal\Http\Middleware\AdministrativeAreaMiddleware::class,
         'userCanByEntreprise' => \Modules\Portal\Http\Middleware\UserCanByEnterpriseMiddleware::class,
         'onlyAllowSuperAdmins' => \Modules\Core\Http\Middleware\OnlyAllowSuperAdminsMiddleware::class,
+        'permissao' => \App\Http\Middleware\Permissao::class,
+        'userCan' => \App\Http\Middleware\UserCan::class,
     ];
 }
