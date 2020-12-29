@@ -327,6 +327,11 @@
 
                 $(selector + ' input[0]').trigger('focus');
                 $(selector).trigger("alteditor:some_dialog_opened").trigger("alteditor:edit_dialog_opened");
+                
+                let unico = document.querySelector('[data-unique="true"]');
+                if($('#'+unico.id).val() != ''){
+                    $('#'+unico.id).attr('disabled',true);
+                }
             },
 
             /**
@@ -744,6 +749,8 @@
                         }
                     }
                 }
+
+                
             },
 
             /**
@@ -929,8 +936,8 @@
                     console.log('1for');
                     if(arrayDataTable[i][0]==rowdata[0]){
                         console.log('achou');
-                        console.log(arrayDataTable[i].length);
-                        for(var j=0;j<3;j++){
+                        console.log(Object.keys(arrayDataTable[i]).length);
+                        for(var j=0;j < Object.keys(arrayDataTable[i]).length;j++){
                             arrayDataTable[i][j] = rowdata[j];
                         }
                     }
@@ -962,7 +969,7 @@
                 if ($sel.modal) {
                     // Bootstrap
                     $sel.on('show.bs.modal', onopen);
-                    $sel.modal('show');
+                    $sel.modal('show');  
 
                 } else if ($sel.foundation){
                     // Foundation

@@ -100,7 +100,8 @@
     
     $(document).ready(function() {
         var dataSet = {!!json_encode($itens)!!};
-        var columnDefs = [{
+        var columnDefs = [             
+        {
             title: "Id",
             type: "text",
             required: true,
@@ -112,7 +113,10 @@
         },{
             title: "CheckList",
             type: "textarea"
-        }];
+        }
+        
+        ];
+        console.log('passou');
 
         var myTable;
 
