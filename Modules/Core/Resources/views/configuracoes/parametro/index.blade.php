@@ -28,7 +28,7 @@
                 <div class="alert alert-info">
                     <ul>
                         
-                        <li>Você pode ativar ou inativar um parâmetro na coluna <span class="font-weight-bold" style="color: cornflowerblue">Ativo</span>!</li>
+                        <li>Você pode ativar ou inativar um parâmetro na coluna <span class="font-weight-bold" style="color: cornflowerblue">Controle</span>!</li>
                     </ul>
                 </div>
             
