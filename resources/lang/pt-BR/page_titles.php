@@ -69,6 +69,11 @@ return [
             'create'          => 'Novo Parametro',
             'update'          => 'Alterando Parametro'
         ],
+        'modelo-notificacao' => [
+            'index'           => 'Notificações',
+            'create'          => 'Nova Notificação',
+            'update'          => 'Alterando Notificação'
+        ],
     ],
 
     'portal'        => [
@@ -255,7 +260,9 @@ return [
             'index'           => 'Documentos Externos',
             'create'          => 'Novo Documento Externo',
             'update'          => 'Alterando Documento Externo'
-        ],
+        ]
+
+        
 
     ]
 ];

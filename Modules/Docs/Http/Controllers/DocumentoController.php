@@ -21,8 +21,10 @@ use Modules\Docs\Repositories\NormaRepository;
 use Modules\Docs\Repositories\TipoDocumentoRepository;
 use Modules\Docs\Repositories\UserEtapaDocumentoRepository;
 use Modules\Docs\Repositories\VinculoDocumentoRepository;
+use Modules\Docs\Repositories\WorkflowRepository;
 use Modules\Docs\Services\DocumentoService;
 use Modules\Docs\Services\TipoDocumentoService;
+use Modules\Docs\Services\WorkflowService;
 
 use function PHPSTORM_META\map;
 
@@ -41,6 +43,8 @@ class DocumentoController extends Controller
     protected $hierarquiaDocumentorepository;
     protected $documentoService;
     protected $tipoDocumentoService;
+    protected $workFlowService;
+    protected $workFlowRepository;
 
     public function __construct(
         DocumentoRepository $documentoRepository,
@@ -54,8 +58,10 @@ class DocumentoController extends Controller
         AgrupamentoUserDocumentoRepository $agrupamentoUserDocumentoRepository,
         VinculoDocumentoRepository $vinculoDocumentoRepository,
         HierarquiaDocumentoRepository $hierarquiaDocumentoRepository,
+        WorkflowRepository $workflowRepository,
         DocumentoService $documentoService,
-        TipoDocumentoService $tipoDocumentoService
+        TipoDocumentoService $tipoDocumentoService,
+        WorkflowService $workFlowService
     ){
         $this->documentoRepository = $documentoRepository;
         $this->setorRepository = $setorRepository;
@@ -68,9 +74,10 @@ class DocumentoController extends Controller
         $this->agrupamentoUserDocumentoRepository = $agrupamentoUserDocumentoRepository;
         $this->vinculoDocumentoRepository = $vinculoDocumentoRepository;
         $this->hierarquiaDocumentorepository = $hierarquiaDocumentoRepository;
+        $this->workFlowRepository = $workflowRepository;
         $this->documentoService = $documentoService;
         $this->tipoDocumentoService = $tipoDocumentoService;
-
+        $this->workFlowService = $workFlowService;
     }
 
     /**
@@ -170,10 +177,24 @@ class DocumentoController extends Controller
     public function store(Request $request)
     {
         $cadastro = $this->montaRequest($request);
+        $buscaTipoDocumento = $this->tipoDocumentorepository->find($request->get('tipoDocumento'));
+        $fluxo = $buscaTipoDocumento->docsFluxo;
         $retorno = $this->documentoService->create($cadastro);
         if ($retorno) {
-            Helper::setNotify('Novo documento criado com sucesso!', 'success|check-circle');
-            return redirect()->route('docs.documento');
+            if ($fluxo->docsEtapaFluxo[0]->permitir_anexo == true) {
+                //abre tela anexos
+                return redirect()->route('docs.anexo', ['id' => $retorno]);
+            } else {
+                $myRequest = new \Illuminate\Http\Request();
+                $myRequest->setMethod('POST');
+                $myRequest->request->add(['idDocumento' => $retorno]);
+                //metodo que executa as configurações da etapa
+                $retornoProximaEtapa = $this->proximaEtapa($myRequest);
+                if ($retornoProximaEtapa) {
+                    Helper::setNotify('Novo documento criado com sucesso!', 'success|check-circle');
+                    return redirect()->route('docs.documento');
+                }
+            }
         }
 
         Helper::setNotify("Um erro ocorreu ao gravar o documento. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
@@ -358,6 +379,71 @@ class DocumentoController extends Controller
         }
     }
 
+    public function proximaEtapa(Request $request)
+    {
+        $idDocumento = $request->idDocumento;
+
+        /*
+        $buscaDocumento = $this->documentoRepository->find($idDocumento);
+
+        $buscaUltimaEtapa = $this->workFlowRepository->findBy(
+            [
+                ['documento_id', '=', $idDocumento],
+                ['versao_documento', '=', $buscaDocumento->revisao, 'AND']
+            ],
+            [],
+            [
+                ['created_at', 'DESC']
+            ]
+        );
+        $etapaAtual = $buscaUltimaEtapa->isEmpty() ? 1 : $buscaUltimaEtapa->etapa_fluxo_id + 1;
+        dd($etapaAtual);
+        */
+
+        /*
+        $fluxo = $buscaDocumento->docsTipoDocumento->docsFluxo;
+        if ($fluxo->docsEtapaFluxo[0]->enviar_notificacao == true) {
+            $idNotificacao = $fluxo->docsEtapaFluxo[0]->notificacao_id;
+            //chama servico email
+        }
+
+        //Cria notificação para todos usuários do setor Qualidade;
+        //chama servico de notificacao usuario
+
+        //Cria registro workflow
+        $createWorkFlow = $this->montaRequestWorkFlow(
+            'Documento em elaboração',
+            '',
+            false,
+            $idDocumento,
+            $fluxo->docsEtapaFluxo[0]->id,
+            $buscaDocumento->revisao
+        );
+        $this->workFlowService->create($createWorkFlow);
+        */
+
+    }
+
+    public function montaRequestWorkFlow(
+        $descricao,
+        $justificativa,
+        $justificativaLida,
+        $idDocumento,
+        $etapaFluxoId,
+        $versaoDocumento
+    )
+    {
+        return [
+            "descricao" => $descricao,
+            "justificativa" => $justificativa,
+            "justificativa_lida" => $justificativaLida,
+            "documento_id" => $idDocumento,
+            "etapa_fluxo_id" => $etapaFluxoId,
+            "user_id" => Auth::user()->id,
+            "versao_documento" => $versaoDocumento
+        ];
+    }
+
     public function importarDocumento(Request $request)
     {
         $error = $this->documentoService->validador($request);
@@ -394,7 +480,7 @@ class DocumentoController extends Controller
                 'copiaControlada' => $request->copiaControlada == 1 ? 'Sim' : 'Não',
                 'classificacao'   => $classificacoes[$request->classificacao],
                 'tipoDocumento'   => $buscaTipoDocumento->nome,
-                'validade'        => $buscaTipoDocumento->periodo_vigencia_id . " Meses",
+                'validade'        => $buscaTipoDocumento->periodo_vigencia . " Meses",
                 'codigo'          => $codigo,
                 'request'         => $request
             ]
@@ -432,6 +518,10 @@ class DocumentoController extends Controller
 
         $codigo = $this->documentoService->gerarCodigoDocumento($request->tipoDocumento, $buscaSetores->id);
         $docPath = $request->tituloDocumento . $buscaPrefixo . '00.' . ($tipoArquivo == 'ation/vnd.ms-excel' ? 'xlsx' : 'docx');
+
+        /**SALVAR NA PASTA DO ONLYOFFICE */
+
+
         return view('docs::documento.factoryDoc',
             [
                 'titulo'          => $request->tituloDocumento,
@@ -440,7 +530,7 @@ class DocumentoController extends Controller
                 'copiaControlada' => $request->copiaControlada == 1 ? 'Sim' : 'Não',
                 'classificacao'   => $classificacoes[$request->classificacao],
                 'tipoDocumento'   => $buscaTipoDocumento->nome,
-                'validade'        => $buscaTipoDocumento->periodo_vigencia_id . " Meses",
+                'validade'        => $buscaTipoDocumento->periodo_vigencia . " Meses",
                 'codigo'          => $codigo,
                 'request'         => $request,
                 'docPath'         => $docPath,

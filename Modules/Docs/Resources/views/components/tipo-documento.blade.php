@@ -66,7 +66,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group{{ $errors->has('periodoVigencia') ? ' has-error' : '' }}">
-                {!! Form::label('periodoVigencia', 'Perído de Vigência (Mese)') !!}
+                {!! Form::label('periodoVigencia', 'Perído de Vigência (Meses)') !!}
                 {!! Form::number('periodoVigencia',$periodosVigencia, ['class' => 'form-control', 'required' => 'required', 'min' => 0]) !!}
                 <small class="text-danger">{{ $errors->first('periodoVigencia') }}</small>
             </div>

@@ -9,10 +9,7 @@ use Modules\Core\Repositories\SetorRepository;
 use Modules\Docs\Model\Documento;
 use Modules\Docs\Repositories\DocumentoRepository;
 use Modules\Docs\Repositories\TipoDocumentoRepository;
-use App\Classes\Helper;
-use Illuminate\Support\Facades\Auth;
 use Modules\Core\Repositories\UserRepository;
-use Modules\Docs\Repositories\HierarquiaDocumentoRepository;
 use Modules\Docs\Repositories\ItemNormaRepository;
 use Modules\Docs\Repositories\UserEtapaDocumentoRepository;
 
@@ -30,7 +27,6 @@ class DocumentoService
     protected $documentoItemNormaService;
     protected $userEtapaDocumentoService;
     protected $tipoDocumentoService;
-    protected $workflowService;
 
     protected $rules;
 
@@ -43,7 +39,6 @@ class DocumentoService
         UserEtapaDocumentoService $userEtapaDocumentoService,
         DocumentoItemNormaService $documentoItemNormaService,
         TipoDocumentoService $tipoDocumentoService,
-        WorkflowService $workFlowService,
         UserRepository $userRepository,
         ItemNormaRepository $itemNormaRepository,
         UserEtapaDocumentoRepository $userEtapaDocumentoRepository
@@ -61,7 +56,6 @@ class DocumentoService
         $this->userEtapaDocumentoService = $userEtapaDocumentoService;
         $this->documentoItemNormaService = $documentoItemNormaService;
         $this->tipoDocumentoService = $tipoDocumentoService;
-        $this->workflowService = $workFlowService;
     }
 
     public function create($data)
@@ -76,12 +70,8 @@ class DocumentoService
             $createDocumento['etapa_aprovacao']
         );
         try {
-            DB::transaction(function () use ($createDocumento, $data) {
+            $documento = DB::transaction(function () use ($createDocumento, $data) {
                 $documento = $this->documentoRepository->create($createDocumento);
-
-                $requestWorkflow = $this->montaRequestWorkflow($data['tipo_documento_id'], $documento->id, $data['revisao']);
-                $this->workflowService->create($requestWorkflow);
-
                 /**Cria Hierarquia Documento */
                 foreach ($data['hierarquia_documento'] as $value) {
                     $value['documento_id'] = $documento->id;
@@ -120,8 +110,9 @@ class DocumentoService
                     $this->userEtapaDocumentoService->create($value);
                 }
                 $this->tipoDocumentoService->atualizaUltimoCodigoTipoDocumento($data['tipo_documento_id']);
+                return  $documento->id;
             });
-            return true;
+            return $documento;
         } catch (\Throwable $th) {
             return false;
         }
@@ -358,21 +349,5 @@ class DocumentoService
         }
 
         return false;
-    }
-
-    public function montaRequestWorkflow($tipoDocumento, $documentoId, $versaoDocumento)
-    {
-        $etapas = $this->tipoDocumentoService->getEtapasFluxo($tipoDocumento);
-        $etapaId = $etapas[0]['id'];
-
-        return [
-            "descricao" => 'Documento em elaboração',
-            "justificativa" => '',
-            "justificativa_lida" => false,
-            "documento_id" => $documentoId,
-            "etapa_fluxo_id" => $etapaId,
-            "user_id" => Auth::user()->id,
-            "versao_documento" => $versaoDocumento
-        ];
     }
 }

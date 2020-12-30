@@ -8,13 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificacaoController extends Controller
 {
-
-    public function index()
-    {
-        return view('core::notifications.index');
-    }
-
-
     public function markAllAsRead(Request $_request)
     {
         try {

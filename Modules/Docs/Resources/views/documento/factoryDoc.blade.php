@@ -74,7 +74,7 @@
                         </div>
                         {!! Form::open(['route' => 'docs.documento.salvar', 'method' => 'POST', 'id' => 'form-upload-document', 'enctype' => 'multipart/form-data']) !!}
                             {{ csrf_field() }}
-
+                            {!! Form::hidden('codigoDocumento', $codigo) !!}
                             <!--campos do formulario anterior -->
                             @component(
                                 'docs::components.input-hidden-criacao-documento', 

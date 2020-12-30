@@ -40,7 +40,8 @@ return [
         'update'         => 'Atualizar',
         'link'           => 'Vincular',
         'import'         => 'Importar',
-        'next'           => 'Proximo'
+        'next'           => 'Proximo',
+        'complete'       => 'Concluir'
 
     ],
 
@@ -63,6 +64,9 @@ return [
         'setor'          => [
             'create'    => 'Criar Setor',
             'users'     => 'Usuários'
+        ],
+        'modelo-notificacao'    => [
+            'create'   => 'Criar Notificação'
         ],
     ],
 
@@ -178,6 +182,8 @@ return [
         'documento-externo'    => [
             'create'   => 'Criar Documento Externo'
         ],
+
+        
 
     ],
 

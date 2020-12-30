@@ -5,6 +5,7 @@ namespace Modules\Docs\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Core\Repositories\ParametroRepository;
 
 class EtapaFluxo extends Model
 {
@@ -39,5 +40,17 @@ class EtapaFluxo extends Model
     public function docsFluxo()
     {
         return $this->hasOne('Modules\Docs\Model\Fluxo', 'id', 'fluxo_id');
+    }
+
+    public function docsStatus($id)
+    {
+        $parametro = new ParametroRepository();
+        $busca = $parametro->findOneBy(
+            [
+                ['identificador_parametro', '=', 'STATUS_ETAPA_FLUXO']
+            ]
+        );
+        $status = json_decode($busca->valor_padrao);
+        return $status->$id;
     }
 }

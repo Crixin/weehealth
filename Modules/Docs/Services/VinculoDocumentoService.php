@@ -24,7 +24,7 @@ class VinculoDocumentoService
         return $this->vinculoDocumentoRepository->update($data, $id);
     }
 
-    public function delete(array $delete)
+    public function delete($delete)
     {
         return $this->vinculoDocumentoRepository->delete($delete);
     }

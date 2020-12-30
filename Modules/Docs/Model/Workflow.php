@@ -21,4 +21,7 @@ class Workflow extends Model
         'versao_documento',
         'justificativa_lida'
     ];
+
+
+    
 }

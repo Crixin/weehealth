@@ -49,4 +49,9 @@ class Documento extends Model
         $nivel = json_decode($busca->valor_padrao);
         return $nivel->$id;
     }
+
+    public function docsTipoDocumento()
+    {
+        return $this->hasOne('Modules\Docs\Model\TipoDocumento', 'id', 'tipo_documento_id');
+    }
 }

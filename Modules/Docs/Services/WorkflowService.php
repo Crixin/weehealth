@@ -24,7 +24,7 @@ class WorkflowService
         return $this->workflowRepository->update($data, $id);
     }
 
-    public function delete(array $delete)
+    public function delete($delete)
     {
         return $this->workflowRepository->delete($delete);
     }

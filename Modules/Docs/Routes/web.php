@@ -112,8 +112,16 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('editar/{id}',   ['as' => 'documento.editar',  'uses' => 'DocumentoController@edit']);
             Route::post('alterar',      ['as' => 'documento.alterar', 'uses' => 'DocumentoController@update']);
             Route::post('deletar',      ['as' => 'documento.deletar', 'uses' => 'DocumentoController@destroy']);
-            Route::post('importar-documento',      ['as' => 'documento.importar-documento', 'uses' => 'DocumentoController@importarDocumento']);
-            Route::post('criar-documento',      ['as' => 'documento.criar-documento', 'uses' => 'DocumentoController@criarDocumento']);
+            Route::post('importar-documento', ['as' => 'documento.importar-documento', 'uses' => 'DocumentoController@importarDocumento']);
+            Route::post('criar-documento',    ['as' => 'documento.criar-documento', 'uses' => 'DocumentoController@criarDocumento']);
+            Route::post('proxima-etapa',    ['as' => 'documento.proxima-etapa', 'uses' => 'DocumentoController@proximaEtapa']);
+        });
+
+        /**ANEXO */
+        Route::group(['prefix' => 'anexo','as' => 'docs.'], function() {
+            Route::get('/{id}',         ['as' => 'anexo',    'uses' => 'AnexoDocumentoController@index']);
+            Route::post('salvar',       ['as' => 'anexo.salvar',  'uses' => 'AnexoDocumentoController@store']);
+            Route::post('deletar',      ['as' => 'anexo.deletar', 'uses' => 'AnexoDocumentoController@destroy']);
         });
 
         Route::group(['prefix' => 'user-etapa-documento','as' => 'docs.'], function() {

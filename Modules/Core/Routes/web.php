@@ -81,9 +81,21 @@ Route::group(['middleware' => ['auth']], function () {
         /*
         * NOTIFICAÇãO
         */
-        Route::group(['prefix' => 'notificacao'], function () {
-            Route::get('',                          ['as' => 'core.notificacao',                           'uses' => 'NotificacaoController@index']);
-            Route::get('marcar-todas-como-lidas',   ['as' => 'core.notificacao.marcar-todas-como-lidas',   'uses' => 'NotificacaoController@markAllAsRead']);
+        Route::group(['prefix' => 'notificacao', 'as' => 'core.'], function () {
+            Route::get('',                          ['as' => 'notificacao',                           'uses' => 'NotificacaoController@index']);
+            Route::get('marcar-todas-como-lidas',   ['as' => 'notificacao.marcar-todas-como-lidas',   'uses' => 'NotificacaoController@markAllAsRead']);
+        });
+
+        /*
+        * MODELO NOTIFICACAO
+        */
+        Route::group(['prefix' => 'modelo-notificacao' , 'as' => 'core.'], function () {
+            Route::get('',              ['as' => 'modelo-notificacao',         'uses' => 'ModeloNotificacaoController@index']);
+            Route::get('novo',          ['as' => 'modelo-notificacao.novo',    'uses' => 'ModeloNotificacaoController@create']);
+            Route::post('salvar',       ['as' => 'modelo-notificacao.salvar',  'uses' => 'ModeloNotificacaoController@store']);
+            Route::get('editar/{id}',   ['as' => 'modelo-notificacao.editar',  'uses' => 'ModeloNotificacaoController@edit']);
+            Route::post('alterar',      ['as' => 'modelo-notificacao.alterar', 'uses' => 'ModeloNotificacaoController@update']);
+            Route::post('deletar',      ['as' => 'modelo-notificacao.deletar', 'uses' => 'ModeloNotificacaoController@destroy']);
         });
         
         /*
@@ -132,5 +144,6 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('permissao-administrador',  ['as' => 'core.atualizar.permissaoAdministrador',      'uses' => 'AjaxController@updateAdministratorPermissions'])->middleware('onlyAllowSuperAdmins');
             Route::post('setup',                    ['as' => 'core.atualizar.setup',                       'uses' => 'AjaxController@updateSetup']);
         });
+
     });
 });

@@ -1,15 +1,12 @@
+
 @extends('layouts.app')
 
-
-
-
-@section('page_title', __('page_titles.docs.documento.index'))
-
+@section('page_title', __('page_titles.core.modelo-notificacao.index'))
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('docs.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item active"> @lang('page_titles.docs.documento.index') </li>    
+    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> @lang('page_titles.general.home') </a></li>
+    <li class="breadcrumb-item active"> @lang('page_titles.core.modelo-notificacao.index') </li>    
 
 @endsection
 
@@ -28,39 +25,29 @@
                     @endif
                     
                     <div class="col-md-12">
-                        <a href="{{ route('docs.documento.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.documento.create') </a>
+                        <a href="{{ route('core.modelo-notificacao.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.core.modelo-notificacao.create') </a>
                     </div>
                 
                     <div class="table-responsive m-t-40">
-                        <table id="dataTable-documento" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                        <table id="dataTable-notificacao" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>Código</th>
-                                    <th>Título do Documento</th>
-                                    <th>Vencimento</th>
-                                    <th>Revisão</th>
-                                    <th>Status</th>
-                                    <th>Nível Acesso</th>
-                                   
+                                    <th>Nome</th>
+                                    <th>Anexo</th>
+                                    <th>Título</th>
                                     <th>Controle</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($documentos as $documento)
+                                @foreach ($notificacoes as $notificacao)
                                     <tr>
-                                        <td>{{ $documento->codigo }}</td>
-                                        <td>{{ $documento->nome }}</td>
-                                        <td>{{ $documento->vencimento }}</td>
-                                        <td>{{ $documento->revisao }}</td>
-                                        <td>{{ ''}}</td>
-                                        <td>{{ $documento->docsNivelAcesso($documento->nivel_acesso_id) }}</td>
+                                        <td>{{ $notificacao->nome }}</td>
+                                        <td>{{ $notificacao->documento_anexo == true ? 'Sim' : 'Não' }}</td>
+                                        <td>{{ $notificacao->titulo_email }}</td>
                                         <td>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="mdi mdi-format-list-numbers"></i> @lang('buttons.docs.documento.edit') </a>                                                
-                                                </div>
-                                            </div>
+                                            <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $notificacao->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
+                                            <a href="{{ route('core.modelo-notificacao.editar', ['id' => $notificacao->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                    
                                         </td>
                                     </tr>
                                 @endforeach
@@ -92,7 +79,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#dataTable-documento').DataTable({
+            $('#dataTable-notificacao').DataTable({
                 "language": {
                     "sEmptyTable": "Nenhum registro encontrado",
                     "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -129,19 +116,18 @@
     <!-- SweetAlert2 -->
     <script>
         
-        // Exclusão do norma
+        // Exclusão do notificacao
         $('.sa-warning').click(function(){
             let id = $(this).data('id');
             let deleteIt = swal2_warning("Essa ação é irreversível!");
             let obj = {'id': id};
 
             deleteIt.then(resolvedValue => {
-                // ajaxMethod('POST', "/plano/" + idPlano, {}).then(response => {
-                ajaxMethod('POST', "{{ URL::route('docs.documento.deletar') }}", obj).then(response => {
+                ajaxMethod('POST', "{{ URL::route('core.modelo-notificacao.deletar') }}", obj).then(response => {
                     if(response.response != 'erro') {
-                        swal2_success("Excluído!", "Documento excluído com sucesso.");
+                        swal2_success("Excluído!", "Notificação excluída com sucesso.");
                     } else {
-                        swal2_alert_error_support("Tivemos um problema ao excluir o documento.");
+                        swal2_alert_error_support("Tivemos um problema ao excluir a notificação.");
                     }
                 }, error => {
                     console.log(error);

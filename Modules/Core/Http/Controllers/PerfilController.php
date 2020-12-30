@@ -108,7 +108,7 @@ class PerfilController extends Controller
         $permissoes = $request->all();
         unset($permissoes["_token"], $permissoes["nome"]);
         $permissoes = array_keys($permissoes);
-        
+
         $data = [
             'id' => $id,
             'nome' => $nome,

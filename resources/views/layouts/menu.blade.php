@@ -30,7 +30,8 @@
                 $url = explode('/', str_replace(env("APP_URL"), "", $actual_link))[1];
                 $menuJSON = (array) json_decode(file_get_contents(base_path() . '/menu.json'));
                 $menus = \Helper::makeMenuPermissions($menuJSON);
-                $menuModulo[ucfirst($url)] = $menus[ucfirst($url)]; 
+                $menuModulo[ucfirst($url)] = $menus[ucfirst($url)];
+                
             @endphp
             @each('layouts/itens-menu', (array) $menuModulo, 'menus') 
         </ul>

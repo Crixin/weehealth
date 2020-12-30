@@ -53,9 +53,9 @@
         </div>
         <div class="col-md-6">
             <div class="form-group required{{ $errors->has('notificacao') ? ' has-error' : '' }}">
-                {!! Form::label('notificacao', 'Notificação', ['class' => 'control-label']) !!}
+                {!! Form::label('notificacao', 'Notificação', ['class' => 'control-label', 'id' => 'iconeNotificacao']) !!}
             
-                {!! Form::select('notificacao', $notificacoes, !empty($etapaEdit) ?  $etapaEdit->notificacao_id : null, ['id' => 'notificacao', 'class' => 'form-control selectpicker ', 'placeholder' => __('components.selectepicker-default') ]) !!}
+                {!! Form::select('notificacao', $notificacoes, !empty($etapaEdit) ?  $etapaEdit->notificacao_id : null, ['id' => 'notificacao', 'class' => 'form-control selectpicker ', 'required' => true, 'placeholder' => __('components.selectepicker-default') ]) !!}
                 <small class="text-danger">{{ $errors->first('notificacao') }}</small>
             </div>
         </div>
@@ -234,5 +234,28 @@
             </div>
         </div>
     </div>
-    
 </div>
+
+@section('footer')
+<script>
+    $(document).ready(function() {
+        notificacao();
+        
+        $('#enviarNotificacao').on('change',function(){
+            notificacao();
+        });
+
+    });
+
+    function notificacao()
+    {
+        if($('#enviarNotificacao').prop('checked') == true){
+            $('#notificacao').attr('required',true);
+            $('#iconeNotificacao').attr('class','control-label')
+        }else{
+            $('#notificacao').removeAttr('required');
+            $('#iconeNotificacao').removeAttr('class')
+        }
+    }
+</script>
+@endsection

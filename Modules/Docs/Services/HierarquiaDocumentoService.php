@@ -24,7 +24,7 @@ class HierarquiaDocumentoService
         return $this->hierarquiaDocumentoRepository->update($dados, $id);
     }
 
-    public function delete(array $delete)
+    public function delete($delete)
     {
         return $this->hierarquiaDocumentoRepository->delete($delete);
     }

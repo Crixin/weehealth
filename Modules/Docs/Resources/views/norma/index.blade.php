@@ -45,12 +45,13 @@
                                         <td>
                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $norma->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
                                             <a href="{{ route('docs.norma.editar', ['id' => $norma->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                            <!--
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item" href="{{ route('docs.norma.item-norma', ['norma_id' => $norma->id]) }}"> <i class="mdi mdi-format-list-numbers"></i> @lang('buttons.docs.norma.itens') </a>                                                
                                                 </div>
-                                            </div>
+                                            </div>-->
                                         </td>
                                     </tr>
                                 @endforeach

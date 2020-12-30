@@ -10,6 +10,7 @@ use Modules\Docs\Repositories\FluxoRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Helper;
+use Modules\Core\Repositories\NotificacaoRepository;
 use Modules\Core\Repositories\ParametroRepository;
 use Modules\Core\Repositories\PerfilRepository;
 
@@ -19,13 +20,21 @@ class EtapaFluxoController extends Controller
     protected $fluxoRepository;
     protected $perfilRepository;
     protected $parametroRepository;
+    protected $notificacaoRepository;
 
-    public function __construct(EtapaFluxoRepository $etapaRepository, FluxoRepository $fluxoRepository, PerfilRepository $perfilRepository, ParametroRepository $parametroRepository)
+    public function __construct(
+        EtapaFluxoRepository $etapaRepository,
+        FluxoRepository $fluxoRepository,
+        PerfilRepository $perfilRepository,
+        ParametroRepository $parametroRepository,
+        NotificacaoRepository $notificacaoRepository
+    )
     {
         $this->etapaRepository = $etapaRepository;
         $this->fluxoRepository = $fluxoRepository;
         $this->perfilRepository = $perfilRepository;
         $this->parametroRepository = $parametroRepository;
+        $this->notificacaoRepository = $notificacaoRepository;
     }
 
     /**
@@ -57,7 +66,9 @@ class EtapaFluxoController extends Controller
 
         $statusEtapa = $this->parametroRepository->getParametro('STATUS_ETAPA_FLUXO');
         $status = json_decode($statusEtapa);
-        $notificacoes = [];
+
+        $buscaNotificacoes = $this->notificacaoRepository->findAll();
+        $notificacoes = array_column(json_decode(json_encode($buscaNotificacoes), true), 'nome', 'id');
 
         $statusTipoAprovacao = $this->parametroRepository->getParametro('TIPO_APROVACAO_ETAPA');
         $tiposAprovacao = json_decode($statusTipoAprovacao);
@@ -69,7 +80,16 @@ class EtapaFluxoController extends Controller
         );
         $etapasRejeicao = array_column(json_decode(json_encode($etapasRejeicao), true), 'nome', 'id');
 
-        return view('docs::etapa-fluxo.create', compact('fluxo', 'perfis', 'status', 'notificacoes', 'tiposAprovacao', 'etapasRejeicao'));
+        return view('docs::etapa-fluxo.create',
+            compact(
+                'fluxo',
+                'perfis',
+                'status',
+                'notificacoes',
+                'tiposAprovacao',
+                'etapasRejeicao'
+            )
+        );
     }
 
     /**
@@ -123,7 +143,8 @@ class EtapaFluxoController extends Controller
         $statusEtapa = $this->parametroRepository->getParametro('STATUS_ETAPA_FLUXO');
         $status = json_decode($statusEtapa);
 
-        $notificacoes = [];
+        $buscaNotificacoes = $this->notificacaoRepository->findAll();
+        $notificacoes = array_column(json_decode(json_encode($buscaNotificacoes), true), 'nome', 'id');
 
         $statusTipoAprovacao = $this->parametroRepository->getParametro('TIPO_APROVACAO_ETAPA');
         $tiposAprovacao = json_decode($statusTipoAprovacao);

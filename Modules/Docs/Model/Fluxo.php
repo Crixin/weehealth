@@ -24,6 +24,6 @@ class Fluxo extends Model
 
     public function docsEtapaFluxo()
     {
-        return $this->hasMany('Modules\Docs\Model\EtapaFluxo', 'fluxo_id', 'id');
+        return $this->hasMany('Modules\Docs\Model\EtapaFluxo', 'fluxo_id', 'id')->orderBy('ordem', 'asc');
     }
 }

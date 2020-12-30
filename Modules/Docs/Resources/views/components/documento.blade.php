@@ -42,7 +42,7 @@
         <div class="col-md-6">
             <div class="form-group{{ $errors->has('documentoPai') ? ' has-error' : '' }}">
                 {!! Form::label('documentoPai', 'Documento(s) Pai') !!}
-                {!! Form::select('documentoPai',$documentosPais, !empty($documentoEdit) ?  $documentosPaiSelecionados : null, ['id' => 'documentoPai', 'name'=>'documentoPai[]', 'class' => 'form-control selectpicker', 'multiple']) !!}
+                {!! Form::select('documentoPai',$documentosPais, !empty($documentoEdit) ?  $documentosPaiSelecionados : null, ['id' => 'documentoPai', 'name'=>'documentoPai[]', 'class' => 'form-control selectpicker', 'multiple', 'data-live-search' => 'true', 'data-actions-box' =>'true']) !!}
                 <small class="text-danger">{{ $errors->first('documentoPai') }}</small>
             </div>
         </div>
@@ -67,7 +67,7 @@
         <div class="col-md-6">
             <div class="form-group{{ $errors->has('documentoVinculado') ? ' has-error' : '' }}">
                 {!! Form::label('documentoVinculado', 'Documento(s) Vinculado(s)') !!}
-                {!! Form::select('documentoVinculado',$documentosVinvulados, !empty($documentoEdit) ?  $documentosVinculadosSelecionados : null, ['id' => 'documentoVinculado', 'name'=>'documentoVinculado[]', 'class' => 'form-control selectpicker', 'multiple']) !!}
+                {!! Form::select('documentoVinculado',$documentosVinvulados, !empty($documentoEdit) ?  $documentosVinculadosSelecionados : null, ['id' => 'documentoVinculado', 'name'=>'documentoVinculado[]', 'class' => 'form-control selectpicker', 'multiple', 'data-live-search' => 'true', 'data-actions-box' =>'true']) !!}
                 <small class="text-danger">{{ $errors->first('documentoVinculado') }}</small>
             </div>
         </div>
