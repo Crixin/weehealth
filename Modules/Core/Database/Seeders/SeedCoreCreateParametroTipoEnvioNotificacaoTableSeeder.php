@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Core\Model\Parametro;
 
-class SeedDocsCreateParametroTipoEnvioNotificacaoTableSeeder extends Seeder
+class SeedCoreCreateParametroTipoEnvioNotificacaoTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
