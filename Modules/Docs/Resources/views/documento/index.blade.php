@@ -104,50 +104,25 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="form-group">
-                                        <div class="checkbox required{{ $errors->has('copiaControlada') ? ' has-error' : '' }}">
-                                            {!! Form::label('copiaControlada', 'Possui Copia Controlada', ['class' => 'control-label']) !!}
-                                            <td class="text-center text-nowrap">
-                                                <div class="switch">
-                                                    <label for="copiaControlada">Não
-                                                        {!! Form::checkbox('copiaControlada', '1',  $copiaControladaSelecionado, ['id' => 'copiaControlada', 'class'=> 'switch-elaborador']) !!}
-                                                        <span class="lever switch-col-light-blue"></span>Sim
-                                                    </label>
-                                                </div>
-                                            </td>    
-                                        </div>
+
+                                    <div class="form-group{{ $errors->has('copiaControlada') ? ' has-error' : '' }}">
+                                        {!! Form::label('copiaControlada', 'Cópia Controlada') !!}
+                                        {!! Form::select('copiaControlada', $options, $copiaControladaSelecionado, ['id' => 'copiaControlada', 'class' => 'form-control selectpicker' , 'placeholder' => __('components.selectepicker-default')]) !!}
                                         <small class="text-danger">{{ $errors->first('copiaControlada') }}</small>
                                     </div>
+                                    
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="form-group">
-                                        <div class="checkbox required{{ $errors->has('pendenteRevisao') ? ' has-error' : '' }}">
-                                            {!! Form::label('pendenteRevisao', 'Doc. Pendente Revisão', ['class' => 'control-label']) !!}
-                                            <td class="text-center text-nowrap">
-                                                <div class="switch">
-                                                    <label for="pendenteRevisao">Não
-                                                        {!! Form::checkbox('pendenteRevisao', '1',  $pendenteRevisaoSelecionado, ['id' => 'pendenteRevisao', 'class'=> 'switch-elaborador']) !!}
-                                                        <span class="lever switch-col-light-blue"></span>Sim
-                                                    </label>
-                                                </div>
-                                            </td>    
-                                        </div>
+                                    <div class="form-group{{ $errors->has('pendenteRevisao') ? ' has-error' : '' }}">
+                                        {!! Form::label('pendenteRevisao', 'Doc. Pendente Revisão') !!}
+                                        {!! Form::select('pendenteRevisao', $options, $pendenteRevisaoSelecionado, ['id' => 'pendenteRevisao', 'class' => 'form-control selectpicker', 'placeholder' => __('components.selectepicker-default')]) !!}
                                         <small class="text-danger">{{ $errors->first('pendenteRevisao') }}</small>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="form-group">
-                                        <div class="checkbox required{{ $errors->has('obsoleto') ? ' has-error' : '' }}">
-                                            {!! Form::label('obsoleto', 'Doc. Obsoleto', ['class' => 'control-label']) !!}
-                                            <td class="text-center text-nowrap">
-                                                <div class="switch">
-                                                    <label for="obsoleto">Não
-                                                        {!! Form::checkbox('obsoleto', '1',  $obsoletoSelecionado, ['id' => 'obsoleto', 'class'=> 'switch-elaborador']) !!}
-                                                        <span class="lever switch-col-light-blue"></span>Sim
-                                                    </label>
-                                                </div>
-                                            </td>    
-                                        </div>
+                                    <div class="form-group{{ $errors->has('obsoleto') ? ' has-error' : '' }}">
+                                        {!! Form::label('obsoleto', 'Doc. Obsoleto') !!}
+                                        {!! Form::select('obsoleto', $options, $obsoletoSelecionado, ['id' => 'obsoleto', 'class' => 'form-control selectpicker', 'placeholder' => __('components.selectepicker-default')]) !!}
                                         <small class="text-danger">{{ $errors->first('obsoleto') }}</small>
                                     </div>
                                 </div>

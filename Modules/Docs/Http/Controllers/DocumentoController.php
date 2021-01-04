@@ -160,14 +160,14 @@ class DocumentoController extends Controller
             }
         }
 
-        if ($request->copiaControlada) {
-            array_push($where, ['copia_controlada','=',$request->copiaControlada == 1 ? true : false , "AND"]);
+        if ($request->copiaControlada != null) {
+            array_push($where, ['copia_controlada','=',$request->copiaControlada == 1 ? true : false, "AND"]);
         }
 
-        if ($request->obsoleto) {
+        if ($request->obsoleto != null) {
             array_push($where, ['obsoleto','=',$request->obsoleto == 1 ? true : false , "AND"]);
         }
-
+        
         $documentos = $this->documentoRepository->findBy($where);
 
         return view('docs::documento.index',
@@ -177,6 +177,7 @@ class DocumentoController extends Controller
                 'tiposDocumento' => $tiposDocumento,
                 'niveisAcesso' => $niveisAcesso,
                 'opcoesVencimento' => $opcoesVencimento,
+                'options' => ["1" => "Sim", "0" => "Não"],
                 'status' => $status,
                 'tituloSelecionado' => $request->titulo ?? null,
                 'setorSelecionado' => $request->setor ?? null,
@@ -186,9 +187,9 @@ class DocumentoController extends Controller
                 'opcoesSelecionado' => $request->tipoVencimento ?? null,
                 'dataInicialSelecionado' => $request->dataInicial ?? null,
                 'dataFinalSelecionado' => $request->dataFinal ?? null,
-                'copiaControladaSelecionado' => $request->copiaControlada == 1 ? true : false,
-                'pendenteRevisaoSelecionado' => $request->pendenteRevisao == 1 ? true : false,
-                'obsoletoSelecionado' => $request->obsoleto == 1 ? true : false,
+                'copiaControladaSelecionado' => $request->copiaControlada,
+                'pendenteRevisaoSelecionado' => $request->pendenteRevisao,
+                'obsoletoSelecionado' => $request->obsoleto,
             ]
         );
     }
