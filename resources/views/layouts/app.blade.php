@@ -104,7 +104,7 @@
                        
                         @php
                             // PEGA PELA URL QUAL MODULO O USUARIO ESTA ACESSANDO
-                            $url = explode('/', str_replace(env("APP_URL"), "", $_SERVER["REQUEST_URI"]))[1];
+                            $url = explode('/', str_replace(env("APP_URL"), "", $_SERVER["REQUEST_URI"]))[2];
                         @endphp
                        
                         @foreach (json_decode(file_get_contents(base_path() . '/modules_statuses.json')) as $key => $module)
