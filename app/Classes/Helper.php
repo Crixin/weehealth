@@ -4,6 +4,7 @@ namespace App\Classes;
 
 use Session;
 use App\Classes\Constants;
+use DateTime;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\{Auth, Log};
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -496,5 +497,62 @@ class Helper
             }
             return $menuMaster;
         }
+    }
+
+    //funcao para data com intervalo do mes de hoje menos a quantidade de mes passada por parametro 
+    public static function dateBetween($mes = 0)
+    {
+
+        $date_default = new DateTime('-' . $mes . ' month');
+
+        $dateMonth    = $date_default->format('m');
+        $dateYear     = $date_default->format('Y');
+
+        $ultimo_dia_mes = date("t", mktime(0, 0, 0, $dateMonth, '01', $dateYear));
+
+        $date_default2 = new DateTime();
+
+        $dateMonth_atual    = $date_default2->format('m');
+        $dateYear_atual     = $date_default2->format('Y');
+
+        $ultimo_dia_mes_atual = date("t", mktime(0, 0, 0, $dateMonth_atual, '01', $dateYear_atual));
+
+        return [
+            'dataInicial' => "$dateYear-$dateMonth-01",
+            'dataFinal'   => "'$dateYear_atual-$dateMonth_atual-$ultimo_dia_mes_atual'"
+        ];
+    }
+
+    //funcao para mes passado com between
+    public static function mesPassadoBetween()
+    {
+        $date_default = new DateTime('-1 month');
+
+        $dateMonth    = $date_default->format('m');
+        $dateYear     = $date_default->format('Y');
+
+        $ultimo_dia_mes = date("t", mktime(0, 0, 0, $dateMonth, '01', $dateYear));
+
+        return [
+            'dataInicial' => "'$dateYear-$dateMonth-01'",
+            'dataFinal'   => "'$dateYear-$dateMonth-$ultimo_dia_mes'"
+        ];
+    }
+
+
+    //funcao para mes passado com between
+    public static function mesBetween($mes = 1)
+    {
+        $date_default = new DateTime('-' . $mes . ' month');
+
+        $dateMonth    = $date_default->format('m');
+        $dateYear     = $date_default->format('Y');
+
+        $ultimo_dia_mes = date("t", mktime(0, 0, 0, $dateMonth, '01', $dateYear));
+
+        return [
+            'dataInicial' => "'$dateYear-$dateMonth-01'",
+            'dataFinal'   => "'$dateYear-$dateMonth-$ultimo_dia_mes'"
+        ];
     }
 }

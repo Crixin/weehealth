@@ -41,7 +41,8 @@ return [
         'link'           => 'Vincular',
         'import'         => 'Importar',
         'next'           => 'Proximo',
-        'complete'       => 'Concluir'
+        'complete'       => 'Concluir',
+        'clear'          => 'Limpar'
 
     ],
 
@@ -176,6 +177,12 @@ return [
         'documento'    => [
             'create'   => 'Criar Documento',
             'edit'     => 'Editar Documento',
+            'start-validation' => 'Iniciar Validação',
+            'printer'  => 'Imprimir',
+            'link-docs' => 'Vincular Documentos',
+            'list'=> 'Lista de Presença',
+            'start-review' => 'Iniciar Revisão',
+            'obsolete' => 'Tornar Obsoleto'
         ],
 
         /*DOCUMENTO EXTERNO*/

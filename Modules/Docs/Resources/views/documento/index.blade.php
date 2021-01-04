@@ -26,10 +26,153 @@
 
                         {{ Session::forget('message') }}
                     @endif
+
+                    <form method="POST" action="{{route('docs.documento')}}" name="createDocumento" id="createDocumento"> 
+                        {{ csrf_field() }}
+                        <div class="col-md-12">
+                            {{-- Aviso: prioridade do título do documento no filtro --}}
+                            <!--<div class="row">
+                                <h5 class="alert alert-info alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    Quando o campo <b>Título do Documento</b> for preenchido, os outros filtros serão <b>ignorados</b>. Caso o campo seja deixado em branco, os outros filtros serão aplicados em conjunto.
+                                </h5>
+                            </div>-->
+                            <div class="row">
+                                <h4><b>FILTROS</b></h4>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group{{ $errors->has('titulo') ? ' has-error' : '' }}">
+                                        {!! Form::label('titulo', 'Título') !!}
+                                        {!! Form::text('titulo', $tituloSelecionado, ['class' => 'form-control']) !!}
+                                        <small class="text-danger">{{ $errors->first('titulo') }}</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group{{ $errors->has('setor') ? ' has-error' : '' }}">
+                                        {!! Form::label('setor', 'Setor') !!}
+                                        {!! Form::select('setor[]',$setores, $setorSelecionado, ['id' => 'setor', 'class' => 'form-control selectpicker', 'data-live-search' => 'true', 'data-actions-box' => 'true' , 'multiple']) !!}
+                                        <small class="text-danger">{{ $errors->first('setor') }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group {{ $errors->has('tipoDocumento') ? ' has-error' : '' }}">
+                                        {!! Form::label('tipoDocumento', 'Tipo de Documento' ) !!}
+                                        {!! Form::select('tipoDocumento[]',$tiposDocumento, $tipoDocumentoSelecionado, ['id' => 'tipoDocumento', 'class' => 'form-control selectpicker',  'data-live-search' => 'true', 'data-actions-box' => 'true','multiple']) !!}
+                                        <small class="text-danger">{{ $errors->first('tipoDocumento') }}</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
+                                        {!! Form::label('status', 'Status do Documento(NÃO FUNCIONA VER)') !!}
+                                        {!! Form::select('status[]',$status, $statusSelecionado, ['id' => 'status', 'class' => 'form-control selectpicker' , 'data-live-search' => 'true', 'data-actions-box' => 'true' , 'multiple']) !!}
+                                        <small class="text-danger">{{ $errors->first('status') }}</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group{{ $errors->has('nivelAcesso') ? ' has-error' : '' }}">
+                                    {!! Form::label('nivelAcesso', 'Nível de Acesso') !!}
+                                    {!! Form::select('nivelAcesso[]',$niveisAcesso, $niveisSelecionado, ['id' => 'nivelAcesso', 'class' => 'form-control selectpicker' , 'data-live-search' => 'true', 'data-actions-box' => 'true', 'multiple']) !!}
+                                    <small class="text-danger">{{ $errors->first('nivelAcesso') }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group{{ $errors->has('tipoVencimento') ? ' has-error' : '' }}">
+                                        {!! Form::label('tipoVencimento', 'Vencimento') !!}
+                                        {!! Form::select('tipoVencimento',$opcoesVencimento, $opcoesSelecionado, ['id' => 'tipoVencimento', 'class' => 'form-control selectpicker', 'placeholder' => __('components.selectepicker-default')]) !!}
+                                        <small class="text-danger">{{ $errors->first('tipoVencimento') }}</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group{{ $errors->has('dataInicial') ? ' has-error' : '' }}" style="display: none" id="divDataInicial">
+                                        {!! Form::label('dataInicial', 'Data Inicial') !!}
+                                        {!! Form::date('dataInicial', $dataInicialSelecionado, ['class' => 'form-control']) !!}
+                                        <small class="text-danger">{{ $errors->first('dataInicial') }}</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group{{ $errors->has('dataFinal') ? ' has-error' : '' }}" style="display: none" id="divDataFinal" >
+                                        {!! Form::label('dataFinal', 'DataFinal') !!}
+                                        {!! Form::date('dataFinal', $dataFinalSelecionado, ['class' => 'form-control']) !!}
+                                        <small class="text-danger">{{ $errors->first('dataFinal') }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="checkbox required{{ $errors->has('copiaControlada') ? ' has-error' : '' }}">
+                                            {!! Form::label('copiaControlada', 'Possui Copia Controlada', ['class' => 'control-label']) !!}
+                                            <td class="text-center text-nowrap">
+                                                <div class="switch">
+                                                    <label for="copiaControlada">Não
+                                                        {!! Form::checkbox('copiaControlada', '1',  $copiaControladaSelecionado, ['id' => 'copiaControlada', 'class'=> 'switch-elaborador']) !!}
+                                                        <span class="lever switch-col-light-blue"></span>Sim
+                                                    </label>
+                                                </div>
+                                            </td>    
+                                        </div>
+                                        <small class="text-danger">{{ $errors->first('copiaControlada') }}</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="checkbox required{{ $errors->has('pendenteRevisao') ? ' has-error' : '' }}">
+                                            {!! Form::label('pendenteRevisao', 'Doc. Pendente Revisão', ['class' => 'control-label']) !!}
+                                            <td class="text-center text-nowrap">
+                                                <div class="switch">
+                                                    <label for="pendenteRevisao">Não
+                                                        {!! Form::checkbox('pendenteRevisao', '1',  $pendenteRevisaoSelecionado, ['id' => 'pendenteRevisao', 'class'=> 'switch-elaborador']) !!}
+                                                        <span class="lever switch-col-light-blue"></span>Sim
+                                                    </label>
+                                                </div>
+                                            </td>    
+                                        </div>
+                                        <small class="text-danger">{{ $errors->first('pendenteRevisao') }}</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="checkbox required{{ $errors->has('obsoleto') ? ' has-error' : '' }}">
+                                            {!! Form::label('obsoleto', 'Doc. Obsoleto', ['class' => 'control-label']) !!}
+                                            <td class="text-center text-nowrap">
+                                                <div class="switch">
+                                                    <label for="obsoleto">Não
+                                                        {!! Form::checkbox('obsoleto', '1',  $obsoletoSelecionado, ['id' => 'obsoleto', 'class'=> 'switch-elaborador']) !!}
+                                                        <span class="lever switch-col-light-blue"></span>Sim
+                                                    </label>
+                                                </div>
+                                            </td>    
+                                        </div>
+                                        <small class="text-danger">{{ $errors->first('obsoleto') }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions ">
+                                <button type="submit" class="btn btn-success  pull-right "> <i class="fa fa-search"></i> @lang('buttons.general.search')</button>
+                                <a href="{{ route('docs.documento') }}" class="btn btn-inverse pull-right mr-1 "><i class="fa fa-ban"></i> @lang('buttons.general.clear')</a>
+                                <a href="{{ route('docs.documento.novo') }}" class=" pull-right mr-1 btn waves-effect waves-light btn-success pull-right"><i class="fa fa-pencil"></i>&nbsp; @lang('buttons.docs.documento.create') </a>
+                            </div> 
+                            {{-- Aviso: pesquisa com datatable --}}
+                            
+                            
+                            <div class="row mt-5 margin-top-1percent">
+                                
+                                <!--<h5 class="alert alert-warning alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    Para filtrar registros através do <b>Título do Documento</b>, utilize o campo acima. Qualquer outro campo pode ser pesquisado no campo <i>Pesquisar</i> (canto superior direito da tabela).
+                                </h5>-->
+                            </div>
+                            
+                        </div>
+                    </form>
                     
-                    <div class="col-md-12">
-                        <a href="{{ route('docs.documento.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.documento.create') </a>
-                    </div>
+                    
                 
                     <div class="table-responsive m-t-40">
                         <table id="dataTable-documento" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
@@ -58,7 +201,13 @@
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="mdi mdi-format-list-numbers"></i> @lang('buttons.docs.documento.edit') </a>                                                
+                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-pencil text-success"></i>&nbsp; @lang('buttons.docs.documento.edit') </a>
+                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-eye text-danger"></i>&nbsp; @lang('buttons.docs.documento.start-validation') </a> 
+                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-print text-info"></i>&nbsp; @lang('buttons.docs.documento.printer') </a> 
+                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-file-text-o text-info"></i>&nbsp; @lang('buttons.docs.documento.list') </a> 
+                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-exchange text-info"></i>&nbsp; @lang('buttons.docs.documento.link-docs') </a> 
+                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-eye text-warning"></i>&nbsp; @lang('buttons.docs.documento.start-review') </a> 
+                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-power-off text-danger"></i>&nbsp; @lang('buttons.docs.documento.obsolete') </a>                                                 
                                                 </div>
                                             </div>
                                         </td>
@@ -92,6 +241,21 @@
 
     <script>
         $(document).ready(function() {
+            if($('#tipoVencimento').val() == 'definir'){
+                $('#divDataInicial, #divDataFinal').show();
+                $('#dataInicial, #dataFinal').attr('required', true);
+            }
+
+            $('#tipoVencimento').on('change', function(){
+                if($(this).val() == 'definir'){
+                    $('#divDataInicial, #divDataFinal').show();
+                    $('#dataInicial, #dataFinal').attr('required', true);
+                }else{
+                    $('#divDataInicial, #divDataFinal').hide();
+                    $('#dataInicial, #dataFinal').attr('required', false);
+                }
+            });
+
             $('#dataTable-documento').DataTable({
                 "language": {
                     "sEmptyTable": "Nenhum registro encontrado",

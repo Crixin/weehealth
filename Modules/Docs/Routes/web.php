@@ -106,7 +106,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
         Route::group(['prefix' => 'documento','as' => 'docs.'], function() {
-            Route::get('',              ['as' => 'documento',         'uses' => 'DocumentoController@index']);
+            Route::any('',              ['as' => 'documento',         'uses' => 'DocumentoController@index']);
             Route::get('novo',          ['as' => 'documento.novo',    'uses' => 'DocumentoController@create']);
             Route::post('salvar',       ['as' => 'documento.salvar',  'uses' => 'DocumentoController@store']);
             Route::get('editar/{id}',   ['as' => 'documento.editar',  'uses' => 'DocumentoController@edit']);

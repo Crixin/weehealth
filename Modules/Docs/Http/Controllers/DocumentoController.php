@@ -26,6 +26,7 @@ use Modules\Docs\Services\DocumentoService;
 use Modules\Docs\Services\TipoDocumentoService;
 use Modules\Docs\Services\WorkflowService;
 
+
 use function PHPSTORM_META\map;
 
 class DocumentoController extends Controller
@@ -84,10 +85,112 @@ class DocumentoController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        $documentos = $this->documentoRepository->findAll();
-        return view('docs::documento.index', compact('documentos'));
+        $buscaSetores = $this->setorRepository->findBy(
+            [
+                ['nome', '!=', 'Sem Setor']
+            ],
+            [],
+            [
+                ['nome', 'ASC']
+            ]
+        );
+        $setores = array_column(json_decode(json_encode($buscaSetores), true), 'nome', 'id');
+
+         /**TIPO DOCUMENTO */
+        $buscaTiposDocumento = $this->tipoDocumentorepository->findBy(
+            [
+                ['ativo', '=', true]
+            ],
+            [],
+            [
+                ['nome', 'ASC']
+            ]
+        );
+        $tiposDocumento = array_column(json_decode(json_encode($buscaTiposDocumento), true), 'nome', 'id');
+
+        /**NIVEL ACESSO*/
+        $buscaNivelAcesso = $this->parametroRepository->getParametro('NIVEL_ACESSO');
+        $niveisAcesso    = json_decode($buscaNivelAcesso);
+
+        /**STATUS */
+        $statusEtapa = $this->parametroRepository->getParametro('STATUS_ETAPA_FLUXO');
+        $status = json_decode($statusEtapa);
+
+        $opcoesVencimento = ["hoje" => "Hoje", "mes" => "Mês", "mespassado" => "Mês Passado", "definir" => "Definir Período"];
+
+        /**FILTROS */
+        $where = [];
+        if ($request->titulo) {
+            array_push($where, ['nome','like','%' . $request->titulo . '%']);
+        }
+
+        if ($request->setor) {
+            array_push($where, ['setor_id','',$request->setor, "IN"]);
+        }
+
+        if ($request->tipoDocumento) {
+            array_push($where, ['tipo_documento_id','',$request->tipoDocumento, "IN"]);
+        }
+
+        if ($request->nivelAcesso) {
+            array_push($where, ['nivel_acesso_id','',$request->nivelAcesso, "IN"]);
+        }
+
+        if ($request->tipoVencimento) {
+            switch ($request->tipoVencimento) {
+                case 'hoje':
+                    array_push($where, ['validade','=',date('Y-m-d'), "AND"]);
+                    break;
+                case 'mes':
+                    $datas = Helper::mesBetween(0);
+                    array_push($where, ['validade','>=',$datas['dataInicial'], "AND"]);
+                    array_push($where, ['validade','<=',$datas['dataFinal'], "AND"]);
+                    break;
+                case 'mespassado':
+                    $datas = Helper::mesPassadoBetween();
+                    array_push($where, ['validade','>=',$datas['dataInicial'], "AND"]);
+                    array_push($where, ['validade','<=',$datas['dataFinal'], "AND"]);
+                    break;
+                case 'definir':
+                    array_push($where, ['validade','>=',$request->dataInicial ?? '1901-01-01', "AND"]);
+                    array_push($where, ['validade','<=',$request->dataFinal ?? '2100-01-01', "AND"]);
+                    break;
+            }
+        }
+
+        if ($request->copiaControlada) {
+            array_push($where, ['copia_controlada','=',$request->copiaControlada == 1 ? true : false , "AND"]);
+        }
+
+        if ($request->obsoleto) {
+            array_push($where, ['obsoleto','=',$request->obsoleto == 1 ? true : false , "AND"]);
+        }
+
+        $documentos = $this->documentoRepository->findBy($where);
+
+        return view('docs::documento.index',
+            [
+                'documentos' => $documentos,
+                'setores' => $setores,
+                'tiposDocumento' => $tiposDocumento,
+                'niveisAcesso' => $niveisAcesso,
+                'opcoesVencimento' => $opcoesVencimento,
+                'status' => $status,
+                'tituloSelecionado' => $request->titulo ?? null,
+                'setorSelecionado' => $request->setor ?? null,
+                'tipoDocumentoSelecionado' => $request->tipoDocumento ?? null,
+                'statusSelecionado' => $request->status ?? null,
+                'niveisSelecionado' => $request->nivelAcesso ?? null,
+                'opcoesSelecionado' => $request->tipoVencimento ?? null,
+                'dataInicialSelecionado' => $request->dataInicial ?? null,
+                'dataFinalSelecionado' => $request->dataFinal ?? null,
+                'copiaControladaSelecionado' => $request->copiaControlada == 1 ? true : false,
+                'pendenteRevisaoSelecionado' => $request->pendenteRevisao == 1 ? true : false,
+                'obsoletoSelecionado' => $request->obsoleto == 1 ? true : false,
+            ]
+        );
     }
 
     /**
