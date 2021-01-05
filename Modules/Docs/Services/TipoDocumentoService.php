@@ -13,6 +13,7 @@ class TipoDocumentoService
         $this->tipoDocumentoRepository = $tipoDocumentoRepository;
     }
 
+    /*
     public function getEtapasFluxo($idTipoDocumento)
     {
         $buscaTipoDocumento = $this->tipoDocumentoRepository->findOneBy(
@@ -33,6 +34,7 @@ class TipoDocumentoService
         $this->ordenacaoArray($etapas, 'ordem');
         return $etapas;
     }
+    */
 
     public function getEtapasFluxosPorComportamento($idTipoDocumento, $comportamento)
     {

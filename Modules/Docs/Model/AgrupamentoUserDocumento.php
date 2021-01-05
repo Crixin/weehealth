@@ -15,7 +15,8 @@ class AgrupamentoUserDocumento extends Model
         'id',
         'documento_id',
         'user_id',
-        'tipo'
+        'tipo',
+        'grupo_id'
     ];
 
 }

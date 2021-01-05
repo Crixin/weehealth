@@ -27,4 +27,9 @@ class AgrupamentoUserDocumentoService
     {
         return  $this->agrupamentoUserDocumentoRepository->delete($delete);
     }
+
+    public function firstOrCreate(array $data)
+    {
+        return $this->agrupamentoUserDocumentoRepository->firstOrCreate($data);
+    }
 }

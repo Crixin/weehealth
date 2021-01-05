@@ -114,4 +114,9 @@ abstract class BaseRepository
     {
         return $this->findBy($where, $with)->first();
     }
+
+    public function firstOrCreate(array $data)
+    {
+        return $this->model::firstOrCreate($data);
+    }
 }

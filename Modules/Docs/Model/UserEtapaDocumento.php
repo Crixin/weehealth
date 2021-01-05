@@ -14,6 +14,7 @@ class UserEtapaDocumento extends Model
     protected $fillable = [
         'user_id',
         'documento_id',
-        'etapa_fluxo_id'
+        'etapa_fluxo_id',
+        'grupo_id'
     ];
 }

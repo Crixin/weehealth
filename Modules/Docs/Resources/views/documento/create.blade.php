@@ -43,7 +43,7 @@
                             'niveisAcesso' => $niveisAcesso,
                             'classificacoes' => $classificacoes,
                             'documentosVinvulados' => $documentos,
-                            'setoresUsuarios' => $setoresUsuarios,
+                            'gruposUsuarios' => $gruposUsuarios,
                             'normas' => $normas,
 
                             'documentosPaiSelecionados' => [],

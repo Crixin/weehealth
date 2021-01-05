@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Helper;
 use Illuminate\Support\Facades\Auth;
+use Modules\Core\Repositories\GrupoRepository;
 use Modules\Core\Repositories\ParametroRepository;
 use Modules\Core\Repositories\SetorRepository;
 use Modules\Core\Repositories\UserRepository;
@@ -26,7 +27,6 @@ use Modules\Docs\Services\DocumentoService;
 use Modules\Docs\Services\TipoDocumentoService;
 use Modules\Docs\Services\WorkflowService;
 
-
 use function PHPSTORM_META\map;
 
 class DocumentoController extends Controller
@@ -42,6 +42,7 @@ class DocumentoController extends Controller
     protected $agrupamentoUserDocumentoRepository;
     protected $vinculoDocumentoRepository;
     protected $hierarquiaDocumentorepository;
+    protected $grupoRepository;
     protected $documentoService;
     protected $tipoDocumentoService;
     protected $workFlowService;
@@ -60,6 +61,7 @@ class DocumentoController extends Controller
         VinculoDocumentoRepository $vinculoDocumentoRepository,
         HierarquiaDocumentoRepository $hierarquiaDocumentoRepository,
         WorkflowRepository $workflowRepository,
+        GrupoRepository $grupoRepository,
         DocumentoService $documentoService,
         TipoDocumentoService $tipoDocumentoService,
         WorkflowService $workFlowService
@@ -76,6 +78,7 @@ class DocumentoController extends Controller
         $this->vinculoDocumentoRepository = $vinculoDocumentoRepository;
         $this->hierarquiaDocumentorepository = $hierarquiaDocumentoRepository;
         $this->workFlowRepository = $workflowRepository;
+        $this->grupoRepository = $grupoRepository;
         $this->documentoService = $documentoService;
         $this->tipoDocumentoService = $tipoDocumentoService;
         $this->workFlowService = $workFlowService;
@@ -208,19 +211,23 @@ class DocumentoController extends Controller
                 ['nome', 'ASC']
             ]
         );
-        foreach ($setores as $key => $setor) {
-            $arrUsers = [];
-            $users = $this->userRepository->findBy(
-                [
-                    ['setor_id', '=', $setor->id]
-                ]
-            );
-            foreach ($users as $key => $user) {
-                $arrUsers[$user->id] = $user->name;
-            }
-            $setoresUsuarios[$setor->nome] = $arrUsers;
-        }
         $setores = array_column(json_decode(json_encode($setores), true), 'nome', 'id');
+
+        /**Grupos */
+        $grupos = $this->grupoRepository->findBy(
+            [],
+            [],
+            [
+                ['nome', 'ASC']
+            ]
+        );
+        foreach ($grupos as $key => $grupo) {
+            $arrUsers = [];
+            foreach ($grupo->coreUsers as $key => $user) {
+                $arrUsers[$grupo->id . '-' . $user->id] = $user->name;
+            }
+            $gruposUsuarios[$grupo->nome] = $arrUsers;
+        }
 
         /**TIPO DOCUMENTO */
         $tiposDocumento = $this->tipoDocumentorepository->findBy(
@@ -265,7 +272,7 @@ class DocumentoController extends Controller
                 'tiposDocumento',
                 'niveisAcesso',
                 'classificacoes',
-                'setoresUsuarios',
+                'gruposUsuarios',
                 'normas'
             )
         );
@@ -332,19 +339,23 @@ class DocumentoController extends Controller
                 ['nome', 'ASC']
             ]
         );
-        foreach ($setores as $key => $setor) {
-            $arrUsers = [];
-            $users = $this->userRepository->findBy(
-                [
-                    ['setor_id', '=', $setor->id]
-                ]
-            );
-            foreach ($users as $key => $user) {
-                $arrUsers[$user->id] = $user->name;
-            }
-            $setoresUsuarios[$setor->nome] = $arrUsers;
-        }
         $setores = array_column(json_decode(json_encode($setores), true), 'nome', 'id');
+
+        /**Grupos */
+        $grupos = $this->grupoRepository->findBy(
+            [],
+            [],
+            [
+                ['nome', 'ASC']
+            ]
+        );
+        foreach ($grupos as $key => $grupo) {
+            $arrUsers = [];
+            foreach ($grupo->coreUsers as $key => $user) {
+                $arrUsers[$grupo->id . '-' . $user->id] = $user->name;
+            }
+            $gruposUsuarios[$grupo->nome] = $arrUsers;
+        }
 
         /**TIPO DOCUMENTO */
         $tiposDocumento = $this->tipoDocumentorepository->findBy(
@@ -412,7 +423,11 @@ class DocumentoController extends Controller
                 ['tipo', '=', 'TREINAMENTO', 'AND']
             ]
         );
-        $grupoTreinamentoSelecionado = array_column(json_decode(json_encode($buscaGrupoTreinamentoSelecionado), true), 'user_id');
+        $arrayGrupoTreinamento = [];
+        foreach ($buscaGrupoTreinamentoSelecionado as $key => $value) {
+            array_push($arrayGrupoTreinamento, $value->grupo_id . '-' . $value->user_id);
+        }
+        $grupoTreinamentoSelecionado = json_decode(json_encode($arrayGrupoTreinamento), true);
 
         $buscaGrupoDivulgacaoSelecionado = $this->agrupamentoUserDocumentoRepository->findBy(
             [
@@ -420,7 +435,11 @@ class DocumentoController extends Controller
                 ['tipo', '=', 'DIVULGACAO', 'AND']
             ]
         );
-        $grupoDivulgacaoSelecionado = array_column(json_decode(json_encode($buscaGrupoDivulgacaoSelecionado), true), 'user_id');
+        $arrayGrupoDivulgacao = [];
+        foreach ($buscaGrupoDivulgacaoSelecionado as $key => $value) {
+            array_push($arrayGrupoDivulgacao, $value->grupo_id . '-' . $value->user_id);
+        }
+        $grupoDivulgacaoSelecionado = json_decode(json_encode($arrayGrupoDivulgacao), true);
 
 
         return view('docs::documento.edit',
@@ -431,7 +450,7 @@ class DocumentoController extends Controller
                 'tiposDocumento',
                 'niveisAcesso',
                 'classificacoes',
-                'setoresUsuarios',
+                'gruposUsuarios',
                 'normas',
 
                 'documentosPaiSelecionados',
@@ -670,9 +689,11 @@ class DocumentoController extends Controller
         if (!empty($request->grupoTreinamentoDoc)) {
             $foreach = !is_array($request->grupoTreinamentoDoc) ? json_decode($request->grupoTreinamentoDoc) : $request->grupoTreinamentoDoc;
             foreach ($foreach as $key => $valueUserTreinamento) {
+                $aux = explode('-', $valueUserTreinamento);
                 $montaRequestTreinamento[$key] = [
-                    "user_id" => (int) $valueUserTreinamento,
-                    "tipo"    => 'TREINAMENTO'
+                    "user_id" => (int) $aux[1],
+                    "tipo"    => 'TREINAMENTO',
+                    'grupo_id' => (int) $aux[0]
                 ];
             }
         }
@@ -682,9 +703,11 @@ class DocumentoController extends Controller
         if (!empty($request->grupoDivulgacaoDoc)) {
             $foreach = !is_array($request->grupoDivulgacaoDoc) ? json_decode($request->grupoDivulgacaoDoc) : $request->grupoDivulgacaoDoc;
             foreach ($foreach as $key => $valueUserDivulgacao) {
+                $aux = explode('-', $valueUserDivulgacao);
                 $montaRequestDivulgacao[$key] = [
-                    "user_id" => (int) $valueUserDivulgacao,
-                    "tipo"    => 'DIVULGACAO'
+                    "user_id" => (int) $aux[1],
+                    "tipo"    => 'DIVULGACAO',
+                    'grupo_id' => (int) $aux[0]
                 ];
             }
         }
@@ -712,9 +735,11 @@ class DocumentoController extends Controller
             if (!empty($request->$variavel)) {
                 $foreach = !is_array($request->$variavel) ? json_decode($request->$variavel) : $request->$variavel;
                 foreach ($foreach as $key => $idAprovadores) {
+                    $aux = explode('-', $idAprovadores);
                     $montaRequestEtapa[$key] = [
-                        "user_id" => $idAprovadores,
-                        "etapa_fluxo_id" => $value['id']
+                        "user_id" => (int) $aux[1],
+                        "etapa_fluxo_id" => $value['id'],
+                        'grupo_id' => (int) $aux[0]
                     ];
                 }
             }

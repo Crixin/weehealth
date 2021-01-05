@@ -36,12 +36,14 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group required{{ $errors->has('titulo') ? ' has-error' : '' }}">
-            {!! Form::label('titulo', 'Título', ['class' => 'control-label']) !!}
-            {!! Form::text('titulo',$titulo, ['class' => 'form-control', 'required' => 'required']) !!}
-            <small class="text-danger">{{ $errors->first('titulo') }}</small>
+                {!! Form::label('titulo', 'Título', ['class' => 'control-label']) !!}
+                {!! Form::textarea('titulo',$titulo, ['class' => 'form-control', 'required' => 'required','rows'=> 5]) !!}
+                <small class="text-danger">{{ $errors->first('titulo') }}</small>
             </div>
+            
         </div>
         <div class="col-md-6">
+            <label></label>
             <div class="alert alert-info">
                 <span><b>Exemplos de Tags disponíveis:</b></span>
                 <ul>

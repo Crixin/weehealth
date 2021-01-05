@@ -29,7 +29,11 @@ class UserEtapaDocumentoController extends Controller
                 ]
             );
 
-            $aprov = array_column(json_decode(json_encode($aprovadores), true), 'user_id');
+            $retorno = [];
+            foreach ($aprovadores as $key => $value) {
+                array_push($retorno, $value->grupo_id . '-' . $value->user_id);
+            }
+            $aprov = json_decode(json_encode($retorno), true);
             return response()->json(['response' => 'sucesso', 'data' => $aprov]);
         } catch (\Exception $th) {
             return response()->json(['response' => 'erro']);

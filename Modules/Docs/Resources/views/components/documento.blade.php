@@ -123,9 +123,9 @@
                 </div>
                 <div class="col-md-12">
                     <select multiple class="optgroup" id="optgroup-newGrupoTreinamentoDoc" name="grupoTreinamentoDoc[]">
-                        @foreach($setoresUsuarios as $key => $su)
+                        @foreach($gruposUsuarios as $key => $grupo)
                             <optgroup label="{{ $key }}">
-                                @foreach($su as $key2 => $user)
+                                @foreach($grupo as $key2 => $user)
                                     <option value="{{ $key2 }}" @if (in_array($key2, $grupoTreinamentoSelecionado)) selected="selected"@endif >{{ $user }}</option>
                                 @endforeach
                             </optgroup>
@@ -143,9 +143,9 @@
                 </div>
                 <div class="col-md-12">
                     <select multiple class="optgroup" id="optgroup-newGrupoDivulgacaoDoc" name="grupoDivulgacaoDoc[]">
-                        @foreach($setoresUsuarios as $key => $su)
+                        @foreach($gruposUsuarios as $key => $grupo)
                             <optgroup label="{{ $key }}">
-                                @foreach($su as $key2 => $user)
+                                @foreach($grupo as $key2 => $user)
                                     <option value="{{ $key2 }}" @if (in_array($key2, $grupoDivulgacaoSelecionado)) selected="selected"@endif>{{ $user }}</option>
                                 @endforeach
                             </optgroup>
@@ -351,11 +351,12 @@
             let obrigatorio = element.obrigatorio == true ? "required='required'" : "";
             linha += "<select multiple class='optgroup' "+obrigatorio+"  id='optgroup-newGrupo"+element.id+"' name='grupo"+element.id+"[]''>";
             
-            @foreach($setoresUsuarios as $key => $su)
+            @foreach($gruposUsuarios as $key => $grupo)
             linha += "<optgroup label='{{ $key }}'>";
-                    @foreach($su as $key2 => $user)
-                    exist = aprovadores.indexOf({{$key2}}) > -1 ? "selected='selected'": "";
-                    linha += "<option value='{{ $key2 }}' "+exist+">{{ $user }}</option>";
+                    @foreach($grupo as $key2 => $user)
+                    console.log(aprovadores);
+                        exist = aprovadores.indexOf('{{$key2}}') > -1 ? "selected='selected'": "";
+                        linha += "<option value='{{$key2}}' "+exist+">{{ $user }}</option>";
                     @endforeach
             linha += "</optgroup>";
             @endforeach
@@ -365,7 +366,6 @@
             linha += "</div>";
             linha += "</div>";
         }
-        
         $('.aprovadores').append(linha);
 
         carregaOptGroup();

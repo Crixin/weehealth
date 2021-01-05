@@ -190,8 +190,15 @@ class DocumentoService
             $diff_para_create_user  = array_diff($grupoTreinamento, $users);
             $diff_para_detete_user = array_diff($users, $grupoTreinamento);
 
-            foreach ($diff_para_create_user as $key => $user) {
-                $this->agrupamentoUserDocumentoService->create(["documento_id" => $id,"user_id"  => $user, 'tipo' => 'TREINAMENTO']);
+            foreach ($data['grupo_treinamento'] as $key => $value) {
+                $this->agrupamentoUserDocumentoService->firstOrCreate(
+                    [
+                        "documento_id" => $id,
+                        "user_id"  => $value['user_id'],
+                        "grupo_id" => $value['grupo_id'],
+                        'tipo' => 'TREINAMENTO'
+                    ]
+                );
             }
 
             foreach ($diff_para_detete_user as $key => $user) {
@@ -213,8 +220,15 @@ class DocumentoService
             $diff_para_create_user_div  = array_diff($grupoDivulgacao, $users);
             $diff_para_detete_user_div = array_diff($users, $grupoDivulgacao);
 
-            foreach ($diff_para_create_user_div as $key => $user) {
-                $this->agrupamentoUserDocumentoService->create(["documento_id" => $id,"user_id"  => $user, 'tipo' => 'DIVULGACAO']);
+            foreach ($data['grupo_divulgacao'] as $key => $value) {
+                $this->agrupamentoUserDocumentoService->firstOrCreate(
+                    [
+                        "documento_id" => $id,
+                        "user_id"  => $value['user_id'],
+                        "grupo_id" => $value['grupo_id'],
+                        'tipo' => 'DIVULGACAO'
+                    ]
+                );
             }
 
             foreach ($diff_para_detete_user_div as $key => $user) {
@@ -266,6 +280,7 @@ class DocumentoService
             //Cria
             foreach ($data['etapa_aprovacao'] as $value) {
                 $value['documento_id'] = (int) $id;
+ 
                 $this->userEtapaDocumentoService->create($value);
             }
             return true;
