@@ -44,6 +44,12 @@ abstract class BaseRepository
     }
 
 
+    public function firstOrCreate(array $data)
+    {
+        return $this->model::firstOrCreate($data);
+    }
+
+
     public function update(array $data, $id)
     {
         return $this->model::find($id)->update($data);
@@ -81,6 +87,12 @@ abstract class BaseRepository
                     $model = $model->whereNotIn($value[0], $value[2]);
                     break;
 
+                case "HAS":
+                    $model = $model->whereHas($value[4], function ($query) use ($value) {
+                        $query->where($value[0], $value[1], $value[2]);
+                    });
+                    break;
+
                 default:
                     $model = $model->where($value[0], $value[1], $value[2]);
                     break;
@@ -115,8 +127,4 @@ abstract class BaseRepository
         return $this->findBy($where, $with)->first();
     }
 
-    public function firstOrCreate(array $data)
-    {
-        return $this->model::firstOrCreate($data);
-    }
 }
