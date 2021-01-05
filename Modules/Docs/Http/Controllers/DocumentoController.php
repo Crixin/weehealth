@@ -167,9 +167,8 @@ class DocumentoController extends Controller
         if ($request->obsoleto != null) {
             array_push($where, ['obsoleto','=',$request->obsoleto == 1 ? true : false , "AND"]);
         }
-        
-        $documentos = $this->documentoRepository->findBy($where);
 
+        $documentos = $this->documentoRepository->findBy($where);
         return view('docs::documento.index',
             [
                 'documentos' => $documentos,
@@ -188,7 +187,6 @@ class DocumentoController extends Controller
                 'dataInicialSelecionado' => $request->dataInicial ?? null,
                 'dataFinalSelecionado' => $request->dataFinal ?? null,
                 'copiaControladaSelecionado' => $request->copiaControlada,
-                'pendenteRevisaoSelecionado' => $request->pendenteRevisao,
                 'obsoletoSelecionado' => $request->obsoleto,
             ]
         );

@@ -113,13 +113,6 @@
                                     
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="form-group{{ $errors->has('pendenteRevisao') ? ' has-error' : '' }}">
-                                        {!! Form::label('pendenteRevisao', 'Doc. Pendente Revisão') !!}
-                                        {!! Form::select('pendenteRevisao', $options, $pendenteRevisaoSelecionado, ['id' => 'pendenteRevisao', 'class' => 'form-control selectpicker', 'placeholder' => __('components.selectepicker-default')]) !!}
-                                        <small class="text-danger">{{ $errors->first('pendenteRevisao') }}</small>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
                                     <div class="form-group{{ $errors->has('obsoleto') ? ' has-error' : '' }}">
                                         {!! Form::label('obsoleto', 'Doc. Obsoleto') !!}
                                         {!! Form::select('obsoleto', $options, $obsoletoSelecionado, ['id' => 'obsoleto', 'class' => 'form-control selectpicker', 'placeholder' => __('components.selectepicker-default')]) !!}
