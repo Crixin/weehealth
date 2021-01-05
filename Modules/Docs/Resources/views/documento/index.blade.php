@@ -96,7 +96,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group{{ $errors->has('dataFinal') ? ' has-error' : '' }}" style="display: none" id="divDataFinal" >
-                                        {!! Form::label('dataFinal', 'DataFinal') !!}
+                                        {!! Form::label('dataFinal', 'Data Final') !!}
                                         {!! Form::date('dataFinal', $dataFinalSelecionado, ['class' => 'form-control']) !!}
                                         <small class="text-danger">{{ $errors->first('dataFinal') }}</small>
                                     </div>
