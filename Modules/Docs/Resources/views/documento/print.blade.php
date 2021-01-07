@@ -17,10 +17,50 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-            
+                <div class="col-3 mb-3">
+                    <button class="btn  btn-info" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2"><i class="mdi mdi-chart-timeline"></i> Linha do Tempo</button>
+                </div>
+                <!-- Timeline do Documento -->
+                <div class="row">
+                    <div class="col col-centered">
+                        <div class="collapse multi-collapse" id="multiCollapseExample2">
+                            <div class="card card-body text-center">
+
+                                <div class="row">
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-6">
+                                        <div class="row" style="font-size:14px">
+                                            <div class="form-group col-md-12">
+                                                <?php \Carbon\Carbon::setLocale('pt_BR') ?>
+                                                <ul class="timeline text-center">
+                                                    @foreach( $historico as $key => $hist )
+                                                        <li class=" {{ $key%2 == 0 ? 'timeline-inverted' : '' }}">
+                                                            <div class="timeline-badge success"  >
+                                                                <i class="mdi mdi-file-document"></i>
+                                                            </div>
+                                                            <div class="timeline-panel">
+                                                                <div class="timeline-heading">
+                                                                    <h4 class="timeline-title">{{ ($hist->coreUsers->name != null) ? $hist->coreUsers->name : 'Usuário Inválido' }}</h4>
+                                                                    <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ $hist->created_at->diffForHumans() }}</small> </p>
+                                                                </div>
+                                                                <div class="timeline-body">
+                                                                    <p>{{ $hist->descricao }}</p>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach     
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- Start Page Content -->
                 <div class="row">
-
                     @if ($mode === "with_stripe")
                         <div class="col-md-12">
                             <div class="card card-outline-{{ $messageClass }}">
@@ -34,33 +74,6 @@
                     <!-- Card Principal -->
                     <div class="col-md-12 card" style="min-height: 600px">
                         <div class="card-body">
-
-                            <!-- Timeline do Documento -->
-                            <div class="row">
-                                <div class="col col-centered">
-                                    <div class="collapse multi-collapse" id="multiCollapseExample2">
-                                        <div class="card card-body text-center">
-                                        
-                                            <div class="row">
-                                                <div class="col-md-3"></div>
-                                                <div class="col-md-6">
-                                                    <div class="row" style="font-size:14px">
-                                                        <div class="form-group col-md-12">
-                                                            <?php \Carbon\Carbon::setLocale('pt_BR') ?>
-                                                            
-                                                            <ul class="timeline text-center">
-                                                                
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>    
-                                            </div>
-                                    
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- Título e Validade do Documento (apenas texto) -->
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 p-20">
@@ -71,9 +84,9 @@
                                         @if (Auth::user()->setor_id == $setorQualidade)
                                             <span class="pull-right">
                                                 @if ($mode === 'without_stripe')
-                                                    <a href="{{ route('docs.documento.imprimir', ['id' => $documento->id]) }}" class="btn btn-lg btn-info">Modo Com Tarja</a>
+                                                    <a href="{{ route('docs.documento.imprimir', ['id' => $documento->id, 'tipo' => 2]) }}" class="btn  btn-info"><i class="mdi mdi-sim-off"></i>&nbsp; Com Tarja</a>
                                                 @else
-                                                    <a href="{{ route('docs.documento.imprimir', ['id' => $documento->id]) }}" class="btn btn-lg btn-info">Modo Sem Tarja</a>
+                                                    <a href="{{ route('docs.documento.imprimir', ['id' => $documento->id, 'tipo' => 1]) }}" class="btn  btn-info"><i class="mdi mdi-sim"></i>&nbsp; Modo Sem Tarja</a>
                                                 @endif
                                             </span>
                                         @endif
@@ -113,7 +126,7 @@
                                 @if ($mode === 'without_stripe')
                                     <iframe id="document-iframe" src="" data-src="{{ asset('plugins/onlyoffice-php/doceditor.php?fileID=').$filename.'&p=1&action=view' }}" frameborder="0" width="100%" height="1000px"></iframe>
                                 @else
-                                    <iframe id="document-iframe" src="" data-src="{{ asset('plugins/onlyoffice-php/doceditor.php?folder=temp&fileID=').$newFileName.'&p=1&action=view' }}" frameborder="0" width="100%" height="1000px"></iframe>
+                                    <iframe id="document-iframe" src="" data-src="{{ asset('plugins/onlyoffice-php/doceditor.php?folder=temp&fileID=').$filename.'&p=1&action=view' }}" frameborder="0" width="100%" height="1000px"></iframe>
                                 @endif
                             </div>
                             
@@ -126,8 +139,6 @@
                         
                         </div>
                     </div>
-
-
                 </div>
                 <!-- End Page Content -->
             </div>

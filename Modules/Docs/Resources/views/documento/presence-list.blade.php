@@ -50,7 +50,7 @@
                                                 <td class="text-center">Revisão: <span class="font-weight-bold">{{ $lista->revisao_documento }}</span></td>
                                                 <td class="text-center">
                                                     <ul class="list-icons">
-                                                        <?php echo(\App\Classes\Helpers::listEmailAddresses($lista->destinatarios_email)); ?>
+                                                        <?php echo(\App\Classes\Helper::listEmailAddresses($lista->destinatarios_email)); ?>
                                                     </ul>
                                                 </td>
                                             </tr>

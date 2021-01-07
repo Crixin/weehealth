@@ -119,8 +119,8 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('iniciar-revisao',    ['as' => 'documento.iniciar-revisao', 'uses' => 'DocumentoController@iniciarRevisao']);
             Route::post('obsoleto',           ['as' => 'documento.obsoleto', 'uses' => 'DocumentoController@tornarObsoleto']);
             Route::get('{id}/lista-presenca', ['as' => 'documento.lista-presenca',	'uses' => 'DocumentoController@listaPresenca']);
-            Route::get('{id}/imprimir',       ['as' => 'documento.imprimir',	'uses' => 'DocumentoController@imprimir']);
-
+            Route::get('{id}/imprimir/{tipo}',['as' => 'documento.imprimir',	'uses' => 'DocumentoController@imprimir']);
+            
             Route::post('proxima-etapa',    ['as' => 'documento.proxima-etapa', 'uses' => 'DocumentoController@proximaEtapa']);
         });
 

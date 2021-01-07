@@ -22,6 +22,9 @@ class Workflow extends Model
         'justificativa_lida'
     ];
 
+    public function coreUsers()
+    {
+        return $this->hasOne('Modules\Core\Model\User', 'id', 'user_id');
+    }
 
-    
 }

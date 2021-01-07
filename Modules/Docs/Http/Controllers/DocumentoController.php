@@ -826,15 +826,26 @@ class DocumentoController extends Controller
         return view('docs::documento.presence-list', compact('documento', 'listaPresenca'));
     }
 
-    public function imprimir($id)
+    public function imprimir($id, $tipo)
     {
-        $mode = "with_stripe";
-        $message      = "Sucesso! O documento foi atualizado com sucesso e as tarjas para impressão foram aplicadas.";
-        $messageClass = "success";
-        $newFileName = '';
-        $documento = $this->documentoRepository->find($id);
+        $mode           = $tipo == 2 ? "with_stripe" : 'without_stripe';
+        $message        = "Sucesso! O documento foi atualizado com sucesso e as tarjas para impressão foram aplicadas.";
+        $messageClass   = "success";
+        $filename       = '';
+        $documento      = $this->documentoRepository->find($id);
         $setorQualidade = $this->parametroRepository->getParametro('ID_SETOR_QUALIDADE');
-        
-        return view('docs::documento.print', compact('mode', 'documento', 'setorQualidade', 'message', 'messageClass', 'newFileName'));
+        $historico = $this->workFlowRepository->findBy(
+            [
+                ['documento_id', '=', $id],
+                ['versao_documento', '=', $documento->revisao]
+            ],
+            [],
+            [
+                ['created_at', 'ASC']
+            ]
+        );
+        /** Cria registro de Intensão de impressão do documento */
+        return view('docs::documento.print', compact('mode', 'documento', 'setorQualidade', 'message', 'messageClass', 'filename', 'historico'));
     }
+
 }
