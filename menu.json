@@ -809,7 +809,7 @@
                     "icone": "mdi mdi-pencil"
                 },
                 "Exclusão": {
-                    "name": "docs_documento_externo_exc",
+                    "name": "docs_bpmn_exc",
                     "descricao": "Exclusão",
                     "icone": "mdi mdi-delete"
                 }
