@@ -411,8 +411,8 @@
             $('#'+label).attr('class', 'control-label');
         }else {
             $('#'+input).attr('required', false);
-            $('#'+div).removeAttr('class');
-            $('#'+label).attr('class', 'form-group');
+            $('#'+div).attr('class', 'form-group');
+            $('#'+label).removeAttr('class');
         } 
     }
 </script>
