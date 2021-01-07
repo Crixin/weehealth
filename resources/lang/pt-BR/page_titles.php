@@ -262,9 +262,9 @@ return [
             'index'           => 'Documentos Externos',
             'create'          => 'Novo Documento Externo',
             'update'          => 'Alterando Documento Externo'
+        ],
+        'bpmn' => [
+            'create'          => 'Novo BPMN'
         ]
-
-        
-
     ]
 ];

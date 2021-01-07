@@ -2,7 +2,7 @@
 
 
 
-@section('page_title', __('page_titles.portal.enterprise.linked_groups'))
+@section('page_title', __('page_titles.docs.bpmn.create'))
 
 
 @section('breadcrumbs')
