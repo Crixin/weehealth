@@ -25,7 +25,7 @@ class EmpresaUser extends Model
         'permissao_editar'
     ];
 
-    public function coreUser()
+    public function coreUsers()
     {
         return $this->hasOne('Modules\Core\Model\User', 'id', 'user_id');
     }

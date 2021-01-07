@@ -40,9 +40,9 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group{{ $errors->has('documentoPai') ? ' has-error' : '' }}">
-                {!! Form::label('documentoPai', 'Documento(s) Pai') !!}
-                {!! Form::select('documentoPai',$documentosPais, !empty($documentoEdit) ?  $documentosPaiSelecionados : null, ['id' => 'documentoPai', 'name'=>'documentoPai[]', 'class' => 'form-control selectpicker', 'multiple', 'data-live-search' => 'true', 'data-actions-box' =>'true']) !!}
+            <div class="form-group{{ $errors->has('documentoPai') ? ' has-error' : '' }}" id="divDocumentoPai">
+                {!! Form::label('documentoPai', 'Documento(s) Pai', ['id' => 'labelDocumentoPai']) !!}
+                {!! Form::select('documentoPai',$documentosPais, null, ['id' => 'documentoPai', 'name'=>'documentoPai[]', 'class' => 'form-control selectpicker', 'multiple', 'data-live-search' => 'true', 'data-actions-box' =>'true']) !!}
                 <small class="text-danger">{{ $errors->first('documentoPai') }}</small>
             </div>
         </div>
@@ -65,8 +65,8 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group{{ $errors->has('documentoVinculado') ? ' has-error' : '' }}">
-                {!! Form::label('documentoVinculado', 'Documento(s) Vinculado(s)') !!}
+            <div class="form-group{{ $errors->has('documentoVinculado') ? ' has-error' : '' }}" id="divDocumentosVinculados">
+                {!! Form::label('documentoVinculado', 'Documento(s) Vinculado(s)', ["id" =>'labelDocumentosVinculados']) !!}
                 {!! Form::select('documentoVinculado',$documentosVinvulados, !empty($documentoEdit) ?  $documentosVinculadosSelecionados : null, ['id' => 'documentoVinculado', 'name'=>'documentoVinculado[]', 'class' => 'form-control selectpicker', 'multiple', 'data-live-search' => 'true', 'data-actions-box' =>'true']) !!}
                 <small class="text-danger">{{ $errors->first('documentoVinculado') }}</small>
             </div>
@@ -325,10 +325,42 @@
 
     }
 
+    function buscaDocumentosPai(tipoDocumento, documento)
+    {
+        return new Promise(function (resolve, reject) {
+            let obj = {'tipo': tipoDocumento, 'documento': documento};
+            ajaxMethod('POST', "{{ URL::route('docs.documento.documento-por-tipo') }}", obj).then(response => {
+                if(response.response == 'erro') {
+                    reject();
+                    swal2_alert_error_support("Tivemos um problema ao buscar as informações das etapas.");
+                }else{
+                    resolve(response.data);
+                }
+            });
+        });
+
+    }
+
     async function monta(response, documento)
     {
         let linha = '';
-        let retorno = response.data;
+        let retorno = response.data.etapas;
+        let retornoTipoDocumento = response.data.tipo;
+     
+        obrigatoriedadeCampos(retornoTipoDocumento['vinculo_obrigatorio_outros_doc'], 'documentoVinculado', 'divDocumentosVinculados', 'labelDocumentosVinculados');
+        obrigatoriedadeCampos(retornoTipoDocumento['vinculo_obrigatorio'], 'documentoPai', 'divDocumentoPai', 'labelDocumentoPai');
+        
+        $('#documentoPai').empty();
+        await buscaDocumentosPai(retornoTipoDocumento['tipo_documento_pai'], documento).then(response => {
+            let options = '';
+            for (let index = 0; index < response.length; index++) {
+                const element = response[index];
+                let selecionado = element.select == true ? 'selected' : '';
+                options += "<option value='"+element.id+"' "+selecionado+" >"+element.nome+"</option>"
+            }
+            $('#documentoPai').append(options).selectpicker('refresh');
+        });
+
         for (let index = 0; index < retorno.length; index++) {
             const element = retorno[index];
             linha += "<div class='col-md-12'>";
@@ -354,7 +386,6 @@
             @foreach($gruposUsuarios as $key => $grupo)
             linha += "<optgroup label='{{ $key }}'>";
                     @foreach($grupo as $key2 => $user)
-                    console.log(aprovadores);
                         exist = aprovadores.indexOf('{{$key2}}') > -1 ? "selected='selected'": "";
                         linha += "<option value='{{$key2}}' "+exist+">{{ $user }}</option>";
                     @endforeach
@@ -371,8 +402,18 @@
         carregaOptGroup();
     }
 
-   
-
+    function obrigatoriedadeCampos(tipo, input, div, label)
+    {
+        if(tipo == true)
+        {    
+            $('#'+input).attr('required', true);
+            $('#'+div).attr('class', 'form-group required');
+            $('#'+label).attr('class', 'control-label');
+        }else {
+            $('#'+input).attr('required', false);
+            $('#'+div).removeAttr('class');
+            $('#'+label).attr('class', 'form-group');
+        } 
+    }
 </script>
-    
 @endsection

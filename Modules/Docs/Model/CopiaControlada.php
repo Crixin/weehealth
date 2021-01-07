@@ -20,7 +20,7 @@ class CopiaControlada extends Model
     ];
 
     /** O usuário 'responsável' pela substituição da cópia física */
-    public function coreUser()
+    public function coreUsers()
     {
         return $this->belongsTo('Modules\Core\Model\User', 'user_id');
     }

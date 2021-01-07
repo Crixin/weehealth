@@ -253,7 +253,9 @@ return [
             'create'          => 'Novo Documento',
             'update'          => 'Alterando Documento',
             'import'          => 'Importação de Documento',
-            'factory'         => 'Criação do Documento'
+            'factory'         => 'Criação do Documento',
+            'print'           => 'Imprimir Documento',
+            'presence-list'   => 'Lista de Presença'
         ],
 
         'documento-externo' => [

@@ -35,27 +35,29 @@
             </div>
         </div>
         <div class="col-md-6">
-           <div class="form-group required{{ $errors->has('numeroPadrao') ? ' has-error' : '' }}">
-                {!! Form::label('numeroPadrao', 'Padrão de Número' , ['class' => 'control-label']) !!}
-                {!! Form::select('numeroPadrao',$padroesNumero, !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->numero_padrao_id : null, ['id' => 'numeroPadrao', 'class' => 'form-control', 'required' => 'required', 'placeholder' => __('components.selectepicker-default')]) !!}
-                <small class="text-danger">{{ $errors->first('numeroPadrao') }}</small>
-           </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
             <div class="form-group required{{ $errors->has('ultimoDocumento') ? ' has-error' : '' }}">
                 {!! Form::label('ultimoDocumento', 'Último Documento', ['class' => 'control-label']) !!}
                 {!! Form::number('ultimoDocumento',$ultimoDocumento, ['class' => 'form-control', 'required' => 'required', 'min' => 0]) !!}
                 <small class="text-danger">{{ $errors->first('ultimoDocumento') }}</small>
             </div>
         </div>
+        
+    </div>
+    <div class="row">
         <div class="col-md-6">
+            <div class="form-group required{{ $errors->has('numeroPadrao') ? ' has-error' : '' }}">
+                 {!! Form::label('numeroPadrao', 'Padrão de Número' , ['class' => 'control-label']) !!}
+                 {!! Form::select('numeroPadrao',$padroesNumero, !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->numero_padrao_id : null, ['id' => 'numeroPadrao', 'class' => 'form-control', 'required' => 'required', 'placeholder' => __('components.selectepicker-default')]) !!}
+                 <small class="text-danger">{{ $errors->first('numeroPadrao') }}</small>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label></label>
             <div class="alert alert-info">
                 <span><b>Exemplos de valores aceitos:</b></span>
                 <ul>
                     <li>0       <span class="text-muted">- Código gerado será [1, 2, 3....]</span></li>
-                    <li>00       <span class="text-muted">- Código gerado será [1, 2, 3....]</span></li>
+                    <li>00       <span class="text-muted">- Código gerado será [01, 02, 03....]</span></li>
                     <li>000     <span class="text-muted">- Código gerado será [001, 002, 003....]</span></li>
                     <li>0000    <span class="text-muted">- Código gerado será [001.01, 002.01, 003.01....]</span></li>
                 </ul>
@@ -82,26 +84,26 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group{{ $errors->has('tipoDocumentoPai') ? ' has-error' : '' }}">
-                {!! Form::label('tipoDocumentoPai', 'Tipo Documento Pai') !!}
-                {!! Form::select('tipoDocumentoPai',$tiposDocumento, !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->tipo_documento_pai_id : null, ['id' => 'tipoDocumentoPai', 'class' => 'form-control selectpicker', 'placeholder' => __('components.selectepicker-default')]) !!}
-                <small class="text-danger">{{ $errors->first('tipoDocumentoPai') }}</small>
-            </div>
-        </div>
-        <div class="col-md-6">
             <div class="form-group">
                 <div class="checkbox{{ $errors->has('vinculoObrigatorio') ? ' has-error' : '' }}">
-                    <label class="control-label">Vínculo Obrigatório</label>
+                    <label class="control-label">Vínculo Obrigatório ao Documento Pai</label>
                                     
                     <td class="text-center text-nowrap">
                         <div class="switch">
                             <label>Não
-                                {!! Form::checkbox('vinculoObrigatorio', '1', !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->vinculo_obrigatorio : true, ['id' => 'vinculoObrigatorio', 'class'=> 'switch-elaborador']) !!}<span class="lever switch-col-light-blue"></span>Sim
+                                {!! Form::checkbox('vinculoObrigatorio', '1', !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->vinculo_obrigatorio : false, ['id' => 'vinculoObrigatorio', 'class'=> 'switch-elaborador']) !!}<span class="lever switch-col-light-blue"></span>Sim
                             </label>
                         </div>
                     </td>
                 <small class="text-danger">{{ $errors->first('vinculoObrigatorio') }}</small>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group{{ $errors->has('tipoDocumentoPai') ? ' has-error' : '' }}" id="divTipoDocumentoPai">
+                {!! Form::label('tipoDocumentoPai', 'Tipo Documento Pai', ['id'=> 'labelTipoDocumentoPai']) !!}
+                {!! Form::select('tipoDocumentoPai',$tiposDocumento, !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->tipo_documento_pai_id : null, ['id' => 'tipoDocumentoPai', 'class' => 'form-control selectpicker', 'placeholder' => __('components.selectepicker-default')]) !!}
+                <small class="text-danger">{{ $errors->first('tipoDocumentoPai') }}</small>
             </div>
         </div>
     </div>
@@ -206,6 +208,8 @@
 <script src="{{ asset('plugins/dropify/dist/js/dropify.min.js') }}"></script>
 <script>
     $(document).ready(function(){
+        verificaVinculoObrigatorio();   
+
         $("#codigoPadrao").select2({
             placeholder: 'Selecione o padrão de codigo'
         }).on("select2:select", function (evt) {
@@ -279,6 +283,23 @@
                 drDestroy.init();
             }
         })
+
+        $('#vinculoObrigatorio').on('change', function(){
+            verificaVinculoObrigatorio();   
+        });
     });
+
+    function verificaVinculoObrigatorio(){
+        if( $('#vinculoObrigatorio').prop('checked') == true ){
+            $('#tipoDocumentoPai').attr('required', true);
+            $('#divTipoDocumentoPai').attr('class', 'form-group required');
+            $('#labelTipoDocumentoPai').attr('class', 'control-label');
+        }else{
+            $('#tipoDocumentoPai').attr('required', false);
+            $('#labelTipoDocumentoPai').removeAttr('class');
+            $('#divTipoDocumentoPai').attr('class', 'form-group');
+        }
+    }
+
 </script>
 @endsection

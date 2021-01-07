@@ -39,7 +39,7 @@
                             'validade' => '',
                             'setores' => $setores,
                             'tiposDocumento' => $tiposDocumento,
-                            'documentosPais' => $documentos,
+                            'documentosPais' => [],
                             'niveisAcesso' => $niveisAcesso,
                             'classificacoes' => $classificacoes,
                             'documentosVinvulados' => $documentos,

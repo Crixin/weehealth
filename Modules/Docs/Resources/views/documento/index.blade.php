@@ -170,12 +170,13 @@
                                                 <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-pencil text-success"></i>&nbsp; @lang('buttons.docs.documento.edit') </a>
-                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-eye text-danger"></i>&nbsp; @lang('buttons.docs.documento.start-validation') </a> 
-                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-print text-info"></i>&nbsp; @lang('buttons.docs.documento.printer') </a> 
-                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-file-text-o text-info"></i>&nbsp; @lang('buttons.docs.documento.list') </a> 
-                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-exchange text-info"></i>&nbsp; @lang('buttons.docs.documento.link-docs') </a> 
-                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-eye text-warning"></i>&nbsp; @lang('buttons.docs.documento.start-review') </a> 
-                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-power-off text-danger"></i>&nbsp; @lang('buttons.docs.documento.obsolete') </a>                                                 
+                                                    
+                                                    <a class="dropdown-item documento-iniciar-validacao" data-id="{{$documento->id}}" href="javascript:void(0)"> <i class="fa fa-eye text-danger"></i>&nbsp; @lang('buttons.docs.documento.start-validation') </a> 
+                                                    <a class="dropdown-item" href="{{ route('docs.documento.imprimir', ['id' => $documento->id]) }}"> <i class="fa fa-print text-info"></i>&nbsp; @lang('buttons.docs.documento.printer') </a> 
+                                                    <a class="dropdown-item" href="{{ route('docs.documento.lista-presenca', ['id' => $documento->id]) }}"> <i class="fa fa-file-text-o text-info"></i>&nbsp; @lang('buttons.docs.documento.list') </a> 
+                                                    <!--<a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-exchange text-info"></i>&nbsp; @lang('buttons.docs.documento.link-docs') </a>-->
+                                                    <a class="dropdown-item documento-iniciar-revisao" data-id="{{$documento->id}}" href="javascript:void(0)"> <i class="fa fa-eye text-warning"></i>&nbsp; @lang('buttons.docs.documento.start-review') </a> 
+                                                    <a class="dropdown-item documento-obsoleto" data-id="{{$documento->id}}" href="javascript:void(0)"> <i class="fa fa-power-off text-danger"></i>&nbsp; @lang('buttons.docs.documento.obsolete') </a>                                                 
                                                 </div>
                                             </div>
                                         </td>
@@ -261,7 +262,7 @@
     <!-- SweetAlert2 -->
     <script>
         
-        // Exclusão do norma
+        // Exclusão do documento
         $('.sa-warning').click(function(){
             let id = $(this).data('id');
             let deleteIt = swal2_warning("Essa ação é irreversível!");
@@ -282,5 +283,76 @@
                 swal.close();
             });
         });
+
+        //Iniciar Validacao
+        $('.documento-iniciar-validacao').click(function(){
+            let id = $(this).data('id');
+            
+            let iniciarValicao = swal2_warning("Que deseja iniciar a validação do documento!", "Sim Iniciar!");
+            let obj = {'id': id};
+            iniciarValicao.then(resolvedValue => {
+                console.log('iniciar validacao');
+                ajaxMethod('POST', "{{ URL::route('docs.documento.iniciar-validacao') }}", obj).then(response => {
+                    if(response.response != 'erro') {
+                        swal2_success("Excluído!", "Documento excluído com sucesso.");
+                    } else {
+                        swal2_alert_error_support("Tivemos um problema ao excluir o documento.");
+                    }
+                }, error => {
+                    console.log(error);
+                });
+            }, error => {
+                swal.close();
+            });
+            
+
+        });
+
+        //Iniciar Revisao
+        $('.documento-iniciar-revisao').click(function(){
+            let id = $(this).data('id');
+            let iniciarRevisao = swal2_warning("Que deseja iniciar a revisão do documento!", "Sim Iniciar!");
+            let obj = {'id': id};
+            iniciarRevisao.then(resolvedValue => {
+                
+                ajaxMethod('POST', "{{ URL::route('docs.documento.iniciar-revisao') }}", obj).then(response => {
+                    if(response.response != 'erro') {
+                        swal2_success("Excluído!", "Documento excluído com sucesso.");
+                    } else {
+                        swal2_alert_error_support("Tivemos um problema ao excluir o documento.");
+                    }
+                }, error => {
+                    console.log(error);
+                });
+                
+            }, error => {
+                swal.close();
+            });
+
+        });
+
+        //Tornar Obsoleto
+        $('.documento-obsoleto').click(function(){
+            let id = $(this).data('id');
+            let tornarObsoleto = swal2_warning("Que deseja tornar obsoleto o documento!", "Sim!");
+            let obj = {'id': id};
+            tornarObsoleto.then(resolvedValue => {
+                
+                ajaxMethod('POST', "{{ URL::route('docs.documento.obsoleto') }}", obj).then(response => {
+                    if(response.response != 'erro') {
+                        swal2_success("Excluído!", "Documento excluído com sucesso.");
+                    } else {
+                        swal2_alert_error_support("Tivemos um problema ao excluir o documento.");
+                    }
+                }, error => {
+                    console.log(error);
+                });
+                
+            }, error => {
+                swal.close();
+            });
+
+        });
+
     </script>
 @endsection

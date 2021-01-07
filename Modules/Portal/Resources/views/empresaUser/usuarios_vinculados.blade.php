@@ -117,8 +117,8 @@
                                             <tbody>
                                                 @foreach ($usuariosJaVinculados as $usuarioV)
                                                     <tr>
-                                                        <td><b> {{ $usuarioV->coreUser->name }} </b></td>
-                                                        <td> {{ $usuarioV->coreUser->email }} </td>
+                                                        <td><b> {{ $usuarioV->coreUsers->name }} </b></td>
+                                                        <td> {{ $usuarioV->coreUsers->email }} </td>
                                                         @if (Helper::isParamActive('PERMITIR_DOWNLOAD'))
                                                             <td> 
                                                                 <input type="checkbox" id="permissao_download-{{ $usuarioV->id }}" class="filled-in chk-col-cyan" {{ ($usuarioV->permissao_download) ? 'checked' : '' }} /> 

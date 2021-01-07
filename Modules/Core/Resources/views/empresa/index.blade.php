@@ -25,7 +25,7 @@
                 @endif
             
                 <div class="col-md-12">
-                    <a href="{{ route('core.empresa.nova') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.core.enterprise.create') </a>
+                    <a href="{{ route('core.empresa.nova') }}" class="btn waves-effect waves-light  btn-success pull-right"><i class="fa fa-pencil"></i>&nbsp;@lang('buttons.core.enterprise.create') </a>
                 </div>
             
                 <div class="table-responsive m-t-40">

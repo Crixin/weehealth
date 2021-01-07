@@ -786,6 +786,34 @@
                     "icone": "mdi mdi-delete"
                 }
             }
+        },
+        "BPMN": {
+            "icone": "mdi mdi-file-tree",
+            "descricao": "BPMN 2.0",
+            "route": "docs.bpmn",
+            "permissao": ["docs_bpmn_cons"],
+            "filhos_perfil": {
+                "Cadastro": {
+                    "name": "docs_bpmn_cad",
+                    "descricao": "Cadastro",
+                    "icone": "mdi mdi-pencil"
+                },
+                "Edição": {
+                    "name": "docs_bpmn_edit",
+                    "descricao": "Edição",
+                    "icone": "mdi mdi-pencil"
+                },
+                "Consulta": {
+                    "name": "docs_bpmn_cad",
+                    "descricao": "Cadastro",
+                    "icone": "mdi mdi-pencil"
+                },
+                "Exclusão": {
+                    "name": "docs_documento_externo_exc",
+                    "descricao": "Exclusão",
+                    "icone": "mdi mdi-delete"
+                }
+            }
         }
     }
 }

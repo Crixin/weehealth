@@ -29,7 +29,7 @@
                     
                     <div class="col-md-12">
                         <a href="{{ route('docs.fluxo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
-                        <a href="{{ route('docs.fluxo.etapa-fluxo.novo', ['fluxo_id' => $fluxo->id]) }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.etapa-fluxo.create') </a>
+                        <a href="{{ route('docs.fluxo.etapa-fluxo.novo', ['fluxo_id' => $fluxo->id]) }}" class="btn waves-effect waves-light  btn-success pull-right"><i class="fa fa-pencil"></i>&nbsp;@lang('buttons.docs.etapa-fluxo.create') </a>
                     </div>
                 
                     <div class="table-responsive m-t-40">

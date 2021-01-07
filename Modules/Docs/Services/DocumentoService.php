@@ -10,8 +10,10 @@ use Modules\Docs\Model\Documento;
 use Modules\Docs\Repositories\DocumentoRepository;
 use Modules\Docs\Repositories\TipoDocumentoRepository;
 use Modules\Core\Repositories\UserRepository;
+use Modules\Docs\Repositories\HierarquiaDocumentoRepository;
 use Modules\Docs\Repositories\ItemNormaRepository;
 use Modules\Docs\Repositories\UserEtapaDocumentoRepository;
+use Modules\Docs\Repositories\VinculoDocumentoRepository;
 
 class DocumentoService
 {
@@ -19,6 +21,8 @@ class DocumentoService
     protected $userRepository;
     protected $itemNormaRepository;
     protected $userEtapaDocumentoRepository;
+    protected $hierarquiaDocumentoRepository;
+    protected $vinculoDocumentoRepository;
 
 
     protected $hierarquiaDocumentoService;
@@ -41,7 +45,9 @@ class DocumentoService
         TipoDocumentoService $tipoDocumentoService,
         UserRepository $userRepository,
         ItemNormaRepository $itemNormaRepository,
-        UserEtapaDocumentoRepository $userEtapaDocumentoRepository
+        UserEtapaDocumentoRepository $userEtapaDocumentoRepository,
+        HierarquiaDocumentoRepository $hierarquiaDocumentoRepository,
+        VinculoDocumentoRepository $vinculoDocumentoRepository
     ) {
         $this->rules = $documento->rules;
 
@@ -49,6 +55,8 @@ class DocumentoService
         $this->userRepository = $userRepository;
         $this->itemNormaRepository = $itemNormaRepository;
         $this->userEtapaDocumentoRepository = $userEtapaDocumentoRepository;
+        $this->hierarquiaDocumentoRepository = $hierarquiaDocumentoRepository;
+        $this->vinculoDocumentoRepository = $vinculoDocumentoRepository;
 
         $this->hierarquiaDocumentoService = $hierarquiaDocumentoService;
         $this->vinculoDocumentoService = $vinculoDocumentoService;
@@ -135,18 +143,24 @@ class DocumentoService
             $this->documentoRepository->update($updateDocumento, $id);
 
             /**Cria Hierarquia Documento */
-            $buscaTodosDocumentos = $this->documentoRepository->findAll();
-            $documentos =  array_column(json_decode(json_encode($buscaTodosDocumentos), true), 'id');
-            $hierarquia = array();
+            $buscaTodosDocumentos = $this->hierarquiaDocumentoRepository->findBy(
+                [
+                    ['documento_id', '=', $id]
+                ]
+            );
+            $documentos =  array_column(json_decode(json_encode($buscaTodosDocumentos), true), 'documento_id');
+            $hierarquia = [];
             foreach ($data['hierarquia_documento'] as $key => $value) {
                 array_push($hierarquia, $value['documento_pai_id']);
+                $this->hierarquiaDocumentoService->firstOrCreate(
+                    [
+                        "documento_id" => $id,
+                        "documento_pai_id"  => $value['documento_pai_id']
+                    ]
+                );
             }
-            $diff_para_create  = array_diff($hierarquia, $documentos);
-            $diff_para_detete = array_diff($documentos, $hierarquia);
 
-            foreach ($diff_para_create as $key => $doc) {
-                $this->hierarquiaDocumentoService->create(["documento_id" => $id,"documento_pai_id"  => $doc]);
-            }
+            $diff_para_detete = array_diff($documentos, $hierarquia);
 
             foreach ($diff_para_detete as $key => $doc) {
                 $this->hierarquiaDocumentoService->delete(
@@ -158,17 +172,24 @@ class DocumentoService
             }
 
             /**Cria Vinculo de Documento */
+            $buscaTodosDocumentosVinculados = $this->vinculoDocumentoRepository->findBy(
+                [
+                    ['documento_id', '=', $id]
+                ]
+            );
+            $documentos =  array_column(json_decode(json_encode($buscaTodosDocumentosVinculados), true), 'documento_id');
             $vinculado = array();
             foreach ($data['vinculo_documento'] as $key => $value) {
                 array_push($vinculado, $value['documento_vinculado_id']);
+                $this->vinculoDocumentoService->firstOrCreate(
+                    [
+                        "documento_id" => $id,
+                        "documento_vinculado_id"  => $value['documento_vinculado_id']
+                    ]
+                );
             }
-            $diff_para_create_vinculo  = array_diff($vinculado, $documentos);
+
             $diff_para_detete_vinculo = array_diff($documentos, $vinculado);
-
-            foreach ($diff_para_create_vinculo as $key => $doc) {
-                $this->vinculoDocumentoService->create(["documento_id" => $id,"documento_vinculado_id"  => $doc]);
-            }
-
             foreach ($diff_para_detete_vinculo as $key => $doc) {
                 $this->vinculoDocumentoService->delete(
                     [
@@ -179,17 +200,9 @@ class DocumentoService
             }
 
             /**Cria Agrupamento de Documento (Treinamento) */
-
             $buscaTodosUsuarios = $this->userRepository->findAll();
             $users =  array_column(json_decode(json_encode($buscaTodosUsuarios), true), 'id');
             $grupoTreinamento = array();
-            foreach ($data['grupo_treinamento'] as $key => $value) {
-                array_push($grupoTreinamento, $value['user_id']);
-            }
-
-            $diff_para_create_user  = array_diff($grupoTreinamento, $users);
-            $diff_para_detete_user = array_diff($users, $grupoTreinamento);
-
             foreach ($data['grupo_treinamento'] as $key => $value) {
                 $this->agrupamentoUserDocumentoService->firstOrCreate(
                     [
@@ -199,8 +212,10 @@ class DocumentoService
                         'tipo' => 'TREINAMENTO'
                     ]
                 );
+                array_push($grupoTreinamento, $value['user_id']);
             }
 
+            $diff_para_detete_user = array_diff($users, $grupoTreinamento);
             foreach ($diff_para_detete_user as $key => $user) {
                 $this->agrupamentoUserDocumentoService->delete(
                     [
@@ -215,12 +230,6 @@ class DocumentoService
             $grupoDivulgacao = array();
             foreach ($data['grupo_divulgacao'] as $key => $value) {
                 array_push($grupoDivulgacao, $value['user_id']);
-            }
-
-            $diff_para_create_user_div  = array_diff($grupoDivulgacao, $users);
-            $diff_para_detete_user_div = array_diff($users, $grupoDivulgacao);
-
-            foreach ($data['grupo_divulgacao'] as $key => $value) {
                 $this->agrupamentoUserDocumentoService->firstOrCreate(
                     [
                         "documento_id" => $id,
@@ -231,6 +240,7 @@ class DocumentoService
                 );
             }
 
+            $diff_para_detete_user_div = array_diff($users, $grupoDivulgacao);
             foreach ($diff_para_detete_user_div as $key => $user) {
                 $this->agrupamentoUserDocumentoService->delete(
                     [
@@ -365,4 +375,5 @@ class DocumentoService
 
         return false;
     }
+
 }

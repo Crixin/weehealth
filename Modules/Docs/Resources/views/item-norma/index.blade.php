@@ -29,7 +29,7 @@
                     
                     <div class="col-md-12">
                         <a href="{{ route('docs.norma') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
-                        <a href="{{ route('docs.norma.item-norma.novo', ['norma_id' => $norma->id]) }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.item-norma.create') </a>
+                        <a href="{{ route('docs.norma.item-norma.novo', ['norma_id' => $norma->id]) }}" class="btn waves-effect waves-light  btn-success pull-right"><i class="fa fa-pencil"></i>&nbsp;@lang('buttons.docs.item-norma.create') </a>
                     </div>
                 
                     <div class="table-responsive m-t-40">
