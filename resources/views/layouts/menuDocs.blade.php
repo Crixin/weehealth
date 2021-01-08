@@ -59,9 +59,7 @@
                     <a class="waves-effect waves-dark" href="{{ route('docs.documento-externo') }}" aria-expanded="false"><i class="mdi mdi-file-cloud"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.uls_li_system.documento_externo') </span></a>
                 </li>
                 
-                <li>
-                    <a class="waves-effect waves-dark" href="{{ route('docs.workflow') }}" aria-expanded="false"><i class="mdi mdi-file-tree"></i><span class="hide-menu"> @lang('sidebar_and_header.docs.uls_li_system.workflow') </span></a>
-                </li>
+                
                
 
             </ul>

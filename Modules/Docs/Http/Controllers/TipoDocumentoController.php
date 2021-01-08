@@ -127,6 +127,7 @@ class TipoDocumentoController extends Controller
         $tiposDocumento = $this->tipoDocumentoRepository->findBy(
             [
                 ['ativo', '=', true],
+                ['id', '!=', $id]
             ]
         );
         $tiposDocumento = $tiposDocumento ? array_column(json_decode(json_encode($tiposDocumento), true), 'nome', 'id') : [];

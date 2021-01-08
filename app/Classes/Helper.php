@@ -555,4 +555,30 @@ class Helper
             'dataFinal'   => "'$dateYear-$dateMonth-$ultimo_dia_mes'"
         ];
     }
+
+    public static function base64ToImage($base64_string, $output_file)
+    {
+        $file = fopen($output_file, "wb");
+        $data = explode(',', $base64_string);
+        fwrite($file, base64_decode($data[1]));
+        fclose($file);
+        return $output_file;
+    }
+
+    public static function listEmailAddresses($_emailList)
+    {
+        $addressesText = explode('Lista de presença enviada para: ', $_emailList)[1];
+        if (is_null($addressesText)) {
+            return '';
+        }
+        $stylizedList = "";
+        $addressesArr = explode(';', $addressesText);
+        foreach ($addressesArr as $address) {
+            if (!is_null($address) && $address != " ") {
+                $stylizedList .= "<li><i class='fa fa-chevron-right'></i>$address</li>";
+            }
+        }
+
+        return $stylizedList;
+    }
 }

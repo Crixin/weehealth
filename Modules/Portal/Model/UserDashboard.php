@@ -16,7 +16,7 @@ class UserDashboard extends Model
         'user_id'
     ];
 
-    public function coreUser()
+    public function coreUsers()
     {
         return $this->belongsTo('Modules\Core\Model\User', 'user_id');
     }

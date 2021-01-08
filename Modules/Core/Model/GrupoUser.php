@@ -23,7 +23,7 @@ class GrupoUser extends Model
     ];
     
 
-    public function coreUser()
+    public function coreUsers()
     {
         return $this->hasOne('Modules\Core\Model\User', 'id', 'user_id');
     }

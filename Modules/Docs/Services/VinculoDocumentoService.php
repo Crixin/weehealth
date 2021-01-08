@@ -28,4 +28,9 @@ class VinculoDocumentoService
     {
         return $this->vinculoDocumentoRepository->delete($delete);
     }
+
+    public function firstOrCreate(array $data)
+    {
+        return $this->vinculoDocumentoRepository->firstOrCreate($data);
+    }
 }

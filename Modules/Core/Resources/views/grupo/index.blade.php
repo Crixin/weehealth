@@ -18,20 +18,17 @@
         <div class="card">
             <div class="card-body">
 
-
-                @component('components.validation-error', ['errors'])@endcomponent
-
                 @if(Session::has('message'))
                     @component('components.alert')@endcomponent
 
                     {{ Session::forget('message') }}
                 @endif
                 
-                      
                 <div class="col-md-12">
-                    <a href="{{ route('core.grupo.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.core.group.create') </a>
+                    <a href="{{ route('core.grupo.novo') }}" class="btn waves-effect waves-light  btn-success pull-right"><i class="fa fa-pencil"></i>&nbsp;@lang('buttons.core.group.create') </a>
                 </div>
             
+                      
                 <div class="table-responsive m-t-40">
                     <table id="dataTable-grupos" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>

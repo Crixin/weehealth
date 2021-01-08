@@ -29,7 +29,7 @@
                     @endif
                     
                     <div class="col-md-12">
-                        <a href="{{ route('core.setor.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.core.setor.create') </a>
+                        <a href="{{ route('core.setor.novo') }}" class="btn waves-effect waves-light  btn-success pull-right"><i class="fa fa-pencil"></i>&nbsp;@lang('buttons.core.setor.create') </a>
                     </div>
                 
                     <div class="table-responsive m-t-40">

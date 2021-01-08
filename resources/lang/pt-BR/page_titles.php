@@ -253,16 +253,18 @@ return [
             'create'          => 'Novo Documento',
             'update'          => 'Alterando Documento',
             'import'          => 'Importação de Documento',
-            'factory'         => 'Criação do Documento'
+            'factory'         => 'Criação do Documento',
+            'print'           => 'Imprimir Documento',
+            'presence-list'   => 'Lista de Presença'
         ],
 
         'documento-externo' => [
             'index'           => 'Documentos Externos',
             'create'          => 'Novo Documento Externo',
             'update'          => 'Alterando Documento Externo'
+        ],
+        'bpmn' => [
+            'create'          => 'Novo BPMN'
         ]
-
-        
-
     ]
 ];

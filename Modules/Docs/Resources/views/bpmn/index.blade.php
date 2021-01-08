@@ -2,12 +2,12 @@
 
 
 
-@section('page_title', __('page_titles.portal.enterprise.linked_groups'))
+@section('page_title', __('page_titles.docs.bpmn.create'))
 
 
 @section('breadcrumbs')
 
-    <li class="breadcrumb-item"><a href="{{ route('core.home') }}"> Dashboard </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('docs.home') }}"> Home </a></li>
     <li class="breadcrumb-item active"> BPMN 2.0 </li>    
 
     

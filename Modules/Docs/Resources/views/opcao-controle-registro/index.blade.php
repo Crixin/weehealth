@@ -28,7 +28,7 @@
                     @endif
                     
                     <div class="col-md-12">
-                        <a href="{{ route('docs.opcao-controle.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.opcao-cotrole-registro.create') </a>
+                        <a href="{{ route('docs.opcao-controle.novo') }}" class="btn waves-effect waves-light  btn-success pull-right"><i class="fa fa-pencil"></i>&nbsp;@lang('buttons.docs.opcao-cotrole-registro.create') </a>
                     </div>
                 
                     <div class="table-responsive m-t-40">

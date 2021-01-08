@@ -106,14 +106,21 @@ Route::group(['middleware' => ['auth']], function () {
 
 
         Route::group(['prefix' => 'documento','as' => 'docs.'], function() {
-            Route::any('',              ['as' => 'documento',         'uses' => 'DocumentoController@index']);
-            Route::get('novo',          ['as' => 'documento.novo',    'uses' => 'DocumentoController@create']);
-            Route::post('salvar',       ['as' => 'documento.salvar',  'uses' => 'DocumentoController@store']);
-            Route::get('editar/{id}',   ['as' => 'documento.editar',  'uses' => 'DocumentoController@edit']);
-            Route::post('alterar',      ['as' => 'documento.alterar', 'uses' => 'DocumentoController@update']);
-            Route::post('deletar',      ['as' => 'documento.deletar', 'uses' => 'DocumentoController@destroy']);
+            Route::any('',                    ['as' => 'documento',         'uses' => 'DocumentoController@index']);
+            Route::get('novo',                ['as' => 'documento.novo',    'uses' => 'DocumentoController@create']);
+            Route::post('salvar',             ['as' => 'documento.salvar',  'uses' => 'DocumentoController@store']);
+            Route::get('editar/{id}',         ['as' => 'documento.editar',  'uses' => 'DocumentoController@edit']);
+            Route::post('alterar',            ['as' => 'documento.alterar', 'uses' => 'DocumentoController@update']);
+            Route::post('deletar',            ['as' => 'documento.deletar', 'uses' => 'DocumentoController@destroy']);
             Route::post('importar-documento', ['as' => 'documento.importar-documento', 'uses' => 'DocumentoController@importarDocumento']);
             Route::post('criar-documento',    ['as' => 'documento.criar-documento', 'uses' => 'DocumentoController@criarDocumento']);
+            Route::post('documento-por-tipo', ['as' => 'documento.documento-por-tipo', 'uses' => 'DocumentoController@buscaDocumentoPorTipo']);
+            Route::post('iniciar-validacao',  ['as' => 'documento.iniciar-validacao', 'uses' => 'DocumentoController@iniciarValidacao']);
+            Route::post('iniciar-revisao',    ['as' => 'documento.iniciar-revisao', 'uses' => 'DocumentoController@iniciarRevisao']);
+            Route::post('obsoleto',           ['as' => 'documento.obsoleto', 'uses' => 'DocumentoController@tornarObsoleto']);
+            Route::get('{id}/lista-presenca', ['as' => 'documento.lista-presenca',	'uses' => 'DocumentoController@listaPresenca']);
+            Route::get('{id}/imprimir/{tipo}',['as' => 'documento.imprimir',	'uses' => 'DocumentoController@imprimir']);
+            
             Route::post('proxima-etapa',    ['as' => 'documento.proxima-etapa', 'uses' => 'DocumentoController@proximaEtapa']);
         });
 
@@ -157,8 +164,8 @@ Route::group(['middleware' => ['auth']], function () {
         });
         
 
-        Route::group(['prefix' => 'workflow', 'as' => 'docs.'], function() {
-            Route::get('',['as' => 'workflow',   'uses' => 'WorkflowController@index']);
+        Route::group(['prefix' => 'bpmn', 'as' => 'docs.'], function() {
+            Route::get('',['as' => 'bpmn',   'uses' => 'BpmnController@index']);
         });
 
 

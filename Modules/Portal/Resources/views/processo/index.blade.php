@@ -29,7 +29,7 @@
                 @endif
 
                 <div class="col-md-12">
-                    <a href="{{ route('portal.processo.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.portal.process.create') </a>
+                    <a href="{{ route('portal.processo.novo') }}" class="btn waves-effect waves-light  btn-success pull-right"><i class="fa fa-pencil"></i>&nbsp;@lang('buttons.portal.process.create') </a>
                 </div>
             
                 <div class="table-responsive m-t-40">

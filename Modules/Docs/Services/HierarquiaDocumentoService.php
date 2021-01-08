@@ -28,4 +28,9 @@ class HierarquiaDocumentoService
     {
         return $this->hierarquiaDocumentoRepository->delete($delete);
     }
+
+    public function firstOrCreate(array $data)
+    {
+        return $this->hierarquiaDocumentoRepository->firstOrCreate($data);
+    }
 }

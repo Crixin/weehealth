@@ -6,10 +6,8 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Docs\Repositories\DocumentoRepository;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{Auth, DB, Storage};
 use App\Classes\Helper;
-use Illuminate\Support\Facades\Auth;
 use Modules\Core\Repositories\GrupoRepository;
 use Modules\Core\Repositories\ParametroRepository;
 use Modules\Core\Repositories\SetorRepository;
@@ -17,7 +15,7 @@ use Modules\Core\Repositories\UserRepository;
 use Modules\Docs\Repositories\AgrupamentoUserDocumentoRepository;
 use Modules\Docs\Repositories\DocumentoItemNormaRepository;
 use Modules\Docs\Repositories\HierarquiaDocumentoRepository;
-use Modules\Docs\Repositories\DocumentoVinculadoRepository;
+use Modules\Docs\Repositories\ListaPresencaRepository;
 use Modules\Docs\Repositories\NormaRepository;
 use Modules\Docs\Repositories\TipoDocumentoRepository;
 use Modules\Docs\Repositories\UserEtapaDocumentoRepository;
@@ -47,6 +45,7 @@ class DocumentoController extends Controller
     protected $tipoDocumentoService;
     protected $workFlowService;
     protected $workFlowRepository;
+    protected $listaPresencaRepository;
 
     public function __construct(
         DocumentoRepository $documentoRepository,
@@ -62,6 +61,7 @@ class DocumentoController extends Controller
         HierarquiaDocumentoRepository $hierarquiaDocumentoRepository,
         WorkflowRepository $workflowRepository,
         GrupoRepository $grupoRepository,
+        ListaPresencaRepository $listaPresencaRepository,
         DocumentoService $documentoService,
         TipoDocumentoService $tipoDocumentoService,
         WorkflowService $workFlowService
@@ -79,6 +79,7 @@ class DocumentoController extends Controller
         $this->hierarquiaDocumentorepository = $hierarquiaDocumentoRepository;
         $this->workFlowRepository = $workflowRepository;
         $this->grupoRepository = $grupoRepository;
+        $this->listaPresencaRepository = $listaPresencaRepository;
         $this->documentoService = $documentoService;
         $this->tipoDocumentoService = $tipoDocumentoService;
         $this->workFlowService = $workFlowService;
@@ -395,13 +396,6 @@ class DocumentoController extends Controller
         );
         $documentos = array_column(json_decode(json_encode($documentos), true), 'nome', 'id');
 
-        /**Selecionados */
-        $buscaPaiSelecionados = $this->hierarquiaDocumentorepository->findBy(
-            [
-                ['documento_id', '=', $id]
-            ]
-        );
-        $documentosPaiSelecionados  = array_column(json_decode(json_encode($buscaPaiSelecionados), true), 'documento_pai_id');
 
         $buscaVinculadosSelecionados = $this->vinculoDocumentoRepository->findBy(
             [
@@ -453,7 +447,6 @@ class DocumentoController extends Controller
                 'gruposUsuarios',
                 'normas',
 
-                'documentosPaiSelecionados',
                 'documentosVinculadosSelecionados',
                 'normasSelecionados',
                 'grupoTreinamentoSelecionado',
@@ -592,7 +585,7 @@ class DocumentoController extends Controller
         );
 
         $codigo = $this->documentoService->gerarCodigoDocumento($request->tipoDocumento, $buscaSetores->id);
-
+        
         return view('docs::documento.import',
             [
                 'titulo'          => $request->tituloDocumento,
@@ -641,9 +634,10 @@ class DocumentoController extends Controller
         $docPath = $request->tituloDocumento . $buscaPrefixo . '00.' . ($tipoArquivo == 'ation/vnd.ms-excel' ? 'xlsx' : 'docx');
 
         /**SALVAR NA PASTA DO ONLYOFFICE */
+        $storagePath = Storage::disk('speed_office')->getDriver()->getAdapter()->getPathPrefix();
+        Helper::base64ToImage($buscaTipoDocumento->modelo_documento, $storagePath . $docPath);
 
-
-        return view('docs::documento.factoryDoc',
+        return view('docs::documento.factory',
             [
                 'titulo'          => $request->tituloDocumento,
                 'nivelAcesso'     => $niveisAcesso[$request->nivelAcesso],
@@ -729,8 +723,7 @@ class DocumentoController extends Controller
             $request->tipoDocumento,
             'comportamento_aprovacao'
         );
-
-        foreach ($etapas as $key => $value) {
+        foreach ($etapas['etapas'] as $key => $value) {
             $variavel = 'grupo' . $value['id'];
             if (!empty($request->$variavel)) {
                 $foreach = !is_array($request->$variavel) ? json_decode($request->$variavel) : $request->$variavel;
@@ -770,4 +763,89 @@ class DocumentoController extends Controller
 
         ];
     }
+
+    public function buscaDocumentoPorTipo(Request $request)
+    {
+        $idDocumento = $request->documento;
+        try {
+
+            $buscaDocHierarquiaSelecionado = $this->hierarquiaDocumentorepository->findBy(
+                [
+                    ['documento_id', '=', $idDocumento]
+                ]
+            );
+            $docSelecionado = array_column(json_decode(json_encode($buscaDocHierarquiaSelecionado), true), 'documento_pai_id');
+            $buscaTodosDocumento = $this->documentoRepository->findBy(
+                [
+                    ['tipo_documento_id', '=', $request->tipo]
+                ],
+                [],
+                [
+                    ['nome', 'ASC']
+                ]
+            );
+            $retorno = [];
+            foreach ($buscaTodosDocumento as $key => $value) {
+                $aux = [
+                    "id" => $value->id,
+                    "nome" => $value->nome,
+                    "select" => in_array($value->id, $docSelecionado) ? true : false
+                ];
+                array_push($retorno, $aux);
+            }
+
+            return response()->json(['response' => 'sucesso', 'data' => $retorno]);
+        } catch (\Exception $th) {
+            return response()->json(['response' => 'erro']);
+        }
+    }
+
+    public function iniciarValidacao(Request $request)
+    {
+
+    }
+
+    public function iniciarRevisao(Request $request)
+    {
+
+    }
+
+    public function tornarObsoleto(Request $request)
+    {
+
+    }
+
+    public function listaPresenca($id)
+    {
+        $documento = $this->documentoRepository->find($id);
+        $listaPresenca = $this->listaPresencaRepository->findBy(
+            [
+                ['documento_id', '=', $id]
+            ]
+        );
+        return view('docs::documento.presence-list', compact('documento', 'listaPresenca'));
+    }
+
+    public function imprimir($id, $tipo)
+    {
+        $mode           = $tipo == 2 ? "with_stripe" : 'without_stripe';
+        $message        = "Sucesso! O documento foi atualizado com sucesso e as tarjas para impressão foram aplicadas.";
+        $messageClass   = "success";
+        $filename       = '';
+        $documento      = $this->documentoRepository->find($id);
+        $setorQualidade = $this->parametroRepository->getParametro('ID_SETOR_QUALIDADE');
+        $historico = $this->workFlowRepository->findBy(
+            [
+                ['documento_id', '=', $id],
+                ['versao_documento', '=', $documento->revisao]
+            ],
+            [],
+            [
+                ['created_at', 'ASC']
+            ]
+        );
+        /** Cria registro de Intensão de impressão do documento */
+        return view('docs::documento.print', compact('mode', 'documento', 'setorQualidade', 'message', 'messageClass', 'filename', 'historico'));
+    }
+
 }

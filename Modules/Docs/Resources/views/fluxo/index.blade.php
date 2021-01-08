@@ -28,7 +28,7 @@
                     @endif
                     
                     <div class="col-md-12">
-                        <a href="{{ route('docs.fluxo.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.docs.fluxo.create') </a>
+                        <a href="{{ route('docs.fluxo.novo') }}" class="btn waves-effect waves-light  btn-success pull-right"><i class="fa fa-pencil"></i>&nbsp;@lang('buttons.docs.fluxo.create') </a>
                     </div>
                 
                     <div class="table-responsive m-t-40">
