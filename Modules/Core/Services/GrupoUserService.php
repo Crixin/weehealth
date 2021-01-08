@@ -75,7 +75,7 @@ class GrupoUserService
             $elaboradoresGrupo = $this->grupoUserRepository->findOneBy(
                 [
                     ['grupo_id', '=', $data['grupo_id']],
-                    ['perfil_id', '=', $idPerfilElaborador, 'HAS', 'coreUser'],
+                    ['perfil_id', '=', $idPerfilElaborador, 'HAS', 'coreUsers'],
                 ],
             );
 
