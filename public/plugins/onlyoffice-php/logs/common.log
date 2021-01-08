@@ -5894,3 +5894,8 @@ getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storag
 getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento30_rev00.doc
 getVirtualPath virtPath: http://192.168.14.14:8000/plugins/onlyoffice-php/Storage/
 getStoragePath result: C:\xampp\htdocs\weehealth\public\plugins\onlyoffice-php\Storage\Teste documento30_rev00.doc
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: /var/www/weehealth/public/plugins/onlyoffice-php/Storage/sadasdas_rev00.docx
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: /var/www/weehealth/public/plugins/onlyoffice-php/Storage/sadasdas_rev00.docx

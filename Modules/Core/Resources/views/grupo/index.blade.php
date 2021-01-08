@@ -18,46 +18,50 @@
         <div class="card">
             <div class="card-body">
 
-                    @if(Session::has('message'))
-                        @component('components.alert')@endcomponent
 
-                        {{ Session::forget('message') }}
-                    @endif
-                    
-                    <div class="col-md-12">
-                        <a href="{{ route('core.grupo.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.core.group.create') </a>
-                    </div>
+                @component('components.validation-error', ['errors'])@endcomponent
+
+                @if(Session::has('message'))
+                    @component('components.alert')@endcomponent
+
+                    {{ Session::forget('message') }}
+                @endif
                 
-                    <div class="table-responsive m-t-40">
-                        <table id="dataTable-grupos" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
-                            <thead>
+                      
+                <div class="col-md-12">
+                    <a href="{{ route('core.grupo.novo') }}" class="btn waves-effect waves-light btn-lg btn-success pull-right">@lang('buttons.core.group.create') </a>
+                </div>
+            
+                <div class="table-responsive m-t-40">
+                    <table id="dataTable-grupos" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Controle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($grupos as $grupo)
                                 <tr>
-                                    <th>Nome</th>
-                                    <th>Descrição</th>
-                                    <th>Controle</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($grupos as $grupo)
-                                    <tr>
-                                        <td>{{ $grupo->nome }}</td>
-                                        <td>{{ $grupo->descricao }}</td>
-                                        <td>
-                                            <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $grupo->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
-                                            <a href="{{ route('core.grupo.editar', ['id' => $grupo->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                    <td>{{ $grupo->nome }}</td>
+                                    <td>{{ $grupo->descricao }}</td>
+                                    <td>
+                                        <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $grupo->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
+                                        <a href="{{ route('core.grupo.editar', ['id' => $grupo->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
 
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{ route('core.grupo.usuariosVinculados', ['id' => $grupo->id]) }}"> <i class="mdi mdi-account-settings-variant"></i> @lang('buttons.core.group.users') </a>  
-                                                </div>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="{{ route('core.grupo.usuariosVinculados', ['id' => $grupo->id]) }}"> <i class="mdi mdi-account-settings-variant"></i> @lang('buttons.core.group.users') </a>  
                                             </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
         </div>
@@ -129,16 +133,12 @@
             deleteIt.then(resolvedValue => {
                 // ajaxMethod('POST', "/grupos/" + idGrupo, {}).then(response => {
                 ajaxMethod('POST', "{{ URL::route('core.grupo.deletar') }}", obj).then(response => {
-                    if(response.response != 'erro') {
-                        swal2_success("Excluído!", "Grupo excluído com sucesso.");
-                    } else {
-                        swal2_alert_error_support("Tivemos um problema ao excluir o grupo.");
-                    }
+                    location.reload();  
                 }, error => {
-                    console.log(error);
+                    location.reload();  
                 });
             }, error => {
-                swal.close();
+                location.reload();  
             });
         });
     </script>
