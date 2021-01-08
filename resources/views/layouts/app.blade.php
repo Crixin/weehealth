@@ -109,7 +109,14 @@
                        
                         @foreach (json_decode(file_get_contents(base_path() . '/modules_statuses.json')) as $key => $module)
                             @if ($module)
-                                <li class="nav-item"> <a class="nav-link @if ($url == strtolower($key)) active @endif" href="{{route(strtolower($key) . '.home')}}" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down"><b>{{ $key }}</b></span></a></li>   
+                                <li class="nav-item"> 
+                                    <a class="nav-link @if ($url == strtolower($key)) active @endif" href="{{route(strtolower($key) . '.home')}}" role="tab">
+                                        <span class="hidden-sm-up">
+                                            <i class="ti-home"></i>
+                                        </span>
+                                        <span class="hidden-xs-down"><b>{{ $key == "Core" ? "Geral" : $key}}</b></span>
+                                    </a>
+                                </li>   
                             @endif
                         @endforeach
                         

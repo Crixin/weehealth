@@ -13,7 +13,15 @@
             @php
                 $menus = (array) json_decode(file_get_contents(base_path() . '/menu.json'));
                 $menus = array_intersect_key($menus, array_flip($modules));
+
+                if (array_key_exists("Core", $menus)) {
+                    $menus["Geral"] = $menus["Core"];
+                    unset($menus["Core"]);
+                }
+
+                ksort($menus);
             @endphp
+            
             @foreach ($menus as $key => $menu)
                 <h3> {{$key}} </h3>
                 <div class="ml-5">

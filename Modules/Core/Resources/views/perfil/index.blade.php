@@ -28,6 +28,7 @@
                     <table id="dataTable-empresas" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th>Id</th>
                                 <th>Nome</th>
                                 <th>Controle</th>
                             </tr>
@@ -35,6 +36,7 @@
                         <tbody>
                             @foreach ($perfis as $perfil)
                                 <tr>
+                                    <td>{{ $perfil->id }}</td>
                                     <td>{{ $perfil->nome }}</td>
                                     <td>
                                         <button class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{$perfil->id}}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </button>
