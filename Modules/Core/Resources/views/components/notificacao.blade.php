@@ -1,5 +1,26 @@
 <div class="form-body">
     <div class="row p-t-20">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                <span class="float-left"><b>Exemplos de Tags disponíveis:</b></span>
+                <br>
+                <ul class="float-left mr-5">
+                    <li>DATA_ELABORACAO       <span class="text-muted">- Tag: &ltDATA_ELABORACAO&gt</span></li>
+                    <li>ELABORADOR            <span class="text-muted">- Tag: &ltELABORADOR&gt</span></li>
+                    <li>APROVADOR             <span class="text-muted">- Tag: &ltAPROVADOR&gt</span></li>
+                    <li>DATA_REVISAO          <span class="text-muted">- Tag: &ltDATA_REVISAO&gt</span></li>
+                    <li>VERSAO                <span class="text-muted">- Tag: &ltVERSAO&gt</span></li>
+                    <li>CODIGO_DOCUMENTO      <span class="text-muted">- Tag: &ltCODIGO_DOCUMENTO&gt</span></li>
+                </ul>
+                <ul>
+                    <li>TITULO_DOCUMENTO      <span class="text-muted">- Tag: &ltTITULO_DOCUMENTO&gt</span></li>
+                    <li>COLABORADORES         <span class="text-muted">- Tag: &ltCOLABORADORES&gt</span></li>
+                    <li>VERIFICADOR_QUALIDADE <span class="text-muted">- Tag: &ltVERIFICADOR_QUALIDADE&gt</span></li>
+                    <li>TIPO_DOCUMENTO        <span class="text-muted">- Tag: &ltTIPO_DOCUMENTO&gt</span></li>
+                    <li>SETOR                 <span class="text-muted">- Tag: &ltSETOR&gt</span></li>
+                </ul>
+            </div>
+        </div>
         <div class="col-md-6">
            <div class="form-group required{{ $errors->has('nome') ? ' has-error' : '' }}">
                 {!! Form::label('nome', 'Nome', ['class' => 'control-label']) !!}
@@ -42,26 +63,6 @@
             </div>
             
         </div>
-        <div class="col-md-6">
-            <label></label>
-            <div class="alert alert-info">
-                <span><b>Exemplos de Tags disponíveis:</b></span>
-                <ul>
-                    <li>DATA_ELABORACAO       <span class="text-muted">- Tag utilizada &ltDATA_ELABORACAO&gt</span></li>
-                    <li>ELABORADOR            <span class="text-muted">- Tag utilizada &ltELABORADOR&gt</span></li>
-                    <li>APROVADOR             <span class="text-muted">- Tag utilizada &ltAPROVADOR&gt</span></li>
-                    <li>DATA_REVISAO          <span class="text-muted">- Tag utilizada &ltDATA_REVISAO&gt</span></li>
-                    <li>VERSAO                <span class="text-muted">- Tag utilizada &ltVERSAO&gt</span></li>
-                    <li>CODIGO_DOCUMENTO      <span class="text-muted">- Tag utilizada &ltCODIGO_DOCUMENTO&gt</span></li>
-                    <li>TITULO_DOCUMENTO      <span class="text-muted">- Tag utilizada &ltTITULO_DOCUMENTO&gt</span></li>
-                    <li>COLABORADORES         <span class="text-muted">- Tag utilizada &ltCOLABORADORES&gt</span></li>
-                    <li>VERIFICADOR_QUALIDADE <span class="text-muted">- Tag utilizada &ltVERIFICADOR_QUALIDADE&gt</span></li>
-                    <li>TIPO_DOCUMENTO        <span class="text-muted">- Tag utilizada &ltTIPO_DOCUMENTO&gt</span></li>
-                    <li>SETOR                 <span class="text-muted">- Tag utilizada &ltSETOR&gt</span></li>
-                </ul>
-                <!--<small><b>Lembre-se:</b> são aceitos apenas 4 dígitos!</small>-->
-            </div>
-        </div>
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -72,5 +73,4 @@
             </div>
         </div>
     </div>
-   
 </div>
