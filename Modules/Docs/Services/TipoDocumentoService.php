@@ -50,19 +50,19 @@ class TipoDocumentoService
             'vinculo_obrigatorio_outros_doc' => $buscaTipoDocumento->vinculo_obrigatorio_outros_documento,
             'tipo_documento_pai' => $buscaTipoDocumento->tipo_documento_pai_id
         ];
-        $i = 0;
+        
         foreach ($buscaTipoDocumento->docsFluxo->docsEtapaFluxo as $key => $value2) {
             if ($value2->$comportamento == true) {
-                $etapas[$i] =
+                $etapas[] =
                 [
                     'id'    => $value2->id,
                     'nome'  => ucfirst($value2->nome),
                     'ordem' => $value2->ordem,
                     'obrigatorio' => $value2->obrigatorio
                 ];
-                $i++;
             }
         }
+        
         $this->ordenacaoArray($etapas, 'ordem');
         $tipoDocumento['etapas'] = $etapas;
         return $tipoDocumento;

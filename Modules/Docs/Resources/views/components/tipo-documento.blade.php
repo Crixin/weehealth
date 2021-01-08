@@ -56,10 +56,10 @@
             <div class="alert alert-info">
                 <span><b>Exemplos de valores aceitos:</b></span>
                 <ul>
-                    <li>0       <span class="text-muted">- Código gerado será [1, 2, 3....]</span></li>
-                    <li>00       <span class="text-muted">- Código gerado será [01, 02, 03....]</span></li>
-                    <li>000     <span class="text-muted">- Código gerado será [001, 002, 003....]</span></li>
-                    <li>0000    <span class="text-muted">- Código gerado será [001.01, 002.01, 003.01....]</span></li>
+                    <li>0       <span class="text-muted">- Código gerado será [1, 2, 3...]</span></li>
+                    <li>00      <span class="text-muted">- Código gerado será [01, 02, 03...]</span></li>
+                    <li>000     <span class="text-muted">- Código gerado será [001, 002, 003...]</span></li>
+                    <li>0000    <span class="text-muted">- Código gerado será [0001, 0002, 0003...]</span></li>
                 </ul>
                 <small><b>Lembre-se:</b> são aceitos apenas 4 dígitos!</small>
             </div>
@@ -185,7 +185,7 @@
                     <td class="text-center text-nowrap">
                         <div class="switch">
                             <label>Não
-                                {!! Form::checkbox('vinculoObrigatorioOutrosDocs', '1', !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->vinculo_obrigatorio_outros_documento : true, ['id' => 'permitirImpressao', 'class'=> 'switch-elaborador']) !!}<span class="lever switch-col-light-blue"></span>Sim
+                                {!! Form::checkbox('vinculoObrigatorioOutrosDocs', '1', !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->vinculo_obrigatorio_outros_documento : false, ['id' => 'permitirImpressao', 'class'=> 'switch-elaborador']) !!}<span class="lever switch-col-light-blue"></span>Sim
                             </label>
                         </div>
                     </td>

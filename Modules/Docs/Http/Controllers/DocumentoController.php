@@ -2,30 +2,25 @@
 
 namespace Modules\Docs\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
+use App\Classes\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Docs\Repositories\DocumentoRepository;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\{Auth, DB, Storage};
-use App\Classes\Helper;
-use Modules\Core\Repositories\GrupoRepository;
-use Modules\Core\Repositories\ParametroRepository;
-use Modules\Core\Repositories\SetorRepository;
-use Modules\Core\Repositories\UserRepository;
-use Modules\Docs\Repositories\AgrupamentoUserDocumentoRepository;
-use Modules\Docs\Repositories\DocumentoItemNormaRepository;
-use Modules\Docs\Repositories\HierarquiaDocumentoRepository;
-use Modules\Docs\Repositories\ListaPresencaRepository;
-use Modules\Docs\Repositories\NormaRepository;
-use Modules\Docs\Repositories\TipoDocumentoRepository;
-use Modules\Docs\Repositories\UserEtapaDocumentoRepository;
-use Modules\Docs\Repositories\VinculoDocumentoRepository;
-use Modules\Docs\Repositories\WorkflowRepository;
-use Modules\Docs\Services\DocumentoService;
-use Modules\Docs\Services\TipoDocumentoService;
-use Modules\Docs\Services\WorkflowService;
-
-use function PHPSTORM_META\map;
+use Modules\Docs\Repositories\{
+    DocumentoRepository,
+    AgrupamentoUserDocumentoRepository,
+    DocumentoItemNormaRepository,
+    HierarquiaDocumentoRepository,
+    ListaPresencaRepository,
+    NormaRepository,
+    TipoDocumentoRepository,
+    UserEtapaDocumentoRepository,
+    VinculoDocumentoRepository,
+    WorkflowRepository
+};
+use Modules\Core\Repositories\{GrupoRepository, ParametroRepository, SetorRepository, UserRepository};
+use Modules\Docs\Services\{DocumentoService, TipoDocumentoService, WorkflowService};
 
 class DocumentoController extends Controller
 {
@@ -65,7 +60,7 @@ class DocumentoController extends Controller
         DocumentoService $documentoService,
         TipoDocumentoService $tipoDocumentoService,
         WorkflowService $workFlowService
-    ){
+    ) {
         $this->documentoRepository = $documentoRepository;
         $this->setorRepository = $setorRepository;
         $this->userRepository = $userRepository;
