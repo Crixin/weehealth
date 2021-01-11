@@ -48,7 +48,7 @@
                                                 <div class="list-group">
                                                     @if(count($revisoes) > 1)
                                                         @foreach($revisoes as $rev)
-                                                            {!! Form::open(['route' => 'documentacao.make-doc-from-name', 'method' => 'POST', 'target' => '_blank']) !!}
+                                                            {!! Form::open(['route' => 'docs.documento', 'method' => 'POST', 'target' => '_blank']) !!}
                                                                 {!! Form::hidden('nome', $rev) !!}
                                                                 {!! Form::hidden('tipo_doc', $tipo_doc) !!}
                                                                 {!! Form::hidden('document_id', $document_id) !!}
