@@ -803,7 +803,16 @@ class DocumentoController extends Controller
     public function visualizar($id)
     {
         $documento = $this->documentoRepository->find($id);
-        $historico = [];
+        $historico = $this->workFlowRepository->findBy(
+            [
+                ['documento_id', '=', $id],
+                ['versao_documento', '=', $documento->revisao]
+            ],
+            [],
+            [
+                ['created_at', 'ASC']
+            ]
+        );
         $revisoes  = [];
         $docPath  = '';
         return view('docs::documento.view', compact('id', 'documento', 'historico', 'revisoes', 'docPath'));

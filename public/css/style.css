@@ -4008,7 +4008,8 @@ Timeline page
   font-size: 1.4em;
   line-height: 50px;
   color: #fff;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .timeline > li.timeline-inverted > .timeline-panel {
   float: right; }
