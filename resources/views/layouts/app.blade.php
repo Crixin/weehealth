@@ -464,6 +464,10 @@
     <link href="{{ asset('plugins/bootstrap-select/bootstrap-select.min.css') }}" rel="stylesheet">
     <script src="{{ asset('plugins/bootstrap-select/bootstrap-select.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap-select/defaults-pt_BR.js') }}"></script>
+
+     <!-- jquery Dropify -->
+     <link rel="stylesheet" href="{{ asset('plugins/dropify/dist/css/dropify.min.css') }}">
+     <script src="{{ asset('plugins/dropify/dist/js/dropify.min.js') }}"></script>
    
     <!-- jquery validade -->
     <script src="{{asset('js/jquery.validate.min.js')}}"></script>
@@ -503,14 +507,6 @@
 
     </script>
 
-    <script>
-        //BUSCANDO DASH E PROCESSO
-        ajaxMethod().then(resp => {
-            
-        })
-    </script>
-     
-    
     @yield('footer')
 
 
