@@ -35,6 +35,7 @@
                 <form method="POST" action="{{route('docs.documento.alterar')}}" name="updateDocumento" id="updateDocumento"> 
                     {{ csrf_field() }}
                     <input type="hidden" name="idDocumento" id="idDocumento" value="{{$documento->id}}">
+                    <input type="hidden" name="revisao" id="revisao" value="{{$documento->revisao}}">
                     @component(
                         'docs::components.documento', 
                         [

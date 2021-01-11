@@ -72,16 +72,17 @@
                         </div>
 
                         <!-- Editor -->
-                        <div class="container iframe_box">
-                            <iframe width="100%" id="speed-onlyoffice-editor" src="" data-src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=review&user=&fileID=').$docPath }}"> </iframe>
+                        <div class="row iframe_box">
+                            <iframe width="100%" id="speed-onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=review&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
                         </div>
+                        
                         <!-- End Editor -->
 
                         <div class="col-lg-12 col-md-12">
                             <br>
                             <div class=" pull-right">
-                                <button   type="button" class="btn btn-info Anexos" data-id="{{$documento->id}}">Anexos</button>
-                                <a href="{{ route('docs.documento') }}" type="button" class="btn btn-inverse">Voltar</a>
+                                <button   type="button" class="btn btn-info Anexos" data-id="{{$documento->id}}">@lang('buttons.general.attachments')</button>
+                                <a href="{{ route('docs.documento') }}" type="button" class="btn btn-inverse">@lang('buttons.general.back')</a>
                             </div>
                         </div>
                     </div>

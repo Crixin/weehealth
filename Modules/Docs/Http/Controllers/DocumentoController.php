@@ -283,8 +283,20 @@ class DocumentoController extends Controller
      */
     public function store(Request $request)
     {
-        $cadastro = $this->montaRequest($request);
+        //VERIFICA SE AÇÃO EH IMPORTACAO (Copiar arquivo para o OnllyOffice)
+        if ($request->acao == 'IMPORTAR') {
+            $file = $request->file('doc_uploaded');
+            $extensao   = $file->getClientOriginalExtension();
+            $nome = $file->getClientOriginalName();
 
+            $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
+            $docPath = $request->tituloDocumento . $buscaPrefixo . '00.' . ($extensao == 'xlsx' || $extensao == 'xls'  ? 'xlsx' : 'docx');
+            //$storagePath = Storage::disk('speed_office')->getDriver()->getAdapter()->getPathPrefix();
+            //dd("cp " . $file->getPathname(). " ". $storagePath . $docPath );
+            //shell_exec( "cp " . $file->getPathname(). " ". $storagePath . $docPath );
+            Storage::disk('speed_office')->put($docPath, file_get_contents($file));
+        }
+        $cadastro = $this->montaRequest($request);
         $buscaTipoDocumento = $this->tipoDocumentorepository->find($request->get('tipoDocumento'));
         $fluxo = $buscaTipoDocumento->docsFluxo;
         $retorno = $this->documentoService->create($cadastro);
@@ -480,7 +492,6 @@ class DocumentoController extends Controller
     {
         dd('proxima etapa');
         $idDocumento = $request->idDocumento;
-
     }
 
     public function montaRequestWorkFlow(
@@ -528,6 +539,7 @@ class DocumentoController extends Controller
                 ['id', '=', $request->tipoDocumento]
             ]
         );
+        
         $codigo = $this->documentoService->gerarCodigoDocumento($request->tipoDocumento, $buscaSetores->id);
         return view('docs::documento.import',
             [
@@ -697,7 +709,7 @@ class DocumentoController extends Controller
             "justificativa_rejeicao_etapa"   => null,
             "justificativa_cancelar_etapa"   => null,
             "ged_documento_id"               => null,
-            "revisao"                        => '1.0',
+            "revisao"                        => $request->idDocumento ? $request->revisao : '00',
             "hierarquia_documento"           => $montaRequestHierarquiaDocumento,
             "vinculo_documento"              => $montaRequestVinculoDocumento,
             "grupo_treinamento"              => $montaRequestTreinamento,
@@ -813,8 +825,12 @@ class DocumentoController extends Controller
                 ['created_at', 'ASC']
             ]
         );
-        $revisoes  = [];
-        $docPath  = '';
+        $revisoes  = Helper::getListAllReviewsDocument($documento->nome);
+
+        $tipoArquivo = 'ation/vnd.ms-excel';
+        $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
+        $docPath = $documento->nome . $buscaPrefixo . '00.' . ($tipoArquivo == 'ation/vnd.ms-excel' ? 'xlsx' : 'docx');
+    
         return view('docs::documento.view', compact('id', 'documento', 'historico', 'revisoes', 'docPath'));
     }
 }

@@ -104,7 +104,7 @@
                             <div class="col-lg-12 col-md-12">
                                 <br>
                                 <div class=" pull-right">
-                                    <a href="{{ route('docs.documento') }}" type="button" class="btn btn-inverse">Voltar</a>
+                                    <a href="{{ route('docs.documento') }}" type="button" class="btn btn-inverse">@lang('buttons.general.back')</a>
                                 </div>
                             </div>
                         

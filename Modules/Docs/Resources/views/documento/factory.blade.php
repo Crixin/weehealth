@@ -74,6 +74,7 @@
                         </div>
                         {!! Form::open(['route' => 'docs.documento.salvar', 'method' => 'POST', 'id' => 'form-create-document', 'enctype' => 'multipart/form-data']) !!}
                             {{ csrf_field() }}
+                            <input type="hidden" name="acao" value="CRIAR">
                             <input type="hidden" name="codigoDocumento" id="codigoDocumento" value="{{$codigo}}">
                             <!--campos do formulario anterior -->
                             @component(

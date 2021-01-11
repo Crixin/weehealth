@@ -6,7 +6,7 @@ use Session;
 use App\Classes\Constants;
 use DateTime;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\{Auth, Log};
+use Illuminate\Support\Facades\{Auth, Log, Storage};
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Modules\Portal\Model\{Grupo, EmpresaUser, EmpresaGrupo};
 use Modules\Core\Model\{Empresa, Parametro};
@@ -580,5 +580,22 @@ class Helper
         }
 
         return $stylizedList;
+    }
+
+    public static function getListAllReviewsDocument($nome)
+    {
+        $arr = [];
+        $files = Storage::disk('speed_office')->allFiles();
+        $parametroRepository = new ParametroRepository();
+        $buscaPrefixo = $parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
+
+        foreach ($files as $file) {
+            $part1 = $file;
+            $final = explode($buscaPrefixo, $part1)[0];
+            if ($final == $nome) {
+                $arr[] = $part1;
+            }
+        }
+        return $arr;
     }
 }

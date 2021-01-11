@@ -58,6 +58,7 @@
                         @endcomponent
                         {!! Form::open(['route' => 'docs.documento.salvar', 'method' => 'POST', 'id' => 'form-upload-document', 'enctype' => 'multipart/form-data']) !!}
                             {{ csrf_field() }}
+                            <input type="hidden" name="acao" value="IMPORTAR">
                             <input type="hidden" name="codigoDocumento" id="codigoDocumento" value="{{$codigo}}">
                             
                             <!--campos do formulario anterior -->
@@ -73,7 +74,7 @@
                                 <div class="card-body">
                                     <h4 class="card-title"> Upload de documentos </h4>
                                     <label for="input-file-now">Por favor, anexe o arquivo que você deseja controlar dentro do sistema.</label>
-                                    {!! Form::file('doc_uploaded', ['class' => 'dropify', 'id' => 'input-file-now', 'required' => 'required']) !!}
+                                    {!! Form::file('doc_uploaded', ['class' => 'dropify', 'id' => 'input-file-now', 'required' => 'required', 'accept' => '.doc, .xls, .DOC, .XLS, .docx, .xlsx, .DOCX, .XLSX']) !!}
                                 </div>
                             </div>
                             <div class="form-actions ">
@@ -163,6 +164,19 @@
                 contentType: false,
                 processData: false,
                 success: function(ret) {
+                    console.log(ret);
+                    
+                    if(ret.response == 'erro'){
+                        swal2_alert_error_support("Tivemos um problema ao importar o documento.");
+                    }
+                    
+                    let id = ret.data
+                    let url ="{!! route('docs.documento.visualizar',['id'=>':id']); !!}";
+                    url = url.replace(':id', id);
+                    document.location.href=url;
+                    
+
+                    /*
                     if($('#permitirAnexo').val() == true){
                         $('#idDocumento').val(ret.data);
                         $("#modal-anexos").modal({ backdrop: 'static', keyboard: false});
@@ -171,7 +185,10 @@
                         swal2_success_not_reload("Sucesso!", "Documento criado com sucesso.");
                         document.location.href="{!! route('docs.documento'); !!}";
                     }
-                    
+                    */
+                },
+                error: function(erro){
+                    console.log(erro);
                 }
             });
              

@@ -42,7 +42,8 @@ return [
         'import'         => 'Importar',
         'next'           => 'Proximo',
         'complete'       => 'Concluir',
-        'clear'          => 'Limpar'
+        'clear'          => 'Limpar',
+        'attachments'    => 'Anexos'
 
     ],
 
