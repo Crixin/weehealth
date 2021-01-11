@@ -24,7 +24,7 @@ class Grupo extends Model
      */
     public function coreUsers()
     {
-        return $this->belongsToMany('Modules\Core\Model\User', 'Modules\Core\Model\GrupoUser');
+        return $this->belongsToMany('Modules\Core\Model\User', 'Modules\Core\Model\GrupoUser')->whereNull('core_grupo_user.deleted_at');
     }
 
 

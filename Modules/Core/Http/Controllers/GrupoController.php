@@ -7,15 +7,26 @@ use Modules\Core\Model\{User, Grupo, GrupoUser};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Modules\Core\Repositories\GrupoRepository;
+use Modules\Core\Repositories\{GrupoRepository, SetorRepository};
+use Modules\Core\Services\{GrupoUserService, GrupoService};
 
 class GrupoController extends Controller
 {
     protected $grupoRepository;
+    private $setorRepository;
+    private $grupoUserService;
+    private $grupoService;
 
-    public function __construct(GrupoRepository $gruporepository)
-    {
-        $this->grupoRepository = $gruporepository;
+    public function __construct(
+        GrupoRepository $grupoRepository,
+        SetorRepository $setorRepository,
+        GrupoUserService $grupoUserService,
+        GrupoService $grupoService
+    ) {
+        $this->grupoRepository = $grupoRepository;
+        $this->setorRepository = $setorRepository;
+        $this->grupoUserService = $grupoUserService;
+        $this->grupoService = $grupoService;
     }
 
     public function index()
@@ -78,31 +89,29 @@ class GrupoController extends Controller
 
     public function linkedUsers($_id)
     {
-        $grupo = Grupo::find($_id);
-        $todosUsuarios = User::select('id', 'name')->orderBy('name')->get();
-        return view('core::grupo.usuarios_vinculados', compact('grupo', 'todosUsuarios'));
+        $grupo = $this->grupoRepository->find($_id, ['coreUsers']);
+        $setores = $this->setorRepository->findAll(['coreUsers', 'coreUsers.corePerfil']);
+        return view('core::grupo.usuarios_vinculados', compact('grupo', 'setores'));
     }
 
 
     public function updateLinkedUsers(Request $request)
     {
-        $grupo = Grupo::find($request->get('idGrupo'));
+        $data['grupo_id'] = $request->idGrupo;
+        $data['user_id'] = $request->usuarios_grupo;
+        
+        $grupo = $this->grupoRepository->find($data['grupo_id']);
 
-        // Deleta todos usuários que já estão vinculados ao grupo
-        foreach ($grupo->coreUsers as $key => $user) {
-            $user->pivot->delete();
+        $reponse = $this->grupoUserService->store($data);
+
+        if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
+            return $reponse;
         }
 
-        if ($request->usuarios_grupo !== null) {
-            foreach ($request->get('usuarios_grupo') as $key => $value) {
-                $gu = new GrupoUser();
-                $gu->grupo_id = (int) $request->get('idGrupo');
-                $gu->user_id = $value;
-                $gu->save();
-            }
+        if ($reponse) {
+            return redirect()->back();
         }
 
-        Helper::setNotify('Usuários vinculados ao grupo ' . $grupo->nome . ' atualizados com sucesso!', 'success|check-circle');
         return redirect()->back()->withInput();
     }
 
@@ -125,6 +134,7 @@ class GrupoController extends Controller
         return true;
     }
 
+
     public function montaRequest(Request $request)
     {
         return [
@@ -132,5 +142,11 @@ class GrupoController extends Controller
             "descricao" => $request->get('descricao'),
             "sigla" => (strlen($request->get('nome')) >= 3) ? strtoupper(substr($request->get('nome'), 0, 3)) : "SIGLA"
         ];
+    }
+
+
+    public function destroy(request $request)
+    {
+        return $this->grupoService->delete($request->grupo_id);
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\{Auth, DB};
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\Auth\JWTController;
 use Modules\Core\Model\{Empresa, Grupo, Parametro, User, Setup};
+use Modules\Core\Services\{GrupoService};
 use Modules\Core\Repositories\{EmpresaRepository, ParametroRepository, UserRepository, SetupRepository};
 
 class AjaxController extends Controller
@@ -17,13 +18,15 @@ class AjaxController extends Controller
     protected $paramentroRepository;
     protected $userRepository;
     protected $setupRepository;
+    protected $grupoService;
 
-    public function __construct(EmpresaRepository $empresaRepository, ParametroRepository $paramentroRepository, UserRepository $userRepository, SetupRepository $setupRepository)
+    public function __construct(EmpresaRepository $empresaRepository, ParametroRepository $paramentroRepository, UserRepository $userRepository, SetupRepository $setupRepository, GrupoService $grupoService)
     {
         $this->empresaRepository = $empresaRepository;
         $this->paramentroRepository = $paramentroRepository;
         $this->userRepository = $userRepository;
         $this->setupRepository = $setupRepository;
+        $this->grupoService = $grupoService;
     }
 
     // EMPRESA
@@ -136,17 +139,4 @@ class AjaxController extends Controller
             return response()->json(['response' => 'erro']);
         }
     }
-
-    // GRUPO
-    public function deleteGroup(Request $request)
-    {
-        $_id = $request->grupo_id;
-        try {
-            Grupo::destroy($_id);
-            return response()->json(['response' => 'sucesso']);
-        } catch (\Exception $th) {
-            return response()->json(['response' => 'erro']);
-        }
-    }
-
 }

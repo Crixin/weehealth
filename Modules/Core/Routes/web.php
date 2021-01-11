@@ -133,7 +133,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('alterar',                  ['as' => 'grupo.alterar',               'uses' => 'GrupoController@updateGroup']);
             Route::get('usuarios-vinculados/{id}',  ['as' => 'grupo.usuariosVinculados',    'uses' => 'GrupoController@linkedUsers']);
             Route::post('vincular-usuarios',        ['as' => 'grupo.vincularUsuarios',      'uses' => 'GrupoController@updateLinkedUsers']);
-            Route::post('deletar',	                ['as' => 'grupo.deletar',               'uses' => 'AjaxController@deleteGroup']);
+            Route::post('deletar',                  ['as' => 'grupo.deletar',               'uses' => 'GrupoController@destroy']);
         });
 
         Route::group(['prefix' => 'atualizar'], function () {

@@ -56,9 +56,14 @@ abstract class BaseRepository
     }
 
 
-    public function delete($_delete)
+    public function delete($delete, $column = "")
     {
-        return is_array($_delete) ? $this->model::where($_delete)->delete() : $this->model::find($_delete)->delete();
+        return is_array($delete) ? $this->model::whereIn($column, $delete)->delete() : $this->model::find($delete)->delete();
+    }
+    
+    public function forceDelete($delete, $column = "")
+    {
+        return is_array($delete) ? $this->model::whereIn($column, $delete)->forceDelete() : $this->model::find($delete)->forceDelete();
     }
 
 

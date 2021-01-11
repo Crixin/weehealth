@@ -40,12 +40,12 @@
                         <div class="row p-t-20">
                             <div class="col-md-12 m-b-30">
                                 <select multiple id="usuarios_grupo" name="usuarios_grupo[]">
-                                    @foreach ($todosUsuarios as $usuario)
-                                        @if ($grupo->coreUsers->contains('id', $usuario->id))
-                                            <option value="{{ $usuario->id }}" selected>{{ $usuario->name }}</option>
-                                        @else
-                                            <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
-                                        @endif
+                                    @foreach ($setores as $setor)
+                                    <optgroup label="{{ $setor->nome }}">
+                                        @foreach ($setor->coreUsers as $user)
+                                            <option value="{{ $user->id }}" {{ $grupo->coreUsers->contains('id', $user->id) ? "selected" : "" }} > {{ $user->name }} ( {{ $user->corePerfil->nome}} )  </option>
+                                        @endforeach
+                                        </optgroup>
                                     @endforeach
                                 </select>
                                 <div class="button-box m-t-20"> 
@@ -78,6 +78,7 @@
     <script>
         $('#usuarios_grupo').multiSelect({ 
             keepOrder: true,
+            selectableOptgroup: true,
             selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Pesquisar usuários do sistema'>",
             selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='Pesquisar usuários já vinculados ao grupo'>",
             afterInit: function(ms){

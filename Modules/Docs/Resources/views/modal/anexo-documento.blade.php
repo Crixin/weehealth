@@ -85,7 +85,6 @@
         //Busca Anexos documentos
         buscaAnexo();
         
-        
         // Basic
         $('.dropify').dropify();
 
@@ -153,6 +152,7 @@
 
         $("#form-save-attachment").submit(function(e){
             e.preventDefault();
+            $('#lista-anexos-cadastrados').attr('class', 'collapse');
             if( $("#anexo_escolhido").val() == null  ||  $("#anexo_escolhido").val() == "" ) {
                 showToast('Opa!', 'Você precisa escolher um arquivo.', 'error');
                 return;

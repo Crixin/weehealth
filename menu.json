@@ -276,7 +276,7 @@
                             "name": "portal_dashboard_view",
                             "permissao": ["portal_dashboard_view"],
                             "descricao": "Visualizar",
-                            "icone": "mdi mdi-magnify"
+                            "icone": "mdi mdi-file-find"
                         }
                     }
                 }
@@ -756,6 +756,32 @@
                     "name": "docs_documento_exc",
                     "descricao": "Exclusão",
                     "icone": "mdi mdi-delete"
+                },
+                "Ações": {
+                    "descricao": "Ações",
+                    "icone": "",
+                    "filhos_perfil": {
+                        "upload_anexo": {
+                            "name": "docs_documento_upload_anexos",
+                            "descricao": "Upload de Anexos",
+                            "icone": "mdi mdi-upload"
+                        },
+                        "view_lista_presenca": {
+                            "name": "docs_documento_view_lista_presenca",
+                            "descricao": "Visualizar Lista de Presença",
+                            "icone": "mdi mdi-file-find"
+                        },
+                        "view_anexos": {
+                            "name": "docs_documento_view_anexos",
+                            "descricao": "Visualizar Anexos",
+                            "icone": "mdi mdi-file-find"
+                        },
+                        "download_documentos": {
+                            "name": "docs_documento_download_documentos",
+                            "descricao": "Download de Documentos",
+                            "icone": "mdi mdi-download"
+                        }
+                    }
                 }
             }
         },
