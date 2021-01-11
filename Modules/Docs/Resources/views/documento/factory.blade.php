@@ -23,7 +23,7 @@
         <div class="card">
             <div class="card-body">
 
-
+                <input type="hidden" name="permitirAnexo" id="permitirAnexo" value="{{$permissaoEtapa->permitir_anexo}}">
                 @component('components.validation-error', ['errors'])@endcomponent
 
                 @if(Session::has('message'))
@@ -122,9 +122,14 @@
                 contentType: false,
                 processData: false,
                 success: function(ret) {
-                    $('#idDocumento').val(ret.data);
-                    $("#modal-anexos").modal({ backdrop: 'static', keyboard: false});
-                    $("#btn-lista-anexos").trigger('click');
+                    if($('#permitirAnexo').val() == true){
+                        $('#idDocumento').val(ret.data);
+                        $("#modal-anexos").modal({ backdrop: 'static', keyboard: false});
+                        $("#btn-lista-anexos").trigger('click');
+                    }else{
+                        swal2_success_not_reload("Sucesso!", "Documento criado com sucesso.");
+                        document.location.href="{!! route('docs.documento'); !!}";
+                    }
                 }
             });
              

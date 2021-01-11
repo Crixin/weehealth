@@ -122,7 +122,7 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('{id}/imprimir/{tipo}',['as' => 'documento.imprimir',	'uses' => 'DocumentoController@imprimir']);
             Route::get('visualizar/{id}',     ['as' => 'documento.visualizar',  'uses' => 'DocumentoController@visualizar']);
             
-            Route::post('proxima-etapa',    ['as' => 'documento.proxima-etapa', 'uses' => 'DocumentoController@proximaEtapa']);
+            Route::get('proxima-etapa',    ['as' => 'documento.proxima-etapa', 'uses' => 'DocumentoController@proximaEtapa']);
         });
 
         /**ANEXO */
