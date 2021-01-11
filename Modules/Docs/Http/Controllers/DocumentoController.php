@@ -22,10 +22,9 @@ use Modules\Docs\Repositories\UserEtapaDocumentoRepository;
 use Modules\Docs\Repositories\VinculoDocumentoRepository;
 use Modules\Docs\Repositories\WorkflowRepository;
 use Modules\Docs\Services\DocumentoService;
+use Modules\Docs\Services\RegistroImpressoesService;
 use Modules\Docs\Services\TipoDocumentoService;
 use Modules\Docs\Services\WorkflowService;
-
-use function PHPSTORM_META\map;
 
 class DocumentoController extends Controller
 {
@@ -40,12 +39,13 @@ class DocumentoController extends Controller
     protected $agrupamentoUserDocumentoRepository;
     protected $vinculoDocumentoRepository;
     protected $hierarquiaDocumentorepository;
+    protected $workFlowRepository;
+    protected $listaPresencaRepository;
     protected $grupoRepository;
     protected $documentoService;
     protected $tipoDocumentoService;
     protected $workFlowService;
-    protected $workFlowRepository;
-    protected $listaPresencaRepository;
+    protected $registroImpressoesService;
 
     public function __construct(
         DocumentoRepository $documentoRepository,
@@ -64,7 +64,8 @@ class DocumentoController extends Controller
         ListaPresencaRepository $listaPresencaRepository,
         DocumentoService $documentoService,
         TipoDocumentoService $tipoDocumentoService,
-        WorkflowService $workFlowService
+        WorkflowService $workFlowService,
+        RegistroImpressoesService $registroImpressoesService
     ){
         $this->documentoRepository = $documentoRepository;
         $this->setorRepository = $setorRepository;
@@ -83,6 +84,7 @@ class DocumentoController extends Controller
         $this->documentoService = $documentoService;
         $this->tipoDocumentoService = $tipoDocumentoService;
         $this->workFlowService = $workFlowService;
+        $this->registroImpressoesService = $registroImpressoesService;
     }
 
     /**
@@ -287,28 +289,14 @@ class DocumentoController extends Controller
     public function store(Request $request)
     {
         $cadastro = $this->montaRequest($request);
+
         $buscaTipoDocumento = $this->tipoDocumentorepository->find($request->get('tipoDocumento'));
         $fluxo = $buscaTipoDocumento->docsFluxo;
         $retorno = $this->documentoService->create($cadastro);
         if ($retorno) {
-            if ($fluxo->docsEtapaFluxo[0]->permitir_anexo == true) {
-                //abre tela anexos
-                return redirect()->route('docs.anexo', ['id' => $retorno]);
-            } else {
-                $myRequest = new \Illuminate\Http\Request();
-                $myRequest->setMethod('POST');
-                $myRequest->request->add(['idDocumento' => $retorno]);
-                //metodo que executa as configurações da etapa
-                $retornoProximaEtapa = $this->proximaEtapa($myRequest);
-                if ($retornoProximaEtapa) {
-                    Helper::setNotify('Novo documento criado com sucesso!', 'success|check-circle');
-                    return redirect()->route('docs.documento');
-                }
-            }
+            return response()->json(['response' => 'sucesso', 'data' => $retorno]);
         }
-
-        Helper::setNotify("Um erro ocorreu ao gravar o documento. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
-        return redirect()->route('docs.documento');
+        return response()->json(['response' => 'erro']);
     }
 
     /**
@@ -497,45 +485,6 @@ class DocumentoController extends Controller
     {
         $idDocumento = $request->idDocumento;
 
-        /*
-        $buscaDocumento = $this->documentoRepository->find($idDocumento);
-
-        $buscaUltimaEtapa = $this->workFlowRepository->findBy(
-            [
-                ['documento_id', '=', $idDocumento],
-                ['versao_documento', '=', $buscaDocumento->revisao, 'AND']
-            ],
-            [],
-            [
-                ['created_at', 'DESC']
-            ]
-        );
-        $etapaAtual = $buscaUltimaEtapa->isEmpty() ? 1 : $buscaUltimaEtapa->etapa_fluxo_id + 1;
-        dd($etapaAtual);
-        */
-
-        /*
-        $fluxo = $buscaDocumento->docsTipoDocumento->docsFluxo;
-        if ($fluxo->docsEtapaFluxo[0]->enviar_notificacao == true) {
-            $idNotificacao = $fluxo->docsEtapaFluxo[0]->notificacao_id;
-            //chama servico email
-        }
-
-        //Cria notificação para todos usuários do setor Qualidade;
-        //chama servico de notificacao usuario
-
-        //Cria registro workflow
-        $createWorkFlow = $this->montaRequestWorkFlow(
-            'Documento em elaboração',
-            '',
-            false,
-            $idDocumento,
-            $fluxo->docsEtapaFluxo[0]->id,
-            $buscaDocumento->revisao
-        );
-        $this->workFlowService->create($createWorkFlow);
-        */
-
     }
 
     public function montaRequestWorkFlow(
@@ -585,7 +534,6 @@ class DocumentoController extends Controller
         );
 
         $codigo = $this->documentoService->gerarCodigoDocumento($request->tipoDocumento, $buscaSetores->id);
-        
         return view('docs::documento.import',
             [
                 'titulo'          => $request->tituloDocumento,
@@ -655,7 +603,6 @@ class DocumentoController extends Controller
 
     public function montaRequest(Request $request)
     {
-
         #Hierarquia Documentos
         $montaRequestHierarquiaDocumento = [];
         if (!empty($request->documentoPai)) {
@@ -768,7 +715,6 @@ class DocumentoController extends Controller
     {
         $idDocumento = $request->documento;
         try {
-
             $buscaDocHierarquiaSelecionado = $this->hierarquiaDocumentorepository->findBy(
                 [
                     ['documento_id', '=', $idDocumento]
@@ -828,24 +774,41 @@ class DocumentoController extends Controller
 
     public function imprimir($id, $tipo)
     {
-        $mode           = $tipo == 2 ? "with_stripe" : 'without_stripe';
-        $message        = "Sucesso! O documento foi atualizado com sucesso e as tarjas para impressão foram aplicadas.";
-        $messageClass   = "success";
-        $filename       = '';
-        $documento      = $this->documentoRepository->find($id);
-        $setorQualidade = $this->parametroRepository->getParametro('ID_SETOR_QUALIDADE');
-        $historico = $this->workFlowRepository->findBy(
-            [
-                ['documento_id', '=', $id],
-                ['versao_documento', '=', $documento->revisao]
-            ],
-            [],
-            [
-                ['created_at', 'ASC']
-            ]
-        );
-        /** Cria registro de Intensão de impressão do documento */
-        return view('docs::documento.print', compact('mode', 'documento', 'setorQualidade', 'message', 'messageClass', 'filename', 'historico'));
+        try {
+            /** Cria registro de Intensão de impressão do documento */
+            $mode           = $tipo == 2 ? "with_stripe" : 'without_stripe';
+            $message        = "Sucesso! O documento foi atualizado com sucesso e as tarjas para impressão foram aplicadas.";
+            $messageClass   = "success";
+            $filename       = '';
+            $documento      = $this->documentoRepository->find($id);
+            $setorQualidade = $this->parametroRepository->getParametro('ID_SETOR_QUALIDADE');
+            $historico = $this->workFlowRepository->findBy(
+                [
+                    ['documento_id', '=', $id],
+                    ['versao_documento', '=', $documento->revisao]
+                ],
+                [],
+                [
+                    ['created_at', 'ASC']
+                ]
+            );
+
+            //O SISTEMA ESTA DUPLICADO A GRAVACAO NA TABELA DE IMPRESSOES BUG 
+            //$this->registroImpressoesService->create(['documento_id' => $id, 'user_id' => Auth::user()->id]);
+
+            return view('docs::documento.print', compact('mode', 'documento', 'setorQualidade', 'message', 'messageClass', 'filename', 'historico'));
+        } catch (\Throwable $th) {
+            Helper::setNotify('Um erro ocorreu ao tentar imprimir o documento', 'danger|close-circle');
+            return redirect()->route('docs.documento');
+        }
     }
 
+    public function visualizar($id)
+    {
+        $documento = $this->documentoRepository->find($id);
+        $historico = [];
+        $revisoes  = [];
+        $docPath  = '';
+        return view('docs::documento.view', compact('id', 'documento', 'historico', 'revisoes', 'docPath'));
+    }
 }

@@ -160,7 +160,7 @@
                                 @foreach ($documentos as $documento)
                                     <tr>
                                         <td>{{ $documento->codigo }}</td>
-                                        <td>{{ $documento->nome }}</td>
+                                        <td><a href="{{ route('docs.documento.visualizar', ['id' => $documento->id]) }}"">{{ $documento->nome }}</a></td>
                                         <td>{{ $documento->vencimento }}</td>
                                         <td>{{ $documento->revisao }}</td>
                                         <td>{{ ''}}</td>

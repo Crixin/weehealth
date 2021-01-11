@@ -33,26 +33,23 @@ class AnexoDocumentoController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index($id)
+    public function index(Request $request)
     {
-        $documento = $this->documentoRepository->find($id);
-        $anexos = $this->anexoRepository->findBy(
-            [
-                ['documento_id', '=', $id]
-            ],
-            [],
-            [
-                ['nome', 'ASC']
-            ]
-        );
+        try {
+            $anexos = $this->anexoRepository->findBy(
+                [
+                    ['documento_id', '=', $request->id]
+                ],
+                [],
+                [
+                    ['created_at', 'ASC']
+                ]
+            );
 
-        return view('docs::anexo.index',
-            [
-                'id'     => $id,
-                'titulo' => $documento->nome,
-                'anexos' => $anexos
-            ]
-        );
+            return response()->json(['response' => 'sucesso', 'data' => $anexos]);
+        } catch (\Exception $th) {
+            return response()->json(['response' => 'erro']);
+        }
     }
 
     /**
@@ -89,10 +86,10 @@ class AnexoDocumentoController extends Controller
                 });
             }
             Helper::setNotify('Novo(s) anexo(s) criado com sucesso!', 'success|check-circle');
-            return redirect()->back()->withInput();
+            return true;
         } catch (\Throwable $th) {
             Helper::setNotify('Um erro ocorreu ao gravar o anexo', 'danger|close-circle');
-            return redirect()->back()->withInput();
+            return false;
         }
     }
 

@@ -72,9 +72,9 @@
 
                             </div>
                         </div>
-                        {!! Form::open(['route' => 'docs.documento.salvar', 'method' => 'POST', 'id' => 'form-upload-document', 'enctype' => 'multipart/form-data']) !!}
+                        {!! Form::open(['route' => 'docs.documento.salvar', 'method' => 'POST', 'id' => 'form-create-document', 'enctype' => 'multipart/form-data']) !!}
                             {{ csrf_field() }}
-                            {!! Form::hidden('codigoDocumento', $codigo) !!}
+                            <input type="hidden" name="codigoDocumento" id="codigoDocumento" value="{{$codigo}}">
                             <!--campos do formulario anterior -->
                             @component(
                                 'docs::components.input-hidden-criacao-documento', 
@@ -84,9 +84,6 @@
                             )
                             @endcomponent
                             <!--Fim campos do formulario anterior -->
-
-
-                            
                             <div class="form-actions ">
                                 <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
                                 <a href="{{ route('docs.documento.novo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
@@ -99,5 +96,39 @@
             </div>
         </div>
     </div>
-    
+@endsection
+
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+@include('docs::modal/anexo-documento',
+    [
+        'comportamento_modal' => 'CRIACAO'
+    ]
+)
+
+@section('footer')
+    <script>
+    $(document).ready(function(){
+        $("#form-create-document").submit(function(e){
+            e.preventDefault();
+            var form = $(this);
+            var formData = new FormData($(this)[0]);
+            var url = form.attr('action');
+            $.ajax({  
+                type: "POST",  
+                url: url,  
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(ret) {
+                    $('#idDocumento').val(ret.data);
+                    $("#modal-anexos").modal({ backdrop: 'static', keyboard: false});
+                    $("#btn-lista-anexos").trigger('click');
+                }
+            });
+             
+        });
+    });
+    </script>
 @endsection

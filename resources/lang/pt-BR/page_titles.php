@@ -255,7 +255,8 @@ return [
             'import'          => 'Importação de Documento',
             'factory'         => 'Criação do Documento',
             'print'           => 'Imprimir Documento',
-            'presence-list'   => 'Lista de Presença'
+            'presence-list'   => 'Lista de Presença',
+            'view'            => 'Visualização do Documento'
         ],
 
         'documento-externo' => [

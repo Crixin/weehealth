@@ -13,7 +13,7 @@
 @section('content')
     
     <!-- jQuery -->
-    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -21,44 +21,15 @@
                     <button class="btn  btn-info" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2"><i class="mdi mdi-chart-timeline"></i> Linha do Tempo</button>
                 </div>
                 <!-- Timeline do Documento -->
-                <div class="row">
-                    <div class="col col-centered">
-                        <div class="collapse multi-collapse" id="multiCollapseExample2">
-                            <div class="card card-body text-center">
+                @component(
+                    'docs::components.linha-tempo-documento', 
+                    [
+                        'historico' => $historico
+                    ]
+                )
+                @endcomponent
+                <!-- FIM Timeline do Documento -->
 
-                                <div class="row">
-                                    <div class="col-md-3"></div>
-                                    <div class="col-md-6">
-                                        <div class="row" style="font-size:14px">
-                                            <div class="form-group col-md-12">
-                                                <?php \Carbon\Carbon::setLocale('pt_BR') ?>
-                                                <ul class="timeline text-center">
-                                                    @foreach( $historico as $key => $hist )
-                                                        <li class=" {{ $key%2 == 0 ? 'timeline-inverted' : '' }}">
-                                                            <div class="timeline-badge success"  >
-                                                                <i class="mdi mdi-file-document"></i>
-                                                            </div>
-                                                            <div class="timeline-panel">
-                                                                <div class="timeline-heading">
-                                                                    <h4 class="timeline-title">{{ ($hist->coreUsers->name != null) ? $hist->coreUsers->name : 'Usuário Inválido' }}</h4>
-                                                                    <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ $hist->created_at->diffForHumans() }}</small> </p>
-                                                                </div>
-                                                                <div class="timeline-body">
-                                                                    <p>{{ $hist->descricao }}</p>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    @endforeach     
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>    
-                                </div>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!-- Start Page Content -->
                 <div class="row">
                     @if ($mode === "with_stripe")
@@ -147,9 +118,8 @@
 
 @endsection
 
-
-
 @section('footer')
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('plugins/blockUI/jquery.blockUI.js') }}"></script>
     <script>
         $('.iframe_box').block({ 

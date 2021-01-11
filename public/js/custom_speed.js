@@ -140,7 +140,18 @@ function swal2_alert_error_not_reload(text) {
     });
 }
 
+/**
+ * Success Message and not Page Reload
+ */
 
+function swal2_success_not_reload(title, text) {
+    swal({   
+        title: title,   
+        text: text,
+        type: "success"
+    }, function(){   
+    });
+}
 
 
 

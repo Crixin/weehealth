@@ -1,11 +1,6 @@
 @extends('layouts.app')
 
-@extends('layouts.menuDocs')
-@yield('menu')
-
-
 @section('page_title', __('page_titles.docs.documento.import'))
-
 
 @section('breadcrumbs')
 
@@ -58,14 +53,13 @@
                                 'text_copiaControlada' => $copiaControlada,
                                 'text_tipo_documento'  => $tipoDocumento,
                                 'text_classificacao'   => $classificacao
-                                
-                                
                             ]
                         )
                         @endcomponent
                         {!! Form::open(['route' => 'docs.documento.salvar', 'method' => 'POST', 'id' => 'form-upload-document', 'enctype' => 'multipart/form-data']) !!}
                             {{ csrf_field() }}
-                            {!! Form::hidden('codigoDocumento', $codigo) !!}
+                            <input type="hidden" name="codigoDocumento" id="codigoDocumento" value="{{$codigo}}">
+                            
                             <!--campos do formulario anterior -->
                             @component(
                                 'docs::components.input-hidden-criacao-documento', 
@@ -74,11 +68,7 @@
                                 ]
                             )
                             @endcomponent
-
-                           
                             <!--Fim campos do formulario anterior -->
-
-
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title"> Upload de documentos </h4>
@@ -100,13 +90,16 @@
     </div>
     
 @endsection
-
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+@include('docs::modal/anexo-documento',
+    [
+        'comportamento_modal' => 'CRIACAO'
+    ]
+)
 @section('footer')
-<link rel="stylesheet" href="{{ asset('plugins/dropify/dist/css/dropify.min.css') }}">
-<script src="{{ asset('plugins/dropify/dist/js/dropify.min.js') }}"></script>
     <script>
     $(document).ready(function(){
-            // Basic
+        // Basic
         $('.dropify').dropify();
 
         // Translated
@@ -143,7 +136,42 @@
             } else {
                 drDestroy.init();
             }
-        })
+        });
+
+
+        $("#form-upload-document").submit(function(e){
+            e.preventDefault();
+
+            if( $("#input-file-now").val() == null  ||  $("#input-file-now").val() == "" ) {
+                showToast('Opa!', 'Você precisa escolher um arquivo.', 'error');
+                return;
+            }
+            /*if( $("#codigoDocumento").val() == null  ||  $("#codigoDocumento").val() == "" ) {
+                showToast('Opa!', 'Você precisa fornecer um código para que o documento seja salvo.', 'error');
+                return;
+            }
+            */
+            var form = $(this);
+            var formData = new FormData($(this)[0]);
+            var url = form.attr('action');
+            $.ajax({  
+                type: "POST",  
+                url: url,  
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(ret) {
+                    $('#idDocumento').val(ret.data);
+                    $("#modal-anexos").modal({ backdrop: 'static', keyboard: false});
+                    $("#btn-lista-anexos").trigger('click');
+                }
+            });
+             
+        });
+
+
     });
     </script>
 @endsection

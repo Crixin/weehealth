@@ -117,6 +117,7 @@ class DocumentoService
                     $value['documento_id'] = $documento->id;
                     $this->userEtapaDocumentoService->create($value);
                 }
+
                 $this->tipoDocumentoService->atualizaUltimoCodigoTipoDocumento($data['tipo_documento_id']);
                 return  $documento->id;
             });

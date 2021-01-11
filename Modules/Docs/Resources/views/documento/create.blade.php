@@ -45,7 +45,6 @@
                             'documentosVinvulados' => $documentos,
                             'gruposUsuarios' => $gruposUsuarios,
                             'normas' => $normas,
-
                             'documentosPaiSelecionados' => [],
                             'documentosVinculadosSelecionados' => [],
                             'normasSelecionados' => [],
