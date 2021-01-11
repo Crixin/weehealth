@@ -478,6 +478,7 @@ class DocumentoController extends Controller
 
     public function proximaEtapa(Request $request)
     {
+        dd('proxima etapa');
         $idDocumento = $request->idDocumento;
 
     }
@@ -527,7 +528,6 @@ class DocumentoController extends Controller
                 ['id', '=', $request->tipoDocumento]
             ]
         );
-
         $codigo = $this->documentoService->gerarCodigoDocumento($request->tipoDocumento, $buscaSetores->id);
         return view('docs::documento.import',
             [
@@ -539,7 +539,8 @@ class DocumentoController extends Controller
                 'tipoDocumento'   => $buscaTipoDocumento->nome,
                 'validade'        => $buscaTipoDocumento->periodo_vigencia . " Meses",
                 'codigo'          => $codigo,
-                'request'         => $request
+                'request'         => $request,
+                'permissaoEtapa'  => $buscaTipoDocumento->docsFluxo->docsEtapaFluxo[0]
             ]
         );
     }
@@ -592,6 +593,7 @@ class DocumentoController extends Controller
                 'codigo'          => $codigo,
                 'request'         => $request,
                 'docPath'         => $docPath,
+                'permissaoEtapa'  => $buscaTipoDocumento->docsFluxo->docsEtapaFluxo[0]
             ]
         );
     }
@@ -801,7 +803,16 @@ class DocumentoController extends Controller
     public function visualizar($id)
     {
         $documento = $this->documentoRepository->find($id);
-        $historico = [];
+        $historico = $this->workFlowRepository->findBy(
+            [
+                ['documento_id', '=', $id],
+                ['versao_documento', '=', $documento->revisao]
+            ],
+            [],
+            [
+                ['created_at', 'ASC']
+            ]
+        );
         $revisoes  = [];
         $docPath  = '';
         return view('docs::documento.view', compact('id', 'documento', 'historico', 'revisoes', 'docPath'));

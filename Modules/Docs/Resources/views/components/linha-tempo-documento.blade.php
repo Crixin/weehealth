@@ -11,11 +11,11 @@
                                 <ul class="timeline text-center">
                                     @foreach( $historico as $key => $hist )
                                         <li class=" {{ $key%2 == 0 ? 'timeline-inverted' : '' }}">
-                                            <div class="timeline-badge success"  >
-                                                <i class="mdi mdi-file-document"></i>
+                                            <div class="timeline-badge success"  style="display: flex;justify-content: center">
+                                                <i class="mdi mdi-file-document" style="display: flex;align-items: center"></i>
                                             </div>
                                             <div class="timeline-panel">
-                                                <div class="timeline-heading">
+                                                <div class="timeline-heading" >
                                                     <h4 class="timeline-title">{{ ($hist->coreUsers->name != null) ? $hist->coreUsers->name : 'Usuário Inválido' }}</h4>
                                                     <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ $hist->created_at->diffForHumans() }}</small> </p>
                                                 </div>
