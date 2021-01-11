@@ -199,7 +199,7 @@
     <legend>Complemento</legend>
     <hr>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="form-group">
                 <div class="checkbox{{ $errors->has('listaPresenca') ? ' has-error' : '' }}">
                     <label class="control-label">Lista de Presença</label>
@@ -215,13 +215,11 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group required{{ $errors->has('tipoAprovacao') ? ' has-error' : '' }}">
+        <div class="col-md-6 div-tipo-aprovacao hide">
+            <div class="form-group required {{ $errors->has('tipoAprovacao') ? ' has-error' : '' }}">
                 {!! Form::label('tipoAprovacao', 'Tipo Aprovação', ['class' => 'control-label']) !!}
             
-                {!! Form::select('tipoAprovacao', $tiposAprovacao, !empty($etapaEdit) ?  $etapaEdit->tipo_aprovacao_id : null, ['id' => 'tipoAprovacao', 'class' => 'form-control selectpicker ', 'required' => true, 'placeholder' => __('components.selectepicker-default') ]) !!}
+                {!! Form::select('tipoAprovacao', $tiposAprovacao, !empty($etapaEdit) ?  $etapaEdit->tipo_aprovacao_id : null, ['id' => 'tipoAprovacao', 'class' => 'form-control selectpicker', 'required' => true, 'placeholder' => __('components.selectepicker-default') ]) !!}
                 <small class="text-danger">{{ $errors->first('tipoAprovacao') }}</small>
             </div>
         </div>
@@ -240,9 +238,14 @@
 <script>
     $(document).ready(function() {
         notificacao();
-        
+        tipoAprovacao();
+
         $('#enviarNotificacao').on('change',function(){
             notificacao();
+        });
+        
+        $('#comportamentoAprovacao').on('change', function () {
+            tipoAprovacao();
         });
 
     });
@@ -257,5 +260,19 @@
             $('#iconeNotificacao').removeAttr('class')
         }
     }
+
+    function tipoAprovacao()
+    {
+        if ($("#comportamentoAprovacao").is(':checked')) {
+            $("#tipoAprovacao").prop("disabled", false);
+            $("#tipoAprovacao").selectpicker("refresh");
+            $(".div-tipo-aprovacao").show();
+        } else {
+            $("#tipoAprovacao").prop("disabled", true);
+            $(".div-tipo-aprovacao").hide();
+        }
+
+    }
+
 </script>
 @endsection
