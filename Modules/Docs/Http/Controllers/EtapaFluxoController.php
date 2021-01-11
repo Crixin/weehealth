@@ -183,7 +183,6 @@ class EtapaFluxoController extends Controller
 
             Helper::setNotify('Informações da etapa atualizadas com sucesso!', 'success|check-circle');
         } catch (\Throwable $th) {
-            dd($th);
             Helper::setNotify('Um erro ocorreu ao atualizar a etapa', 'danger|close-circle');
         }
         return redirect()->back()->withInput();
@@ -217,7 +216,7 @@ class EtapaFluxoController extends Controller
                 'descricao'          => 'required|string|min:5|max:200',
                 'status'             => 'required|numeric',
                 'perfil'             => 'required|numeric',
-                'tipoAprovacao'      => 'required|numeric',
+                'tipoAprovacao'      => 'sometimes|required|numeric',
             ]
         );
 
