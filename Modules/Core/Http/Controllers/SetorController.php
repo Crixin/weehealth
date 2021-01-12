@@ -169,7 +169,7 @@ class SetorController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nome'               => empty($request->get('idSetor')) ? 'required|string|min:5|max:100|unique:core_setor' : '',
+                'nome'               => empty($request->get('idSetor')) ? 'required|string|min:5|max:100|unique:core_setor,nome' : 'required|string|min:5|max:100|unique:core_setor,nome,' . $request->idSetor,
                 'descricao'          => 'required|string|min:5|max:200',
                 'sigla'              => 'required|string',
             ]

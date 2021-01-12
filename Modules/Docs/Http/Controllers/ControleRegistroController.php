@@ -202,7 +202,7 @@ class ControleRegistroController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'codigo'          => empty($request->get('idControleRegistro')) ? 'required|string|unique:docs_controle_registros' : '',
+                'codigo'          => empty($request->get('idControleRegistro')) ? 'required|string|unique:docs_controle_registros,codigo' : 'required|string|unique:docs_controle_registros,codigo,' . $request->idControleRegistro,
                 'descricao'       => 'required|string|min:5|max:100',
                 'responsavel'     => 'required|numeric',
                 'meio'            => 'required|numeric',

@@ -25,11 +25,7 @@ class SeedDocsCreateParametroNivelAcessoTableSeeder extends Seeder
             "2": "Restrito",
             "3": "Livre"
         }';
-        $newParametro->valor_usuario = '{
-            "1": "Confidencial",
-            "2": "Restrito",
-            "3": "Livre"
-        }';
+        $newParametro->valor_usuario = '';
         $newParametro->ativo = true;
         $newParametro->save();
 
@@ -41,9 +37,7 @@ class SeedDocsCreateParametroNivelAcessoTableSeeder extends Seeder
         '{
             "1": "Qualidade"
         }';
-        $newParametro->valor_usuario = '{
-            "1": "Qualidade"
-        }';
+        $newParametro->valor_usuario = '';
         $newParametro->ativo = true;
         $newParametro->save();
 
@@ -53,7 +47,7 @@ class SeedDocsCreateParametroNivelAcessoTableSeeder extends Seeder
         $newParametro->identificador_parametro = "ID_SETOR_QUALIDADE";
         $newParametro->descricao = "Id Setor de Qualidade";
         $newParametro->valor_padrao = 1;
-        $newParametro->valor_usuario = 1;
+        $newParametro->valor_usuario = '';
         $newParametro->ativo = true;
         $newParametro->save();
 

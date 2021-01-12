@@ -15,8 +15,18 @@
     <div class="card">
         <div class="card-body">
             
+            @php
+                // PEGA PELA URL QUAL MODULO O USUARIO ESTA ACESSANDO
+                $url = explode('/', str_replace(env("APP_URL"), "", $_SERVER["REQUEST_URI"]))[2];
+            @endphp
             <p class="text-center  font-weight-bold" style="font-size: xx-large;">
-                {{ \Auth::user()->name }} ------DOCS
+                @foreach (json_decode(file_get_contents(base_path() . '/modules_statuses.json')) as $key => $module)
+                    @if ($module)
+                        @if ($url == strtolower($key))
+                        {{$key == "Core" ? "Geral" : $key}}
+                        @endif 
+                    @endif
+                @endforeach
                 <p class="text-center text-info" style="font-size: larger;"> @lang('home.welcome') </p>
             </p>
 

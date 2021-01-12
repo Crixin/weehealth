@@ -24,11 +24,7 @@ class SeedCoreCreateParametroTableSeeder extends Seeder
             "2": "FORNECEDOR",
             "3": "TRANSPORTADOR"
         }';
-        $prmDownload->valor_usuario = '{
-            "1": "CLIENTE",
-            "2": "FORNECEDOR",
-            "3": "TRANSPORTADOR"
-        }';
+        $prmDownload->valor_usuario = '';
         $prmDownload->ativo = true;
         $prmDownload->save();
     }

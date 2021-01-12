@@ -226,7 +226,7 @@ class TipoDocumentoController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nome'                  => empty($request->get('idTipoDocumento')) ? 'required|string|max:100|unique:docs_tipo_documento' : '',
+                'nome'                  => empty($request->get('idTipoDocumento')) ? 'required|string|max:100|unique:docs_tipo_documento,nome' : 'required|string|max:100|unique:docs_tipo_documento,nome,' . $request->idTipoDocumento,
                 'descricao'             => 'required|string|min:5|max:200',
                 'sigla'                 => 'required|string|min:1|max:5',
                 'fluxo'                 => 'required|string|max:50',

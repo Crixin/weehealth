@@ -21,7 +21,7 @@ class SeedDocsCreateParametroPrefixoNameDocumentoTableSeeder extends Seeder
         $newParametro->descricao = "Prefixo utilizado na formação do título do documento";
         $newParametro->valor_padrao =
         '_rev';
-        $newParametro->valor_usuario = '_rev';
+        $newParametro->valor_usuario = '';
         $newParametro->ativo = true;
         $newParametro->save();
     }

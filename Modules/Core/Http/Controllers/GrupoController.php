@@ -48,7 +48,10 @@ class GrupoController extends Controller
 
     public function saveGroup(Request $request)
     {
-        self::validador($request);
+        $error = $this->validador($request);
+        if ($error) {
+            return redirect()->back()->withInput()->withErrors($error);
+        }
         $cadastro = self::montaRequest($request);
         try {
             DB::transaction(function () use ($cadastro, $request) {
@@ -72,7 +75,10 @@ class GrupoController extends Controller
     public function updateGroup(Request $request)
     {
         $id = $request->get('idGrupo');
-        self::validador($request);
+        $error = $this->validador($request);
+        if ($error) {
+            return redirect()->back()->withInput()->withErrors($error);
+        }
         $update = self::montaRequest($request);
         try {
             DB::transaction(function () use ($update, $id) {
@@ -121,17 +127,16 @@ class GrupoController extends Controller
         (
             $request->all(),
             [
-                'nome'      => empty($request->get('idGrupo')) ? 'required|string|max:100|unique:core_grupo' : '',
+                'nome'      => empty($request->get('idGrupo')) ? 'required|string|max:100|unique:core_grupo,nome' : 'required|string|max:100|unique:core_grupo,nome,' . $request->idGrupo,
                 'descricao' => 'required|string|max:300'
             ]
         );
 
         if ($validator->fails()) {
-            Helper::setNotify($validator->messages()->first(), 'danger|close-circle');
-            return redirect()->back()->withInput();
+            return $validator;
         }
 
-        return true;
+        return false;
     }
 
 

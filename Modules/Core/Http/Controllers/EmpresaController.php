@@ -146,7 +146,7 @@ class EmpresaController extends Controller
         (
             $request->all(),
             [
-                'nome'                  => empty($request->get('idEmpresa')) ? 'required|string|max:100|unique:core_empresa' : '',
+                'nome'                  => empty($request->get('idEmpresa')) ? 'required|string|max:100|unique:core_empresa,nome' : 'required|string|max:100|unique:core_empresa,nome,' . $request->idEmpresa,
                 'cnpj'                  => 'required|string|min:18|max:18',
                 'telefone'              => 'required|string|min:14|max:15',
                 'responsavel_contato'   => 'required|string|max:50',

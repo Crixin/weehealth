@@ -253,7 +253,7 @@ class NormaController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'descricao'          => empty($request->get('idNorma')) ? 'required|string|min:5|max:100|unique:docs_norma' : '',
+                'descricao'          => empty($request->get('idNorma')) ? 'required|string|min:5|max:100|unique:docs_norma,descricao' : 'required|string|min:5|max:100|unique:docs_norma,descricao,' . $request->idNorma,
                 'orgaoRegulador'     => 'required|numeric',
                 'cicloAuditoria'     => 'required|numeric',
             ]

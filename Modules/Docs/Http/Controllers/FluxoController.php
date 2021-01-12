@@ -159,7 +159,7 @@ class FluxoController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nome'               => empty($request->get('idFluxo')) ? 'required|string|min:5|max:100|unique:docs_fluxo' : '',
+                'nome'               => empty($request->get('idFluxo')) ? 'required|string|min:5|max:100|unique:docs_fluxo,nome' : 'required|string|min:5|max:100|unique:docs_fluxo,nome,' . $request->idFluxo,
                 'versao'             => 'required|',
                 'descricao'          => 'required|string|min:5|max:200',
                 'grupo'              => 'required|numeric',

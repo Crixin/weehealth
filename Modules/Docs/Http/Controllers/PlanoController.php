@@ -46,7 +46,10 @@ class PlanoController extends Controller
      */
     public function store(Request $request)
     {
-        self::validador($request);
+        $error = $this->validador($request);
+        if ($error) {
+            return redirect()->back()->withInput()->withErrors($error);
+        }
         $cadastro = self::montaRequest($request);
         try {
             DB::transaction(function () use ($cadastro, $request) {
@@ -91,7 +94,10 @@ class PlanoController extends Controller
     public function update(Request $request)
     {
         $id = $request->id;
-        self::validador($request);
+        $error = $this->validador($request);
+        if ($error) {
+            return redirect()->back()->withInput()->withErrors($error);
+        }
         $update = self::montaRequest($request);
         try {
             DB::transaction(function () use ($update, $id) {
@@ -131,18 +137,15 @@ class PlanoController extends Controller
         (
             $request->all(),
             [
-                'nome'                  => empty($request->get('nome')) ? 'required|string|min:5|max:100|unique:docs_plano' : '',
+                'nome'                  => empty($request->id) ? 'required|string|min:5|max:100|unique:docs_plano,nome' : 'required|string|min:5|max:100|unique:docs_plano,nome,' . $request->id,
                 'status'                => 'required',
             ]
         );
-
-
         if ($validator->fails()) {
-            Helper::setNotify($validator->messages()->first(), 'danger|close-circle');
-            return redirect()->back()->withInput();
+            return $validator;
         }
 
-        return true;
+        return false;
     }
 
     public function montaRequest(Request $request)

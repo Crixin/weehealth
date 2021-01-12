@@ -144,7 +144,7 @@ class OpcaoControleRegistroController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'descricao'          => empty($request->get('idOpcaoControle')) ? 'required|string|min:5|max:100|unique:docs_opcoes_controle_registros' : '',
+                'descricao'          => empty($request->get('idOpcaoControle')) ? 'required|string|min:5|max:100|unique:docs_opcoes_controle_registros,descricao' : 'required|string|min:5|max:100|unique:docs_opcoes_controle_registros,descricao,' . $request->idOpcaoControle,
                 'tipoControle'       => 'required|string',
             ]
         );
