@@ -253,11 +253,9 @@ class TipoDocumentoController extends Controller
             $mimeType = $request->file('documentoModelo')->getMimeType();
             $imageBase64 = base64_encode(file_get_contents($request->file('documentoModelo')->getRealPath()));
             $imageBase64 = 'data:' . $mimeType . ';base64,' . $imageBase64;
-        } else {
-            $buscaTipoDocumento = $this->tipoDocumentoRepository->find($request->get('idTipoDocumento'));
-            $imageBase64 = $buscaTipoDocumento->documento_modelo ?? null;
-        }
-        return [
+        } 
+
+        $retorno = [
             "nome"                  => $request->get('nome'),
             "descricao"             => $request->get('descricao'),
             "sigla"                 => $request->get('sigla'),
@@ -270,10 +268,16 @@ class TipoDocumentoController extends Controller
             "permitir_download"     => $request->get('permitirDownload') == 1 ? true : false,
             "permitir_impressao"    => $request->get('permitirImpressao') == 1 ? true : false,
             "periodo_aviso"         => $request->get('periodoAviso'),
-            "modelo_documento"      => $imageBase64,
+            "modelo_documento"      => $imageBase64 ?? '',
             "codigo_padrao"         => json_encode($request->get('codigoPadrao')),
             "numero_padrao_id"      => $request->get('numeroPadrao'),
             "ultimo_documento"      => $request->get('ultimoDocumento') ?? 0
         ];
+
+        if (!$request->documentoModelo) {
+            unset($retorno["modelo_documento"]);
+        }
+
+        return $retorno;
     }
 }

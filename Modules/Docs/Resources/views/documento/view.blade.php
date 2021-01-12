@@ -47,8 +47,8 @@
                                                 <h3 class="card-title text-success">Revisões do documento: <b>{{ $documento->nome ?? '' }}</b></h3>
                                                 <div class="list-group">
                                                     @if(count($revisoes) > 1)
-                                                       {{--  @foreach($revisoes as $rev)
-                                                            {!! Form::open(['route' => 'documentacao.make-doc-from-name', 'method' => 'POST', 'target' => '_blank']) !!}
+                                                        @foreach($revisoes as $rev)
+                                                            {!! Form::open(['route' => 'docs.documento', 'method' => 'POST', 'target' => '_blank']) !!}
                                                                 {!! Form::hidden('nome', $rev) !!}
                                                                 {!! Form::hidden('tipo_doc', $tipo_doc) !!}
                                                                 {!! Form::hidden('document_id', $document_id) !!}

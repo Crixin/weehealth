@@ -32,10 +32,15 @@ class Documento extends Model
 
 
     public $rules = [
-        'tituloDocumento'    => 'required|string|min:5|max:100',
+        'tituloDocumento'    => 'required|string|min:5|max:100|unique:docs_documento,nome',
         'setor'              => 'required|numeric',
         'tipoDocumento'      => 'required|numeric',
         'nivelAcesso'        => 'required|numeric',
+        'grupoTreinamentoDoc' => 'required|array|min:1',
+        'grupoTreinamentoDoc.*' => 'required|string|distinct|min:1',
+        'grupoDivulgacaoDoc' => 'required|array|min:1',
+        'grupoDivulgacaoDoc.*' => 'required|string|distinct|min:1',
+
     ];
 
     public function docsNivelAcesso($id)

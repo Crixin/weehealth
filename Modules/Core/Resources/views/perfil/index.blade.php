@@ -28,7 +28,7 @@
                     <table id="dataTable-empresas" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th>Id</th>
+                                <th>#</th>
                                 <th>Nome</th>
                                 <th>Controle</th>
                             </tr>

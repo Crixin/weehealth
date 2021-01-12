@@ -29,7 +29,15 @@ class SeedDocsCreateParametroTipoControleRegistroTableSeeder extends Seeder
             "TEMPO_RETENCAO_DEPOSITO": "Retenção Mínima - Arquivo Morto",
             "TEMPO_RETENCAO_LOCAL": "Retenção Mínima - Local"
         }';
-        $newParametro->valor_usuario = 1;
+        $newParametro->valor_usuario = '{
+            "LOCAL_ARMAZENAMENTO": "Armazenamento",
+            "DISPOSICAO": "Disposição",
+            "MEIO_DISTRIBUICAO": "Meio de Distribuição",
+            "MEIO_PROTECAO": "Proteção",
+            "RECUPERACAO": "Recuperação",
+            "TEMPO_RETENCAO_DEPOSITO": "Retenção Mínima - Arquivo Morto",
+            "TEMPO_RETENCAO_LOCAL": "Retenção Mínima - Local"
+        }';
         $newParametro->ativo = true;
         $newParametro->save();
     }

@@ -35,6 +35,7 @@
                         <table id="dataTable-fluxo" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Nome</th>
                                     <th>Descricao</th>
                                     <th>Controle</th>
@@ -43,6 +44,7 @@
                             <tbody>
                                 @foreach ($fluxos as $fluxo)
                                     <tr>
+                                        <td>{{ $fluxo->id }}</td>
                                         <td>{{ $fluxo->nome }}</td>
                                         <td>{{ $fluxo->descricao }}</td>
                                         <td>

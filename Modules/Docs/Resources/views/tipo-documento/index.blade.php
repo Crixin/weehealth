@@ -35,6 +35,7 @@
                         <table id="dataTable-tipo-documento" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Nome</th>
                                     <th>Sigla</th>
                                     <th>Controle</th>
@@ -43,6 +44,7 @@
                             <tbody>
                                 @foreach ($tipos as $tipo)
                                     <tr>
+                                        <td>{{ $tipo->id }}</td>
                                         <td>{{ $tipo->nome }}</td>
                                         <td>{{ $tipo->sigla }}</td>
                                         <td>

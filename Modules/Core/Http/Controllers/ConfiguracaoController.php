@@ -74,7 +74,6 @@ class ConfiguracaoController extends Controller
     {
         return [
             "descricao"          => $request->descricao,
-            "valor_padrao"       => $request->valorPadrao,
             "valor_usuario"      => $request->valorUsuario
         ];
     }

@@ -23,9 +23,9 @@ class AgrupamentoUserDocumentoService
         return $this->agrupamentoUserDocumentoRepository->update($dados, $id);
     }
 
-    public function delete($delete)
+    public function delete($delete, $column = '')
     {
-        return  $this->agrupamentoUserDocumentoRepository->delete($delete);
+        return  $this->agrupamentoUserDocumentoRepository->delete($delete, $column);
     }
 
     public function firstOrCreate(array $data)

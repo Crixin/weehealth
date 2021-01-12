@@ -24,9 +24,9 @@ class HierarquiaDocumentoService
         return $this->hierarquiaDocumentoRepository->update($dados, $id);
     }
 
-    public function delete($delete)
+    public function delete($delete, $column = '')
     {
-        return $this->hierarquiaDocumentoRepository->delete($delete);
+        return $this->hierarquiaDocumentoRepository->delete($delete, $column);
     }
 
     public function firstOrCreate(array $data)

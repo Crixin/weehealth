@@ -80,7 +80,7 @@
                     <td class="text-center text-nowrap">
                         <div class="switch">
                             <label for="copiaControlada">Não
-                                {!! Form::checkbox('copiaControlada', '1', !empty($normaEdit) ?  $normaEdit->copia_controlada : true, ['id' => 'copiaControlada', 'class'=> 'switch-elaborador']) !!}
+                                {!! Form::checkbox('copiaControlada', '1', !empty($normaEdit) ?  $normaEdit->copia_controlada : false, ['id' => 'copiaControlada', 'class'=> 'switch-elaborador']) !!}
                                 <span class="lever switch-col-light-blue"></span>Sim
                             </label>
                         </div>

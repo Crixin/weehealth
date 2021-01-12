@@ -17,9 +17,9 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group required{{ $errors->has('valorPadrao') ? ' has-error' : '' }}">
-                {!! Form::label('valorPadrao', 'Valor Padrão' , ['class' => 'control-label']) !!}
-                {!! Form::textarea('valorPadrao',$parametroEdit->valor_padrao, ['class' => 'form-control', 'required' => 'required']) !!}
+            <div class="form-group {{ $errors->has('valorPadrao') ? ' has-error' : '' }}">
+                {!! Form::label('valorPadrao', 'Valor Padrão' ) !!}
+                {!! Form::textarea('valorPadrao',$parametroEdit->valor_padrao, ['class' => 'form-control',"readonly" => 'true']) !!}
                 <small class="text-danger">{{ $errors->first('valorPadrao') }}</small>
             </div>
         </div>

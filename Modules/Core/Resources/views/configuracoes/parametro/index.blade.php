@@ -35,6 +35,7 @@
                 <table class="table table-striped table-bordered" id="editable-datatable">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Identificador Parâmetro</th>
                             <th>Descrição</th>
                             <th>Valor Padrão</th>
@@ -46,6 +47,9 @@
 
                         @foreach ($params as $p)
                             <tr id="tr_param-{{ $p->id }}" data-id="{{ $p->id }}" class="{{ ($p->ativo) ? 'text-black' : 'text-muted' }}">
+                                <td>
+                                    {{ $p->id }} 
+                                </td>
                                 <td id="identificador_parametro-{{ $p->id }}" >
                                     {{ $p->identificador_parametro }} 
                                 </td>

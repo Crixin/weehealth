@@ -22,7 +22,7 @@ class NotificacaoService
     }
 
 
-    public function store(Request $request, array $montaRequest)
+    public function create(Request $request, array $montaRequest)
     {
         try {
             $validacao = new ValidacaoService($this->rules, $request->all());

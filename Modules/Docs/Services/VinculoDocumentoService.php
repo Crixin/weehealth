@@ -24,9 +24,9 @@ class VinculoDocumentoService
         return $this->vinculoDocumentoRepository->update($data, $id);
     }
 
-    public function delete($delete)
+    public function delete($delete, $column = '')
     {
-        return $this->vinculoDocumentoRepository->delete($delete);
+        return $this->vinculoDocumentoRepository->delete($delete, $column);
     }
 
     public function firstOrCreate(array $data)

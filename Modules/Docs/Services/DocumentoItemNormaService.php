@@ -24,8 +24,8 @@ class DocumentoItemNormaService
         return $this->documentoItemNormaRepository->update($dados, $id);
     }
 
-    public function delete($delete)
+    public function delete($delete, $column = '')
     {
-        return $this->documentoItemNormaRepository->delete($delete);
+        return $this->documentoItemNormaRepository->delete($delete, $column);
     }
 }

@@ -36,6 +36,7 @@
                         <table id="dataTable-etapa" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Ordem</th>
                                     <th>Nome</th>
                                     <th>Descricao</th>
@@ -45,6 +46,7 @@
                             <tbody>
                                 @foreach ($etapas as $etapa)
                                     <tr>
+                                        <td>{{ $etapa->id }}</td>
                                         <td>{{ $etapa->ordem }}</td>
                                         <td>{{ $etapa->nome }}</td>
                                         <td>{{ $etapa->descricao }}</td>

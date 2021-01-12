@@ -291,9 +291,6 @@ class DocumentoController extends Controller
 
             $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
             $docPath = $request->tituloDocumento . $buscaPrefixo . '00.' . ($extensao == 'xlsx' || $extensao == 'xls'  ? 'xlsx' : 'docx');
-            //$storagePath = Storage::disk('speed_office')->getDriver()->getAdapter()->getPathPrefix();
-            //dd("cp " . $file->getPathname(). " ". $storagePath . $docPath );
-            //shell_exec( "cp " . $file->getPathname(). " ". $storagePath . $docPath );
             Storage::disk('speed_office')->put($docPath, file_get_contents($file));
         }
         $cadastro = $this->montaRequest($request);

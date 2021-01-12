@@ -36,6 +36,7 @@
                         <table id="dataTable-setor" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Nome</th>
                                     <th>Descrição</th>
                                     <th>Controle</th>
@@ -44,6 +45,7 @@
                             <tbody>
                                 @foreach ($setores as $setor)
                                     <tr>
+                                        <td>{{ $setor->id }}</td>
                                         <td>{{ $setor->nome }}</td>
                                         <td>{{ $setor->descricao }}</td>
                                         <td>

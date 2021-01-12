@@ -33,6 +33,7 @@
                     <table id="dataTable-administradores" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Nome</th>
                                 <th>Nome de Usuário</th>
                                 <th>E-mail</th>
@@ -46,6 +47,7 @@
                         <tbody>
                             @foreach ($users as $user)
                                 <tr>
+                                    <td>{{ $user->id }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->username }}</td>
                                     <td>{{ $user->email }}</td>
