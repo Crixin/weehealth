@@ -35,6 +35,7 @@
                         <table id="dataTable-opcao-controle-registro" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Descricao</th>
                                     <th>Ativo</th>
                                     <th>Controle</th>
@@ -43,6 +44,7 @@
                             <tbody>
                                 @foreach ($opcoes as $opcao)
                                     <tr>
+                                        <td>{{ $opcao->id }}</td>
                                         <td>{{ $opcao->descricao }}</td>
                                         <td>{{ $opcao->ativo == true ? 'Sim' : 'Não' }}</td>
                                         <td>

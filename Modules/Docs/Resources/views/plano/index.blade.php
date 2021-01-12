@@ -35,6 +35,7 @@
                         <table id="dataTable-planos" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Nome</th>
                                     <th>Status</th>
                                     <th>Controle</th>
@@ -43,6 +44,7 @@
                             <tbody>
                                 @foreach ($planos as $plano)
                                     <tr>
+                                        <td>{{ $plano->id }}</td>
                                         <td>{{ $plano->nome }}</td>
                                         <td>{{ $plano->ativo == true ? 'Ativo' : 'Inativo' }}</td>
                                         <td>

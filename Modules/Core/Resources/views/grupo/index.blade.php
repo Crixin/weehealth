@@ -33,6 +33,7 @@
                     <table id="dataTable-grupos" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Nome</th>
                                 <th>Descrição</th>
                                 <th>Controle</th>
@@ -41,6 +42,7 @@
                         <tbody>
                             @foreach ($grupos as $grupo)
                                 <tr>
+                                    <td>{{ $grupo->id }}</td>
                                     <td>{{ $grupo->nome }}</td>
                                     <td>{{ $grupo->descricao }}</td>
                                     <td>

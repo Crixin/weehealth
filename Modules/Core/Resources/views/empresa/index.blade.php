@@ -32,6 +32,7 @@
                     <table id="dataTable-empresas" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Nome</th>
                                 <th>CNPJ</th>
                                 <th>Telefone</th>
@@ -41,6 +42,7 @@
                         <tbody>
                             @foreach ($empresas as $empresa)
                                 <tr>
+                                    <td>{{ $empresa->id }}</td>
                                     <td>{{ $empresa->nome }}</td>
                                     <td>{{ $empresa->cnpj }}</td>
                                     <td>{{ $empresa->telefone }}</td>

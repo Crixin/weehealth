@@ -32,6 +32,7 @@
                         <table id="dataTable-norma" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Descricao</th>
                                     <th>Vigente</th>
                                     <th>Controle</th>
@@ -40,6 +41,7 @@
                             <tbody>
                                 @foreach ($normas as $norma)
                                     <tr>
+                                        <td>{{ $norma->id }}</td>
                                         <td>{{ $norma->descricao }}</td>
                                         <td>{{ $norma->ativo == true ? 'Sim' : 'Não' }}</td>
                                         <td>

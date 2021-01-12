@@ -32,6 +32,7 @@
                         <table id="dataTable-notificacao" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Nome</th>
                                     <th>Anexo</th>
                                     <th>Título</th>
@@ -41,6 +42,7 @@
                             <tbody>
                                 @foreach ($notificacoes as $notificacao)
                                     <tr>
+                                        <td>{{ $notificacao->id }}</td>
                                         <td>{{ $notificacao->nome }}</td>
                                         <td>{{ $notificacao->documento_anexo == true ? 'Sim' : 'Não' }}</td>
                                         <td>{{ $notificacao->titulo_email }}</td>

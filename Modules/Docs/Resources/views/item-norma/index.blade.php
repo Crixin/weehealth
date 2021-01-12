@@ -36,6 +36,7 @@
                         <table id="dataTable-item-norma" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Item</th>
                                     <th>Descricao</th>
                                     <th>Controle</th>
@@ -44,6 +45,7 @@
                             <tbody>
                                 @foreach ($itens as $item)
                                     <tr>
+                                        <td>{{ $item->id }}</td>
                                         <td>{{ $item->numero }}</td>
                                         <td>{{ $item->descricao }}</td>
                                         <td>

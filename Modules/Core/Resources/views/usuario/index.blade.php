@@ -37,6 +37,7 @@
                     <table id="dataTable-usuarios" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Nome</th>
                                 <th>Nome de Usuário</th>
                                 <th>E-mail</th>
@@ -52,6 +53,7 @@
                         <tbody>
                             @foreach ($usuarios as $usuario)
                                 <tr>
+                                    <td>{{ $usuario->id }}</td>
                                     <td>{{ $usuario->name }}</td>
                                     <td>{{ $usuario->username }}</td>
                                     <td>{{ $usuario->email }}</td>
