@@ -418,7 +418,7 @@ class DocumentoService
 
     public function validador($data)
     {
-
+       
         $buscaTipoDocumento = $this->tipoDocumentoRepository->find($data->tipoDocumento);
         //verifica se o tipo de documento exige vinculo obrigatorio
         if ($buscaTipoDocumento->vinculo_obrigatorio == true) {
@@ -430,6 +430,19 @@ class DocumentoService
         if ($buscaTipoDocumento->vinculo_obrigatorio_outros_documento == true) {
             $this->rules["documentoVinculado"] = "required|array|min:1";
             $this->rules["documentoVinculado.*"] = "required|string|distinct|min:1";
+        }
+
+        //verifica as etapas de aprovação
+        $etapas = $this->tipoDocumentoService->getEtapasFluxosPorComportamento(
+            $data->tipoDocumento,
+            'comportamento_aprovacao'
+        );
+        foreach ($etapas['etapas'] as $key => $value) {
+            $variavel = 'grupo' . $value['id'];
+            if ($data->$variavel) {
+                $this->rules[$variavel] = "required|array|min:1";
+                $this->rules[$variavel . ".*"] = "required|string|distinct|min:1";
+            }
         }
 
         $validacao = new ValidacaoService($this->rules, $data->all());

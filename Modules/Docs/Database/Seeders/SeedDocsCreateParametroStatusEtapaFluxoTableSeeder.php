@@ -25,7 +25,10 @@ class SeedDocsCreateParametroStatusEtapaFluxoTableSeeder extends Seeder
             "1": "ISO",
             "2": "ONA"
         }';
-        $newParametro->valor_usuario = 1;
+        $newParametro->valor_usuario = '{
+            "1": "ISO",
+            "2": "ONA"
+        }';
         $newParametro->ativo = true;
         $newParametro->save();
 
@@ -41,7 +44,13 @@ class SeedDocsCreateParametroStatusEtapaFluxoTableSeeder extends Seeder
             "4": "Semestre",
             "5": "Anual"
           }';
-        $newParametro->valor_usuario = "5";
+        $newParametro->valor_usuario = '{
+            "1": "Mensal",
+            "2": "Bimestre",
+            "3": "Trimestre",
+            "4": "Semestre",
+            "5": "Anual"
+          }';
         $newParametro->ativo = true;
         $newParametro->save();
 
@@ -56,7 +65,12 @@ class SeedDocsCreateParametroStatusEtapaFluxoTableSeeder extends Seeder
             "3": "EM TREINAMENTO",
             "4": "FINALIZADO"
         }';
-        $newParametro->valor_usuario = 1;
+        $newParametro->valor_usuario = '{
+            "1": "EM ELABORACAO",
+            "2": "EM APROVACAO",
+            "3": "EM TREINAMENTO",
+            "4": "FINALIZADO"
+        }';
         $newParametro->ativo = true;
         $newParametro->save();
 
@@ -70,7 +84,10 @@ class SeedDocsCreateParametroStatusEtapaFluxoTableSeeder extends Seeder
             "1": "SIMPLES",
             "2": "CONDICIONAL"
         }';
-        $newParametro->valor_usuario = 1;
+        $newParametro->valor_usuario = '{
+            "1": "SIMPLES",
+            "2": "CONDICIONAL"
+        }';
         $newParametro->ativo = true;
         $newParametro->save();
     }

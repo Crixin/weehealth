@@ -21,7 +21,9 @@ class SeedCoreCreateParametroTipoEnvioNotificacaoTableSeeder extends Seeder
         $tipoEnvio->valor_padrao = '{
             "1": "EMAIL"
         }';
-        $tipoEnvio->valor_usuario = "1";
+        $tipoEnvio->valor_usuario = '{
+            "1": "EMAIL"
+        }';
         $tipoEnvio->ativo = true;
         $tipoEnvio->save();
     }
