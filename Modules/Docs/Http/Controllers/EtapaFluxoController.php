@@ -235,7 +235,7 @@ class EtapaFluxoController extends Controller
             ],
             []
         );
- 
+
         return [
             "nome"                       => $request->get('nome'),
             "descricao"                  => $request->get('descricao'),
@@ -245,7 +245,7 @@ class EtapaFluxoController extends Controller
             "status_id"                  => $request->get('status'),
             "ordem"                      => $request->get('ordem') ? $request->get('ordem') : $buscaUltimaEtapa->count() + 1,
             "enviar_notificacao"         => $request->get('enviarNotificacao') == 1 ? true : false,
-            "notificacao_id"             => $request->get('notificacao'),
+            "notificacao_id"             => $request->get('notificacao') ?? null,
             "permitir_anexo"             => $request->get('permitirAnexo') == 1 ? true : false,
             "comportamento_criacao"      => $request->get('comportamentoCriacao') == 1 ? true : false,
             "comportamento_edicao"       => $request->get('comportamentoEdicao') == 1 ? true : false,
@@ -253,9 +253,9 @@ class EtapaFluxoController extends Controller
             "comportamento_visualizacao" => $request->get('comportamentoVizualizacao') == 1 ? true : false,
             "comportamento_divulgacao"   => $request->get('comportamentoDivulgacao') == 1 ? true : false,
             "comportamento_treinamento"  => $request->get('comportamentoTreinamento') == 1 ? true : false,
-            "tipo_aprovacao_id"          => $request->get('tipoAprovacao'),
+            "tipo_aprovacao_id"          => $request->get('tipoAprovacao') ?? null,
             "obrigatorio"                => $request->get('obrigatoria') == 1 ? true : false,
-            "etapa_rejeicao_id"          => $request->get('etapaRejeicao'),
+            "etapa_rejeicao_id"          => $request->get('etapaRejeicao') ?? null,
             "exigir_lista_presenca"      => $request->get('listaPresenca') == 1 ? true : false,
         ];
     }

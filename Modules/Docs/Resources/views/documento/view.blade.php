@@ -54,7 +54,7 @@
                                                                 {!! Form::hidden('document_id', $document_id) !!}
                                                                 <button type="submit" class="list-group-item btn-block mt-3">  <span style="font-size: 20px">Revisão <b>{{ explode(".html", explode("_rev", $rev)[1])[0] }}</b>:</span> {{ explode(Constants::$SUFIXO_REVISAO_NOS_TITULO_DOCUMENTOS, $rev)[0] }}  </button>
                                                             {!! Form::close() !!}
-                                                        @endforeach
+                                                        @endforeach --}}
                                                     @endif
                                                 </div>
                                             </div>
