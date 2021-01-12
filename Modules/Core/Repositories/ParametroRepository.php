@@ -21,6 +21,6 @@ class ParametroRepository extends BaseRepository
                 ['identificador_parametro', '=', $key]
             ]
         );
-        return $consulta->valor_padrao;
+        return $consulta->valor_usuario ? $consulta->valor_usuario : $consulta->valor_padrao;
     }
 }

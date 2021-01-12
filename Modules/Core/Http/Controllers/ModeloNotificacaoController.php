@@ -57,7 +57,7 @@ class ModeloNotificacaoController extends Controller
     public function store(Request $request)
     {
         $montaRequest = $this->montaRequest($request);
-        $reponse = $this->notificacaoService->store($request, $montaRequest);
+        $reponse = $this->notificacaoService->create($request, $montaRequest);
 
         if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
             return $reponse;
