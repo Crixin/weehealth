@@ -41,7 +41,8 @@
                             'nome' => $modeloNotificacao->nome,
                             'titulo' => $modeloNotificacao->titulo_email,
                             'corpo' => $modeloNotificacao->corpo_email,
-                            'tiposEnvio' => $tiposEnvio
+                            'tiposEnvio' => $tiposEnvio,
+                            'tiposNotificacao' => $tiposNotificacao
                         ]
                     )
                     @endcomponent

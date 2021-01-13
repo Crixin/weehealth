@@ -25,6 +25,7 @@ class Notificacao extends Model
         'nome'      => 'required|string|min:5|unique:core_notificacao,nome',
         'tipoEnvio' => 'required',
         'titulo'    => 'required',
-        'corpo'     => 'required'
+        'corpo'     => 'required',
+        'tipoNotificacao' => 'required'
     ];
 }

@@ -35,7 +35,8 @@
                             'nome' => '',
                             'titulo' => '',
                             'corpo' => '',
-                            'tiposEnvio' => $tiposEnvio
+                            'tiposEnvio' => $tiposEnvio,
+                            'tiposNotificacao' => $tiposNotificacao
                         ]
                     )
                     @endcomponent

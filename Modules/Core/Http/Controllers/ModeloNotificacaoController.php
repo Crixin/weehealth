@@ -46,7 +46,13 @@ class ModeloNotificacaoController extends Controller
     {
         $buscaTiposEnvio = $this->parametroRepository->getParametro('TIPO_ENVIO_NOTIFICACAO');
         $tiposEnvio = json_decode($buscaTiposEnvio);
-        return view('core::modelo-notificacao.create', compact('tiposEnvio'));
+
+        $buscaTiposNotificacao = $this->parametroRepository->getParametro('TIPO_NOTIFICACAO');
+        $tiposNotificacao = json_decode($buscaTiposNotificacao);
+
+        
+
+        return view('core::modelo-notificacao.create', compact('tiposEnvio', 'tiposNotificacao'));
     }
 
     /**
@@ -90,10 +96,14 @@ class ModeloNotificacaoController extends Controller
     public function edit($id)
     {
         $modeloNotificacao = $this->notificacaoRepository->find($id);
+        
         $buscaTiposEnvio = $this->parametroRepository->getParametro('TIPO_ENVIO_NOTIFICACAO');
         $tiposEnvio = json_decode($buscaTiposEnvio);
 
-        return view('core::modelo-notificacao.edit', compact('tiposEnvio', 'modeloNotificacao'));
+        $buscaTiposNotificacao = $this->parametroRepository->getParametro('TIPO_NOTIFICACAO');
+        $tiposNotificacao = json_decode($buscaTiposNotificacao);
+
+        return view('core::modelo-notificacao.edit', compact('tiposEnvio', 'modeloNotificacao', 'tiposNotificacao'));
     }
 
     /**
@@ -146,7 +156,8 @@ class ModeloNotificacaoController extends Controller
             "titulo_email" => $request->titulo,
             "corpo_email" => $request->corpo,
             "tipo_envio_notificacao_id" => $request->tipoEnvio,
-            "documento_anexo" => $request->enviarAnexo == '1' ? true : false
+            "documento_anexo" => $request->enviarAnexo == '1' ? true : false,
+            'tipo_id' => $request->tipoNotificacao
         ];
     }
 }
