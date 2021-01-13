@@ -42,15 +42,4 @@ class EtapaFluxo extends Model
         return $this->hasOne('Modules\Docs\Model\Fluxo', 'id', 'fluxo_id');
     }
 
-    public function docsStatus($id)
-    {
-        $parametro = new ParametroRepository();
-        $busca = $parametro->findOneBy(
-            [
-                ['identificador_parametro', '=', 'STATUS_ETAPA_FLUXO']
-            ]
-        );
-        $status = json_decode($busca->valor_padrao);
-        return $status->$id;
-    }
 }

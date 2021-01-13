@@ -27,4 +27,9 @@ class Workflow extends Model
         return $this->hasOne('Modules\Core\Model\User', 'id', 'user_id');
     }
 
+    public function docsEtapaFluxo()
+    {
+        return $this->hasOne('Modules\Docs\Model\EtapaFluxo', 'id', 'etapa_fluxo_id');
+    }
+
 }

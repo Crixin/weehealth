@@ -59,4 +59,9 @@ class Documento extends Model
     {
         return $this->hasOne('Modules\Docs\Model\TipoDocumento', 'id', 'tipo_documento_id');
     }
+
+    public function docsWorkFlow()
+    {
+        return $this->hasMany('Modules\Docs\Model\Workflow', 'documento_id', 'id')->orderBy('id', 'DESC');
+    }
 }

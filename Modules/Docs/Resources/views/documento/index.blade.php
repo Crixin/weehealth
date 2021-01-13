@@ -160,23 +160,28 @@
                                 @foreach ($documentos as $documento)
                                     <tr>
                                         <td>{{ $documento->codigo }}</td>
-                                        <td><a href="{{ route('docs.documento.visualizar', ['id' => $documento->id]) }}"">{{ $documento->nome }}</a></td>
+                                        <td><a href="{{ route('docs.documento.visualizar', ['id' => $documento->id]) }}">{{ $documento->nome }}</a></td>
                                         <td>{{ $documento->vencimento }}</td>
                                         <td>{{ $documento->revisao }}</td>
-                                        <td>{{ ''}}</td>
+                                        <td>{{ empty($documento->docsWorkFlow[0]) ? '':  Helper::buscaParametro($documento->docsWorkFlow[0]->docsEtapaFluxo->status_id, 'STATUS_ETAPA_FLUXO')}}</td>
                                         <td>{{ $documento->docsNivelAcesso($documento->nivel_acesso_id) }}</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-pencil text-success"></i>&nbsp; @lang('buttons.docs.documento.edit') </a>
-                                                    
+                                                    @if( Helper::permissaoEditarDocumento($documento) )
+                                                        <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-pencil text-success"></i>&nbsp; @lang('buttons.docs.documento.edit') </a>
+                                                    @endif
                                                     <a class="dropdown-item documento-iniciar-validacao" data-id="{{$documento->id}}" href="javascript:void(0)"> <i class="fa fa-eye text-danger"></i>&nbsp; @lang('buttons.docs.documento.start-validation') </a> 
                                                     <a class="dropdown-item" href="{{ route('docs.documento.imprimir', ['id' => $documento->id, 'tipo' => 2]) }}"> <i class="fa fa-print text-info"></i>&nbsp; @lang('buttons.docs.documento.printer') </a> 
-                                                    <a class="dropdown-item" href="{{ route('docs.documento.lista-presenca', ['id' => $documento->id]) }}"> <i class="fa fa-file-text-o text-info"></i>&nbsp; @lang('buttons.docs.documento.list') </a> 
-                                                    <!--<a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-exchange text-info"></i>&nbsp; @lang('buttons.docs.documento.link-docs') </a>-->
+                                                    @if( Helper::isSetorQualidade() )
+                                                        <a class="dropdown-item" href="{{ route('docs.documento.lista-presenca', ['id' => $documento->id]) }}"> <i class="fa fa-file-text-o text-info"></i>&nbsp; @lang('buttons.docs.documento.list') </a> 
+                                                        <!--<a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-exchange text-info"></i>&nbsp; @lang('buttons.docs.documento.link-docs') </a>-->
+                                                    @endif
                                                     <a class="dropdown-item documento-iniciar-revisao" data-id="{{$documento->id}}" href="javascript:void(0)"> <i class="fa fa-eye text-warning"></i>&nbsp; @lang('buttons.docs.documento.start-review') </a> 
-                                                    <a class="dropdown-item documento-obsoleto" data-id="{{$documento->id}}" href="javascript:void(0)"> <i class="fa fa-power-off text-danger"></i>&nbsp; @lang('buttons.docs.documento.obsolete') </a>                                                 
+                                                    @if( Helper::isSetorQualidade() )
+                                                        <a class="dropdown-item documento-obsoleto" data-id="{{$documento->id}}" href="javascript:void(0)"> <i class="fa fa-power-off text-danger"></i>&nbsp; @lang('buttons.docs.documento.obsolete') </a>                                                 
+                                                    @endif
                                                 </div>
                                             </div>
                                         </td>

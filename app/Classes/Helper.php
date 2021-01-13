@@ -598,4 +598,38 @@ class Helper
         }
         return $arr;
     }
+
+    public static function permissaoEditarDocumento($documento)
+    {
+        $parametroRepository = new ParametroRepository();
+        $idSetorQualidade = $parametroRepository->getParametro('ID_SETOR_QUALIDADE');
+
+        return
+        Auth::user()->setor_id == $idSetorQualidade ||
+        (
+            Auth::user()->id == $documento->elaborador_id &&
+            $documento->docsWorkFlow[0]->docsEtapaFluxo->comportamento_criacao == true
+        );
+    }
+
+    public static function isSetorQualidade()
+    {
+        $parametroRepository = new ParametroRepository();
+        $idSetorQualidade = $parametroRepository->getParametro('ID_SETOR_QUALIDADE');
+
+        return Auth::user()->setor_id == $idSetorQualidade;
+    }
+
+    public static function buscaParametro($id, $key)
+    {
+        $parametro = new ParametroRepository();
+        $busca = $parametro->findOneBy(
+            [
+                ['identificador_parametro', '=', $key]
+            ]
+        );
+        $status = $busca->valor_usuario != '' ? $busca->valor_usuario : $busca->valor_padrao;
+        $retorno = (array) json_decode($status);
+        return $retorno[$id];
+    }
 }
