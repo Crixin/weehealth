@@ -608,7 +608,7 @@ class Helper
         Auth::user()->setor_id == $idSetorQualidade ||
         (
             Auth::user()->id == $documento->elaborador_id &&
-            $documento->docsWorkFlow[0]->docsEtapaFluxo->comportamento_criacao == true
+            empty($documento->docsWorkFlow[0]) ? false : $documento->docsWorkFlow[0]->docsEtapaFluxo->comportamento_criacao == true
         );
     }
 
