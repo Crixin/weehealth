@@ -22,7 +22,6 @@ class CoreDatabaseSeeder extends Seeder
         $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateParametroTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\SeedCoreSetorTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateParametroTipoEnvioNotificacaoTableSeeder::class);
-
-        
+        $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateParametroTipoNotificacaoTableSeeder::class);
     }
 }
