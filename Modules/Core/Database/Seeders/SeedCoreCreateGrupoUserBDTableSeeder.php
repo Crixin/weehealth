@@ -16,9 +16,9 @@ class SeedCoreCreateGrupoUserBDTableSeeder extends Seeder
      */
     public function run()
     {
-        //DB::select("CREATE ROLE weehealth WITH NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT NOREPLICATION CONNECTION LIMIT -1");
-        //DB::unprepared("GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO weehealth");
-        //DB::unprepared("GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO weehealth");
+        DB::select("CREATE ROLE weehealth WITH NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT NOREPLICATION CONNECTION LIMIT -1");
+        DB::unprepared("GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO weehealth");
+        DB::unprepared("GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO weehealth");
 
         foreach (User::all() as $key => $value) {
             $user     = '"' . $value->username . '"';
