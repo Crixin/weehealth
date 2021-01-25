@@ -4,9 +4,7 @@ namespace Modules\Core\Http\Controllers;
 
 use App\Classes\Helper;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{DB, Validator};
 use Modules\Core\Model\User;
 use Modules\Core\Repositories\{UserRepository, PerfilRepository, SetorRepository};
 

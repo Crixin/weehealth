@@ -3,8 +3,7 @@
 namespace Modules\Portal\Http\Controllers;
 
 use Session;
-use App\Classes\Helper;
-use App\Classes\RESTServices;
+use App\Classes\{Helper, RESTServices};
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

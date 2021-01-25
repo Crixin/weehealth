@@ -3,8 +3,7 @@
 namespace Modules\Core\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Classes\{Constants, GEDServices, RESTServices, Helper};
-use Illuminate\Support\Facades\{Auth, DB};
+use App\Classes\{Constants};
 use Modules\Core\Services\{GrupoService};
 use Modules\Core\Repositories\{EmpresaRepository, ParametroRepository, UserRepository, SetupRepository};
 

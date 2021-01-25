@@ -3,9 +3,9 @@
 namespace Modules\Portal\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Classes\{Constants, RESTServices, Helper};
+use App\Classes\{RESTServices, Helper};
 use App\Mail\Dossie;
-use Illuminate\Support\Facades\{Auth, DB};
+use Illuminate\Support\Facades\{DB};
 use Modules\Core\Http\Controllers\JobController;
 use Modules\Core\Http\Controllers\Auth\JWTController;
 use Modules\Portal\Repositories\{
