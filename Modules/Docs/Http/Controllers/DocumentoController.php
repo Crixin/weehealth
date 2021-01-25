@@ -17,7 +17,8 @@ use Modules\Docs\Repositories\{
     TipoDocumentoRepository,
     UserEtapaDocumentoRepository,
     VinculoDocumentoRepository,
-    WorkflowRepository
+    WorkflowRepository,
+    EtapaFluxoRepository
 };
 use Modules\Core\Repositories\{GrupoRepository, ParametroRepository, SetorRepository, UserRepository};
 use Modules\Docs\Services\{DocumentoService, RegistroImpressoesService, TipoDocumentoService, WorkflowService};
@@ -28,7 +29,7 @@ class DocumentoController extends Controller
     protected $setorRepository;
     protected $userRepository;
     protected $normaRepositorty;
-    protected $tipoDocumentorepository;
+    protected $tipoDocumentoRepository;
     protected $parametroRepository;
     protected $userEtapaDocumentoRepository;
     protected $documentoItemNormaRepository;
@@ -42,6 +43,7 @@ class DocumentoController extends Controller
     protected $tipoDocumentoService;
     protected $workFlowService;
     protected $registroImpressoesService;
+    protected $etapaFluxoRepository;
 
     public function __construct(
         DocumentoRepository $documentoRepository,
@@ -61,13 +63,14 @@ class DocumentoController extends Controller
         DocumentoService $documentoService,
         TipoDocumentoService $tipoDocumentoService,
         WorkflowService $workFlowService,
-        RegistroImpressoesService $registroImpressoesService
-    ){
+        RegistroImpressoesService $registroImpressoesService,
+        EtapaFluxoRepository $etapaFluxoRepository
+    ) {
         $this->documentoRepository = $documentoRepository;
         $this->setorRepository = $setorRepository;
         $this->userRepository = $userRepository;
         $this->normaRepositorty = $normaRepository;
-        $this->tipoDocumentorepository = $tipoDocumentoRepository;
+        $this->tipoDocumentoRepository = $tipoDocumentoRepository;
         $this->parametroRepository = $parametroRepository;
         $this->userEtapaDocumentoRepository = $userEtapaDocumentoRepository;
         $this->documentoItemNormaRepository = $documentoItemNormaRepository;
@@ -81,6 +84,7 @@ class DocumentoController extends Controller
         $this->tipoDocumentoService = $tipoDocumentoService;
         $this->workFlowService = $workFlowService;
         $this->registroImpressoesService = $registroImpressoesService;
+        $this->etapaFluxoRepository = $etapaFluxoRepository;
     }
 
     /**
@@ -101,7 +105,7 @@ class DocumentoController extends Controller
         $setores = array_column(json_decode(json_encode($buscaSetores), true), 'nome', 'id');
 
          /**TIPO DOCUMENTO */
-        $buscaTiposDocumento = $this->tipoDocumentorepository->findBy(
+        $buscaTiposDocumento = $this->tipoDocumentoRepository->findBy(
             [
                 ['ativo', '=', true]
             ],
@@ -171,7 +175,8 @@ class DocumentoController extends Controller
         }
 
         $documentos = $this->documentoRepository->findBy($where);
-        return view('docs::documento.index',
+        return view(
+            'docs::documento.index',
             [
                 'documentos' => $documentos,
                 'setores' => $setores,
@@ -185,7 +190,7 @@ class DocumentoController extends Controller
                 'tipoDocumentoSelecionado' => $request->tipoDocumento ?? null,
                 'statusSelecionado' => $request->status ?? null,
                 'niveisSelecionado' => $request->nivelAcesso ?? null,
-                'opcoesSelecionado' => $request->tipoVencimento ?? null,
+                'opcoesSelecionado' => $request->tipoVencimento ?? [],
                 'dataInicialSelecionado' => $request->dataInicial ?? null,
                 'dataFinalSelecionado' => $request->dataFinal ?? null,
                 'copiaControladaSelecionado' => $request->copiaControlada,
@@ -229,7 +234,7 @@ class DocumentoController extends Controller
         }
 
         /**TIPO DOCUMENTO */
-        $tiposDocumento = $this->tipoDocumentorepository->findBy(
+        $tiposDocumento = $this->tipoDocumentoRepository->findBy(
             [
                 ['ativo', '=', true]
             ],
@@ -291,13 +296,16 @@ class DocumentoController extends Controller
             $nome = $file->getClientOriginalName();
 
             $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
-            $docPath = $request->tituloDocumento . $buscaPrefixo . '00.' . ($extensao == 'xlsx' || $extensao == 'xls'  ? 'xlsx' : 'docx');
-            Storage::disk('speed_office')->put($docPath, file_get_contents($file));
+            $docPath = $request->tituloDocumento . $buscaPrefixo . '00.' . $extensao;
+            Storage::disk('weecode_office')->put($docPath, file_get_contents($file));
         }
+        
         $cadastro = $this->montaRequest($request);
-        $buscaTipoDocumento = $this->tipoDocumentorepository->find($request->get('tipoDocumento'));
+        $buscaTipoDocumento = $this->tipoDocumentoRepository->find($request->get('tipoDocumento'));
         $fluxo = $buscaTipoDocumento->docsFluxo;
-        $retorno = $this->documentoService->create($cadastro);
+        
+        return $this->documentoService->store($cadastro);
+        
         if ($retorno) {
             return response()->json(['response' => 'sucesso', 'data' => $retorno]);
         }
@@ -352,7 +360,7 @@ class DocumentoController extends Controller
         }
 
         /**TIPO DOCUMENTO */
-        $tiposDocumento = $this->tipoDocumentorepository->findBy(
+        $tiposDocumento = $this->tipoDocumentoRepository->findBy(
             [
                 ['ativo', '=', true]
             ],
@@ -410,6 +418,7 @@ class DocumentoController extends Controller
                 ['tipo', '=', 'TREINAMENTO', 'AND']
             ]
         );
+
         $arrayGrupoTreinamento = [];
         foreach ($buscaGrupoTreinamentoSelecionado as $key => $value) {
             array_push($arrayGrupoTreinamento, $value->grupo_id . '-' . $value->user_id);
@@ -422,14 +431,15 @@ class DocumentoController extends Controller
                 ['tipo', '=', 'DIVULGACAO', 'AND']
             ]
         );
+
         $arrayGrupoDivulgacao = [];
         foreach ($buscaGrupoDivulgacaoSelecionado as $key => $value) {
             array_push($arrayGrupoDivulgacao, $value->grupo_id . '-' . $value->user_id);
         }
         $grupoDivulgacaoSelecionado = json_decode(json_encode($arrayGrupoDivulgacao), true);
 
-
-        return view('docs::documento.edit',
+        return view(
+            'docs::documento.edit',
             compact(
                 'documento',
                 'documentos',
@@ -439,7 +449,6 @@ class DocumentoController extends Controller
                 'classificacoes',
                 'gruposUsuarios',
                 'normas',
-
                 'documentosVinculadosSelecionados',
                 'normasSelecionados',
                 'grupoTreinamentoSelecionado',
@@ -498,9 +507,8 @@ class DocumentoController extends Controller
         $justificativaLida,
         $idDocumento,
         $etapaFluxoId,
-        $versaoDocumento
-    )
-    {
+        $documentoRevisao
+    ) {
         return [
             "descricao" => $descricao,
             "justificativa" => $justificativa,
@@ -508,7 +516,7 @@ class DocumentoController extends Controller
             "documento_id" => $idDocumento,
             "etapa_fluxo_id" => $etapaFluxoId,
             "user_id" => Auth::user()->id,
-            "versao_documento" => $versaoDocumento
+            "documento_revisao" => $documentoRevisao
         ];
     }
 
@@ -532,14 +540,16 @@ class DocumentoController extends Controller
             ]
         );
 
-        $buscaTipoDocumento = $this->tipoDocumentorepository->findOneBy(
+        $buscaTipoDocumento = $this->tipoDocumentoRepository->findOneBy(
             [
                 ['id', '=', $request->tipoDocumento]
             ]
         );
         
         $codigo = $this->documentoService->gerarCodigoDocumento($request->tipoDocumento, $buscaSetores->id);
-        return view('docs::documento.import',
+        
+        return view(
+            'docs::documento.import',
             [
                 'titulo'          => $request->tituloDocumento,
                 'nivelAcesso'     => $niveisAcesso[$request->nivelAcesso],
@@ -575,7 +585,7 @@ class DocumentoController extends Controller
             ]
         );
 
-        $buscaTipoDocumento = $this->tipoDocumentorepository->findOneBy(
+        $buscaTipoDocumento = $this->tipoDocumentoRepository->findOneBy(
             [
                 ['id', '=', $request->tipoDocumento]
             ]
@@ -588,10 +598,12 @@ class DocumentoController extends Controller
         $docPath = $request->tituloDocumento . $buscaPrefixo . '00.' . ($tipoArquivo == 'ation/vnd.ms-excel' ? 'xlsx' : 'docx');
 
         /**SALVAR NA PASTA DO ONLYOFFICE */
-        $storagePath = Storage::disk('speed_office')->getDriver()->getAdapter()->getPathPrefix();
+        $storagePath = Storage::disk('weecode_office')->getDriver()->getAdapter()->getPathPrefix();
+        
         Helper::base64ToImage($buscaTipoDocumento->modelo_documento, $storagePath . $docPath);
 
-        return view('docs::documento.factory',
+        return view(
+            'docs::documento.factory',
             [
                 'titulo'          => $request->tituloDocumento,
                 'nivelAcesso'     => $niveisAcesso[$request->nivelAcesso],
@@ -621,7 +633,7 @@ class DocumentoController extends Controller
             }
         }
 
-        #Documentos Vinculados 
+        #Documentos Vinculados
         $montaRequestVinculoDocumento = [];
         if (!empty($request->documentoVinculado)) {
             $foreach = !is_array($request->documentoVinculado) ? json_decode($request->documentoVinculado) : $request->documentoVinculado;
@@ -632,7 +644,7 @@ class DocumentoController extends Controller
             }
         }
 
-        #Grupo Treinamento 
+        #Grupo Treinamento
         $montaRequestTreinamento = [];
         if (!empty($request->grupoTreinamentoDoc)) {
             $foreach = !is_array($request->grupoTreinamentoDoc) ? json_decode($request->grupoTreinamentoDoc) : $request->grupoTreinamentoDoc;
@@ -692,10 +704,20 @@ class DocumentoController extends Controller
             }
         }
 
+        //PEGA A EXTENSAO DO MODELO DO TIPO DE DOCUMENTO CASO O USER NÃO SUBIU UM ARQUIVO
+        $tipoDoc = $this->tipoDocumentoRepository->find($request->tipoDocumento);
+        $extensao = $tipoDoc->extensao;
+
+        if ($request->file('doc_uploaded')) {
+            $file = $request->file('doc_uploaded');
+            $extensao = $file->getClientOriginalExtension();
+        }
+
         return [
             "nome"                           => $request->get('tituloDocumento'),
             "codigo"                         => $request->get('codigoDocumento'),
             "validade"                       => null,
+            "extensao"                       => $extensao,
             "tipo_documento_id"              => (int) $request->get('tipoDocumento') ?? null,
             "copia_controlada"               => $request->get('copiaControlada') == 1 ? true : false,
             "nivel_acesso_id"                => (int) $request->get('nivelAcesso') ?? null,
@@ -703,7 +725,6 @@ class DocumentoController extends Controller
             "obsoleto"                       => $request->get('obsoleto') == 1 ? true : false,
             "elaborador_id"                  => Auth::user()->id ?? null,
             "classificacao_id"               => (int) $request->classificacao ?? null,
-            "etapa_id"                       => (int) $request->setor ?? null,
             "justificativa_rejeicao_etapa"   => null,
             "justificativa_cancelar_etapa"   => null,
             "ged_documento_id"               => null,
@@ -792,7 +813,7 @@ class DocumentoController extends Controller
             $historico = $this->workFlowRepository->findBy(
                 [
                     ['documento_id', '=', $id],
-                    ['versao_documento', '=', $documento->revisao]
+                    ['documento_revisao', '=', $documento->revisao]
                 ],
                 [],
                 [
@@ -810,25 +831,38 @@ class DocumentoController extends Controller
         }
     }
 
+
     public function visualizar($id)
     {
         $documento = $this->documentoRepository->find($id);
         $historico = $this->workFlowRepository->findBy(
             [
                 ['documento_id', '=', $id],
-                ['versao_documento', '=', $documento->revisao]
+                ['documento_revisao', '=', $documento->revisao]
             ],
-            [],
+            ['coreUsers'],
             [
                 ['created_at', 'ASC']
             ]
         );
+        
+        $etapaAtual = $this->workFlowService->getEtapaAtual($documento->id);
+
         $revisoes  = Helper::getListAllReviewsDocument($documento->nome);
 
-        $tipoArquivo = 'ation/vnd.ms-excel';
         $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
-        $docPath = $documento->nome . $buscaPrefixo . '00.' . ($tipoArquivo == 'ation/vnd.ms-excel' ? 'xlsx' : 'docx');
-    
-        return view('docs::documento.view', compact('id', 'documento', 'historico', 'revisoes', 'docPath'));
+        $docPath = $documento->nome . $buscaPrefixo . $documento->revisao . "." . $documento->extensao;
+
+        return view(
+            'docs::documento.view',
+            compact(
+                'id',
+                'documento',
+                'historico',
+                'revisoes',
+                'docPath',
+                'etapaAtual'
+            )
+        );
     }
 }

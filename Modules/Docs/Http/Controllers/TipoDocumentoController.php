@@ -23,7 +23,7 @@ class TipoDocumentoController extends Controller
         FluxoRepository $fluxoRepository,
         ParametroRepository $parametroRepository,
         TipoDocumentoService $tipoDocumentoService
-    ){
+    ) {
         $this->tipoDocumentoRepository = $tipoDocumentoRepository;
         $this->fluxoRepository = $fluxoRepository;
         $this->parametroRepository = $parametroRepository;
@@ -71,7 +71,18 @@ class TipoDocumentoController extends Controller
         $padroesNumero = $this->parametroRepository->getParametro('PADRAO_NUMERO');
         $padroesNumero = $padroesNumero ? array_column((array)json_decode($padroesNumero), 'DESCRICAO', 'ID') : [];
 
-        return view('docs::tipo-documento.create', compact('fluxos', 'tiposDocumento', 'padroesCodigo', 'padroesNumero'));
+        $extensoesDocumentos = $this->parametroRepository->getParametro('EXTENSAO_DOCUMENTO_ONLYOFFICE');
+
+        return view(
+            'docs::tipo-documento.create',
+            compact(
+                'fluxos',
+                'tiposDocumento',
+                'padroesCodigo',
+                'padroesNumero',
+                'extensoesDocumentos'
+            )
+        );
     }
 
     /**
@@ -154,9 +165,18 @@ class TipoDocumentoController extends Controller
         $padroesNumero = $padroesNumero ? array_column((array)json_decode($padroesNumero), 'DESCRICAO', 'ID') : [];
 
 
+        $extensoesDocumentos = $this->parametroRepository->getParametro('EXTENSAO_DOCUMENTO_ONLYOFFICE');
 
-        return view('docs::tipo-documento.edit',
-            compact('tipoDocumento', 'fluxos', 'tiposDocumento', 'padroesCodigo', 'padroesNumero')
+        return view(
+            'docs::tipo-documento.edit',
+            compact(
+                'tipoDocumento',
+                'fluxos',
+                'tiposDocumento',
+                'padroesCodigo',
+                'padroesNumero',
+                'extensoesDocumentos'
+            )
         );
     }
 
@@ -249,9 +269,10 @@ class TipoDocumentoController extends Controller
 
         if ($request->documentoModelo) {
             $mimeType = $request->file('documentoModelo')->getMimeType();
+            $extensao = $request->file('documentoModelo')->getClientOriginalExtension();
             $imageBase64 = base64_encode(file_get_contents($request->file('documentoModelo')->getRealPath()));
             $imageBase64 = 'data:' . $mimeType . ';base64,' . $imageBase64;
-        } 
+        }
 
         $retorno = [
             "nome"                  => $request->get('nome'),
@@ -267,13 +288,16 @@ class TipoDocumentoController extends Controller
             "permitir_impressao"    => $request->get('permitirImpressao') == 1 ? true : false,
             "periodo_aviso"         => $request->get('periodoAviso'),
             "modelo_documento"      => $imageBase64 ?? '',
+            "extensao"              => $extensao ?? '',
             "codigo_padrao"         => json_encode($request->get('codigoPadrao')),
             "numero_padrao_id"      => $request->get('numeroPadrao'),
             "ultimo_documento"      => $request->get('ultimoDocumento') ?? 0
         ];
 
+        //REMOVENDO OS CAMPOS DO DOCUMENTO MODELO NO MOMENTO DO UPDATE PARA CASO O USUÁRIO NAO
+        //TENHA SUBIDO UM NOVO ARQUIVO PARA QUE ASSIM NÃO SUBSTITUA O MODELO ATUAL POR VAZIO
         if (!$request->documentoModelo) {
-            unset($retorno["modelo_documento"]);
+            unset($retorno["modelo_documento"], $retorno["extensao"]);
         }
 
         return $retorno;

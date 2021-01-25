@@ -18,6 +18,8 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body">
+            @component('docs::components.cancelar-revisao-documento') @endcomponent
+
             <div class="col-3 mb-3">
                 <button class="btn  btn-info" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2"><i class="mdi mdi-chart-timeline"></i> Linha do Tempo</button>
             </div>
@@ -29,6 +31,8 @@
                 ]
             )
             @endcomponent
+            {{-- @component('docs::components.aprovacao-documento') @endcomponent --}}
+            
             <!-- FIM Timeline do Documento -->
             <input type="hidden" name="idDocumentoOrigem" id="idDocumentoOrigem" value="{{$documento->id}}">
             <!-- Start Page Content -->
@@ -49,10 +53,7 @@
                                                     @if(count($revisoes) > 1)
                                                         @foreach($revisoes as $rev)
                                                             {!! Form::open(['route' => 'docs.documento', 'method' => 'POST', 'target' => '_blank']) !!}
-                                                                {!! Form::hidden('nome', $rev) !!}
-                                                                {!! Form::hidden('tipo_doc', $tipo_doc) !!}
-                                                                {!! Form::hidden('document_id', $document_id) !!}
-                                                                <button type="submit" class="list-group-item btn-block mt-3">  <span style="font-size: 20px">Revisão <b>{{ explode(".html", explode("_rev", $rev)[1])[0] }}</b>:</span> {{ explode(Constants::$SUFIXO_REVISAO_NOS_TITULO_DOCUMENTOS, $rev)[0] }}  </button>
+                                                                <button type="submit" class="list-group-item btn-block mt-3">  <span style="font-size: 20px">Revisão <b>{{ explode(".html", explode("_rev", $rev)[1])[0] }}</b>:</span> {{-- {{ explode(Constants::$SUFIXO_REVISAO_NOS_TITULO_DOCUMENTOS, $rev)[0] }} --}}  </button>
                                                             {!! Form::close() !!}
                                                         @endforeach --}}
                                                     @endif
@@ -100,6 +101,8 @@
         'comportamento_modal' => 'EDICAO'
     ]
 )
+
+@include('docs::components.cancelar-revisao-documento')
 
 @section('footer')
 

@@ -111,7 +111,7 @@
         <div class="col-md-12">
             <div class="form-group required{{ $errors->has('documentoModelo') ? ' has-error' : '' }}">
                 {!! Form::label('documentoModelo', 'Modelo de Documento', ['class' => 'control-label']) !!}<br>
-                {!! Form::file('documentoModelo', [empty($tipoDocumentoEdit) ? 'required': '', 'accept' =>'.doc, .xls, .DOC, .XLS','class' => 'dropify', 'id' => 'input-file-now']) !!}
+                {!! Form::file('documentoModelo', [empty($tipoDocumentoEdit) ? 'required': '', 'accept' => "$extensoesDocumentos", 'class' => 'dropify', 'id' => 'input-file-now']) !!}
 
                 <small class="text-danger">{{ $errors->first('documentoModelo') }}</small>
             </div>

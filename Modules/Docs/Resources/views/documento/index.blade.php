@@ -74,7 +74,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group{{ $errors->has('nivelAcesso') ? ' has-error' : '' }}">
                                     {!! Form::label('nivelAcesso', 'Nível de Acesso') !!}
-                                    {!! Form::select('nivelAcesso[]',$niveisAcesso, $niveisSelecionado, ['id' => 'nivelAcesso', 'class' => 'form-control selectpicker' , 'data-live-search' => 'true', 'data-actions-box' => 'true', 'multiple']) !!}
+                                    {!! Form::select('nivelAcesso[]', $niveisAcesso, $niveisSelecionado, ['id' => 'nivelAcesso', 'class' => 'form-control selectpicker' , 'data-live-search' => 'true', 'data-actions-box' => 'true', 'multiple']) !!}
                                     <small class="text-danger">{{ $errors->first('nivelAcesso') }}</small>
                                     </div>
                                 </div>
@@ -83,7 +83,6 @@
                                 <div class="col-md-4">
                                     <div class="form-group{{ $errors->has('tipoVencimento') ? ' has-error' : '' }}">
                                         {!! Form::label('tipoVencimento', 'Vencimento') !!}
-                                        {!! Form::select('tipoVencimento',$opcoesVencimento, $opcoesSelecionado, ['id' => 'tipoVencimento', 'class' => 'form-control selectpicker', 'placeholder' => __('components.selectepicker-default')]) !!}
                                         <small class="text-danger">{{ $errors->first('tipoVencimento') }}</small>
                                     </div>
                                 </div>
