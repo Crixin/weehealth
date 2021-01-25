@@ -606,12 +606,7 @@ class Helper
         $parametroRepository = new ParametroRepository();
         $idSetorQualidade = $parametroRepository->getParametro('ID_SETOR_QUALIDADE');
 
-        return
-        Auth::user()->setor_id == $idSetorQualidade ||
-        (
-            Auth::user()->id == $documento->elaborador_id &&
-            empty($documento->docsWorkFlow[0]) ? false : $documento->docsWorkFlow[0]->docsEtapaFluxo->comportamento_criacao == true
-        );
+        return Auth::user()->setor_id == $idSetorQualidade || Auth::user()->id == $documento->elaborador_id;
     }
 
     public static function isSetorQualidade()
