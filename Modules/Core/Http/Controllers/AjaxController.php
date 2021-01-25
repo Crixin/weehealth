@@ -5,9 +5,6 @@ namespace Modules\Core\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Classes\{Constants, GEDServices, RESTServices, Helper};
 use Illuminate\Support\Facades\{Auth, DB};
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\Auth\JWTController;
-use Modules\Core\Model\{Empresa, Grupo, Parametro, User, Setup};
 use Modules\Core\Services\{GrupoService};
 use Modules\Core\Repositories\{EmpresaRepository, ParametroRepository, UserRepository, SetupRepository};
 
@@ -56,20 +53,18 @@ class AjaxController extends Controller
 
     public function updateUserPermissions(Request $_request)
     {
-        $user = User::find($_request->get('idUsuario'));
+        $user = $this->userRepository->find($_request->get('idUsuario'));
         $valor = $_request->get('valor');
         try {
             // Se o valor for verdadeiro, quer dizer que o usuário deseja sobescrever as permissões dos grupos que ele pertence e considerar apenas os vínculos diretos entre USUÁRIO e EMPRESA
+            $utilizar_permissoes_nivel_usuario = false;
             if ($valor == "true") {
                 foreach ($user->coreGroups as $key => $value) {
                     $value->pivot->delete();
                 }
-
-                $user->utilizar_permissoes_nivel_usuario = true;
-            } else {
-                $user->utilizar_permissoes_nivel_usuario = false;
-            }
-            $user->save();
+                $utilizar_permissoes_nivel_usuario = true;
+            } 
+            $this->userRepository->update(["utilizar_permissoes_nivel_usuario" => $utilizar_permissoes_nivel_usuario], $_request->get('idUsuario'));
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {
             return response()->json(['response' => 'erro']);
@@ -84,15 +79,14 @@ class AjaxController extends Controller
             return response()->json(['response' => 'erro']);
         }
 
-        $user  = User::find($_request->idUsuario);
+        $user  = $this->userRepository->find($_request->idUsuario);
         $valor = $_request->valor;
         try {
+            $administrador = false;
             if ($valor == "true") {
-                $user->administrador = true;
-            } else {
-                $user->administrador = false;
+                $administrador = true;
             }
-            $user->save();
+            $this->userRepository->update(['administrador' => $administrador], $_request->idUsuario);
             return response()->json(['response' => 'sucesso']);
         } catch (\Throwable $th) {
             return response()->json(['response' => 'erro']);
@@ -103,7 +97,7 @@ class AjaxController extends Controller
     // CONFIGURAÇÕES
     public function updateParamValue(Request $_request)
     {
-        $param = Parametro::find($_request->get('parametro_id'));
+        $param = $this->paramentroRepository->find($_request->get('parametro_id'));
         try {
             $param[$_request->get('coluna')] = $_request->get('valor');
             $param->save();
@@ -116,7 +110,7 @@ class AjaxController extends Controller
 
     public function updateParamActiveValue(Request $_request)
     {
-        $param = Parametro::find($_request->get('parametro_id'));
+        $param = $this->paramentroRepository->find($_request->get('parametro_id'));
         try {
             $param[$_request->get('coluna')] = $_request->get('valor');
             $param->save();
@@ -130,10 +124,9 @@ class AjaxController extends Controller
     //SETUP
     public function updateSetup(Request $_request)
     {
-        $setup = Setup::find(1);
+        $setup = $this->setupRepository->find(1);
         try {
-            $setup[$_request->get('coluna')] = $_request->get('valor');
-            $setup->save();
+            $this->setupRepository->update([$_request->get('coluna') => $_request->get('valor')], 1);
             return response()->json(['response' => 'sucesso']);
         } catch (\Throwable $th) {
             return response()->json(['response' => 'erro']);

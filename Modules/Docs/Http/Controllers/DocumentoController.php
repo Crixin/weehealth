@@ -21,6 +21,7 @@ use Modules\Docs\Repositories\{
 };
 use Modules\Core\Repositories\{GrupoRepository, ParametroRepository, SetorRepository, UserRepository};
 use Modules\Docs\Services\{DocumentoService, RegistroImpressoesService, TipoDocumentoService, WorkflowService};
+
 class DocumentoController extends Controller
 {
     protected $documentoRepository;

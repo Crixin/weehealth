@@ -231,6 +231,19 @@
                 }
                 
             }
+        },
+        "LOGS": {
+            "icone": "mdi mdi-account-search",
+            "descricao": "Logs",
+            "route": "core.log",
+            "permissao": ["core_log_cons"],
+            "filhos_perfil": {
+                "Consulta": {
+                    "name": "core_log_cons",
+                    "descricao": "Consulta",
+                    "icone": "mdi mdi-magnify"
+                }
+            }
         }
     },
     "Portal": {

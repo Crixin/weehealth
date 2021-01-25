@@ -7,9 +7,8 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Core\Model\{Empresa};
-use Modules\Core\Repositories\EmpresaRepository;
-use Modules\Core\Repositories\UserRepository;
 use Modules\Portal\Model\{EmpresaUser};
+use Modules\Core\Repositories\{EmpresaRepository, UserRepository};
 use Modules\Portal\Repositories\EmpresaUserRepository;
 
 class EmpresaUserController extends Controller

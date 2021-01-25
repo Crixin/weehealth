@@ -129,7 +129,7 @@ class DashboardController extends Controller
             [
                 ['dashboard_id', '=', $_id]
             ],
-            ['coreUser']
+            ['coreUsers']
         )->toArray();
         $usuariosVinculados = array_column($usuariosVinculados, 'user_id');
         

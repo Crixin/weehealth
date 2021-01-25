@@ -47,7 +47,7 @@
                                     <tr>
                                         <td>{{ $setor->id }}</td>
                                         <td>{{ $setor->nome }}</td>
-                                        <td>{{ $setor->descricao }}</td>
+                                        <td>{{ Helper::limitChar($setor->descricao,70) }}</td>
                                         <td>
                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $setor->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
                                             <a href="{{ route('core.setor.editar', ['id' => $setor->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>

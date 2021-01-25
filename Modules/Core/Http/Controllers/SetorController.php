@@ -5,11 +5,10 @@ namespace Modules\Core\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Core\Repositories\SetorRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Helper;
-use Modules\Core\Repositories\UserRepository;
+use Modules\Core\Repositories\{SetorRepository, UserRepository};
 
 class SetorController extends Controller
 {

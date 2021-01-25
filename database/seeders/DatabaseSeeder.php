@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(\Modules\Core\Database\Seeders\SeedCoreSetorTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateParametroTipoEnvioNotificacaoTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateParametroTipoNotificacaoTableSeeder::class);
+        $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateGrupoUserBDTableSeeder::class);
 
         /**PORTAL */
         $this->call(\Modules\Portal\Database\Seeders\SeedPortalProcessoTableSeeder::class);

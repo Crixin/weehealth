@@ -74,6 +74,10 @@ return [
             'create'          => 'Nova Notificação',
             'update'          => 'Alterando Notificação'
         ],
+        //LOG
+        'log'        => [
+            'index'           => 'Logs'
+        ],
     ],
 
     'portal'        => [

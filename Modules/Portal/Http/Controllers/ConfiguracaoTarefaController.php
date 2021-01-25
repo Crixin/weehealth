@@ -3,8 +3,7 @@
 namespace Modules\Portal\Http\Controllers;
 
 use App\Classes\Helper;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{Validator, DB};
 use Modules\Portal\Repositories\ConfiguracaoTarefaRepository;
 use Illuminate\Http\Request;
 

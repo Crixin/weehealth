@@ -24,11 +24,11 @@ class Permissao
         if (Auth::user()->administrador) {
             return $next($request);
         }
-        
+
         if (count(array_intersect($permissoes, Auth::user()->corePerfil->permissoes))) {
             return $next($request);
         }
-        
+
         return redirect('/');
     }
 }

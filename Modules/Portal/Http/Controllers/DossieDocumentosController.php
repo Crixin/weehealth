@@ -9,7 +9,7 @@ use App\Http\Controllers\Auth\JWTController;
 use Illuminate\Support\Facades\{Storage, DB, File};
 use Illuminate\Filesystem\Filesystem;
 use App\Classes\{Constants, RESTServices};
-use Modules\Core\Repositories\{GrupoUserRepository};
+use App\Mail\Dossie;
 use Modules\Portal\Repositories\{
     EmpresaGrupoRepository,
     EmpresaUserRepository,
@@ -17,7 +17,7 @@ use Modules\Portal\Repositories\{
     DossieEmpresaProcessoRepository,
     EmpresaProcessoRepository
 };
-use Modules\Core\Repositories\{EmpresaRepository, ParametroRepository};
+use Modules\Core\Repositories\{EmpresaRepository, ParametroRepository, GrupoUserRepository};
 
 class DossieDocumentosController extends Controller
 {
@@ -342,11 +342,10 @@ class DossieDocumentosController extends Controller
                     $jwt = new JWTController();
                     $token = $jwt->generateToken($info, $timer);
 
-                    $server = 'http' . (empty($_SERVER['HTTPS']) ? '' : 's') . '://' . $_SERVER['HTTP_HOST'];
-
                     $send = new JobController();
-                    $send->enqueue($token, $emails2JWT, $server);
-
+                    $corpo = new Dossie($token);
+                    $send->enqueue($emails2JWT, $corpo);
+                   
                     Helper::setNotify(
                         'E-mails enviados com sucessos!',
                         'success|check-circle'

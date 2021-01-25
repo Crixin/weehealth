@@ -36,6 +36,7 @@
                     <table id="dataTable-processos" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Nome</th>
                                 <th>Descrição</th>
                                 <th>Controle</th>
@@ -44,8 +45,9 @@
                         <tbody>
                             @foreach ($processos as $processo)
                                 <tr>
+                                    <td>{{ $processo->id }}</td>
                                     <td>{{ $processo->nome }}</td>
-                                    <td>{{ $processo->descricao }}</td>
+                                    <td style="white-space: initial">{{ $processo->descricao }}</td>
                                     <td style="white-space: nowrap">
                                         <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $processo->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
                                         <a href="{{ route('portal.processo.editar', ['id' => $processo->id ]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>

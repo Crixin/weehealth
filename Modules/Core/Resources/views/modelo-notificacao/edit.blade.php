@@ -41,6 +41,8 @@
                             'nome' => $modeloNotificacao->nome,
                             'titulo' => $modeloNotificacao->titulo_email,
                             'corpo' => $modeloNotificacao->corpo_email,
+                            'delay' => $modeloNotificacao->tempo_delay_envio,
+                            'tentativasEnvio' => $modeloNotificacao->numero_tentativas_envio,
                             'tiposEnvio' => $tiposEnvio,
                             'tiposNotificacao' => $tiposNotificacao
                         ]

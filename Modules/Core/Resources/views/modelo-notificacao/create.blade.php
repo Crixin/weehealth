@@ -35,6 +35,8 @@
                             'nome' => '',
                             'titulo' => '',
                             'corpo' => '',
+                            'delay' => '0',
+                            'tentativasEnvio' => '0',
                             'tiposEnvio' => $tiposEnvio,
                             'tiposNotificacao' => $tiposNotificacao
                         ]

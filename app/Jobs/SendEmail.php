@@ -2,28 +2,32 @@
 
 namespace App\Jobs;
 
+use App\Mail\Padrao;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Mail\Dossie;
 use Mail;
 
 class SendEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    
+
+    public $tries;
     protected $details;
+    protected $corpo;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($details)
+    public function __construct($details, $corpo, $tries)
     {
         $this->details = $details;
+        $this->corpo = $corpo;
+        $this->tries = $tries;
     }
  
 
@@ -34,8 +38,6 @@ class SendEmail implements ShouldQueue
      */
     public function handle()
     {
-        $email = new Dossie($this->details['token'], $this->details['server']);
-        
-        Mail::to($this->details['email'])->send($email);
+        Mail::to($this->details['email'])->send($this->corpo);
     }
 }

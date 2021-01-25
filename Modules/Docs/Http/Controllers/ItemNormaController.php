@@ -5,10 +5,8 @@ namespace Modules\Docs\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Docs\Repositories\ItemNormaRepository;
-use Modules\Docs\Repositories\NormaRepository;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use Modules\Docs\Repositories\{ItemNormaRepository, NormaRepository};
+use Illuminate\Support\Facades\{DB, Validator};
 use App\Classes\Helper;
 
 class ItemNormaController extends Controller

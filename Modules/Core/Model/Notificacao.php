@@ -18,7 +18,9 @@ class Notificacao extends Model
         'titulo_email',
         'corpo_email',
         'tipo_envio_notificacao_id',
-        'documento_anexo'
+        'documento_anexo',
+        'tempo_delay_envio',
+        'numero_tentativas_envio'
     ];
 
     public $rules = [
@@ -26,6 +28,8 @@ class Notificacao extends Model
         'tipoEnvio' => 'required',
         'titulo'    => 'required',
         'corpo'     => 'required',
-        'tipoNotificacao' => 'required'
+        'tipoNotificacao' => 'required',
+        'delay'      => 'min:0',
+        'tentativas' => 'min:0'
     ];
 }

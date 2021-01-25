@@ -8,8 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Modules\Core\Repositories\GrupoRepository;
-use Modules\Core\Repositories\PerfilRepository;
+use Modules\Core\Repositories\{GrupoRepository, PerfilRepository};
 use Modules\Docs\Repositories\FluxoRepository;
 
 class FluxoController extends Controller

@@ -43,7 +43,8 @@ return [
         'next'           => 'Proximo',
         'complete'       => 'Concluir',
         'clear'          => 'Limpar',
-        'attachments'    => 'Anexos'
+        'attachments'    => 'Anexos',
+        'detail'         => 'Detalhe'
 
     ],
 

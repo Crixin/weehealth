@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Classes\Helper;
 use Modules\Core\Model\User;
 use Illuminate\Http\Request;
 use Modules\Core\Repositories\PerfilRepository;
@@ -9,6 +10,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\DB;
+use Modules\Core\Repositories\UserRepository;
 
 class RegisterController extends Controller
 {
@@ -32,16 +35,18 @@ class RegisterController extends Controller
      */
     protected $redirectTo = 'usuario';
     protected $perfilRepository;
+    protected $userRepository;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(PerfilRepository $perfil)
+    public function __construct(PerfilRepository $perfil, UserRepository $userRepository)
     {
         //Comentando para não exigir que o usuário não esteja autenticado para acessar a rota para inserir um novo usuário
         $this->perfilRepository = $perfil;
+        $this->userRepository = $userRepository;
     }
 
 
@@ -94,7 +99,7 @@ class RegisterController extends Controller
             $createUser['foto'] = $imageBase64;
         }
 
-        return User::create($createUser);
+        return $this->userRepository->create($createUser);
     }
 
     /**
@@ -108,13 +113,18 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
+        try {
+            $this->validator($request->all())->validate();
+            event(new Registered($user = $this->create($request->all())));
 
-        $this->validator($request->all())->validate();
-        event(new Registered($user = $this->create($request->all())));
-
-        // $this->guard()->login($user);
-
-        return $this->registered($request, $user)
+            // $this->guard()->login($user);
+            return $this->registered($request, $user)
             ?: redirect($this->redirectPath())->with(['message' => 'Novo usuário criado com sucesso!', 'style' => 'success|check-circle']);
+
+        } catch (\Throwable $th) {
+            Helper::setNotify('Um erro ocorreu ao gravar o usuario.', 'danger|close-circle');
+            return redirect()->back()->withInput();
+        }
+
     }
 }

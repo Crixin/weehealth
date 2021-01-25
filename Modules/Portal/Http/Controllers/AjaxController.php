@@ -4,15 +4,18 @@ namespace Modules\Portal\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Classes\{Constants, RESTServices, Helper};
+use App\Mail\Dossie;
 use Illuminate\Support\Facades\{Auth, DB};
 use Modules\Core\Http\Controllers\JobController;
 use Modules\Core\Http\Controllers\Auth\JWTController;
-use Modules\Portal\Model\{EmpresaGrupo, EmpresaProcesso, EmpresaUser, Processo};
 use Modules\Portal\Repositories\{
     EmpresaProcessoRepository,
     DashboardRepository,
     DossieRepository,
-    EmpresaProcessoGrupoRepository
+    EmpresaProcessoGrupoRepository,
+    EmpresaGrupoRepository,
+    EmpresaUserRepository,
+    ProcessoRepository
 };
 use Modules\Core\Repositories\{ParametroRepository};
 
@@ -31,7 +34,8 @@ class AjaxController extends Controller
         $_idEmpresa = $request->empresa_id;
         $_idEmpresaGrupo = $request->grupo_id;
         try {
-            EmpresaGrupo::destroy($_idEmpresaGrupo);
+            $empresaGrupo = new EmpresaGrupoRepository();
+            $empresaGrupo->delete($_idEmpresaGrupo);
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {
             return response()->json(['response' => 'erro']);
@@ -40,7 +44,8 @@ class AjaxController extends Controller
 
     public function updateLinkEnterpriseGroup(Request $_request)
     {
-        $empresaGrupo = EmpresaGrupo::find($_request->get('idVinculo'));
+        $empresaGrupoRepository = new EmpresaGrupoRepository();
+        $empresaGrupo = $empresaGrupoRepository->find($_request->get('idVinculo'));
         try {
             $empresaGrupo[$_request->get('coluna')] = $_request->get('valor');
             $empresaGrupo->save();
@@ -65,7 +70,8 @@ class AjaxController extends Controller
     {
         $_idEmpresaProcesso = $request->vinculo_id;
         try {
-            EmpresaProcesso::destroy($_idEmpresaProcesso);
+            $empresaProcessoRepository = new EmpresaProcessoRepository();
+            $empresaProcessoRepository->delete($_idEmpresaProcesso);
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {
             return response()->json(['response' => 'erro']);
@@ -76,7 +82,8 @@ class AjaxController extends Controller
     {
         $_idEmpresaUsuario = $request->vinculo_id;
         try {
-            EmpresaUser::destroy($_idEmpresaUsuario);
+            $empresaUserRepository = new EmpresaUserRepository();
+            $empresaUserRepository->delete($_idEmpresaUsuario);
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {
             return response()->json(['response' => 'erro']);
@@ -85,17 +92,18 @@ class AjaxController extends Controller
 
     public function updateLinkEnterpriseUser(Request $_request)
     {
-        $empresaUser = EmpresaUser::find($_request->get('idVinculo'));
+        $empresaUserRepository = new EmpresaUserRepository();
+        $empresaUser = $empresaUserRepository->find($_request->get('idVinculo'));
         try {
-            $empresaUser[$_request->get('coluna')] = $_request->get('valor');
-            $empresaUser->save();
+            $empresaUserRepository->update(
+                [$_request->get('coluna') => $_request->get('valor')],
+                $_request->get('idVinculo')
+            );
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {
             return response()->json(['response' => 'erro']);
         }
     }
-
-    
 
     public function deleteDossie(Request $_request)
     {
@@ -113,7 +121,8 @@ class AjaxController extends Controller
     {
         $_id = $request->processo_id;
         try {
-            Processo::destroy($_id);
+            $processoRepository = new ProcessoRepository();
+            $processoRepository->delete($_id);
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {
         }
@@ -239,10 +248,8 @@ class AjaxController extends Controller
             $token = $jwt->generateToken($info, 1440 * $dias);
 
             $send = new JobController();
-
-            $server = 'http' . (empty($_SERVER['HTTPS']) ? '' : 's') . '://' . $_SERVER['HTTP_HOST'];
-
-            $send->enqueue($token, $emailsToResend, $server);
+            $corpo = new Dossie($token);
+            $send->enqueue($emailsToResend, $corpo);
 
             return response()->json(['response' => 'sucesso']);
         } catch (\Throwable $th) {

@@ -6,8 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use App\Classes\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{DB, Validator};
 use Modules\Docs\Repositories\PlanoRepository;
 
 class PlanoController extends Controller

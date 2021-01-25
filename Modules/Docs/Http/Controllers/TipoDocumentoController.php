@@ -6,11 +6,9 @@ use App\Classes\Helper;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{DB, Validator};
 use Modules\Core\Repositories\ParametroRepository;
-use Modules\Docs\Repositories\FluxoRepository;
-use Modules\Docs\Repositories\TipoDocumentoRepository;
+use Modules\Docs\Repositories\{FluxoRepository, TipoDocumentoRepository};
 use Modules\Docs\Services\TipoDocumentoService;
 
 class TipoDocumentoController extends Controller

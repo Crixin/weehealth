@@ -59,7 +59,7 @@
                                     <div class="form-group{{ $errors->has('indice_filtro_utilizado') ? ' has-error' : '' }}">
                                         <label class="control-label">Filtros de Utilização</label>
                                         <input type="hidden" name="headersTable" id="headersTable" />
-                                        <select class="form-control selectpicker" name="indice_filtro_utilizado[]" id="indice_filtro_utilizado" value="{{ old('indice_filtro_utilizado') }}" required data-live-search="true" data-size='10' data-actions-box="true" multiple></select>
+                                        <select class="form-control selectpicker" name="indice_filtro_utilizado[]" id="indice_filtro_utilizado"  required data-live-search="true" data-size='10' data-actions-box="true" multiple></select>
 
                                         <small class="form-control-feedback"> Selecione quais devem ser os filtros deste processo. </small> 
                                     </div>

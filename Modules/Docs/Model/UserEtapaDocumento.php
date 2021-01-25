@@ -17,4 +17,19 @@ class UserEtapaDocumento extends Model
         'etapa_fluxo_id',
         'grupo_id'
     ];
+
+    public function docsDocumento()
+    {
+        return $this->hasOne('Modules\Docs\Model\Documento', 'id', 'documento_id');
+    }
+
+    public function docsEtapa()
+    {
+        return $this->hasOne('Modules\Docs\Model\EtapaFluxo', 'id', 'etapa_fluxo_id');
+    }
+
+    public function coreUsers()
+    {
+        return $this->hasOne('Modules\Core\Model\User', 'id', 'user_id');
+    }
 }

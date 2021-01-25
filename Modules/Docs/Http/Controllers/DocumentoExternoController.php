@@ -5,13 +5,10 @@ namespace Modules\Docs\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Core\Repositories\EmpresaRepository;
-use Modules\Core\Repositories\SetorRepository;
+use Modules\Core\Repositories\{EmpresaRepository, SetorRepository};
 use Modules\Docs\Repositories\DocumentoExternoRepository;
 use App\Classes\Helper;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{Auth, DB, Validator};
 
 class DocumentoExternoController extends Controller
 {

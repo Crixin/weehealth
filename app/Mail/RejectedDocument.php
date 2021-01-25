@@ -2,7 +2,8 @@
 
 namespace App\Mail;
 
-use App\{Empresa, Processo, User};
+use Modules\Core\Model\{Empresa, User};
+use Modules\Portal\Model\{Processo};
 use App\Classes\Constants;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;

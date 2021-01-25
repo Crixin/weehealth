@@ -9,11 +9,8 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Core\Repositories\ParametroRepository;
-use Modules\Docs\Repositories\CheckListItemNormaRepository;
-use Modules\Docs\Repositories\ItemNormaRepository;
-use Modules\Docs\Repositories\NormaRepository;
-use Modules\Docs\Services\CheckListItemNormaService;
-use Modules\Docs\Services\ItemNormaService;
+use Modules\Docs\Repositories\{CheckListItemNormaRepository, ItemNormaRepository, NormaRepository};
+use Modules\Docs\Services\{CheckListItemNormaService, ItemNormaService};
 
 class NormaController extends Controller
 {

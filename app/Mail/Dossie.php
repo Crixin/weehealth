@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Repositories\SetupRepository;
+use Modules\Core\Repositories\SetupRepository;
 
 class Dossie extends Mailable
 {
@@ -15,7 +15,6 @@ class Dossie extends Mailable
     private $token;
     private $setupRepository;
 
-    
     protected $logoPath;
     protected $iconPath;
     protected $server;
@@ -25,10 +24,10 @@ class Dossie extends Mailable
      *
      * @return void
      */
-    public function __construct($_token, $_server)
+    public function __construct($_token)
     {
         $this->token = $_token;
-        $this->server = $_server;
+        $this->server = 'http' . (empty($_SERVER['HTTPS']) ? '' : 's') . '://' . $_SERVER['HTTP_HOST'];
         $this->setupRepository = new SetupRepository();
         $this->logoPath = public_path() . '/images/emails/logo.png';
         $this->iconPath = public_path() . '/images/emails/docs.png';

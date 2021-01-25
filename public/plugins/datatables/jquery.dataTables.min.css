@@ -351,8 +351,8 @@ table.dataTable td {
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
     color: white !important;
-    border: 1px solid #6164c1;
-    background-color: #6164c1;
+    border: 1px solid #c3c7ca;
+    background-color: #c3c7ca;
     
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button:active {

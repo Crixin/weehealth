@@ -145,5 +145,11 @@ Route::group(['middleware' => ['auth']], function () {
             Route::post('setup',                    ['as' => 'core.atualizar.setup',                       'uses' => 'AjaxController@updateSetup']);
         });
 
+        /**LOG */
+        Route::group(['prefix' => 'log', 'as' => 'core.'], function () {
+            Route::any('',                          ['as' => 'log',                       'uses' => 'LogController@index']);
+            Route::post('tabela',        ['as' => 'log.tabela',      'uses' => 'LogController@buscaCamposTabela']);
+        });
+
     });
 });

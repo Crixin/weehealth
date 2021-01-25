@@ -78,8 +78,8 @@
 
 
      <!-- Modal de confimação: deseja, realmente, trocar a permissão do usuário? -->
-     <div id="modalChangeUserPermission" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+     <div class="modal" id="modalChangeUserPermission" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel">Confirmação - Mudança de Permissão</h4>
@@ -91,14 +91,13 @@
                     <p>Dito isso, <span class="font-weight-bold">deseja realmente aplicar essa alteração?</span></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-back waves-effect" data-dismiss="modal"> @lang('buttons.general.cancel') </button>
+                    <button type="button" style="border-color: black" class="btn btn-back waves-effect" data-dismiss="modal"> @lang('buttons.general.cancel') </button>
                     <button type="button" id="confirm_change_permission" class="btn btn-danger waves-effect"> @lang('buttons.general.confirm') </button>
                 </div>
             </div>
         </div>
     </div>
     <!-- /.Fecha modal de confimação: deseja, realmente, trocar a permissão do usuário? -->
-    
 @endsection
 
 
@@ -196,8 +195,8 @@
         });
 
         // Quando o modal de confirmação é fechada através do botão cancelar, limpa a sessão e recarrega a página
-        $('#modalChangeUserPermission').on('hide.bs.modal', function (e) {
-            window.sessionStorage.clear();
+        $('.btn-back, .close').on('click', function (e) {
+            $("#modalChangeUserPermission").hide();
             location.reload();
         })
 

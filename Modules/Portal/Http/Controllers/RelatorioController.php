@@ -5,28 +5,36 @@ namespace Modules\Portal\Http\Controllers;
 use App\Classes\Constants;
 use App\Classes\Helper;
 use Carbon\Carbon;
-use Modules\Portal\Model\{EmpresaProcesso, Logs};
+use Modules\Portal\Model\{Logs};
 use App\Classes\GEDServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Modules\Portal\Repositories\EmpresaProcessoRepository;
 
 class RelatorioController extends Controller
 {
 
     private $ged;
+    protected $empresaProcessoRepository;
 
     /*
     * Construtor
     */
-    public function __construct()
+    public function __construct(EmpresaProcessoRepository $empresaProcessoRepository)
     {
         $this->ged = new GEDServices(['id_user' => env('ID_GED_USER'), 'server' => env('URL_GED_WSDL')]);
+        $this->empresaProcessoRepository = $empresaProcessoRepository;
     }
 
 
     public function index($_idEmpresa, $_idProcesso)
     {
-        $empresaProcesso = EmpresaProcesso::where('empresa_id', $_idEmpresa)->where('processo_id', $_idProcesso)->first();
+        $empresaProcesso = $this->empresaProcessoRepository->findOneBy(
+            [
+                ['empresa_id', '=', $_idEmpresa],
+                ['processo_id', '=', $_idProcesso]
+            ]
+        );
         $dataInicio      = Carbon::now()->subDays(7)->startOfDay();
         $dataTermino     = Carbon::yesterday()->endOfDay();
         $idxFiltro       = $empresaProcesso->indice_filtro_utilizado;
@@ -66,7 +74,12 @@ class RelatorioController extends Controller
         $dataTermino     = Carbon::parse($request->dataTermino)->endOfDay();
         $idEmpresa       = $request->idEmpresa;
         $idProcesso      = $request->idProcesso;
-        $empresaProcesso = EmpresaProcesso::where('empresa_id', $idEmpresa)->where('processo_id', $idProcesso)->first();
+        $empresaProcesso = $this->empresaProcessoRepository->findOneBy(
+            [
+                ['empresa_id','=',$idEmpresa],
+                ['processo_id','=',$idProcesso]
+            ]
+        );
         $idxFiltro       = $empresaProcesso->indice_filtro_utilizado;
         $filtroAdicional = $request->filtro_adicional;
 

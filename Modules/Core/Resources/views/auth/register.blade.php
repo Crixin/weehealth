@@ -22,7 +22,12 @@
         <div class="card">
             <div class="card-body">
             
-            
+                @if(Session::has('message'))
+                    @component('components.alert')
+                    @endcomponent
+
+                    {{ Session::forget('message') }}
+                @endif
                 <form method="POST" action="{{ route('core.usuario.save') }}"  enctype="multipart/form-data">
                     {{ csrf_field() }}
 

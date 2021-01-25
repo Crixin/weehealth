@@ -10,12 +10,10 @@
                     <li>APROVADOR             <span class="text-muted">- Tag: &ltAPROVADOR&gt</span></li>
                     <li>DATA_REVISAO          <span class="text-muted">- Tag: &ltDATA_REVISAO&gt</span></li>
                     <li>VERSAO                <span class="text-muted">- Tag: &ltVERSAO&gt</span></li>
-                    <li>CODIGO_DOCUMENTO      <span class="text-muted">- Tag: &ltCODIGO_DOCUMENTO&gt</span></li>
                 </ul>
                 <ul>
+                    <li>CODIGO_DOCUMENTO      <span class="text-muted">- Tag: &ltCODIGO_DOCUMENTO&gt</span></li>
                     <li>TITULO_DOCUMENTO      <span class="text-muted">- Tag: &ltTITULO_DOCUMENTO&gt</span></li>
-                    <li>COLABORADORES         <span class="text-muted">- Tag: &ltCOLABORADORES&gt</span></li>
-                    <li>VERIFICADOR_QUALIDADE <span class="text-muted">- Tag: &ltVERIFICADOR_QUALIDADE&gt</span></li>
                     <li>TIPO_DOCUMENTO        <span class="text-muted">- Tag: &ltTIPO_DOCUMENTO&gt</span></li>
                     <li>SETOR                 <span class="text-muted">- Tag: &ltSETOR&gt</span></li>
                 </ul>
@@ -67,8 +65,21 @@
                 {!! Form::label('titulo', 'Título', ['class' => 'control-label']) !!}
                 {!! Form::textarea('titulo',$titulo, ['class' => 'form-control', 'required' => 'required','rows'=> 5]) !!}
                 <small class="text-danger">{{ $errors->first('titulo') }}</small>
+            </div> 
+        </div>
+        <div class="col-md-3">
+            <div class="form-group{{ $errors->has('delay') ? ' has-error' : '' }}">
+                {!! Form::label('delay', 'Delay Entre Envios (Em segundos)') !!}
+                {!! Form::number('delay',$delay, ['class' => 'form-control']) !!}
+                <small class="text-danger">{{ $errors->first('delay') }}</small>
             </div>
-            
+        </div>
+        <div class="col-md-3">
+            <div class="form-group{{ $errors->has('tentativas') ? ' has-error' : '' }}">
+                {!! Form::label('tentativas', 'N° de Tentativas') !!}
+                {!! Form::number('tentativas',$tentativasEnvio, ['class' => 'form-control']) !!}
+                <small class="text-danger">{{ $errors->first('tentativas') }}</small>
+            </div>
         </div>
     </div>
     <div class="row">

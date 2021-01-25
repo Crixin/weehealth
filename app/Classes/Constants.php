@@ -266,4 +266,16 @@ class Constants {
             'mask' => ''
         )
     ];
+
+    public static $TAGS_NOTIFICACOES = [
+        "<DATA_ELABORACAO>",
+        "<ELABORADOR>",
+        "<APROVADOR>",
+        "<DATA_REVISAO>",
+        "<VERSAO>",
+        "<CODIGO_DOCUMENTO>",
+        "<TITULO_DOCUMENTO>",
+        "<TIPO_DOCUMENTO>",
+        "<SETOR>"
+    ];
 }

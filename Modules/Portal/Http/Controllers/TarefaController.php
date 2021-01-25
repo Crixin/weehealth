@@ -3,8 +3,7 @@
 namespace Modules\Portal\Http\Controllers;
 
 use App\Classes\Helper;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{Validator, DB};
 use Modules\Core\Repositories\{EmpresaRepository,GrupoUserRepository};
 use Modules\Portal\Repositories\{
     TarefaRepository,
@@ -14,7 +13,6 @@ use Modules\Portal\Repositories\{
     EmpresaProcessoRepository
 };
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class TarefaController extends Controller
 {

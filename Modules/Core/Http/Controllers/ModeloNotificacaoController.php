@@ -5,8 +5,7 @@ namespace Modules\Core\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Core\Repositories\NotificacaoRepository;
-use Modules\Core\Repositories\ParametroRepository;
+use Modules\Core\Repositories\{NotificacaoRepository, ParametroRepository};
 use Illuminate\Support\Facades\{DB};
 use Modules\Core\Services\NotificacaoService;
 use App\Classes\Helper;
@@ -49,8 +48,6 @@ class ModeloNotificacaoController extends Controller
 
         $buscaTiposNotificacao = $this->parametroRepository->getParametro('TIPO_NOTIFICACAO');
         $tiposNotificacao = json_decode($buscaTiposNotificacao);
-
-        
 
         return view('core::modelo-notificacao.create', compact('tiposEnvio', 'tiposNotificacao'));
     }
@@ -157,7 +154,9 @@ class ModeloNotificacaoController extends Controller
             "corpo_email" => $request->corpo,
             "tipo_envio_notificacao_id" => $request->tipoEnvio,
             "documento_anexo" => $request->enviarAnexo == '1' ? true : false,
-            'tipo_id' => $request->tipoNotificacao
+            'tipo_id' => $request->tipoNotificacao,
+            'tempo_delay_envio' => $request->delay,
+            'numero_tentativas_envio' => $request->tentativas
         ];
     }
 }

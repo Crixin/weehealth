@@ -20,7 +20,9 @@ class DocsController extends Controller
      */
     public function index()
     {
-        
+        //$jobController = new JobController();
+        //$corpo = new PadraoDocs(1, 59);
+        //$jobController->enqueue(['bruno-colla@hotmail.com'], $corpo, 2, 15);
         return view('docs::home.index');
     }
 

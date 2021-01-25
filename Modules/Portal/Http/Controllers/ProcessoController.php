@@ -6,12 +6,12 @@ use App\Classes\Helper;
 use Illuminate\Http\Request;
 use App\Mail\RejectedDocument;
 use App\Classes\{Constants, RESTServices};
-use Modules\Portal\Model\{Processo, EmpresaProcesso};
-use Modules\Core\Model\{User};
-use Modules\Core\Repositories\{GrupoUserRepository};
+use Modules\Core\Repositories\{GrupoUserRepository, UserRepository};
 use Modules\Portal\Repositories\{
     EmpresaGrupoRepository,
-    EdicaoDocumentoRepository
+    EdicaoDocumentoRepository,
+    EmpresaProcessoRepository,
+    ProcessoRepository
 };
 use Illuminate\Support\Facades\{Auth, Mail, Log, Validator};
 
@@ -20,23 +20,41 @@ class ProcessoController extends Controller
     protected $edicaoDocumentoRepository;
     protected $empresaGrupoRepository;
     protected $grupoUserRepository;
+    protected $userRepository;
+    protected $processoRepository;
+    protected $empresaProcessoRepository;
     private $ged;
 
 
     /*
     * Construtor
     */
-    public function __construct(EmpresaGrupoRepository $grupo, GrupoUserRepository $grupoUser)
+    public function __construct(
+        EmpresaGrupoRepository $grupo,
+        GrupoUserRepository $grupoUser,
+        UserRepository $userRepository,
+        ProcessoRepository $processoRepository,
+        EmpresaProcessoRepository $empresaProcessoRepository
+    )
     {
         $this->ged = new RESTServices();
         $this->empresaGrupoRepository = $grupo;
         $this->grupoUserRepository = $grupoUser;
+        $this->userRepository = $userRepository;
+        $this->processoRepository = $processoRepository;
+        $this->empresaProcessoRepository = $empresaProcessoRepository;
     }
 
 
     public function index()
     {
-        $processos = Processo::orderBy('nome')->get();
+        $processos = $this->processoRepository->findBy(
+            [],
+            [],
+            [
+                ['nome','ASC']
+            ]
+        );
         return view('portal::processo.index', compact('processos'));
     }
 
@@ -59,10 +77,12 @@ class ProcessoController extends Controller
         }
 
 
-        $processo = new Processo();
-        $processo->nome = $request->get('nome');
-        $processo->descricao = $request->get('descricao');
-        $processo->save();
+        $this->processoRepository->create(
+            [
+                'nome' => $request->get('nome'),
+                'descricao' => $request->get('descricao')
+            ]
+        );
 
         Helper::setNotify('Processo criado com sucesso!', 'success|check-circle');
         return redirect()->route('portal.processo');
@@ -71,7 +91,7 @@ class ProcessoController extends Controller
 
     public function editProcess($_id)
     {
-        $processo = Processo::find($_id);
+        $processo = $this->processoRepository->find($_id);
         return view('portal::processo.update', compact('processo'));
     }
 
@@ -79,7 +99,7 @@ class ProcessoController extends Controller
     public function updateProcess(Request $request)
     {
         $arrRegras = array('descricao' => 'required|string|max:300');
-        $processo = Processo::find($request->get('idProcesso'));
+        $processo = $this->processoRepository->find($request->get('idProcesso'));
 
         if ($request->get('nome') != $processo->nome) {
             $arrRegras['nome'] = 'required|string|max:100|unique:portal_processo';
@@ -102,8 +122,12 @@ class ProcessoController extends Controller
 
     public function search($_idEmpresa, $_idProcesso)
     {
-        $empresaProcesso = EmpresaProcesso::where('empresa_id', $_idEmpresa)->where('processo_id', $_idProcesso)->first();
-
+        $empresaProcesso = $this->empresaProcessoRepository->findOneBy(
+            [
+                ['empresa_id','=', $_idEmpresa],
+                ['processo_id','=', $_idProcesso]
+            ]
+        );
         $indices = json_decode($empresaProcesso->indice_filtro_utilizado, true);
 
         foreach ($indices as $key => $indice) {
@@ -427,7 +451,11 @@ class ProcessoController extends Controller
         );
 
         // [README] Essa validação é feita por questões de segurança. Em resumo, valida se o valor presente na sessão (id da empresa) é o mesmo que o valor encontrado no banco de outra forma (através do id de área vinculado à empresa, que é único). Se os dois valores são iguais, segue o processamento
-        $empresaProcesso = EmpresaProcesso::where('id_area_ged', 'like', '%' . $documentoCompleto->idArea . '%' )->first();
+        $empresaProcesso = $this->empresaProcessoRepository->findOneBy(
+            [
+                ['id_area_ged', 'like', '%' . $documentoCompleto->idArea . '%' ]
+            ]
+        );
         $identificadores = session('identificadores');
 
         if ($empresaProcesso->empresa_id != $identificadores['_idEmpresa']) {
@@ -478,7 +506,11 @@ class ProcessoController extends Controller
             if (is_array($idUsuariosHabilitados)) {
                 Log::debug(Constants::$LOG . "Destinatários da empresa [{$empresaProcesso->empresa_id}]: " . implode("; ", $idUsuariosHabilitados));
 
-                $destinatarios = User::whereIn('id', $idUsuariosHabilitados)->get();
+                $destinatarios = $this->userRepository->findBy(
+                    [
+                        ['id','',$idUsuariosHabilitados, 'IN']
+                    ]
+                );
                 Mail::to($destinatarios)->send(
                     new RejectedDocument(
                         $empresaProcesso->empresa_id,
@@ -500,11 +532,12 @@ class ProcessoController extends Controller
 
     public function upload($_idEmpresa, $_idProcesso)
     {
-        $empresaProcesso = EmpresaProcesso::
-            where('empresa_id', $_idEmpresa)
-            ->where('processo_id', $_idProcesso)
-            ->first();
-
+        $empresaProcesso = $this->empresaProcessoRepository->findOneBy(
+            [
+                ['empresa_id','=',$_idEmpresa],
+                ['processo_id','=', $_idProcesso]
+            ]
+        );
         $idAreaGED = $empresaProcesso->id_area_ged;
 
         return view('portal::processo.upload-documents', compact("idAreaGED"));

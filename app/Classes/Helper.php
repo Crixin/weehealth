@@ -108,8 +108,8 @@ class Helper
             }
         }
         else {
-            foreach (Auth::user()->groups as $kGrupo => $grupo) {
-                foreach ($grupo->enterprises as $kEmpresa => $empresa) {
+            foreach (Auth::user()->coreGroups as $kGrupo => $grupo) {
+                foreach ($grupo->coreEnterprises as $kEmpresa => $empresa) {
                     $empresaAtual = Empresa::find($empresa->id);
                     $empresaAtual['permissao_upload_doc'] = $empresa->pivot->permissao_upload_doc;
                     $empresas[] = $empresaAtual;
@@ -154,7 +154,7 @@ class Helper
                                             ->wherePivot('permissao_receber_email', true)->where('utilizar_permissoes_nivel_usuario', true)
                                             ->get()->pluck('id')->toArray();
             array_push($destinatarios, $usuariosVinculadosDiretamente);
-            $gruposVinculadosDiretamente = $empresa->groups()->wherePivot('permissao_receber_email', true)->get();
+            $gruposVinculadosDiretamente = $empresa->coreGroups()->wherePivot('permissao_receber_email', true)->get();
             foreach ($gruposVinculadosDiretamente as $key => $grupo) {
                 $usuariosVinculadosPeloGrupo = $grupo->users()->where('utilizar_permissoes_nivel_usuario', false)->get()->pluck('id')->toArray();
                 array_push($destinatarios, $usuariosVinculadosPeloGrupo);
@@ -222,8 +222,8 @@ class Helper
             if( !empty($permissao) ) $retorno = true;
         } else {
 
-            $gruposDaEmpresa = Empresa::find($_idEnterprise)->groups->pluck('id')->toArray();
-            $gruposDoUsuario = Auth::user()->groups->pluck('id')->toArray();
+            $gruposDaEmpresa = Empresa::find($_idEnterprise)->coreGroups->pluck('id')->toArray();
+            $gruposDoUsuario = Auth::user()->coreGroups->pluck('id')->toArray();
             $matches = array_intersect($gruposDaEmpresa, $gruposDoUsuario);
             if ( count($matches) > 1) {
 
@@ -464,6 +464,7 @@ class Helper
 
     public static function makeMenuPermissions(&$menuMaster, bool $first = true)
     {
+        
         if ($menuMaster->filhos_menu ?? false) {
             $perm = [];
             foreach ($menuMaster->filhos_menu as $key => $menu) {
@@ -481,6 +482,7 @@ class Helper
             $menuMaster->permissao = $perm;
             return;
         }
+        
 
         if ($first) {
             foreach ($menuMaster ?? [] as $key => $menus) {
@@ -632,4 +634,35 @@ class Helper
         $retorno = (array) json_decode($status);
         return $retorno[$id];
     }
+
+    public static function limitChar($string, $numeroChar)
+    {
+        #$string = palavra, texto...
+        #$numeroChar = numero de ocorrencias permitido,
+        #apos esse numero começa limitar os caracteres
+        $countString = strlen($string); // * Numero de ocorrencias na string
+        if ($countString > $numeroChar) { // * se o numero de ocorrencias encontrado for maior do que o informado
+            $nRest = $countString - $numeroChar; // * calculo para fazer o limit ex: 41(ocorrencias)-30(valor informado) = 11
+            $rest = substr($string, 0, -$nRest); // * pega a string e diminui os caracteres a mais ex: substr(abcwer, 0, -1) resultado = 'abcwe'
+            return $rest . "..."; // retorna a nova string com ... no final
+        } else {
+            return $string; // rotorna a mesma string da entrada da função
+        }
+    } // fim da função limitChar(), utilizada para limitar os caracteres de uma determinada string
+
+    //FUNÇÃO PARA LIMITAR OS CARACTERES DE UMA STRING [ direção da string '<-' ] ($variavel a ser limitada, $numero de caracteres permitidos)
+    public static function limitCharRevert($string, $numeroChar)
+    {
+        #$string = palavra, texto...
+        #$numeroChar = numero de ocorrencias permitido,
+        #apos esse numero começa limitar os caracteres
+        $countString = strlen($string); // * Numero de ocorrencias na string
+        if ($countString > $numeroChar) { // * se o numero de ocorrencias encontrado for maior do que o informado
+            $nRest = $countString - $numeroChar; // * calculo para fazer o limit ex: 41(ocorrencias)-30(valor informado) = 11
+            $rest = substr($string, -$numeroChar); // * pega a string e diminui os caracteres a mais ex: substr(abcwer, 0, -1) resultado = 'abcwe'
+            return "..." . $rest; // retorna a nova string com ... no final
+        } else {
+            return $string; // rotorna a mesma string da entrada da função
+        }
+    } // fim da função limitChar(), utilizada para limitar os caracteres de uma determinada string
 }

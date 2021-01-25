@@ -2,8 +2,6 @@
 
 namespace Modules\Portal\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class PortalController extends Controller
 {
     /**

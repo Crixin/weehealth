@@ -15,14 +15,14 @@ class JobController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function enqueue($_token, $_destinatarios, $_server)
+    public function enqueue($_destinatarios, $corpo, $tries = 2, $delay = 1)
     {
         foreach ($_destinatarios as $key => $destinatario) {
-            SendEmail::dispatch([
-                'email' => $destinatario,
-                'token' => $_token,
-                'server' => $_server,
-            ]);
+            SendEmail::dispatch(
+                ['email' => $destinatario],
+                $corpo,
+                $tries
+            )->delay(now()->addSeconds($delay));
         }
     }
 }

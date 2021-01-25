@@ -3,12 +3,19 @@
 namespace Modules\Core\Http\Controllers;
 
 use App\Classes\Helper;
-use Modules\Core\Model\Setup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Modules\Core\Repositories\SetupRepository;
 
 class SetupController extends Controller
 {
+    protected $setupRepository;
+
+    public function __construct(SetupRepository $setupRepository)
+    {
+        $this->setupRepository = $setupRepository;
+    }
+
     public function index()
     {
         return view('core::configuracoes.setup.index');
@@ -28,24 +35,24 @@ class SetupController extends Controller
                 return redirect()->back()->withInput();
             }
 
-            $setup = Setup::find(1);
+            $setup = $this->setupRepository->find(1);
 
+            $logoSistema = $setup->logo_sistema;
+            $logoLogin   = $setup->logo_login;
             if ($request->logo_login) {
                 $mimeType = $request->file('logo_login')->getMimeType();
                 $imageBase64 = base64_encode(file_get_contents($request->file('logo_login')->getRealPath()));
                 $imageBase64 = 'data:' . $mimeType . ';base64,' . $imageBase64;
-                $setup->logo_login = $imageBase64;
+                $logoSistema = $imageBase64;
             }
 
             if ($request->logo_sistema) {
                 $mimeType = $request->file('logo_sistema')->getMimeType();
                 $imageBase64 = base64_encode(file_get_contents($request->file('logo_sistema')->getRealPath()));
                 $imageBase64 = 'data:' . $mimeType . ';base64,' . $imageBase64;
-
-                $setup->logo_sistema = $imageBase64;
+                $logoLogin = $imageBase64;
             }
-
-            $setup->save();
+            $this->setupRepository->update(['logo_login' => $logoLogin, 'logo_sistema' => $logoSistema], 1);
             Helper::setNotify('Informações alteradas com sucesso!', 'success|check-circle');
             return redirect()->back()->withInput();
         } catch (\Throwable $th) {

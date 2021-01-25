@@ -6,9 +6,8 @@ use App\Classes\Helper;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Core\Repositories\EmpresaRepository;
+use Modules\Core\Repositories\{EmpresaRepository, GrupoRepository};
 use Modules\Portal\Repositories\EmpresaGrupoRepository;
-use Modules\Core\Repositories\GrupoRepository;
 
 class EmpresaGrupoController extends Controller
 {

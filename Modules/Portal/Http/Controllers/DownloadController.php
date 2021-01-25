@@ -4,14 +4,12 @@ namespace Modules\Portal\Http\Controllers;
 
 use App\Classes\Helper;
 use Modules\Core\Model\Empresa;
-use App\Classes\Constants;
-use App\Classes\RESTServices;
+use App\Classes\{Constants, RESTServices};
 use App\Jobs\MakeZipFileJob;
 use Illuminate\Http\Request;
 
 class DownloadController extends Controller
 {
-
     private $ged;
 
     /**

@@ -5,8 +5,7 @@ namespace Modules\Core\Http\Controllers;
 use App\Classes\Constants;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Modules\Core\Model\{Parametro, User};
-use Modules\Core\Repositories\ParametroRepository;
+use Modules\Core\Repositories\{ ParametroRepository, UserRepository};
 use App\Classes\Helper;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,15 +13,24 @@ class ConfiguracaoController extends Controller
 {
 
     protected $parametroRepository;
+    protected $userRepository;
 
-    public function __construct(ParametroRepository $parametroRepository)
+    public function __construct(ParametroRepository $parametroRepository, UserRepository $userRepository)
     {
         $this->parametroRepository = $parametroRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function index()
     {
-        $params = Parametro::orderBy('identificador_parametro')->get();
+        $params = $this->parametroRepository->findBy
+        (
+            [],
+            [],
+            [
+                ['identificador_parametro']
+            ]
+        );
         return view('core::configuracoes.parametro.index', compact('params'));
     }
 
@@ -84,7 +92,11 @@ class ConfiguracaoController extends Controller
 
     public function indexAdministrators()
     {
-        $users = User::whereNotIn('id', Constants::$ARR_SUPER_ADMINISTRATORS_ID)->get();
+        $users = $this->userRepository->findBy(
+            [
+                ['id','',Constants::$ARR_SUPER_ADMINISTRATORS_ID,"NOTIN"]
+            ]
+        );
         return view('core::configuracoes.administrador.index', compact('users'));
     }
 }

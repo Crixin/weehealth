@@ -5,11 +5,10 @@ namespace Modules\Docs\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use App\Classes\Helper;
 use Modules\Core\Repositories\ParametroRepository;
 use Modules\Docs\Repositories\OpcaoControleRegistroRepository;
-use App\Classes\Helper;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{DB, Validator};
 
 class OpcaoControleRegistroController extends Controller
 {

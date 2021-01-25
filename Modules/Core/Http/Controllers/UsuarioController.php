@@ -3,9 +3,11 @@
 namespace Modules\Core\Http\Controllers;
 
 use App\Classes\Helper;
-use Modules\Core\Model\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
+use Modules\Core\Model\User;
 use Modules\Core\Repositories\{UserRepository, PerfilRepository, SetorRepository};
 
 class UsuarioController extends Controller
@@ -43,7 +45,7 @@ class UsuarioController extends Controller
     public function updateUser(Request $request)
     {
         $arrRegras = array('name' => 'required|string|max:255', 'perfil' => 'required|numeric');
-        $usuario = User::find($request->get('idUsuario'));
+        $usuario = $this->userRepository->find($request->get('idUsuario'));
 
         if ($request->get('username') != $usuario->username) {
             $arrRegras['username'] = 'required|string|max:20|unique:users';
@@ -61,19 +63,8 @@ class UsuarioController extends Controller
             return redirect()->back()->withInput();
         }
 
-        if ($request->foto) {
-            $mimeType = $request->file('foto')->getMimeType();
-            $imageBase64 = base64_encode(file_get_contents($request->file('foto')->getRealPath()));
-            $imageBase64 = 'data:' . $mimeType . ';base64,' . $imageBase64;
-            $usuario->foto = $imageBase64;
-        }
-
-        $usuario->name = $request->get('name');
-        $usuario->username = $request->get('username');
-        $usuario->email = $request->get('email');
-        $usuario->perfil_id = $request->get('perfil');
-        $usuario->setor_id = $request->get('setor');
-        $usuario->save();
+        $montaUpdate = $this->montaRequest($request);
+        $this->userRepository->update($montaUpdate, $request->get('idUsuario'));
 
         Helper::setNotify('Informações pessoais alteradas com sucesso!', 'success|check-circle');
         return redirect()->back()->withInput();
@@ -90,11 +81,40 @@ class UsuarioController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $usuario = User::find($request->get('idUsuario'));
-        $usuario->password = bcrypt($request->get('password'));
-        $usuario->save();
+        try {
+            DB::transaction(function () use ($request) {
+                $usuario = User::find($request->get('idUsuario'));
+                $senha = bcrypt($request->get('password'));
+                $usuario->password = $senha;
+                $usuario->save();
+                $altera = DB::unprepared("ALTER USER $usuario->username WITH PASSWORD '" . $senha . "'");
+            });
 
-        Helper::setNotify('Senha alterada com sucesso!', 'success|check-circle');
-        return redirect()->back()->withInput();
+            Helper::setNotify('Senha alterada com sucesso!', 'success|check-circle');
+            return redirect()->back()->withInput();
+        } catch (\Throwable $th) {
+            Helper::setNotify('Um erro ocorreu ao alterar a senha.', 'danger|close-circle');
+            return redirect()->back()->withInput();
+        }
+    }
+
+    public function montaRequest(Request $request)
+    {
+        $retorno = [
+            "name"      => $request->get('name'),
+            "username" => $request->get('username'),
+            "email"     => $request->get('email'),
+            "perfil_id"     => $request->get('perfil'),
+            "setor_id"     => $request->get('setor'),
+        ];
+
+        if ($request->foto) {
+            $mimeType = $request->file('foto')->getMimeType();
+            $imageBase64 = base64_encode(file_get_contents($request->file('foto')->getRealPath()));
+            $imageBase64 = 'data:' . $mimeType . ';base64,' . $imageBase64;
+            $retorno['foto'] = $imageBase64;
+        }
+
+        return $retorno;
     }
 }

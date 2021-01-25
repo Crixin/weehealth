@@ -291,7 +291,7 @@
                                                                                  <td style="padding-right: 10px; padding-left: 10px; padding-top: 0px; padding-bottom: 5px; font-family: Tahoma, Verdana, sans-serif">
                                                                                     <![endif]-->
                                                                                     <div style="color:#000000;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:0px;padding-right:10px;padding-bottom:5px;padding-left:10px;">
-                                                                                       <p>Olá, você está recebendo este email com o link para odownload do dossiê de documentos. Clique <a href="{{$server}}/download/dossie/{{$token}}" target="_blank" rel="noopener noreferrer"> aqui</a> para ser redirecionado para a página de download.
+                                                                                       <p>Olá, você está recebendo este email com o link para o download do dossiê de documentos. Clique <a href="{{$server}}/download/dossie/{{$token}}" target="_blank" rel="noopener noreferrer"> aqui</a> para ser redirecionado para a página de download.
                                                                                             </p>
                                                                                     </div>
                                                                                     <!--[if mso]>

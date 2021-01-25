@@ -7,18 +7,19 @@ use Modules\Core\Model\{Cidade};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-use Modules\Core\Repositories\{ParametroRepository, EmpresaRepository, EmpresaTipoRepository};
+use Modules\Core\Repositories\{ParametroRepository, EmpresaRepository, EmpresaTipoRepository, CidadeRepository};
 
 class EmpresaController extends Controller
 {
     private $parametroRepository;
     private $empresaRepository;
     private $empresaTipoRepository;
+    protected $cidadeRepository;
 
     /*
     * Construtor
     */
-    public function __construct(ParametroRepository $parametroRepository, EmpresaRepository $empresaRepository, EmpresaTipoRepository $empresaTipoRepository)
+    public function __construct(ParametroRepository $parametroRepository, EmpresaRepository $empresaRepository, EmpresaTipoRepository $empresaTipoRepository, CidadeRepository $cidadeRepository)
     {
         $this->parametroRepository = $parametroRepository;
         $this->empresaRepository = $empresaRepository;

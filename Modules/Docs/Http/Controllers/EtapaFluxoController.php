@@ -5,14 +5,11 @@ namespace Modules\Docs\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Docs\Repositories\EtapaFluxoRepository;
-use Modules\Docs\Repositories\FluxoRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Helper;
-use Modules\Core\Repositories\NotificacaoRepository;
-use Modules\Core\Repositories\ParametroRepository;
-use Modules\Core\Repositories\PerfilRepository;
+use Modules\Core\Repositories\{NotificacaoRepository, ParametroRepository, PerfilRepository};
+use Modules\Docs\Repositories\{EtapaFluxoRepository, FluxoRepository};
 
 class EtapaFluxoController extends Controller
 {

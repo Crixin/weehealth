@@ -3,7 +3,6 @@
 namespace Modules\Core\Http\Controllers;
 
 use App\Classes\Helper;
-use Modules\Core\Model\{User, Grupo, GrupoUser};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;

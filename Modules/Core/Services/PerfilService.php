@@ -25,9 +25,8 @@ class PerfilService
     {
         try {
             $validacao = new ValidacaoService($this->rules, $data);
-            
             $errors = $validacao->make();
-            
+
             if ($errors) {
                 return redirect()->back()->withErrors($errors)->withInput();
             }

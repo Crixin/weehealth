@@ -2,14 +2,16 @@
 
 namespace Modules\Core\Http\Controllers\Auth;
 
+use App\Classes\Helper;
 use Modules\Core\Model\User;
 use Illuminate\Http\Request;
-use Modules\Core\Repositories\PerfilRepository;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Modules\Core\Repositories\SetorRepository;
+use Illuminate\Support\Facades\DB;
+use Modules\Core\Repositories\{SetorRepository, UserRepository, PerfilRepository};
 
 class RegisterController extends Controller
 {
@@ -34,17 +36,24 @@ class RegisterController extends Controller
     protected $redirectTo = 'usuario';
     protected $perfilRepository;
     protected $setorRepository;
+    protected $userRepository;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(PerfilRepository $perfil, SetorRepository $setorRepository)
+    public function __construct
+    (
+        PerfilRepository $perfil,
+        SetorRepository $setorRepository,
+        UserRepository $userRepository
+    )
     {
         //Comentando para não exigir que o usuário não esteja autenticado para acessar a rota para inserir um novo usuário
         $this->perfilRepository = $perfil;
         $this->setorRepository = $setorRepository;
+        $this->userRepository = $userRepository;
     }
 
 
@@ -101,6 +110,7 @@ class RegisterController extends Controller
         }
 
         return User::create($createUser);
+
     }
 
     /**
@@ -114,13 +124,31 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
+        try {
+            DB::beginTransaction();
+            $this->validator($request->all())->validate();
+            event(new Registered($user = $this->create($request->all())));
 
-        $this->validator($request->all())->validate();
-        event(new Registered($user = $this->create($request->all())));
-
-        // $this->guard()->login($user);
-
-        return $this->registered($request, $user)
+            //Verifica existencia usuario no bd
+            $usuario = $user->username;
+            $password = $user->password;
+            $busca = DB::select("SELECT count(*) as total FROM pg_roles WHERE rolname ILIKE '" . $usuario . "'");
+            if ($busca[0]->total == 0) {
+                $user = '"' . $usuario . '"';
+                $cria   = DB::select("CREATE ROLE $usuario WITH LOGIN NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION VALID UNTIL 'infinity' ");
+                $altera = DB::unprepared("ALTER USER $usuario WITH PASSWORD '" . $password . "'");
+                $setFrupo = DB::unprepared("GRANT weehealth TO $usuario ");
+            }
+            DB::commit();
+            // $this->guard()->login($user);
+            return $this->registered($request, $user)
             ?: redirect()->route('core.usuario')->with(['message' => 'Novo usuário criado com sucesso!', 'style' => 'success|check-circle']);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            Helper::setNotify('Um erro ocorreu ao gravar o usuario.', 'danger|close-circle');
+            return redirect()->back()->withInput();
+        }
     }
+
+    
 }

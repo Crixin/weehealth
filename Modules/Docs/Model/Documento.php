@@ -64,4 +64,14 @@ class Documento extends Model
     {
         return $this->hasMany('Modules\Docs\Model\Workflow', 'documento_id', 'id')->orderBy('id', 'DESC');
     }
+
+    public function coreElaborador()
+    {
+        return $this->hasOne('Modules\Core\Model\User', 'id', 'elaborador_id');
+    }
+
+    public function coreSetor()
+    {
+        return $this->hasOne('Modules\Core\Model\Setor', 'id', 'setor_id');
+    }
 }
