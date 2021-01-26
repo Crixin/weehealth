@@ -83,27 +83,28 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <div class="checkbox{{ $errors->has('vinculoObrigatorio') ? ' has-error' : '' }}">
-                    <label class="control-label">Vínculo Obrigatório ao Documento Pai</label>
-                                    
-                    <td class="text-center text-nowrap">
-                        <div class="switch">
-                            <label>Não
-                                {!! Form::checkbox('vinculoObrigatorio', '1', !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->vinculo_obrigatorio : false, ['id' => 'vinculoObrigatorio', 'class'=> 'switch-elaborador']) !!}<span class="lever switch-col-light-blue"></span>Sim
-                            </label>
-                        </div>
-                    </td>
-                <small class="text-danger">{{ $errors->first('vinculoObrigatorio') }}</small>
-                </div>
-            </div>
-        </div>
+        
         <div class="col-md-6">
             <div class="form-group{{ $errors->has('tipoDocumentoPai') ? ' has-error' : '' }}" id="divTipoDocumentoPai">
                 {!! Form::label('tipoDocumentoPai', 'Tipo Documento Pai', ['id'=> 'labelTipoDocumentoPai']) !!}
                 {!! Form::select('tipoDocumentoPai',$tiposDocumento, !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->tipo_documento_pai_id : null, ['id' => 'tipoDocumentoPai', 'class' => 'form-control selectpicker', 'placeholder' => __('components.selectepicker-default')]) !!}
                 <small class="text-danger">{{ $errors->first('tipoDocumentoPai') }}</small>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="checkbox{{ $errors->has('vinculoObrigatorio') ? ' has-error' : '' }}" id="divVinculoObrigatorio">
+                    <label class="control-label" id="labelVinculoObrigatorio">Vínculo Obrigatório ao Documento Pai</label>
+                                    
+                    <td class="text-center text-nowrap">
+                        <div class="switch">
+                            <label>Não
+                                {!! Form::checkbox('vinculoObrigatorio', '1', !empty($tipoDocumentoEdit) ?  $tipoDocumentoEdit->vinculo_obrigatorio : false, ['id' => 'vinculoObrigatorio', 'class'=> 'switch-elaborador', 'disabled' => true]) !!}<span class="lever switch-col-light-blue"></span>Sim
+                            </label>
+                        </div>
+                    </td>
+                <small class="text-danger">{{ $errors->first('vinculoObrigatorio') }}</small>
+                </div>
             </div>
         </div>
     </div>
@@ -284,19 +285,20 @@
             }
         })
 
-        $('#vinculoObrigatorio').on('change', function(){
+        $('#tipoDocumentoPai').on('change', function(){
             verificaVinculoObrigatorio();   
         });
     });
 
     function verificaVinculoObrigatorio(){
-        if( $('#vinculoObrigatorio').prop('checked') == true ){
-            $('#tipoDocumentoPai').attr('required', true);
-            $('#divTipoDocumentoPai').attr('class', 'form-group required');
-            $('#labelTipoDocumentoPai').attr('class', 'control-label');
+
+        if( $('#tipoDocumentoPai').val() != '' ){
+            $('#vinculoObrigatorio').removeAttr('disabled');
+            $('#divVinculoObrigatorio').attr('class', 'form-group required');
+            $('#labelVinculoObrigatorio').attr('class', 'control-label');
         }else{
-            $('#tipoDocumentoPai').attr('required', false);
-            $('#labelTipoDocumentoPai').removeAttr('class');
+            $('#vinculoObrigatorio').attr('disabled', true).prop('checked', false);
+            $('#labelVinculoObrigatorio').removeAttr('class');
             $('#divTipoDocumentoPai').attr('class', 'form-group');
         }
     }

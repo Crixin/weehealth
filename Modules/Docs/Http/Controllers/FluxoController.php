@@ -159,7 +159,6 @@ class FluxoController extends Controller
             $request->all(),
             [
                 'nome'               => empty($request->get('idFluxo')) ? 'required|string|min:5|max:100|unique:docs_fluxo,nome' : 'required|string|min:5|max:100|unique:docs_fluxo,nome,' . $request->idFluxo,
-                'versao'             => 'required|',
                 'descricao'          => 'required|string|min:5|max:200',
                 'grupo'              => 'required|numeric',
                 'perfil'             => 'required|numeric'
@@ -177,7 +176,6 @@ class FluxoController extends Controller
     {
         return [
             "nome"      => $request->get('nome'),
-            "versao"    => $request->get('versao'),
             "descricao" => $request->get('descricao'),
             "perfil_id" => $request->get('perfil'),
             "grupo_id"  => $request->get('grupo'),

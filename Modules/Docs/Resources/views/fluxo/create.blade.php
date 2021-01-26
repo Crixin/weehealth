@@ -40,7 +40,7 @@
                             'fluxoEdit' => [],
                             'nome' => '',
                             'descricao' => '', 
-                            'versao' => '1.0',
+                            'versao' => '',
                             'grupos' => $grupos,
                             'perfis' => $perfis
                         ]

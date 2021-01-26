@@ -40,7 +40,7 @@
                             'fluxoEdit' => $fluxo,
                             'nome' => $fluxo->nome,
                             'descricao' => $fluxo->descricao, 
-                            'versao' => $fluxo->versao_fluxo,
+                            'versao' => $fluxo->versao,
                             'grupos' => $grupos,
                             'perfis' => $perfis
                         ]
