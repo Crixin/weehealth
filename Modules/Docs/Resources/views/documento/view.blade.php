@@ -18,8 +18,8 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body">
-            @component('docs::components.cancelar-revisao-documento') @endcomponent
-
+            <legend><b>@lang('page_titles.docs.documento.doc_number'){{$documento->id}}</b></legend>
+            <hr>
             <div class="col-3 mb-3">
                 <button class="btn  btn-info" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2"><i class="mdi mdi-chart-timeline"></i> Linha do Tempo</button>
             </div>

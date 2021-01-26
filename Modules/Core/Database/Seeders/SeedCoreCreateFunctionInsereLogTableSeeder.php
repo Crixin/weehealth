@@ -169,7 +169,7 @@ class SeedCoreCreateFunctionInsereLogTableSeeder extends Seeder
             for r in (Select t.table_name
                         From information_schema.tables as t
                         Where t.table_type = 'BASE TABLE'
-                        and t.table_schema = quote_ident(lower(NomeSchema)) and t.table_name <> 'core_log'
+                        and t.table_schema = quote_ident(lower(NomeSchema)) and t.table_name <> 'core_log' and t.table_name <> 'failed_jobs' and t.table_name <> 'jobs' and t.table_name <> 'migrations' and t.table_name <> 'notifications'
                         Order By t.table_name
                     )
             loop

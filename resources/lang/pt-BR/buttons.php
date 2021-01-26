@@ -184,7 +184,7 @@ return [
             'link-docs' => 'Vincular Documentos',
             'list'=> 'Lista de Presença',
             'start-review' => 'Iniciar Revisão',
-            'obsolete' => 'Tornar Obsoleto'
+            'obsolete' => 'Tornar Obsoleto',
         ],
 
         /*DOCUMENTO EXTERNO*/

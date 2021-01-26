@@ -260,7 +260,10 @@ return [
             'factory'         => 'Criação do Documento',
             'print'           => 'Imprimir Documento',
             'presence-list'   => 'Lista de Presença',
-            'view'            => 'Visualização do Documento'
+            'view'            => 'Visualização do Documento',
+            'stage_create'    => 'Dt.Início:',
+            'doc_number'      => 'Documento n°: ',
+            'stage_time'      =>  'Duração:'
         ],
 
         'documento-externo' => [
