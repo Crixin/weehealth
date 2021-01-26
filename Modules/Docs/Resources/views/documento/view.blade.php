@@ -102,8 +102,6 @@
     ]
 )
 
-@include('docs::components.cancelar-revisao-documento')
-
 @section('footer')
 
 <script>
