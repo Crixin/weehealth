@@ -48,7 +48,8 @@
                             'ultimoDocumento' => $tipoDocumento->ultimo_documento,
                             'tiposDocumento' => $tiposDocumento,
                             'padroesCodigo' => $padroesCodigo,
-                            'padroesNumero' => $padroesNumero
+                            'padroesNumero' => $padroesNumero,
+                            'extensoesDocumentos' => $extensoesDocumentos
                         ]
                     )
                     @endcomponent

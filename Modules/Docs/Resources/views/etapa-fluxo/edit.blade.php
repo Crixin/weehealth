@@ -9,7 +9,7 @@
 @section('breadcrumbs')
 
     <li class="breadcrumb-item"><a href="{{ route('docs.home') }}"> @lang('page_titles.general.home') </a></li>
-    <li class="breadcrumb-item"><a href="{{ route('docs.fluxo.etapa-fluxo', ['id' => $etapaEdit->id, 'fluxo_id' => $etapaEdit->docsFluxo->id] ) }}"> @lang('page_titles.docs.etapa-fluxo.index') </a></li>
+    <li class="breadcrumb-item"><a href="{{ route('docs.fluxo.etapa-fluxo', ['fluxo_id' => $etapaEdit->docsFluxo->id] ) }}"> @lang('page_titles.docs.etapa-fluxo.index') </a></li>
     <li class="breadcrumb-item active"> @lang('page_titles.docs.etapa-fluxo.update') </li>    
 
 @endsection
@@ -23,7 +23,7 @@
             <div class="card-body">
 
 
-                @component('components.validation-error', ['errors'])@endcomponent
+                @component('components.validation-error', ['errors']) @endcomponent
 
                 @if(Session::has('message'))
                     @component('components.alert')@endcomponent

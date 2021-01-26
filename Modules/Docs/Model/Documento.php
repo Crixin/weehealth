@@ -27,7 +27,8 @@ class Documento extends Model
         'obsoleto',
         'classificacao_id',
         'ged_documento_id',
-        'setor_id'
+        'setor_id',
+        'extensao'
     ];
 
 

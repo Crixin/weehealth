@@ -6,16 +6,19 @@ use App\Services\ValidacaoService;
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Repositories\ParametroRepository;
 use Modules\Core\Repositories\SetorRepository;
-use Modules\Docs\Model\Documento;
-use Modules\Docs\Repositories\DocumentoRepository;
-use Modules\Docs\Repositories\TipoDocumentoRepository;
 use Modules\Core\Repositories\UserRepository;
-use Modules\Docs\Repositories\AgrupamentoUserDocumentoRepository;
-use Modules\Docs\Repositories\DocumentoItemNormaRepository;
-use Modules\Docs\Repositories\HierarquiaDocumentoRepository;
-use Modules\Docs\Repositories\ItemNormaRepository;
-use Modules\Docs\Repositories\UserEtapaDocumentoRepository;
-use Modules\Docs\Repositories\VinculoDocumentoRepository;
+use Modules\Docs\Model\Documento;
+use Modules\Docs\Repositories\{
+    DocumentoRepository,
+    TipoDocumentoRepository,
+    AgrupamentoUserDocumentoRepository,
+    DocumentoItemNormaRepository,
+    HierarquiaDocumentoRepository,
+    ItemNormaRepository,
+    UserEtapaDocumentoRepository,
+    VinculoDocumentoRepository
+};
+use Modules\Docs\Services\WorkflowService;
 
 class DocumentoService
 {
@@ -35,6 +38,7 @@ class DocumentoService
     protected $documentoItemNormaService;
     protected $userEtapaDocumentoService;
     protected $tipoDocumentoService;
+    protected $workflowService;
 
     protected $rules;
 
@@ -54,8 +58,8 @@ class DocumentoService
         VinculoDocumentoRepository $vinculoDocumentoRepository,
         TipoDocumentoRepository $tipoDocumentoRepository,
         AgrupamentoUserDocumentoRepository $agrupamentoUserDocumentoRepository,
-        DocumentoItemNormaRepository $documentoItemNormaRepository
-
+        DocumentoItemNormaRepository $documentoItemNormaRepository,
+        WorkflowService $workflowService
     ) {
         $this->rules = $documento->rules;
 
@@ -75,9 +79,10 @@ class DocumentoService
         $this->userEtapaDocumentoService = $userEtapaDocumentoService;
         $this->documentoItemNormaService = $documentoItemNormaService;
         $this->tipoDocumentoService = $tipoDocumentoService;
+        $this->workflowService = $workflowService;
     }
 
-    public function create($data)
+    public function store($data)
     {
         $createDocumento = $data;
         unset(
@@ -88,13 +93,30 @@ class DocumentoService
             $createDocumento['item_normas'],
             $createDocumento['etapa_aprovacao']
         );
+        
         try {
             $documento = DB::transaction(function () use ($createDocumento, $data) {
                 $documento = $this->documentoRepository->create($createDocumento);
+                
+                $versãoFluxo = $documento->docsTipoDocumento->docsFluxo->versao;
+
+                $primeiraEtapaFluxo = array_first(array_filter($documento->docsTipoDocumento->docsFluxo->docsEtapaFluxo->toArray(), function ($etapa) use ($versãoFluxo) {
+                    return $etapa['ordem'] == 1 && $etapa['versao_fluxo'] == $versãoFluxo;
+                }));
+
+                $dataWorkflow = [
+                    'etapa_id' => $primeiraEtapaFluxo['id'],
+                    'documento_id' => $documento->id
+                ];
+
+                if (!$this->workflowService->storeFirstStep($dataWorkflow)['success']) {
+                    throw new \Exception('Falha ao criar workflow');
+                }
+
                 /**Cria Hierarquia Documento */
                 foreach ($data['hierarquia_documento'] as $value) {
                     $value['documento_id'] = $documento->id;
-                    $this->hierarquiaDocumentoService->create($value);
+                    $resp = $this->hierarquiaDocumentoService->create($value);
                 }
 
                 /**Cria Vinculo de Documento */
@@ -130,11 +152,13 @@ class DocumentoService
                 }
 
                 $this->tipoDocumentoService->atualizaUltimoCodigoTipoDocumento($data['tipo_documento_id']);
-                return  $documento->id;
+
+
+                return $documento;
             });
-            return $documento;
+            return response()->json(["success" => true, "data" => ['documento_id' => $documento->id]]);
         } catch (\Throwable $th) {
-            return false;
+            return response()->json(["success" => false]);
         }
     }
 
@@ -152,7 +176,6 @@ class DocumentoService
             $updateDocumento['etapa_aprovacao']
         );
         try {
-
             $this->documentoRepository->update($updateDocumento, $id);
 
             /**Cria Hierarquia Documento */
@@ -161,8 +184,10 @@ class DocumentoService
                     ['documento_id', '=', $id]
                 ]
             );
+
             $documentos =  array_column(json_decode(json_encode($buscaTodosDocumentos), true), 'documento_pai_id');
             $hierarquia = [];
+
             foreach ($data['hierarquia_documento'] as $key => $value) {
                 array_push($hierarquia, $value['documento_pai_id']);
                 $this->hierarquiaDocumentoService->firstOrCreate(
@@ -175,6 +200,7 @@ class DocumentoService
 
             $diff_para_delete = array_diff($documentos, $hierarquia);
             $idDelete = [];
+
             foreach ($diff_para_delete as $key => $doc) {
                 $busca = $this->hierarquiaDocumentoRepository->findOneBy(
                     [

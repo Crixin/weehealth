@@ -129,7 +129,7 @@
         });
 
         // Exclusão
-        $(document).on("click",".btn-danger", function() {
+        $(document).on("click", "#btn-delete-attachment-modal", function() {
             let id = $(this).data('anexo-id');
             let deleteIt = swal2_warning("Essa ação é irreversível!");
             let obj = {'id': id};
@@ -201,6 +201,7 @@
             $('#attachment-table-body').empty();
             for (let index = 0; index < dados.length; index++) {
                 const element = dados[index];
+
                 linha += '<tr><td class="text-nowrap text-center">'+element.nome+'</td>';
                 linha += '<td class="text-nowrap text-center">'+moment(element.created_at).format('DD/MM/YYYY')+'</td>';
                 linha += '<td class="text-nowrap text-center"><button type="button" id="btn-delete-attachment-modal" class="btn btn-rounded btn-danger" data-anexo-id="'+element.id+'"> <i class="fa fa-close"></i> </button></td>';

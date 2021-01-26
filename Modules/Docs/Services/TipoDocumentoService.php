@@ -13,28 +13,6 @@ class TipoDocumentoService
         $this->tipoDocumentoRepository = $tipoDocumentoRepository;
     }
 
-    /*
-    public function getEtapasFluxo($idTipoDocumento)
-    {
-        $buscaTipoDocumento = $this->tipoDocumentoRepository->findOneBy(
-            [
-                ['ativo', '=', true],
-                ['id', '=', $idTipoDocumento, "AND"]
-            ]
-        );
-        foreach ($buscaTipoDocumento->docsFluxo->docsEtapaFluxo as $keyEtapa => $value2) {
-            $etapas[$keyEtapa] =
-            [
-                'id'    => $value2->id,
-                'nome'  => ucfirst($value2->nome),
-                'ordem' => $value2->ordem,
-                'obrigatorio' => $value2->obrigatorio
-            ];
-        }
-        $this->ordenacaoArray($etapas, 'ordem');
-        return $etapas;
-    }
-    */
 
     public function getEtapasFluxosPorComportamento($idTipoDocumento, $comportamento)
     {

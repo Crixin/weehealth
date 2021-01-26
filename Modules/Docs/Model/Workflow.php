@@ -20,8 +20,18 @@ class Workflow extends Model
         'user_id',
         'versao_documento',
         'justificativa_lida',
-        'tempo_duracao_etapa'
+        'documento_revisao',
+        'tempo_duracao_etapa',
     ];
+
+
+    public $rules = [
+        'descricao' => "required|string",
+        'documento_id' => 'required|integer|exists:docs_documento,id',
+        'user_id' => 'required|integer|exists:core_users,id',
+        'documento_revisao' => "required|string",
+    ];
+
 
     public function coreUsers()
     {

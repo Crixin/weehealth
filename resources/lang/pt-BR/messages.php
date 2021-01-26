@@ -19,5 +19,10 @@ return [
         'updateFail' => "",
         'deleteSucess' => "Usuários desvinculados com sucesso!",
         'deleteFail' => "Falha ao desvincular os usuários."
+    ],
+    'workflow' => [
+        'storeSuccess' => "Workflow cadastrado com sucesso!",
+        'storeFail' => "Falha ao cadastrar o workflow.",
+        'validationFail' => "Falha ao validar campos do workflow"
     ]
 ];

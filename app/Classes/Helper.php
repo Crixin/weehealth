@@ -587,7 +587,7 @@ class Helper
     public static function getListAllReviewsDocument($nome)
     {
         $arr = [];
-        $files = Storage::disk('speed_office')->allFiles();
+        $files = Storage::disk('weecode_office')->allFiles();
         $parametroRepository = new ParametroRepository();
         $buscaPrefixo = $parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
 

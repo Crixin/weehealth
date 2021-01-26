@@ -166,11 +166,11 @@
                 success: function(ret) {
                     console.log(ret);
                     
-                    if(ret.response == 'erro'){
-                        swal2_alert_error_support("Tivemos um problema ao importar o documento.");
+                    if(!ret.success){
+                       swal2_alert_error_support("Tivemos um problema ao importar o documento.");
                     }
                     
-                    let id = ret.data
+                    let id = ret.data.documento_id;
                     let url ="{!! route('docs.documento.visualizar',['id'=>':id']); !!}";
                     url = url.replace(':id', id);
                     document.location.href=url;

@@ -28,7 +28,8 @@ class TipoDocumento extends Model
         'codigo_padrao',
         'vinculo_obrigatorio_outros_documento',
         'numero_padrao_id',
-        'ultimo_documento'
+        'ultimo_documento',
+        'extensao'
     ];
 
     public function docsFluxo()
