@@ -19,7 +19,8 @@ class Workflow extends Model
         'etapa_fluxo_id',
         'user_id',
         'versao_documento',
-        'justificativa_lida'
+        'justificativa_lida',
+        'tempo_duracao_etapa'
     ];
 
     public function coreUsers()

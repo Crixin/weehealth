@@ -660,4 +660,25 @@ class Helper
             return $string; // rotorna a mesma string da entrada da função
         }
     } // fim da função limitChar(), utilizada para limitar os caracteres de uma determinada string
+
+    public static function format_interval($interval)
+    {
+        $result = "";
+        if ($interval->y) {
+            $result .= $interval->format("%y anos ");
+        }
+        if ($interval->m) {
+            $result .= $interval->format("%m meses ");
+        }
+        if ($interval->d) {
+            $result .= $interval->format("%d dias ");
+        }
+        if ($interval->h) {
+            $result .= $interval->format("%h horas ");
+        }
+        if ($interval->i) {
+            $result .= $interval->format("%i minutos ");
+        }
+        return $result;
+    }
 }
