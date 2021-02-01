@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTableDocsWorkflowCreateDuracao extends Migration
+class AlterTableDocsEtapaFluxoAlterColumnTipoAprovacaoId extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AlterTableDocsWorkflowCreateDuracao extends Migration
      */
     public function up()
     {
-        Schema::table('docs_workflow', function (Blueprint $table) {
-            $table->text('tempo_duracao_etapa')->nullable()->change();
+        Schema::table('docs_etapa_fluxo', function (Blueprint $table) {
+            $table->text('tipo_aprovacao_id')->nullable()->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AlterTableDocsWorkflowCreateDuracao extends Migration
      */
     public function down()
     {
-        Schema::table('docs_workflow', function (Blueprint $table) {
-            $table->dropColumn('tempo_duracao_etapa')->change();
+        Schema::table('docs_etapa_fluxo', function (Blueprint $table) {
+            $table->dropColumn('tipo_aprovacao_id')->change();
         });
     }
 }

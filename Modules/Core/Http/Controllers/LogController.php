@@ -27,8 +27,6 @@ class LogController extends Controller
      */
     public function index(Request $request)
     {
-        $this->criaTrigger();
-        /*
         $buscaUsuario = $this->usuarioRepository->findAll();
         foreach ($buscaUsuario as $key => $value) {
             $usuarios[$value->name] = $value->name;
@@ -127,7 +125,6 @@ class LogController extends Controller
                 'colunaSelecionada'
             )
         );
-        */
     }
 
     /**

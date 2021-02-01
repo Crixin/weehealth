@@ -1,5 +1,5 @@
 <div class="form-body">
-    <legend>Informações da Etapa</legend>
+    <h5>Informações da Etapa</h5>
     <hr>
     <div class="row">
         <div class="col-md-6">
@@ -93,7 +93,7 @@
             </div>
         </div>
     </div>
-    <legend>Comportamento Editor</legend>
+    <h5>Comportamento Editor</h5>
     <hr>
     <div class="row">
         <div class="col-md-4">
@@ -129,6 +129,23 @@
         </div>
         <div class="col-md-4">
             <div class="form-group">
+                <div class="checkbox{{ $errors->has('comportamentoVizualizacao') ? ' has-error' : '' }}">
+                    <label class="control-label">Visualização</label>
+                    <td class="text-center text-nowrap">
+                        <div class="switch">
+                            <label>Não
+                                {!! Form::checkbox('comportamentoVizualizacao', '1', !empty($etapaEdit) ?  $etapaEdit->comportamento_visualizacao : false, ['id' => 'comportamentoVizualizacao', 'class'=> 'switch-elaborador']) !!}<span class="lever switch-col-light-blue"></span>Sim
+                            </label>
+                        </div>
+                    </td>
+                    <small class="text-danger">{{ $errors->first('comportamentoVizualizacao') }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
                 <div class="checkbox{{ $errors->has('comportamentoAprovacao') ? ' has-error' : '' }}">
                     <label class="control-label">Aprovação</label>
                                     
@@ -143,23 +160,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-                <div class="checkbox{{ $errors->has('comportamentoVizualizacao') ? ' has-error' : '' }}">
-                    <label class="control-label">Visualização</label>
-                    <td class="text-center text-nowrap">
-                        <div class="switch">
-                            <label>Não
-                                {!! Form::checkbox('comportamentoVizualizacao', '1', !empty($etapaEdit) ?  $etapaEdit->comportamento_visualizacao : false, ['id' => 'comportamentoVizualizacao', 'class'=> 'switch-elaborador']) !!}<span class="lever switch-col-light-blue"></span>Sim
-                            </label>
-                        </div>
-                    </td>
-                    <small class="text-danger">{{ $errors->first('comportamentoVizualizacao') }}</small>
-                </div>
-            </div>
-        </div>
+        
         <div class="col-md-4">
             <div class="form-group">
                 <div class="checkbox{{ $errors->has('comportamentoDivulgacao') ? ' has-error' : '' }}">
@@ -191,7 +192,7 @@
             </div>
         </div>
     </div>
-    <legend>Complemento</legend>
+    <h5 >Complemento</h5>
     <hr>
     <div class="row">
         <div class="col-md-6 div-aprovacao hide">
@@ -203,14 +204,14 @@
             </div>
         </div>
         <div class="col-md-6 div-aprovacao hide">
-            <div class="form-group required {{ $errors->has('etapaRejeicao') ? ' has-error' : '' }}">
-                {!! Form::label('etapaRejeicao', 'Etapa Após Rejeição', ['class' => 'control-label']) !!}
+            <div class="form-group {{ $errors->has('etapaRejeicao') ? ' has-error' : '' }}">
+                {!! Form::label('etapaRejeicao', 'Etapa Após Rejeição') !!}
             
-                {!! Form::select('etapaRejeicao', $etapasRejeicao, !empty($etapaEdit) ?  $etapaEdit->etapa_rejeicao_id : null, ['id' => 'etapaRejeicao', 'class' => 'form-control selectpicker ', 'required' => true, 'placeholder' => __('components.selectepicker-default') ]) !!}
+                {!! Form::select('etapaRejeicao', $etapasRejeicao, !empty($etapaEdit) ?  $etapaEdit->etapa_rejeicao_id : null, ['id' => 'etapaRejeicao', 'class' => 'form-control selectpicker ', 'placeholder' => __('components.selectepicker-default') ]) !!}
                 <small class="text-danger">{{ $errors->first('etapaRejeicao') }}</small>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 div-lista-presenca hide">
             <div class="form-group">
                 <div class="checkbox{{ $errors->has('listaPresenca') ? ' has-error' : '' }}">
                     <label class="control-label">Lista de Presença</label>
@@ -227,12 +228,15 @@
         </div>
     </div>
 </div>
-
-@section('footer')
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <script>
     $(document).ready(function() {
-        notificacao();
-        tipoAprovacao();
+
+        $(document).on('show.bs.modal', '.modal', function () {
+            notificacao();
+            tipoAprovacao();
+            treinamento();
+        });
 
         $('#enviarNotificacao').on('change',function(){
             notificacao();
@@ -241,6 +245,11 @@
         $('#comportamentoAprovacao').on('change', function () {
             tipoAprovacao();
         });
+        
+        $('#comportamentoTreinamento').on('change', function () {
+            treinamento();
+        });
+
     });
 
     function notificacao()
@@ -267,8 +276,14 @@
             $("#etapaRejeicao").prop("disabled", true);
             $(".div-aprovacao").hide();
         }
-
     }
 
+    function treinamento()
+    {
+        if($('#comportamentoTreinamento').is(':checked')){
+            $(".div-lista-presenca").show();
+        } else {
+            $(".div-lista-presenca").hide();
+        }
+    }
 </script>
-@endsection

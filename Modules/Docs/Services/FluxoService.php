@@ -2,20 +2,130 @@
 
 namespace Modules\Docs\Services;
 
+use Illuminate\Support\Facades\DB;
+use Modules\Docs\Repositories\EtapaFluxoRepository;
 use Modules\Docs\Repositories\FluxoRepository;
 
 class FluxoService
 {
-
     protected $fluxoRepository;
+    protected $etapaFluxoRepository;
+    protected $etapaFluxoService;
 
-    public function __construct(FluxoRepository $fluxoRepository)
+    public function __construct(
+        FluxoRepository $fluxoRepository,
+        EtapaFluxoService $etapaFluxoService,
+        EtapaFluxoRepository $etapaFluxoRepository
+    )
     {
         $this->fluxoRepository = $fluxoRepository;
+        $this->etapaFluxoService = $etapaFluxoService;
+        $this->etapaFluxoRepository = $etapaFluxoRepository;
     }
 
     public function create(array $data)
     {
-        return $this->fluxoRepository->create($data);
+        $createFluxo = $data;
+        unset(
+            $createFluxo['etapas'],
+        );
+
+        DB::beginTransaction();
+        try {
+            $fluxo = $this->fluxoRepository->create($createFluxo);
+            //Cria etapas
+            $novaOrdem = 0;
+            foreach ($data['etapas'] as $key => $value) {
+                $novaOrdem += 1 ;
+                $etapas = json_decode($value);
+                $requestCreate = $this->montaRequest($etapas, $fluxo, $novaOrdem);
+                $this->etapaFluxoService->create($requestCreate);
+            }
+            DB::commit();
+            return response()->json(["success" => true]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return response()->json(["success" => false]);
+        }
+    }
+
+    public function update(array $data, $id)
+    {
+        $createFluxo = $data;
+        unset(
+            $createFluxo['etapas'],
+        );
+        DB::beginTransaction();
+        try {
+            $buscaFluxo = $this->fluxoRepository->find($id);
+            $this->fluxoRepository->update($createFluxo, $id);
+
+            /**Etapas */
+            $etapasRequest = [];
+            foreach ($data['etapas'] as $key => $value) {
+                $etapas = json_decode($value);
+
+                if ($etapas->id != '') {
+                    array_push($etapasRequest, $etapas->id);
+                }
+            }
+
+            $etapaDelete = $this->etapaFluxoRepository->findBy(
+                [
+                    ['fluxo_id', "=", $id],
+                    ['id', "", $etapasRequest ?? [] , "NOTIN"]
+                ]
+            )->pluck('id')->toArray();
+
+            if ($etapaDelete) {
+                if (!$this->etapaFluxoRepository->delete($etapaDelete, 'id')) {
+                    throw new \Exception('Falha da deleção dos registros');
+                }
+            }
+            //Cria etapas
+            $novaOrdem = 0;
+            foreach ($data['etapas'] as $key => $value) {
+                $novaOrdem += 1 ;
+                $etapas = json_decode($value);
+                $requestUpdate = $this->montaRequest($etapas, $buscaFluxo, $novaOrdem);
+                if ($etapas->id != '') {
+                    $this->etapaFluxoRepository->update($requestUpdate, $etapas->id);
+                } else {
+                    $this->etapaFluxoRepository->create($requestUpdate);
+                }
+            }
+            DB::commit();
+            return response()->json(["success" => true]);
+        } catch (\Throwable $th) {
+            dd($th);
+            DB::rollback();
+            return response()->json(["success" => false]);
+        }
+    }
+
+    public function montaRequest($etapas, $fluxo, $novaOrdem)
+    {
+        return [
+            "fluxo_id"       => $fluxo->id,
+            "versao_fluxo"   => $fluxo->versao,
+            "ordem"          => $novaOrdem,
+            "nome"           => $etapas->nome,
+            "descricao"      => $etapas->descricao,
+            "status_id"      => (int)$etapas->status,
+            "perfil_id"      => (int)$etapas->perfil,
+            "permitir_anexo" => $etapas->permitirAnexo == 1 ? true : false,
+            "obrigatorio"    => $etapas->obrigatoria  == 1 ? true : false,
+            "enviar_notificacao" => $etapas->enviarNotificacao  == 1 ? true : false,
+            "notificacao_id" => empty($etapas->notificacao) ? null : (int) $etapas->notificacao,
+            "comportamento_criacao" => $etapas->comportamentoCriacao  == 1 ? true : false,
+            "comportamento_edicao" => $etapas->comportamentoEdicao  == 1 ? true : false,
+            "comportamento_aprovacao" => $etapas->comportamentoAprovacao  == 1 ? true : false,
+            "comportamento_visualizacao" => $etapas->comportamentoVizualizacao  == 1 ? true : false,
+            "comportamento_treinamento" => $etapas->comportamentoTreinamento  == 1 ? true : false,
+            "comportamento_divulgacao" => $etapas->comportamentoDivulgacao  == 1 ? true : false,
+            "tipo_aprovacao_id" => empty($etapas->tipoAprovacao) ? null : $etapas->tipoAprovacao,
+            "etapa_rejeicao_id" => empty($etapas->etapaRejeicao) ? null : $etapas->etapaRejeicao,
+            "exigir_lista_presenca" => $etapas->listaPresenca  == 1 ? true : false
+        ];
     }
 }

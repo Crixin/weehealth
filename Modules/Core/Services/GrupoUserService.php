@@ -98,7 +98,6 @@ class GrupoUserService
     {
         try {
             DB::beginTransaction();
-            
             //FORCE TO CHECK FOREING KEY
             DB::beginTransaction();
             $this->grupoUserRepository->forceDelete($data, "id");

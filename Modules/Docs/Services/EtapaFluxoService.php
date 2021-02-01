@@ -18,4 +18,14 @@ class EtapaFluxoService
     {
         return $this->etapaFluxoRepository->create($data);
     }
+
+    public function update(array $data, $id)
+    {
+        return $this->etapaFluxoRepository->update($data, $id);
+    }
+
+    public function firstOrCreate($data)
+    {
+        return $this->etapaFluxoRepository->firstOrCreate($data);
+    }
 }

@@ -2,11 +2,6 @@
 
 namespace Modules\Core\Repositories;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-
 abstract class BaseRepository
 {
    /**
@@ -23,7 +18,6 @@ abstract class BaseRepository
 
     public function find($id, array $with = [])
     {
-        $this->setUser();
         return $this->model::with($with)->find($id);
     }
 
@@ -33,7 +27,6 @@ abstract class BaseRepository
     */
     public function findAll(array $with = [], array $orderBy = [])
     {
-        $this->setUser();
         $model = $this->model::with($with);
 
         if (count($orderBy)) {
@@ -47,41 +40,35 @@ abstract class BaseRepository
 
     public function create(array $data)
     {
-        $this->setUser();
         return $this->model::create($data);
     }
 
 
     public function firstOrCreate(array $data)
     {
-        $this->setUser();
         return $this->model::firstOrCreate($data);
     }
 
 
     public function update(array $data, $id)
     {
-        $this->setUser();
         return $this->model::find($id)->update($data);
     }
 
 
     public function delete($delete, $column = "")
     {
-        $this->setUser();
         return is_array($delete) ? $this->model::whereIn($column, $delete)->delete() : $this->model::find($delete)->delete();
     }
 
     public function forceDelete($delete, $column = "")
     {
-        $this->setUser();
         return is_array($delete) ? $this->model::whereIn($column, $delete)->forceDelete() : $this->model::find($delete)->forceDelete();
     }
 
 
     public function findBy(array $where, array $with = [], array $orderBy = [], $limit = null, $offset = null)
     {
-        $this->setUser();
         $model = $this->model;
 
         $model = $model::with($with);
@@ -142,17 +129,7 @@ abstract class BaseRepository
 
     public function findOneBy(array $where, array $with = [])
     {
-        $this->setUser();
         return $this->findBy($where, $with)->first();
     }
 
-    public function setUser()
-    {
-        $usuario =  strtolower(Auth::user()->username);
-        DB::purge('pgsql');
-        Config::set('database.connections.pgsql.username', $usuario);
-        Config::set('database.connections.pgsql.password', Auth::user()->password);
-        DB::reconnect('pgsql');
-        //dd(Schema::connection('pgsql')->getConnection());
-    }
 }

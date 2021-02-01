@@ -12,7 +12,7 @@
 */
 // @codingStandardsIgnoreFile
 use Illuminate\Support\Facades\Route;
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'changeUser']], function () {
     Route::prefix('docs')->group(function () {
 
         Route::get('/', 'DocsController@index');

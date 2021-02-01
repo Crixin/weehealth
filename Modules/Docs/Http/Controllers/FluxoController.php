@@ -3,25 +3,43 @@
 namespace Modules\Docs\Http\Controllers;
 
 use App\Classes\Helper;
+use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Modules\Core\Repositories\{GrupoRepository, PerfilRepository};
-use Modules\Docs\Repositories\FluxoRepository;
+use Modules\Core\Repositories\{GrupoRepository, PerfilRepository, ParametroRepository, NotificacaoRepository};
+use Modules\Docs\Repositories\{FluxoRepository, EtapaFluxoRepository};
+use Modules\Docs\Services\FluxoService;
 
 class FluxoController extends Controller
 {
     protected $fluxoRepository;
     protected $grupoRepository;
     protected $perfilRepository;
+    protected $parametroRepository;
+    protected $notificacaoRepository;
+    protected $etapaRepository;
+    protected $fluxoService;
 
-    public function __construct(FluxoRepository $fluxoRepository, GrupoRepository $grupoRepository, PerfilRepository $perfilRepository)
+    public function __construct(
+        FluxoRepository $fluxoRepository,
+        GrupoRepository $grupoRepository,
+        PerfilRepository $perfilRepository,
+        ParametroRepository $parametroRepository,
+        NotificacaoRepository $notificacaoRepository,
+        EtapaFluxoRepository $etapaRepository,
+        FluxoService $fluxoService
+    )
     {
+        $this->etapaRepository = $etapaRepository;
         $this->fluxoRepository = $fluxoRepository;
         $this->grupoRepository = $grupoRepository;
         $this->perfilRepository = $perfilRepository;
+        $this->parametroRepository = $parametroRepository;
+        $this->notificacaoRepository = $notificacaoRepository;
+        $this->fluxoService = $fluxoService;
     }
     /**
      * Display a listing of the resource.
@@ -52,7 +70,27 @@ class FluxoController extends Controller
         $buscaPerfil = $this->perfilRepository->findAll();
         $perfis = array_column(json_decode(json_encode($buscaPerfil), true), 'nome', 'id');
 
-        return view('docs::fluxo.create', compact('grupos', 'perfis'));
+        $statusEtapa = $this->parametroRepository->getParametro('STATUS_ETAPA_FLUXO');
+        $status = json_decode($statusEtapa);
+
+        $buscaNotificacoes = $this->notificacaoRepository->findAll();
+        $notificacoes = array_column(json_decode(json_encode($buscaNotificacoes), true), 'nome', 'id');
+
+        $statusTipoAprovacao = $this->parametroRepository->getParametro('TIPO_APROVACAO_ETAPA');
+        $tiposAprovacao = json_decode($statusTipoAprovacao);
+
+
+        $etapasRejeicao = [];
+
+        return view('docs::fluxo.create', compact(
+            'grupos',
+            'perfis',
+            'status',
+            'notificacoes',
+            'tiposAprovacao',
+            'etapasRejeicao'
+            )
+        );
     }
 
     /**
@@ -66,12 +104,12 @@ class FluxoController extends Controller
         if ($error) {
             return redirect()->back()->withInput()->withErrors($error);
         }
-        $cadastro = self::montaRequest($request);
         try {
-            DB::transaction(function () use ($cadastro) {
-                $this->fluxoRepository->create($cadastro);
-            });
-
+            $cadastro = $this->montaRequest($request);
+            $retorno = $this->fluxoService->create($cadastro);
+            if (!$retorno->original['success']) {
+                throw new Exception("Um erro ocorreu ao gravar o fluxo", 1);
+            }
             Helper::setNotify('Novo fluxo criado com sucesso!', 'success|check-circle');
             return redirect()->route('docs.fluxo');
         } catch (\Throwable $th) {
@@ -105,7 +143,33 @@ class FluxoController extends Controller
         $buscaPerfil = $this->perfilRepository->findAll();
         $perfis = array_column(json_decode(json_encode($buscaPerfil), true), 'nome', 'id');
 
-        return view('docs::fluxo.edit', compact('fluxo', 'grupos', 'perfis'));
+        $statusEtapa = $this->parametroRepository->getParametro('STATUS_ETAPA_FLUXO');
+        $status = json_decode($statusEtapa);
+
+        $buscaNotificacoes = $this->notificacaoRepository->findAll();
+        $notificacoes = array_column(json_decode(json_encode($buscaNotificacoes), true), 'nome', 'id');
+
+        $statusTipoAprovacao = $this->parametroRepository->getParametro('TIPO_APROVACAO_ETAPA');
+        $tiposAprovacao = json_decode($statusTipoAprovacao);
+
+        $etapasRejeicao  = $this->etapaRepository->findBy(
+            [
+                ['fluxo_id', '=', $id]
+            ]
+        );
+        $etapasRejeicao = array_column(json_decode(json_encode($etapasRejeicao), true), 'nome', 'id');
+
+        return view('docs::fluxo.edit',
+            compact(
+                'fluxo',
+                'grupos',
+                'perfis',
+                'status',
+                'notificacoes',
+                'tiposAprovacao',
+                'etapasRejeicao'
+            )
+        );
     }
 
     /**
@@ -122,12 +186,12 @@ class FluxoController extends Controller
         }
 
         $fluxo = $request->get('idFluxo');
-        $update  = self::montaRequest($request);
+        $update  = $this->montaRequest($request);
         try {
-            DB::transaction(function () use ($update, $fluxo) {
-                $this->fluxoRepository->update($update, $fluxo);
-            });
-
+            $retorno = $this->fluxoService->update($update, $fluxo);
+            if (!$retorno->original['success']) {
+                throw new Exception("Um erro ocorreu ao atualizar o fluxo", 1);
+            }
             Helper::setNotify('Informações do fluxo atualizadas com sucesso!', 'success|check-circle');
         } catch (\Throwable $th) {
             Helper::setNotify('Um erro ocorreu ao atualizar o fluxo', 'danger|close-circle');
@@ -158,14 +222,17 @@ class FluxoController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'nome'               => empty($request->get('idFluxo')) ? 'required|string|min:5|max:100|unique:docs_fluxo,nome' : 'required|string|min:5|max:100|unique:docs_fluxo,nome,' . $request->idFluxo,
-                'descricao'          => 'required|string|min:5|max:200',
+                'nome'               => empty($request->get('idFluxo')) ? 'required|string|max:100|unique:docs_fluxo,nome' : 'required|string|min:5|max:100|unique:docs_fluxo,nome,' . $request->idFluxo,
+                'descricao'          => 'required|string|max:200',
                 'grupo'              => 'required|numeric',
                 'perfil'             => 'required|numeric'
             ]
         );
 
         if ($validator->fails()) {
+            return $validator;
+        }else if(empty($request->dados)) {
+            Helper::setNotify('Informe alguma etapa do fluxo', 'danger|close-circle');
             return $validator;
         }
 
@@ -179,7 +246,9 @@ class FluxoController extends Controller
             "descricao" => $request->get('descricao'),
             "perfil_id" => $request->get('perfil'),
             "grupo_id"  => $request->get('grupo'),
+            "versao"    => $request->get('versao'),
             "ativo"     => $request->get('ativo') == 1 ? true : false,
+            "etapas"    => $request->get('dados')
         ];
     }
 }

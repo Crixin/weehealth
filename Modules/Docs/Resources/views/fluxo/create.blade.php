@@ -17,7 +17,16 @@
 
 
 @section('content')
-
+@include('docs::modal/etapa-fluxo',
+[
+    "etapa"          => [],
+    "perfis"         => $perfis,
+    "status"         => $status,
+    "notificacoes"   => $notificacoes,
+    "tipoAprovacao"  => $tiposAprovacao,
+    "etapasRejeicao" => $etapasRejeicao
+]
+)
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -33,16 +42,17 @@
 
                 <form method="POST" action="{{ route('docs.fluxo.salvar') }}"> 
                     {{ csrf_field() }}
-                    
+                    <input type="hidden" name="ordemHidden" id="ordemHidden" value="0"> 
                     @component(
                         'docs::components.fluxo', 
                         [
                             'fluxoEdit' => [],
                             'nome' => '',
                             'descricao' => '', 
-                            'versao' => '',
+                            'versao' => '1',
                             'grupos' => $grupos,
-                            'perfis' => $perfis
+                            'perfis' => $perfis,
+                            'etapas' => []
                         ]
                     )
                     @endcomponent
@@ -52,7 +62,7 @@
                         <a href="{{ route('docs.fluxo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
                 </form>
-
+                
             </div>
         </div>
     </div>

@@ -10,7 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Illuminate\Support\Facades\Route;
 
-Route::prefix('forms')->group(function () {
-    Route::get('/home', 'FormsController@index')->name('forms.home');
+Route::group(['middleware' => ['auth' , 'changeUser']], function () {
+    Route::prefix('forms')->group(function () {
+        Route::get('/home', 'FormsController@index')->name('forms.home');
+    });
 });

@@ -63,5 +63,6 @@ class Kernel extends HttpKernel
         'onlyAllowSuperAdmins' => \Modules\Core\Http\Middleware\OnlyAllowSuperAdminsMiddleware::class,
         'permissao' => \App\Http\Middleware\Permissao::class,
         'userCan' => \App\Http\Middleware\UserCan::class,
+        'changeUser' => \App\Http\Middleware\ChangeUser::class,
     ];
 }

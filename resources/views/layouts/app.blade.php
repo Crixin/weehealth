@@ -17,7 +17,9 @@
     <title>{{ env('APP_NAME') }} - @yield('page_title')</title>
 
     <!-- Bootstrap Core CSS -->
+    
     <link href="{{ asset('plugins/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{asset('css/datatable/rowReorder.bootstrap.min.css')}}" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
@@ -448,7 +450,7 @@
                 });
             $('.selectonfocus').mask("00/00/0000", {selectOnFocus: true});
             $('.versao').mask('##0.0', {reverse: true});
-            $('.padrao-numero').mask('0000', {reverse: true});    
+            $('.padrao-numero').mask('0000', {reverse: true});  
         });
     </script>
 

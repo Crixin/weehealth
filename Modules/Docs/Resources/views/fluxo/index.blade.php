@@ -50,12 +50,7 @@
                                         <td>
                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $fluxo->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
                                             <a href="{{ route('docs.fluxo.editar', ['id' => $fluxo->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{ route('docs.fluxo.etapa-fluxo', ['fluxo_id' => $fluxo->id]) }}"> <i class="mdi mdi-format-list-numbers"></i> @lang('buttons.docs.fluxo.etapas') </a>                                                
-                                                </div>
-                                            </div>
+                                            
                                         </td>
                                     </tr>
                                 @endforeach
@@ -68,9 +63,6 @@
     </div>
     
 @endsection
-
-
-
 @section('footer')
     <!-- This is data table -->
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
@@ -120,10 +112,8 @@
             });
         });
     </script>
-
     <!-- SweetAlert2 -->
     <script>
-        
         // Exclusão do fluxo
         $('.sa-warning').click(function(){
             let id = $(this).data('id');

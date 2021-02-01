@@ -1,10 +1,6 @@
 @extends('layouts.app')
 
-
-
-
 @section('page_title', __('page_titles.docs.fluxo.update'))
-
 
 @section('breadcrumbs')
 
@@ -14,10 +10,16 @@
 
 @endsection
 
-
-
 @section('content')
-
+@include('docs::modal/etapa-fluxo',
+[
+    "etapa"          => $fluxo,
+    "perfis"         => $perfis,
+    "status"         => $status,
+    "notificacoes"   => $notificacoes,
+    "tipoAprovacao"  => $tiposAprovacao,
+    "etapasRejeicao" => $etapasRejeicao
+])
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -34,6 +36,7 @@
                 <form method="POST" action="{{ route('docs.fluxo.alterar') }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <input type="hidden" name="idFluxo" value="{{ $fluxo->id }}">
+                    <input type="hidden" name="ordemHidden" id="ordemHidden" value="{{$fluxo->docsEtapaFluxoInversao[0]->ordem ?? 0}}"> 
                     @component(
                         'docs::components.fluxo', 
                         [
@@ -57,5 +60,4 @@
             </div>
         </div>
     </div>
-    
 @endsection

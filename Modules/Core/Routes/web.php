@@ -15,7 +15,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth' , 'changeUser']], function () {
     Route::prefix('core')->group(function () {
 
         Route::get('/', ['uses' => 'HomeCoreController@index']);

@@ -26,4 +26,9 @@ class Fluxo extends Model
     {
         return $this->hasMany('Modules\Docs\Model\EtapaFluxo', 'fluxo_id', 'id')->orderBy('ordem', 'asc');
     }
+
+    public function docsEtapaFluxoInversao()
+    {
+        return $this->hasMany('Modules\Docs\Model\EtapaFluxo', 'fluxo_id', 'id')->orderBy('ordem', 'desc')->limit(1);
+    }
 }
