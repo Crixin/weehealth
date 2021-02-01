@@ -105,7 +105,7 @@
                     <td>{{$etapas->nome}}</td>
                     <td>{{$etapas->descricao}}</td>
                     <td>
-                        <a class="btn waves-effect waves-light btn-danger sa-warning btnExcluirEtapa mr-1" data-id='{{$etapas->ordem}}'><i class="mdi mdi-delete"></i> @lang('buttons.general.delete')</a>
+                        <a class="btn waves-effect waves-light btn-danger sa-warning btnExcluirEtapa" data-id='{{$etapas->ordem}}'><i class="mdi mdi-delete"></i> @lang('buttons.general.delete')</a>
                         <a class="btn waves-effect waves-light btn-info btnEditEtapa" data-id='{{$etapas->ordem}}' data-etapa='{{$etapas->id}}'><input type="hidden" name="dados[]" id="dados{{$etapas->ordem}}" value='{{JSON_encode($conteudoBotao)}}'><i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit')</a>
                     </td>
                 </tr>
