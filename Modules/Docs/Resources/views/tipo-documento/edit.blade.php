@@ -33,7 +33,7 @@
 
                 <form method="POST" action="{{ route('docs.tipo-documento.alterar') }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
-                    <input type="hidden" name="idTipoDocumento" value="{{ $tipoDocumento->id }}">
+                    <input type="hidden" id="idTipoDocumento" name="idTipoDocumento" value="{{ $tipoDocumento->id }}">
                     @component(
                         'docs::components.tipo-documento', 
                         [

@@ -3,6 +3,7 @@
 namespace Modules\Docs\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TipoDocumento extends Model
@@ -35,5 +36,10 @@ class TipoDocumento extends Model
     public function docsFluxo()
     {
         return $this->hasOne('Modules\Docs\Model\Fluxo', 'id', 'fluxo_id');
+    }
+
+    public function docsDocumento()
+    {
+        return $this->hasMany('Modules\Docs\Model\Documento', 'tipo_documento_id', 'id');
     }
 }

@@ -32,7 +32,12 @@
 
                     {{ Session::forget('message') }}
                 @endif
-
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Ao salvar alguma alteração no fluxo ou em suas etapas, será gerado uma nova versão do fluxo.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                    </button>
+               </div>
                 <form method="POST" action="{{ route('docs.fluxo.alterar') }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <input type="hidden" name="idFluxo" value="{{ $fluxo->id }}">
@@ -50,6 +55,8 @@
                     )
                     @endcomponent
                     
+                   
+
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
                         <a href="{{ route('docs.fluxo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>

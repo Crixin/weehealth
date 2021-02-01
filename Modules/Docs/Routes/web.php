@@ -114,7 +114,7 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
             Route::post('deletar',            ['as' => 'documento.deletar', 'uses' => 'DocumentoController@destroy']);
             Route::post('importar-documento', ['as' => 'documento.importar-documento', 'uses' => 'DocumentoController@importarDocumento']);
             Route::post('criar-documento',    ['as' => 'documento.criar-documento', 'uses' => 'DocumentoController@criarDocumento']);
-            Route::post('documento-por-tipo', ['as' => 'documento.documento-por-tipo', 'uses' => 'DocumentoController@buscaDocumentoPorTipo']);
+            Route::post('documento-pai-por-tipo', ['as' => 'documento.documento-pai-por-tipo', 'uses' => 'DocumentoController@buscaDocumentoPaiPorTipo']);
             Route::post('iniciar-validacao',  ['as' => 'documento.iniciar-validacao', 'uses' => 'DocumentoController@iniciarValidacao']);
             Route::post('iniciar-revisao',    ['as' => 'documento.iniciar-revisao', 'uses' => 'DocumentoController@iniciarRevisao']);
             Route::post('obsoleto',           ['as' => 'documento.obsoleto', 'uses' => 'DocumentoController@tornarObsoleto']);
@@ -123,6 +123,7 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
             Route::get('visualizar/{id}',     ['as' => 'documento.visualizar',  'uses' => 'DocumentoController@visualizar']);
             
             Route::get('proxima-etapa',    ['as' => 'documento.proxima-etapa', 'uses' => 'DocumentoController@proximaEtapa']);
+            Route::post('documento-por-tipo', ['as' => 'documento.documento-por-tipo', 'uses' => 'DocumentoController@buscaDocumentoPorTipo']);
         });
 
         /**ANEXO */

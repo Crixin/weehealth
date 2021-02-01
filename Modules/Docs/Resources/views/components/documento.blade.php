@@ -329,7 +329,7 @@
     {
         return new Promise(function (resolve, reject) {
             let obj = {'tipo': tipoDocumento, 'documento': documento};
-            ajaxMethod('POST', "{{ URL::route('docs.documento.documento-por-tipo') }}", obj).then(response => {
+            ajaxMethod('POST', "{{ URL::route('docs.documento.documento-pai-por-tipo') }}", obj).then(response => {
                 if(response.response == 'erro') {
                     reject();
                     swal2_alert_error_support("Tivemos um problema ao buscar as informações das etapas.");

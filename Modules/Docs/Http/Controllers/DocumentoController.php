@@ -739,7 +739,7 @@ class DocumentoController extends Controller
         ];
     }
 
-    public function buscaDocumentoPorTipo(Request $request)
+    public function buscaDocumentoPaiPorTipo(Request $request)
     {
         $idDocumento = $request->documento;
         try {
@@ -845,7 +845,7 @@ class DocumentoController extends Controller
                 ['created_at', 'ASC']
             ]
         );
-        
+
         $etapaAtual = $this->workFlowService->getEtapaAtual($documento->id);
 
         $revisoes  = Helper::getListAllReviewsDocument($documento->nome);
@@ -864,5 +864,24 @@ class DocumentoController extends Controller
                 'etapaAtual'
             )
         );
+    }
+
+    public function buscaDocumentoPorTipo(Request $request)
+    {
+        try {
+            $idTipo = $request->tipo;
+            $documentos = $this->documentoRepository->findBy(
+                [
+                    ['tipo_documento_id', '=', $idTipo]
+                ],
+                [],
+                [
+                    ['id', 'DESC']
+                ]
+            );
+            return response()->json(['response' => 'sucesso', 'data' => $documentos]);
+        } catch (\Exception $th) {
+            return response()->json(['response' => 'erro']);
+        }
     }
 }

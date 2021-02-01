@@ -209,7 +209,8 @@
 <script src="{{ asset('plugins/dropify/dist/js/dropify.min.js') }}"></script>
 <script>
     $(document).ready(function(){
-        verificaVinculoObrigatorio();   
+        verificaVinculoObrigatorio();
+        buscaDocumentos();   
 
         $("#codigoPadrao").select2({
             placeholder: 'Selecione o padrão de codigo'
@@ -301,6 +302,25 @@
             $('#labelVinculoObrigatorio').removeAttr('class');
             $('#divTipoDocumentoPai').attr('class', 'form-group');
         }
+    }
+
+    function buscaDocumentos() {
+        let tipoDocumento = $('#idTipoDocumento').val();
+        let obj = {'tipo': tipoDocumento};
+        ajaxMethod('POST', "{{ URL::route('docs.documento.documento-por-tipo') }}", obj).then(response => {
+            if(response.response == 'erro') {
+                swal2_alert_error_support("Tivemos um problema ao buscar os documentos.");
+            }
+            let obj = response.data;
+            if(obj != ''){
+                $('#ultimoDocumento').attr('readonly', true);
+            }else {
+                $('#ultimoDocumento').removeAttr('disabled');
+            }
+
+        }, error => {
+            console.log(error);
+        });
     }
 
 </script>

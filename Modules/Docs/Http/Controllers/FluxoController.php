@@ -186,7 +186,11 @@ class FluxoController extends Controller
         }
 
         $fluxo = $request->get('idFluxo');
+        $buscaFluxo = $this->fluxoRepository->find($fluxo);
+
         $update  = $this->montaRequest($request);
+        $update['versao'] = $buscaFluxo->versao + 1;
+
         try {
             $retorno = $this->fluxoService->update($update, $fluxo);
             if (!$retorno->original['success']) {
