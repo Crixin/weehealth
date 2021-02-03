@@ -595,7 +595,7 @@ class DocumentoController extends Controller
 
         /**SALVAR NA PASTA DO ONLYOFFICE */
         $storagePath = Storage::disk('weecode_office')->getDriver()->getAdapter()->getPathPrefix();
-        
+
         Helper::base64ToImage($buscaTipoDocumento->modelo_documento, $storagePath . $docPath);
 
         return view(
@@ -724,7 +724,7 @@ class DocumentoController extends Controller
             "justificativa_rejeicao_etapa"   => null,
             "justificativa_cancelar_etapa"   => null,
             "ged_documento_id"               => null,
-            "bpmn_id"                        => (int) $request->get('bpmn') ?? null,
+            "bpmn_id"                        => $request->get('bpmn') ? (int) $request->get('bpmn') : null,
             "revisao"                        => $request->idDocumento ? $request->revisao : '00',
             "hierarquia_documento"           => $montaRequestHierarquiaDocumento,
             "vinculo_documento"              => $montaRequestVinculoDocumento,

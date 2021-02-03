@@ -235,7 +235,6 @@ class TipoDocumentoController extends Controller
             ksort($etapas);
             return response()->json(['response' => 'sucesso', 'data' => $etapas]);
         } catch (\Exception $th) {
-            dd($th);
             return response()->json(['response' => 'erro']);
         }
     }

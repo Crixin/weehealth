@@ -160,6 +160,7 @@ class DocumentoService
             });
             return response()->json(["success" => true, "data" => ['documento_id' => $documento->id]]);
         } catch (\Throwable $th) {
+            dd($th);
             return response()->json(["success" => false]);
         }
     }
