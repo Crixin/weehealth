@@ -1,10 +1,6 @@
 @extends('layouts.app')
 
-
-
-
 @section('page_title', __('page_titles.docs.documento.view'))
-
 
 @section('breadcrumbs')
 
@@ -15,23 +11,49 @@
 @endsection
 
 @section('content')
-<div class="col-12">
+<div class="col-md-12">
+    
+    <div class="row">
+        @if (!$etapaAtual->comportamento_treinamento && $etapaAtual->docsFluxo->coreGrupo->coreUsers->contains("id", Auth::id()))
+            @component('docs::components.documento.cancelar-revisao') @endcomponent
+        @endif
+
+        @if ($etapaAtual->comportamento_criacao || $etapaAtual->comportamento_edicao)
+            @component(
+                'docs::components.documento.substituicao', 
+                [
+                    "documento" => $documento->id,
+                    "extensoes" => $extensoesPermitidas
+                ]
+            ) @endcomponent
+        @endif
+    </div>
+
     <div class="card">
         <div class="card-body">
-            <legend><b>@lang('page_titles.docs.documento.doc_number'){{$documento->id}}</b></legend>
+            <legend><b>{{ $documento->nome . " - " . $documento->codigo}}</b></legend>
             <hr>
-            <div class="col-3 mb-3">
-                <button class="btn  btn-info" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2"><i class="mdi mdi-chart-timeline"></i> Linha do Tempo</button>
-            </div>
+
             <!-- Timeline do Documento -->
+            <div class="col-md-12 mb-3">
+                <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2"><i class="mdi mdi-chart-timeline"></i> Linha do Tempo</button>
+            </div>
             @component(
-                'docs::components.linha-tempo-documento', 
+                'docs::components.documento.linha-tempo', 
                 [
                     'historico' => $historico
                 ]
             )
             @endcomponent
-            {{-- @component('docs::components.aprovacao-documento') @endcomponent --}}
+
+            @if ($etapaAtual->comportamento_aprovacao)
+                @component(
+                    'docs::components.documento.aprovacao',
+                    [
+                        "documento" => $documento->id
+                    ]
+                ) @endcomponent
+            @endif
             
             <!-- FIM Timeline do Documento -->
             <input type="hidden" name="idDocumentoOrigem" id="idDocumentoOrigem" value="{{$documento->id}}">
@@ -40,31 +62,7 @@
                 <!-- Card Principal -->
                 <div class="col-md-12 card" style="min-height: 600px">
                     <div class="card-body">
-                        <!-- Revisões do Documento -->
-                        <div class="row">
-                            <div class="col col-centered">
-                                <div class="collapse multi-collapse" id="revisoesDoc">
-                                    <div class="card card-body text-center">
 
-                                        <div class="row">
-                                           <div class="col-md-12 col-sm-12 p-20">
-                                                <h3 class="card-title text-success">Revisões do documento: <b>{{ $documento->nome ?? '' }}</b></h3>
-                                                <div class="list-group">
-                                                    @if(count($revisoes) > 1)
-                                                        @foreach($revisoes as $rev)
-                                                            {!! Form::open(['route' => 'docs.documento', 'method' => 'POST', 'target' => '_blank']) !!}
-                                                                <button type="submit" class="list-group-item btn-block mt-3">  <span style="font-size: 20px">Revisão <b>{{ explode(".html", explode("_rev", $rev)[1])[0] }}</b>:</span> {{-- {{ explode(Constants::$SUFIXO_REVISAO_NOS_TITULO_DOCUMENTOS, $rev)[0] }} --}}  </button>
-                                                            {!! Form::close() !!}
-                                                        @endforeach --}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <!-- Título e Validade do Documento (apenas texto) -->
                         <div class="row">
                             <div class="col-md-12 col-sm-12 p-20">
@@ -73,17 +71,34 @@
                         </div>
 
                         <!-- Editor -->
-                        <div class="row iframe_box">
-                            <iframe width="100%" id="speed-onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=review&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
-                        </div>
                         
-                        <!-- End Editor -->
+                        @if ($etapaAtual->comportamento_criacao || $etapaAtual->comportamento_edicao)
+                            <div class="row iframe_box">
+                                <iframe width="100%" id="speed-onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=review&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
+                            </div>
+                        @endif
+                        
+                        @if ($etapaAtual->comportamento_treinamento)
+                            @component('docs::components.documento.treinamento', ["documento" => $documento]) @endcomponent
+                        @endif
+                        
+                         <!-- End Editor -->
 
-                        <div class="col-lg-12 col-md-12">
-                            <br>
-                            <div class=" pull-right">
-                                <button   type="button" class="btn btn-info Anexos" data-id="{{$documento->id}}">@lang('buttons.general.attachments')</button>
-                                <a href="{{ route('docs.documento') }}" type="button" class="btn btn-inverse">@lang('buttons.general.back')</a>
+                        <div class="col-lg-12 col-md-12 mt-3">
+                            <div class="pull-right">
+                                {!! Form::open(['method' => 'POST', 'route' => 'docs.workflow.avancar-etapa']) !!}
+                                
+                                    {{ Form::token() }}
+                                    {!! Form::hidden('documento_id', $documento->id) !!}
+
+                                    @if (!$etapaAtual->comportamento_aprovacao)
+                                        {!! Form::submit("Encaminhar para " . $proximaEtapa->nome, ['class' => 'btn btn-success']) !!}
+                                    @endif
+                                
+                                    <button type="button" class="btn btn-info anexos-documento" data-id="{{$documento->id}}">@lang('buttons.general.attachments')</button>
+                                    <a href="{{ route('docs.documento') }}" type="button" class="btn btn-inverse">@lang('buttons.general.back')</a>
+                                
+                                {!! Form::close() !!}
                             </div>
                         </div>
                     </div>
@@ -94,23 +109,24 @@
     </div>
 </div>
 
-@endsection
-<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 @include('docs::modal/anexo-documento',
     [
-        'comportamento_modal' => 'EDICAO'
+        'comportamento_modal' => 'EDICAO',
+        'idDocumento' => $documento->id
     ]
 )
+
+@endsection
+
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 
 @section('footer')
 
 <script>
     $(document).ready(function(){
 
-        $('.Anexos').click(function(){
+        $('.anexos-documento').click(function(){
             $('#modal-anexos').modal('show');
-            let origem = $('#idDocumentoOrigem').val(); 
-            $('#idDocumento').val(origem);
         });
 
     });

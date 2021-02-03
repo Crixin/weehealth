@@ -48,7 +48,7 @@
                         </div>
 
                         @component(
-                            'docs::components.informacao-criacao-documento', 
+                            'docs::components.documento.informacao-criacao', 
                             [
                                 'text_tituloDocumento'      => $titulo,
                                 'text_codigoDocumento'      => $codigo,
@@ -78,7 +78,7 @@
                             <input type="hidden" name="codigoDocumento" id="codigoDocumento" value="{{$codigo}}">
                             <!--campos do formulario anterior -->
                             @component(
-                                'docs::components.input-hidden-criacao-documento', 
+                                'docs::components.documento.input-hidden-criacao', 
                                 [
                                     'request' => $request
                                 ]

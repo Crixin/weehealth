@@ -23,6 +23,10 @@ return [
     'workflow' => [
         'storeSuccess' => "Workflow cadastrado com sucesso!",
         'storeFail' => "Falha ao cadastrar o workflow.",
-        'validationFail' => "Falha ao validar campos do workflow"
+        'advanceStepSuccess' => "Etapa avançada com sucesso!",
+        'advanceStepFail' => "Falha ao avançar a etapa.",
+        'retreatStepSuccess' => "Etapa retrocedida com sucesso!",
+        'retreatStepFail' => "Falha ao retroceder a etapa.",
+        'validationFail' => "Falha ao validar campos do workflow."
     ]
 ];

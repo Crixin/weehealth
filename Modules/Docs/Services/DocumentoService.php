@@ -106,10 +106,11 @@ class DocumentoService
 
                 $dataWorkflow = [
                     'etapa_id' => $primeiraEtapaFluxo['id'],
-                    'documento_id' => $documento->id
+                    'documento_id' => $documento->id,
+                    'avancar' => true
                 ];
 
-                if (!$this->workflowService->storeFirstStep($dataWorkflow)['success']) {
+                if (!$this->workflowService->store($dataWorkflow)['success']) {
                     throw new \Exception('Falha ao criar workflow');
                 }
 
@@ -148,6 +149,7 @@ class DocumentoService
                 /**Etapa de Aprovação */
                 foreach ($data['etapa_aprovacao'] as $value) {
                     $value['documento_id'] = $documento->id;
+                    $value['documento_revisao'] = "00";
                     $this->userEtapaDocumentoService->create($value);
                 }
 
@@ -176,6 +178,8 @@ class DocumentoService
             $updateDocumento['etapa_aprovacao']
         );
         try {
+            $documento = $this->documentoRepository->find($id);
+            
             $this->documentoRepository->update($updateDocumento, $id);
 
             /**Cria Hierarquia Documento */
@@ -369,6 +373,7 @@ class DocumentoService
             //Cria
             foreach ($data['etapa_aprovacao'] as $value) {
                 $value['documento_id'] = (int) $id;
+                $value['documento_revisao'] = $documento->revisao;
  
                 $this->userEtapaDocumentoService->create($value);
             }
@@ -480,5 +485,4 @@ class DocumentoService
 
         return false;
     }
-
 }

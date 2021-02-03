@@ -10,8 +10,6 @@
 
 @endsection
 
-
-
 @section('content')
 
     <div class="col-12">
@@ -43,7 +41,7 @@
                         </div>
 
                         @component(
-                            'docs::components.informacao-criacao-documento', 
+                            'docs::components.documento.informacao-criacao', 
                             [
                                 'text_tituloDocumento'      => $titulo,
                                 'text_codigoDocumento'      => $codigo,
@@ -63,7 +61,7 @@
                             
                             <!--campos do formulario anterior -->
                             @component(
-                                'docs::components.input-hidden-criacao-documento', 
+                                'docs::components.documento.input-hidden-criacao', 
                                 [
                                     'request' => $request
                                 ]
@@ -92,11 +90,7 @@
     
 @endsection
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-@include('docs::modal/anexo-documento',
-    [
-        'comportamento_modal' => 'CRIACAO'
-    ]
-)
+
 @section('footer')
     <script>
     $(document).ready(function(){
@@ -174,18 +168,6 @@
                     let url ="{!! route('docs.documento.visualizar',['id'=>':id']); !!}";
                     url = url.replace(':id', id);
                     document.location.href=url;
-                    
-
-                    /*
-                    if($('#permitirAnexo').val() == true){
-                        $('#idDocumento').val(ret.data);
-                        $("#modal-anexos").modal({ backdrop: 'static', keyboard: false});
-                        $("#btn-lista-anexos").trigger('click');
-                    }else{
-                        swal2_success_not_reload("Sucesso!", "Documento criado com sucesso.");
-                        document.location.href="{!! route('docs.documento'); !!}";
-                    }
-                    */
                 },
                 error: function(erro){
                     console.log(erro);

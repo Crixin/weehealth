@@ -617,7 +617,7 @@ class Helper
         return Auth::user()->setor_id == $idSetorQualidade;
     }
 
-    public static function buscaParametro($id, $key)
+    public static function buscaParametro($key)
     {
         $parametro = new ParametroRepository();
         $busca = $parametro->findOneBy(
@@ -625,9 +625,7 @@ class Helper
                 ['identificador_parametro', '=', $key]
             ]
         );
-        $status = $busca->valor_usuario != '' ? $busca->valor_usuario : $busca->valor_padrao;
-        $retorno = (array) json_decode($status);
-        return $retorno[$id];
+        return $busca->valor_usuario ?: $busca->valor_padrao;
     }
 
     public static function limitChar($string, $numeroChar)
