@@ -2,7 +2,12 @@
 
 namespace Modules\Docs\Services;
 
-use Modules\Docs\Repositories\{WorkflowRepository, DocumentoRepository, EtapaFluxoRepository};
+use Modules\Docs\Repositories\{
+    WorkflowRepository,
+    DocumentoRepository,
+    EtapaFluxoRepository,
+    UserEtapaDocumentoRepository
+};
 use Illuminate\Support\Facades\DB;
 use App\Classes\Helper;
 use Illuminate\Support\Facades\Auth;
@@ -14,22 +19,25 @@ class WorkflowService
     private $workflowRepository;
     private $documentoRepository;
     private $etapaFluxoRepository;
+    private $userEtapaDocumentoRepository;
     private $rules;
 
     public function __construct(
         WorkflowRepository $workflowRepository,
         DocumentoRepository $documentoRepository,
         EtapaFluxoRepository $etapaFluxoRepository,
-        Workflow $workflow
+        Workflow $workflow,
+        UserEtapaDocumentoRepository $userEtapaDocumentoRepository
     ) {
         $this->rules = $workflow->rules;
         $this->workflowRepository = $workflowRepository;
         $this->documentoRepository = $documentoRepository;
         $this->etapaFluxoRepository = $etapaFluxoRepository;
+        $this->userEtapaDocumentoRepository = $userEtapaDocumentoRepository;
     }
 
     
-    public function storeFirstStep(array $dados)
+    public function store(array $dados)
     {
         try {
             DB::beginTransaction();
@@ -37,16 +45,16 @@ class WorkflowService
             $etapa = $this->etapaFluxoRepository->find($dados['etapa_id']);
             $documento = $this->documentoRepository->find($dados['documento_id']);
             
-            $descricao = $this->replaceText($etapa->descricao);
-
+            $descricao = $dados['avancar'] ? $this->replaceText($etapa->descricao) : "A etapa '{$etapa->nome}' foi rejeitada";
 
             $inserir = [
                 'documento_id' => $documento->id,
                 'descricao' => $descricao,
-                'etapa_fluxo_id' => $dados['etapa_id'],
+                'etapa_fluxo_id' => $etapa->id,
                 'user_id' => Auth::id(),
                 'documento_revisao' => $documento->revisao,
             ];
+
             $validacao = new ValidacaoService($this->rules, $inserir);
             $errors = $validacao->make();
 
@@ -64,6 +72,7 @@ class WorkflowService
         } catch (\Throwable $th) {
             DB::rollback();
             Helper::setNotify(__("messages.workflow.storeFail"), 'danger|close-circle');
+            dd($th);
             return ['success' => false];
         }
     }
@@ -110,6 +119,163 @@ class WorkflowService
             ]
         )->toArray();
 
-        return end($historico);
+        $ultimo = end($historico);
+            
+        return $this->etapaFluxoRepository->find($ultimo['etapa_fluxo_id']);
+    }
+
+
+    public function getProximaEtapa(int $documento)
+    {
+        $etapaAtual = $this->getEtapaAtual($documento);
+        
+        return $this->etapaFluxoRepository->findOneBy(
+            [
+                ['fluxo_id', '=', $etapaAtual->fluxo_id],
+                ['versao_fluxo', '=', $etapaAtual->versao_fluxo],
+                ['ordem', '=', $etapaAtual->ordem + 1],
+            ]
+        );
+    }
+
+    
+    public function avancarEtapa(array $data)
+    {
+        try {
+            $etapaAtual = $this->getEtapaAtual($data['documento_id']);
+            $proxEtapa = $this->getProximaEtapa($data['documento_id']);
+            
+            $info = [
+                'documento_id' => $data['documento_id'],
+                'etapa_id' => $proxEtapa->id,
+                'avancar' => true
+            ];
+
+            if ($proxEtapa->comportamento_divulgacao) {
+                if (!$this->divulgaDocumento($info)) {
+                    throw new \Exception('Falha ao divulgar o doc');
+                }
+            }
+            
+            if ($proxEtapa->comportamento_treinamento) {
+                //
+            }
+            
+            if ($proxEtapa->comportamento_aprovacao) {
+                if (!$this->store($info)) {
+                    throw new \Exception('Falha ao salvar a aprovação da etapa');
+                }
+            }
+            Helper::setNotify(__("messages.workflow.advanceStepSuccess"), 'success|check-circle');
+            return ['success' => true];
+        } catch (\Throwable $th) {
+            Helper::setNotify(__("messages.workflow.advanceStepFail"), 'danger|close-circle');
+            return ['success' => false];
+        }
+    }
+
+    
+    private function retrocederEtapa(array $data)
+    {
+        try {
+            $etapa = $this->getEtapaAtual($data['documento_id']);
+            
+            
+            $info = [
+                'documento_id' => $data['documento_id'],
+                'etapa_id' => $etapa->etapa_rejeicao_id,
+                'avancar' => false
+            ];
+            
+            if (!$this->store($info)['success']) {
+                throw new \Exception('Falha ao salvar o retrocesso da etapa');
+            }
+
+            Helper::setNotify(__("messages.workflow.retreatStepSuccess"), 'success|check-circle');
+            return ['success' => true];
+        } catch (\Throwable $th) {
+            Helper::setNotify(__("messages.workflow.retreatStepFail"), 'danger|close-circle');
+            return ['success' => false];
+        }
+    }
+    
+
+
+    public function validarEtapaAprovacao(array $data)
+    {
+        try {
+
+            $etapaAtual = $this->getEtapaAtual($data['documento_id']);
+            $documento = $this->documentoRepository->find($data["documento_id"]);
+        
+            if (filter_var($data["aprovado"], FILTER_VALIDATE_BOOLEAN)) {
+                DB::beginTransaction();
+
+                $userEtapaDocumento = $this->userEtapaDocumentoRepository->findBy(
+                    [
+                        ["etapa_fluxo_id", "=", $etapaAtual->id],
+                        ["documento_id", "=", $documento->id],
+                        ["documento_revisao", "=", $documento->revisao],
+                    ]
+                );
+                
+                $etapaUser = array_first($userEtapaDocumento->filter(function ($value, $key) {
+                    return $value->user_id == Auth::id();
+                }));
+                $this->userEtapaDocumentoRepository->update([
+                    "aprovado" => true
+                ], $etapaUser->id);
+
+                $avancar = false;
+
+                if ($etapaAtual->tipo_aprovacao_id == 1) {
+                    //TIPO 1 = APROVAÇÃO SIMPLES (UM APROVADOR AVANÇA A ETAPA)
+                    $avancar = true;
+                } elseif ($etapaAtual->tipo_aprovacao_id == 2) {
+                    //TIPO 2 = APROVAÇÃO CONDICIONADA (TODOS APROVADOR APROVAM PARA AVANÇAR A ETAPA)
+                    $qtdEtapasAprovadas = count($userEtapaDocumento->filter(function ($value, $key) {
+                        return $value->aprovado;
+                    }));
+
+                    //QTD ATUAL MAIS A DE AGORA
+                    if ($qtdEtapasAprovadas + 1 == count($etapaUser)) {
+                        $avancar = true;
+                    }
+                }
+
+                if ($avancar) {
+                    if (!$this->avancarEtapa(['documento_id' => $data['documento_id']])['success']) {
+                        throw new \Exception("Falha ao retroceder etapa");
+                    }
+                }
+
+                DB::commit();
+                return ["success" => true];
+            }
+
+            if (!$this->retrocederEtapa(['documento_id' => $data['documento_id']])['success']) {
+                throw new \Exception("Falha ao retroceder etapa");
+            }
+            
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            dd($th);
+            return ["success" => false];
+        }
+    }
+
+
+    private function divulgaDocumento(array $data)
+    {
+        try {
+            if (!$this->store($data)['success']) {
+                throw new \Exception("Falha ao divulgar o documento");
+            }
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            dd($th);
+            return ["success" => false];
+        }
     }
 }

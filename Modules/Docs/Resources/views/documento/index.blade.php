@@ -162,7 +162,7 @@
                                         <td><a href="{{ route('docs.documento.visualizar', ['id' => $documento->id]) }}">{{ $documento->nome }}</a></td>
                                         <td>{{ $documento->vencimento }}</td>
                                         <td>{{ $documento->revisao }}</td>
-                                        <td>{{ empty($documento->docsWorkFlow[0]) ? '':  Helper::buscaParametro($documento->docsWorkFlow[0]->docsEtapaFluxo->status_id, 'STATUS_ETAPA_FLUXO')}}</td>
+                                        <td>{{ empty($documento->docsWorkFlow[0]) ? '': json_decode(Helper::buscaParametro('STATUS_ETAPA_FLUXO'), true)[$documento->docsWorkFlow[0]->docsEtapaFluxo->status_id]}}</td>
                                         <td>{{ $documento->docsNivelAcesso($documento->nivel_acesso_id) }}</td>
                                         <td>
                                             <div class="btn-group">

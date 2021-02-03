@@ -42,7 +42,7 @@ class DocumentoController extends Controller
     protected $grupoRepository;
     protected $documentoService;
     protected $tipoDocumentoService;
-    protected $workFlowService;
+    protected $workflowService;
     protected $registroImpressoesService;
     protected $etapaFluxoRepository;
     protected $bpmnRepository;
@@ -64,7 +64,7 @@ class DocumentoController extends Controller
         ListaPresencaRepository $listaPresencaRepository,
         DocumentoService $documentoService,
         TipoDocumentoService $tipoDocumentoService,
-        WorkflowService $workFlowService,
+        WorkflowService $workflowService,
         RegistroImpressoesService $registroImpressoesService,
         EtapaFluxoRepository $etapaFluxoRepository,
         BpmnRepository $bpmnRepository
@@ -85,7 +85,7 @@ class DocumentoController extends Controller
         $this->listaPresencaRepository = $listaPresencaRepository;
         $this->documentoService = $documentoService;
         $this->tipoDocumentoService = $tipoDocumentoService;
-        $this->workFlowService = $workFlowService;
+        $this->workflowService = $workflowService;
         $this->registroImpressoesService = $registroImpressoesService;
         $this->etapaFluxoRepository = $etapaFluxoRepository;
         $this->bpmnRepository = $bpmnRepository;
@@ -515,24 +515,6 @@ class DocumentoController extends Controller
         $idDocumento = $request->idDocumento;
     }
 
-    public function montaRequestWorkFlow(
-        $descricao,
-        $justificativa,
-        $justificativaLida,
-        $idDocumento,
-        $etapaFluxoId,
-        $documentoRevisao
-    ) {
-        return [
-            "descricao" => $descricao,
-            "justificativa" => $justificativa,
-            "justificativa_lida" => $justificativaLida,
-            "documento_id" => $idDocumento,
-            "etapa_fluxo_id" => $etapaFluxoId,
-            "user_id" => Auth::user()->id,
-            "documento_revisao" => $documentoRevisao
-        ];
-    }
 
     public function importarDocumento(Request $request)
     {
@@ -860,12 +842,16 @@ class DocumentoController extends Controller
                 ['created_at', 'ASC']
             ]
         );
-
-        $etapaAtual = $this->workFlowService->getEtapaAtual($documento->id);
+        
+        $etapaAtual = $this->workflowService->getEtapaAtual($documento->id);
+        
+        $proximaEtapa = $this->workflowService->getProximaEtapa($documento->id);
 
         $revisoes  = Helper::getListAllReviewsDocument($documento->nome);
 
         $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
+        
+        $extensoesPermitidas = implode(", ", json_decode(Helper::buscaParametro('EXTENSAO_DOCUMENTO_ONLYOFFICE')));
         $docPath = $documento->nome . $buscaPrefixo . $documento->revisao . "." . $documento->extensao;
 
         return view(
@@ -876,7 +862,9 @@ class DocumentoController extends Controller
                 'historico',
                 'revisoes',
                 'docPath',
-                'etapaAtual'
+                'etapaAtual',
+                'proximaEtapa',
+                'extensoesPermitidas'
             )
         );
     }

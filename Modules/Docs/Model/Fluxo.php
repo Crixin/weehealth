@@ -31,4 +31,9 @@ class Fluxo extends Model
     {
         return $this->hasMany('Modules\Docs\Model\EtapaFluxo', 'fluxo_id', 'id')->orderBy('ordem', 'desc')->limit(1);
     }
+    
+    public function coreGrupo()
+    {
+        return $this->hasOne('Modules\Core\Model\Grupo', 'id', 'grupo_id');
+    }
 }

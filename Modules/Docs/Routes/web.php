@@ -133,6 +133,12 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
             Route::post('deletar',  ['as' => 'anexo.deletar', 'uses' => 'AnexoDocumentoController@destroy']);
         });
 
+        /**WORKFLOW */
+        Route::group(['prefix' => 'workflow', 'as' => 'docs.workflow.'], function() {
+            Route::post('avancar-etapa',   ['as' => 'avancar-etapa',  'uses' => 'WorkflowController@avancarEtapa']);
+            Route::post('aprovar', ['as' => 'aprovar',  'uses' => 'WorkflowController@aprovar']);
+        });
+
         Route::group(['prefix' => 'user-etapa-documento','as' => 'docs.'], function() {
             Route::post('aprovadores',      ['as' => 'user-etapa-documento.aprovadores', 'uses' => 'UserEtapaDocumentoController@aprovadores']);
         });
