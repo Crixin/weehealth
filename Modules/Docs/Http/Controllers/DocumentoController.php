@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\{Auth, DB, Storage};
 use Modules\Docs\Repositories\{
     DocumentoRepository,
     AgrupamentoUserDocumentoRepository,
+    BpmnRepository,
     DocumentoItemNormaRepository,
     HierarquiaDocumentoRepository,
     ListaPresencaRepository,
@@ -44,6 +45,7 @@ class DocumentoController extends Controller
     protected $workFlowService;
     protected $registroImpressoesService;
     protected $etapaFluxoRepository;
+    protected $bpmnRepository;
 
     public function __construct(
         DocumentoRepository $documentoRepository,
@@ -64,7 +66,8 @@ class DocumentoController extends Controller
         TipoDocumentoService $tipoDocumentoService,
         WorkflowService $workFlowService,
         RegistroImpressoesService $registroImpressoesService,
-        EtapaFluxoRepository $etapaFluxoRepository
+        EtapaFluxoRepository $etapaFluxoRepository,
+        BpmnRepository $bpmnRepository
     ) {
         $this->documentoRepository = $documentoRepository;
         $this->setorRepository = $setorRepository;
@@ -85,6 +88,7 @@ class DocumentoController extends Controller
         $this->workFlowService = $workFlowService;
         $this->registroImpressoesService = $registroImpressoesService;
         $this->etapaFluxoRepository = $etapaFluxoRepository;
+        $this->bpmnRepository = $bpmnRepository;
     }
 
     /**
@@ -260,6 +264,10 @@ class DocumentoController extends Controller
             ]
         );
 
+        /**BPMN */
+        $bpmns = $this->bpmnRepository->findAll();
+        $bpmns = array_column(json_decode(json_encode($bpmns), true), 'nome', 'id');
+
         $documentos = $this->documentoRepository->findBy(
             [],
             [],
@@ -277,7 +285,8 @@ class DocumentoController extends Controller
                 'niveisAcesso',
                 'classificacoes',
                 'gruposUsuarios',
-                'normas'
+                'normas',
+                'bpmns'
             )
         );
     }
@@ -299,13 +308,13 @@ class DocumentoController extends Controller
             $docPath = $request->tituloDocumento . $buscaPrefixo . '00.' . $extensao;
             Storage::disk('weecode_office')->put($docPath, file_get_contents($file));
         }
-        
+
         $cadastro = $this->montaRequest($request);
         $buscaTipoDocumento = $this->tipoDocumentoRepository->find($request->get('tipoDocumento'));
         $fluxo = $buscaTipoDocumento->docsFluxo;
-        
+
         return $this->documentoService->store($cadastro);
-        
+
         if ($retorno) {
             return response()->json(['response' => 'sucesso', 'data' => $retorno]);
         }
@@ -386,6 +395,10 @@ class DocumentoController extends Controller
             ]
         );
 
+        /**BPMN */
+        $bpmns = $this->bpmnRepository->findAll();
+        $bpmns = array_column(json_decode(json_encode($bpmns), true), 'nome', 'id');
+
         $documentos = $this->documentoRepository->findBy(
             [
                 ['codigo', '!=', $documento->codigo]
@@ -449,6 +462,7 @@ class DocumentoController extends Controller
                 'classificacoes',
                 'gruposUsuarios',
                 'normas',
+                'bpmns',
                 'documentosVinculadosSelecionados',
                 'normasSelecionados',
                 'grupoTreinamentoSelecionado',
@@ -728,6 +742,7 @@ class DocumentoController extends Controller
             "justificativa_rejeicao_etapa"   => null,
             "justificativa_cancelar_etapa"   => null,
             "ged_documento_id"               => null,
+            "bpmn_id"                        => (int) $request->get('bpmn') ?? null,
             "revisao"                        => $request->idDocumento ? $request->revisao : '00',
             "hierarquia_documento"           => $montaRequestHierarquiaDocumento,
             "vinculo_documento"              => $montaRequestVinculoDocumento,

@@ -93,11 +93,11 @@ class DocumentoService
             $createDocumento['item_normas'],
             $createDocumento['etapa_aprovacao']
         );
-        
+
         try {
             $documento = DB::transaction(function () use ($createDocumento, $data) {
                 $documento = $this->documentoRepository->create($createDocumento);
-                
+
                 $versãoFluxo = $documento->docsTipoDocumento->docsFluxo->versao;
 
                 $primeiraEtapaFluxo = array_first(array_filter($documento->docsTipoDocumento->docsFluxo->docsEtapaFluxo->toArray(), function ($etapa) use ($versãoFluxo) {

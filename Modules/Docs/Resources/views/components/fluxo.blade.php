@@ -71,42 +71,44 @@
                 <th>Ordem</th>
                 <th>Nome</th>
                 <th>Descrição</th>
+                <th>Versão</th>
                 <th>Controle</th>        
             </tr>
         </thead>
         <tbody id="itemEtapas">
-            @foreach ($fluxoEdit->docsEtapaFluxo ?? [] as $etapas)
+            @foreach ($etapas ?? [] as $etapa)
                 @php
                     $conteudoBotao = 
                     [
-                        "nome"=> $etapas->nome,
-                        "descricao"=>$etapas->descricao,
-                        "status"=>$etapas->status_id,
-                        "perfil"=>$etapas->perfil_id,
-                        "permitirAnexo"=>$etapas->permitir_anexo,
-                        "obrigatoria"=>$etapas->obrigatorio,
-                        "enviarNotificacao"=>$etapas->enviar_notificacao,
-                        "notificacao"=>$etapas->notificacao_id,
-                        "comportamentoCriacao"=>$etapas->comportamento_criacao,
-                        "comportamentoEdicao"=>$etapas->comportamento_edicao,
-                        "comportamentoAprovacao"=>$etapas->comportamento_aprovacao,
-                        "comportamentoVizualizacao"=>$etapas->comportamento_visualizacao,
-                        "comportamentoDivulgacao"=>$etapas->comportamento_divulgacao,
-                        "comportamentoTreinamento"=>$etapas->comportamento_treinamento,
-                        "tipoAprovacao"=>$etapas->tipo_aprovacao_id,
-                        "etapaRejeicao"=>$etapas->etapa_rejeicao_id,
-                        "listaPresenca"=>$etapas->exigir_lista_presenca,
-                        "ordem" => $etapas->ordem,
-                        "id" => $etapas->id
+                        "nome"=> $etapa->nome,
+                        "descricao"=>$etapa->descricao,
+                        "status"=>$etapa->status_id,
+                        "perfil"=>$etapa->perfil_id,
+                        "permitirAnexo"=>$etapa->permitir_anexo,
+                        "obrigatoria"=>$etapa->obrigatorio,
+                        "enviarNotificacao"=>$etapa->enviar_notificacao,
+                        "notificacao"=>$etapa->notificacao_id,
+                        "comportamentoCriacao"=>$etapa->comportamento_criacao,
+                        "comportamentoEdicao"=>$etapa->comportamento_edicao,
+                        "comportamentoAprovacao"=>$etapa->comportamento_aprovacao,
+                        "comportamentoVizualizacao"=>$etapa->comportamento_visualizacao,
+                        "comportamentoDivulgacao"=>$etapa->comportamento_divulgacao,
+                        "comportamentoTreinamento"=>$etapa->comportamento_treinamento,
+                        "tipoAprovacao"=>$etapa->tipo_aprovacao_id,
+                        "etapaRejeicao"=>$etapa->etapa_rejeicao_id,
+                        "listaPresenca"=>$etapa->exigir_lista_presenca,
+                        "ordem" => $etapa->ordem,
+                        "id" => $etapa->id
                     ];
                 @endphp
                 <tr>
-                    <td data-id="{{$etapas->ordem}}">{{$etapas->ordem}}</td>
-                    <td>{{$etapas->nome}}</td>
-                    <td>{{$etapas->descricao}}</td>
+                    <td data-id="{{$etapa->ordem}}">{{$etapa->ordem}}</td>
+                    <td>{{$etapa->nome}}</td>
+                    <td>{{$etapa->descricao}}</td>
+                    <td>{{$etapa->versao_fluxo}}</td>
                     <td>
-                        <a class="btn waves-effect waves-light btn-danger sa-warning btnExcluirEtapa" data-id='{{$etapas->ordem}}'><i class="mdi mdi-delete"></i> @lang('buttons.general.delete')</a>
-                        <a class="btn waves-effect waves-light btn-info btnEditEtapa" data-id='{{$etapas->ordem}}' data-etapa='{{$etapas->id}}'><input type="hidden" name="dados[]" id="dados{{$etapas->ordem}}" value='{{JSON_encode($conteudoBotao)}}'><i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit')</a>
+                        <a class="btn waves-effect waves-light btn-danger sa-warning btnExcluirEtapa" data-id='{{$etapa->ordem}}'><i class="mdi mdi-delete"></i> @lang('buttons.general.delete')</a>
+                        <a class="btn waves-effect waves-light btn-info btnEditEtapa" data-id='{{$etapa->ordem}}' data-etapa='{{$etapa->id}}'><input type="hidden" name="dados[]" id="dados{{$etapa->ordem}}" value='{{JSON_encode($conteudoBotao)}}'><i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit')</a>
                     </td>
                 </tr>
             @endforeach

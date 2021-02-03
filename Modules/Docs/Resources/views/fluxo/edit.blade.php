@@ -50,20 +50,16 @@
                             'descricao' => $fluxo->descricao, 
                             'versao' => $fluxo->versao,
                             'grupos' => $grupos,
-                            'perfis' => $perfis
+                            'perfis' => $perfis,
+                            'etapas' => $todasEtapas
                         ]
                     )
                     @endcomponent
-                    
-                   
-
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
+                        <button type="submit" class="btn btn-success" id="btnEditFluxo"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
                         <a href="{{ route('docs.fluxo') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
-
                 </form>
-
             </div>
         </div>
     </div>

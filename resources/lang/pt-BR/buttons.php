@@ -192,7 +192,10 @@ return [
             'create'   => 'Criar Documento Externo'
         ],
 
-        
+        /*BPMN*/
+        'bpmn'    => [
+            'create'   => 'Criar BPMN'
+        ],
 
     ],
 
