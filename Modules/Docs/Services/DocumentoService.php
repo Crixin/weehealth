@@ -313,7 +313,8 @@ class DocumentoService
                 $busca = $this->agrupamentoUserDocumentoRepository->findOneBy(
                     [
                         ['documento_id','=',$id],
-                        ['user_id','=',$user,"AND"],
+                        ['user_id','=',explode('-', $user)[1],"AND"],
+                        ['grupo_id','=',explode('-', $user)[0],"AND"],
                         ['tipo', '=', 'DIVULGACAO', "AND"]
                     ]
                 );
