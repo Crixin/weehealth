@@ -36,7 +36,8 @@ class DossieDocumentosController extends Controller
     /**
     * Construtor
     */
-    public function __construct() {
+    public function __construct()
+    {
         $this->grupoUserRepository = new GrupoUserRepository();
         $this->empresaGrupoRepository = new EmpresaGrupoRepository();
         $this->empresaUserRepository = new EmpresaUserRepository();
