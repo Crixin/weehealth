@@ -8,9 +8,9 @@ class TipoDocumentoService
 {
     protected $tipoDocumentoRepository;
 
-    public function __construct(TipoDocumentoRepository $tipoDocumentoRepository)
+    public function __construct()
     {
-        $this->tipoDocumentoRepository = $tipoDocumentoRepository;
+        $this->tipoDocumentoRepository = new TipoDocumentoRepository();
     }
 
 

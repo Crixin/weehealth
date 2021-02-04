@@ -12,9 +12,9 @@ class EmpresaPortalController extends Controller
     protected $empresaRepository;
 
 
-    public function __construct(EmpresaRepository $empresaRepository)
+    public function __construct()
     {
-        $this->empresaRepository = $empresaRepository;
+        $this->empresaRepository = new EmpresaRepository();
     }
 
     /**

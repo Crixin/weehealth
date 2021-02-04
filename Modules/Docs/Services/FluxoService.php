@@ -42,10 +42,10 @@ class FluxoService
                 $this->etapaFluxoService->create($requestCreate);
             }
             DB::commit();
-            return response()->json(["success" => true]);
+            return ["success" => true];
         } catch (\Throwable $th) {
             DB::rollback();
-            return response()->json(["success" => false]);
+            return ["success" => false];
         }
     }
 
@@ -57,10 +57,10 @@ class FluxoService
         );
         DB::beginTransaction();
         try {
-            $buscaFluxo = $this->fluxoRepository->find($id);
             $this->fluxoRepository->update($createFluxo, $id);
-
+            $buscaFluxo = $this->fluxoRepository->find($id);
             /**Etapas */
+            /*
             $etapasRequest = [];
             foreach ($data['etapas'] as $key => $value) {
                 $etapas = json_decode($value);
@@ -82,24 +82,20 @@ class FluxoService
                     throw new \Exception('Falha da deleção dos registros');
                 }
             }
+            */
             //Cria etapas
             $novaOrdem = 0;
             foreach ($data['etapas'] as $key => $value) {
                 $novaOrdem += 1 ;
                 $etapas = json_decode($value);
                 $requestUpdate = $this->montaRequest($etapas, $buscaFluxo, $novaOrdem);
-                if ($etapas->id != '') {
-                    $this->etapaFluxoRepository->update($requestUpdate, $etapas->id);
-                } else {
-                    $this->etapaFluxoRepository->create($requestUpdate);
-                }
+                $this->etapaFluxoRepository->create($requestUpdate);
             }
             DB::commit();
-            return response()->json(["success" => true]);
+            return ["success" => true];
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollback();
-            return response()->json(["success" => false]);
+            return ["success" => false];
         }
     }
 

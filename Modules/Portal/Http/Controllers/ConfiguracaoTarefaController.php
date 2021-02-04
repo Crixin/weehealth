@@ -11,9 +11,9 @@ class ConfiguracaoTarefaController extends Controller
 {
     protected $configuracaoTarefaRepository;
 
-    public function __construct(ConfiguracaoTarefaRepository $configTarefa)
+    public function __construct()
     {
-        $this->configuracaoTarefaRepository = $configTarefa;
+        $this->configuracaoTarefaRepository = new ConfiguracaoTarefaRepository();
     }
 
     public function index()

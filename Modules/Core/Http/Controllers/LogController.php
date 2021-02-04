@@ -6,6 +6,7 @@ use App\Classes\Helper;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Repositories\{LogRepository, UserRepository};
 
@@ -15,10 +16,10 @@ class LogController extends Controller
     protected $usuarioRepository;
     protected $logRepository;
 
-    public function __construct(LogRepository $logRepository, UserRepository $usuarioRepository)
+    public function __construct()
     {
-        $this->logRepository = $logRepository;
-        $this->usuarioRepository = $usuarioRepository;
+        $this->logRepository = new LogRepository();
+        $this->usuarioRepository = new UserRepository();
     }
 
     /**
@@ -125,6 +126,7 @@ class LogController extends Controller
                 'colunaSelecionada'
             )
         );
+        
     }
 
     /**
@@ -205,9 +207,17 @@ class LogController extends Controller
         ini_set('memory_limit', '3000M');
         ini_set('max_execution_time', '0');
 
+        DB::purge('pgsql');
+        Config::set('database.connections.pgsql.username', 'postgres');
+        Config::set('database.connections.pgsql.password', 'admin');
+        DB::reconnect('pgsql');
+
         $criaTrigger = DB::select("select geracao_inicial_triggers('public')");
         $criacaoLote = DB::select($criaTrigger[0]->geracao_inicial_triggers);
         $executaLote = DB::select("select criar_triggers_lote('public')");
         DB::unprepared($executaLote[0]->criar_triggers_lote);
+
+        DB::unprepared('grant SELECT, INSERT, UPDATE, DELETE on all tables in schema public to weehealth');
+        DB::unprepared('grant ALL on all sequences in schema public to weehealth');
     }
 }

@@ -16,15 +16,11 @@ class DocumentoExternoController extends Controller
     protected $setorRepository;
     protected $empresaRepository;
 
-    public function __construct(
-        DocumentoExternoRepository $documentoExternoRepository,
-        SetorRepository $setorRepository,
-        EmpresaRepository $empresaRepository
-    )
+    public function __construct()
     {
-        $this->documentoExternoRepository = $documentoExternoRepository;
-        $this->setorRepository = $setorRepository;
-        $this->empresaRepository = $empresaRepository;
+        $this->documentoExternoRepository = new DocumentoExternoRepository();
+        $this->setorRepository = new SetorRepository();
+        $this->empresaRepository = new EmpresaRepository();
     }
 
     /**

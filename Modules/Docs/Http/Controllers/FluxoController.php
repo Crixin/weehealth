@@ -107,7 +107,7 @@ class FluxoController extends Controller
         try {
             $cadastro = $this->montaRequest($request);
             $retorno = $this->fluxoService->create($cadastro);
-            if (!$retorno->original['success']) {
+            if (!$retorno['success']) {
                 throw new Exception("Um erro ocorreu ao gravar o fluxo", 1);
             }
             Helper::setNotify('Novo fluxo criado com sucesso!', 'success|check-circle');
@@ -154,10 +154,18 @@ class FluxoController extends Controller
 
         $etapasRejeicao  = $this->etapaRepository->findBy(
             [
-                ['fluxo_id', '=', $id]
+                ['fluxo_id', '=', $id],
+                ['versao_fluxo', '=', $fluxo->versao]
             ]
         );
         $etapasRejeicao = array_column(json_decode(json_encode($etapasRejeicao), true), 'nome', 'id');
+
+        $todasEtapas = $this->etapaRepository->findBy(
+            [
+                ['fluxo_id', '=', $id],
+                ['versao_fluxo', '=', $fluxo->versao]
+            ]
+        );
 
         return view('docs::fluxo.edit',
             compact(
@@ -167,7 +175,8 @@ class FluxoController extends Controller
                 'status',
                 'notificacoes',
                 'tiposAprovacao',
-                'etapasRejeicao'
+                'etapasRejeicao',
+                'todasEtapas'
             )
         );
     }
@@ -193,11 +202,12 @@ class FluxoController extends Controller
 
         try {
             $retorno = $this->fluxoService->update($update, $fluxo);
-            if (!$retorno->original['success']) {
+            if (!$retorno['success']) {
                 throw new Exception("Um erro ocorreu ao atualizar o fluxo", 1);
             }
             Helper::setNotify('Informações do fluxo atualizadas com sucesso!', 'success|check-circle');
         } catch (\Throwable $th) {
+            dd($th);
             Helper::setNotify('Um erro ocorreu ao atualizar o fluxo', 'danger|close-circle');
         }
         return redirect()->back()->withInput();

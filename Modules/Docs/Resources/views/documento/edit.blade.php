@@ -51,7 +51,7 @@
                             'documentosVinvulados' => $documentos,
                             'gruposUsuarios' => $gruposUsuarios,
                             'normas' => $normas,
-
+                            'bpmns' => $bpmns,
                             'documentosVinculadosSelecionados' => $documentosVinculadosSelecionados,
                             'normasSelecionados' => $normasSelecionados,
                             'grupoTreinamentoSelecionado' => $grupoTreinamentoSelecionado,

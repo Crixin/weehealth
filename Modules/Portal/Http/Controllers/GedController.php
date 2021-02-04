@@ -14,10 +14,10 @@ class GedController extends Controller
     /*
     * Construtor
     */
-    public function __construct(EmpresaProcessoRepository $empresaProcesso)
+    public function __construct()
     {
         $this->ged = new RESTServices();
-        $this->empresaProcessoRepository = $empresaProcesso;
+        $this->empresaProcessoRepository = new EmpresaProcessoRepository();
     }
 
     /**

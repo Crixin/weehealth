@@ -8,9 +8,9 @@ class AnexoService
 {
     protected $anexoRepository;
 
-    public function __construct(AnexoRepository $anexoRepository)
+    public function __construct()
     {
-        $this->anexoRepository = $anexoRepository;
+        $this->anexoRepository = new AnexoRepository();
     }
 
     public function create(array $dados)

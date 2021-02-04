@@ -18,16 +18,11 @@ class TipoDocumentoController extends Controller
     protected $parametroRepository;
     protected $tipoDocumentoService;
 
-    public function __construct(
-        TipoDocumentoRepository $tipoDocumentoRepository,
-        FluxoRepository $fluxoRepository,
-        ParametroRepository $parametroRepository,
-        TipoDocumentoService $tipoDocumentoService
-    ) {
-        $this->tipoDocumentoRepository = $tipoDocumentoRepository;
-        $this->fluxoRepository = $fluxoRepository;
-        $this->parametroRepository = $parametroRepository;
-        $this->tipoDocumentoService = $tipoDocumentoService;
+    public function __construct()
+    {
+        $this->tipoDocumentoRepository = new TipoDocumentoRepository();
+        $this->fluxoRepository = new FluxoRepository();
+        $this->parametroRepository = new ParametroRepository();
     }
 
     /**
@@ -231,11 +226,11 @@ class TipoDocumentoController extends Controller
     {
         try {
             $id = $request->id;
-            $etapas = $this->tipoDocumentoService->getEtapasFluxosPorComportamento($id, 'comportamento_aprovacao');
+            $tipoDocumentoService = new TipoDocumentoService();
+            $etapas = $tipoDocumentoService->getEtapasFluxosPorComportamento($id, 'comportamento_aprovacao');
             ksort($etapas);
             return response()->json(['response' => 'sucesso', 'data' => $etapas]);
         } catch (\Exception $th) {
-            dd($th);
             return response()->json(['response' => 'erro']);
         }
     }

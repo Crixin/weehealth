@@ -11,9 +11,9 @@ class EdicaoDocumentoController extends Controller
 
     protected $edicaoDocumentoRepository;
 
-    public function __construct(EdicaoDocumentoRepository $edicaoDocumento)
+    public function __construct()
     {
-        $this->edicaoDocumentoRepository = $edicaoDocumento;
+        $this->edicaoDocumentoRepository = new EdicaoDocumentoRepository();
     }
 
 

@@ -14,17 +14,12 @@ class ModeloNotificacaoController extends Controller
 {
     protected $notificacaoRepository;
     protected $parametroRepository;
-    protected $notificacaoService;
 
-    public function __construct(
-        NotificacaoRepository $notificacaoRepository,
-        ParametroRepository $parametroRepository,
-        NotificacaoService $notificacaoService
-    )
+
+    public function __construct()
     {
-        $this->notificacaoRepository = $notificacaoRepository;
-        $this->parametroRepository = $parametroRepository;
-        $this->notificacaoService = $notificacaoService;
+        $this->notificacaoRepository = new NotificacaoRepository();
+        $this->parametroRepository = new ParametroRepository();
     }
 
     /**
@@ -59,8 +54,9 @@ class ModeloNotificacaoController extends Controller
      */
     public function store(Request $request)
     {
+        $notificacaoService = new NotificacaoService();
         $montaRequest = $this->montaRequest($request);
-        $reponse = $this->notificacaoService->create($request, $montaRequest);
+        $reponse = $notificacaoService->create($request, $montaRequest);
 
         if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
             return $reponse;
@@ -111,8 +107,9 @@ class ModeloNotificacaoController extends Controller
      */
     public function update(Request $request)
     {
+        $notificacaoService = new NotificacaoService();
         $montaRequest = $this->montaRequest($request);
-        $reponse = $this->notificacaoService->update($request, $montaRequest);
+        $reponse = $notificacaoService->update($request, $montaRequest);
 
         if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
             return $reponse;
@@ -134,10 +131,12 @@ class ModeloNotificacaoController extends Controller
      */
     public function destroy(Request $request)
     {
+        
         $id = $request = $request->id;
         try {
             DB::transaction(function () use ($id) {
-                $this->notificacaoService->delete($id);
+                $notificacaoService = new NotificacaoService();
+                $notificacaoService->delete($id);
             });
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {

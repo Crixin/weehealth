@@ -9,9 +9,9 @@ class ItemNormaService
 
     protected $itemNormaRepository;
 
-    public function __construct(ItemNormaRepository $itemNormaRepository)
+    public function __construct()
     {
-        $this->itemNormaRepository = $itemNormaRepository;
+        $this->itemNormaRepository = new ItemNormaRepository();
     }
 
     public function create(array $data)

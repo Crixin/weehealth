@@ -84,7 +84,7 @@ class DocumentoService
 
 
                 $documento = $this->documentoRepository->create($createDocumento);
-                
+
                 $versãoFluxo = $documento->docsTipoDocumento->docsFluxo->versao;
 
                 $primeiraEtapaFluxo = array_first(array_filter($documento->docsTipoDocumento->docsFluxo->docsEtapaFluxo->toArray(), function ($etapa) use ($versãoFluxo) {
@@ -147,6 +147,7 @@ class DocumentoService
             });
             return response()->json(["success" => true, "data" => ['documento_id' => $documento->id]]);
         } catch (\Throwable $th) {
+            dd($th);
             return response()->json(["success" => false]);
         }
     }

@@ -4,26 +4,22 @@ namespace Modules\Core\Services;
 
 use App\Classes\Helper;
 use Modules\Core\Model\Grupo;
-use App\Services\ValidacaoService;
 use Illuminate\Support\Facades\DB;
-use Modules\Core\Repositories\{GrupoRepository, ParametroRepository};
-use Modules\Docs\Repositories\{AgrupamentoUserDocumentoRepository, UserEtapaDocumentoRepository};
+use Modules\Core\Repositories\{GrupoRepository};
 
 class GrupoService
 {
     private $rules;
     private $grupoRepository;
-    private $parametroRepository;
-    private $agrupamentoUserDocumentoRepository;
-    private $userEtapaDocumentoRepository;
 
-    public function __construct(Grupo $grupo, GrupoRepository $grupoRepository)
+
+    public function __construct()
     {
+        $grupo = new Grupo();
+        $this->grupoRepository = new GrupoRepository();
         $this->rules = $grupo->rules;
-        $this->grupoRepository = $grupoRepository;
     }
 
-    
     public function delete($data)
     {
         try {
@@ -32,16 +28,16 @@ class GrupoService
             $this->grupoRepository->forceDelete($data);
 
             DB::rollBack();
-            
+
             $this->grupoRepository->delete($data);
             DB::commit();
 
             Helper::setNotify('Grupo deletado com sucesso!', 'success|check-circle');
-            return true;
+            return ["success" => true];
         } catch (\Throwable $th) {
             DB::rollBack();
             $this->failDeleteGroup($data);
-            return false;
+            return ["success" => false];
         }
     }
 
@@ -58,8 +54,6 @@ class GrupoService
                     ['grupo_id', '=', $grupo],
                     ]
                 ); */
-                
-
         Helper::setNotify("O grupo possui vínculos, impossível excluir sem removê-los.", 'danger|close-circle');
         return;
     }

@@ -11,13 +11,10 @@ use Modules\Core\Services\PerfilService;
 class PerfilController extends Controller
 {
     protected $perfilRepository;
-    protected $perfilService;
 
-
-    public function __construct(PerfilRepository $perfil, PerfilService $perfilService)
+    public function __construct()
     {
-        $this->perfilRepository = $perfil;
-        $this->perfilService = $perfilService;
+        $this->perfilRepository = new PerfilRepository();
     }
 
 
@@ -54,6 +51,7 @@ class PerfilController extends Controller
      */
     public function store(Request $request)
     {
+        $perfilService = new PerfilService();
         $nome = $request->nome;
 
         $permissoes = $request->all();
@@ -65,7 +63,7 @@ class PerfilController extends Controller
             'permissoes' => $permissoes,
         ];
 
-        $reponse = $this->perfilService->store($data);
+        $reponse = $perfilService->store($data);
 
         if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
             return $reponse;
@@ -103,6 +101,7 @@ class PerfilController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $perfilService = new PerfilService();
         $nome = $request->nome;
 
         $permissoes = $request->all();
@@ -115,7 +114,7 @@ class PerfilController extends Controller
             'permissoes' => $permissoes,
         ];
 
-        $reponse = $this->perfilService->update($data);
+        $reponse = $perfilService->update($data);
 
         if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
             return $reponse;

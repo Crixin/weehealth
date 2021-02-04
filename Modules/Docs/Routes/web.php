@@ -173,7 +173,12 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
         
 
         Route::group(['prefix' => 'bpmn', 'as' => 'docs.'], function() {
-            Route::get('',['as' => 'bpmn',   'uses' => 'BpmnController@index']);
+            Route::get('',              ['as' => 'bpmn',         'uses' => 'BpmnController@index']);
+            Route::get('novo',          ['as' => 'bpmn.novo',    'uses' => 'BpmnController@create']);
+            Route::post('salvar',       ['as' => 'bpmn.salvar',  'uses' => 'BpmnController@store']);
+            Route::get('editar/{id}',   ['as' => 'bpmn.editar',  'uses' => 'BpmnController@edit']);
+            Route::post('alterar',      ['as' => 'bpmn.alterar', 'uses' => 'BpmnController@update']);
+            Route::post('deletar',      ['as' => 'bpmn.deletar', 'uses' => 'BpmnController@destroy']);
         });
 
 

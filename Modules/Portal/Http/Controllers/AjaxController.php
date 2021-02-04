@@ -23,9 +23,9 @@ class AjaxController extends Controller
 {
     protected $dashboardRepository;
 
-    public function __construct(DashboardRepository $dashboard)
+    public function __construct()
     {
-        $this->dashboardRepository = $dashboard;
+        $this->dashboardRepository = new DashboardRepository();
     }
 
 

@@ -65038,6 +65038,19 @@ var modeler = new bpmn_js_lib_Modeler__WEBPACK_IMPORTED_MODULE_1__["default"]({
   container: '#js-canvas'
 });
 
+
+setTimeout(function(){ 
+
+  if(window.parent.iframeTeste.document.getElementById('arquivoXML').value != ''){
+    let data = window.parent.iframeTeste.document.getElementById('arquivoXML').value;
+    openDiagram(data);
+  }
+  
+  
+
+}, 3000);
+
+
 function createNewDiagram() {
   openDiagram(_resources_newDiagram_bpmn__WEBPACK_IMPORTED_MODULE_2___default.a);
 }
@@ -65090,7 +65103,7 @@ function registerFileDrop(container, callback) {
     reader.onload = function(e) {
 
       var xml = e.target.result;
-
+      
       callback(xml);
     };
 
@@ -65149,6 +65162,11 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(function() {
         'href': 'data:application/bpmn20-xml;charset=UTF-8,' + encodedData,
         'download': name
       });
+
+      //let data =  document.querySelector('#js-download-diagram').href;
+
+      document.querySelector('#arquivoXML').value = data;
+
     } else {
       link.removeClass('active');
     }
@@ -65212,3 +65230,4 @@ module.exports = __webpack_require__(/*! ./public/app.js */"./public/app.js");
 
 /******/ });
 //# sourceMappingURL=app.bundled.js.map
+

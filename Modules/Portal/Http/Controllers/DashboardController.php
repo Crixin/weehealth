@@ -34,24 +34,16 @@ class DashboardController extends Controller
     private $REST;
     private $const;
 
-    public function __construct(
-        DashboardRepository $dashboard,
-        GrupoUserRepository $grupoUser,
-        EmpresaGrupoRepository $empresaGrupo,
-        EmpresaUserRepository $empresaUserGrupo,
-        EmpresaRepository $empresa,
-        EmpresaProcessoRepository $empresaProcesso,
-        UserDashboardRepository $userDashboard,
-        UserRepository $user
-    ) {
-        $this->dashboardRepository = $dashboard;
-        $this->grupoUserRepository = $grupoUser;
-        $this->empresaGrupoRepository = $empresaGrupo;
-        $this->empresaUserRepository = $empresaUserGrupo;
-        $this->empresaRepository = $empresa;
-        $this->empresaProcessoRepository = $empresaProcesso;
-        $this->userDashboardRepository = $userDashboard;
-        $this->userRepository = $user;
+    public function __construct()
+    {
+        $this->dashboardRepository = new DashboardRepository();
+        $this->grupoUserRepository = new GrupoUserRepository();
+        $this->empresaGrupoRepository = new EmpresaGrupoRepository();
+        $this->empresaUserRepository = new EmpresaUserRepository();
+        $this->empresaRepository = new EmpresaRepository();
+        $this->empresaProcessoRepository = new EmpresaProcessoRepository();
+        $this->userDashboardRepository = new UserDashboardRepository();
+        $this->userRepository = new UserRepository();
 
         $this->REST = new RESTServices();
         $this->const = new Constants();

@@ -123,13 +123,17 @@
                 contentType: false,
                 processData: false,
                 success: function(ret) {
-                    if($('#permitirAnexo').val() == true){
-                        $('#idDocumento').val(ret.data);
-                        $("#modal-anexos").modal({ backdrop: 'static', keyboard: false});
-                        $("#btn-lista-anexos").trigger('click');
+                    if(ret.success == true) {
+                        if($('#permitirAnexo').val() == true){
+                            $('#idDocumento').val(ret.data);
+                            $("#modal-anexos").modal({ backdrop: 'static', keyboard: false});
+                            $("#btn-lista-anexos").trigger('click');
+                        }else{
+                            swal2_success_not_reload("Sucesso!", "Documento criado com sucesso.");
+                            document.location.href="{!! route('docs.documento'); !!}";
+                        }
                     }else{
-                        swal2_success_not_reload("Sucesso!", "Documento criado com sucesso.");
-                        document.location.href="{!! route('docs.documento'); !!}";
+                        swal2_alert_error_not_reload("Erro ao criar documento.");
                     }
                 }
             });

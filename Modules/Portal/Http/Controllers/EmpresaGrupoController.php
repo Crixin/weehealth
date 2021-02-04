@@ -15,15 +15,11 @@ class EmpresaGrupoController extends Controller
     protected $grupoRepository;
     protected $empresaGrupoRepository;
 
-    public function __construct(
-        EmpresaRepository $empresaRepository,
-        GrupoRepository $grupoRepository,
-        EmpresaGrupoRepository $empresaGrupoRepository
-    )
+    public function __construct()
     {
-        $this->empresaRepository = $empresaRepository;
-        $this->grupoRepository   = $grupoRepository;
-        $this->empresaGrupoRepository = $empresaGrupoRepository;
+        $this->empresaRepository = new EmpresaRepository();
+        $this->grupoRepository   = new GrupoRepository();
+        $this->empresaGrupoRepository = new EmpresaGrupoRepository();
     }
 
     /**

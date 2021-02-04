@@ -26,7 +26,7 @@
         <div class="col-md-6">
             <div class="form-group required{{ $errors->has('setor') ? ' has-error' : '' }}">
                 {!! Form::label('setor', 'Setor', ['class' => 'control-label']) !!}
-                {!! Form::select('setor',$setores, !empty($documentoEdit) ?  $documentoEdit->setor_id : null, ['id' => 'setor', 'class' => 'form-control selectpicker', 'required' => 'required', 'placeholder' => __('components.selectepicker-default')]) !!}
+                {!! Form::select('setor',$setores, !empty($documentoEdit) ?  $documentoEdit->setor_id : null, ['id' => 'setor', 'class' => 'form-control selectpicker', 'required' => 'required','data-live-search' => 'true', 'data-actions-box' =>'true', 'placeholder' => __('components.selectepicker-default')]) !!}
                 <small class="text-danger">{{ $errors->first('setor') }}</small>
             </div>
         </div>
@@ -35,7 +35,7 @@
         <div class="col-md-6">
             <div class="form-group required{{ $errors->has('tipoDocumento') ? ' has-error' : '' }}">
                 {!! Form::label('tipoDocumento', 'Tipo de Documento' , ['class' => 'control-label']) !!}
-                {!! Form::select('tipoDocumento',$tiposDocumento, !empty($documentoEdit) ?  $documentoEdit->tipo_documento_id : null, ['id' => 'tipoDocumento', 'class' => 'form-control selectpicker', 'required' => 'required', 'placeholder' => __('components.selectepicker-default')]) !!}
+                {!! Form::select('tipoDocumento',$tiposDocumento, !empty($documentoEdit) ?  $documentoEdit->tipo_documento_id : null, ['id' => 'tipoDocumento', 'class' => 'form-control selectpicker', 'required' => 'required','data-live-search' => 'true', 'data-actions-box' =>'true', 'placeholder' => __('components.selectepicker-default')]) !!}
                 <small class="text-danger">{{ $errors->first('tipoDocumento') }}</small>
             </div>
         </div>
@@ -51,14 +51,14 @@
         <div class="col-md-6">
             <div class="form-group required{{ $errors->has('nivelAcesso') ? ' has-error' : '' }}">
                 {!! Form::label('nivelAcesso', 'Nível de Acesso', ['class' => 'control-label']) !!}
-                {!! Form::select('nivelAcesso',$niveisAcesso, !empty($documentoEdit) ?  $documentoEdit->nivel_acesso_id : null, ['id' => 'nivelAcesso', 'class' => 'form-control selectpicker', 'required' => 'required', 'placeholder' => __('components.selectepicker-default')]) !!}
+                {!! Form::select('nivelAcesso',$niveisAcesso, !empty($documentoEdit) ?  $documentoEdit->nivel_acesso_id : null, ['id' => 'nivelAcesso', 'class' => 'form-control selectpicker', 'required' => 'required', 'data-live-search' => 'true', 'data-actions-box' =>'true', 'placeholder' => __('components.selectepicker-default')]) !!}
                 <small class="text-danger">{{ $errors->first('nivelAcesso') }}</small>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group {{ $errors->has('classificacao') ? ' has-error' : '' }}">
                 {!! Form::label('classificacao', 'Classificação') !!}
-                {!! Form::select('classificacao',$classificacoes, !empty($documentoEdit) ?  $documentoEdit->classificacao_id : null, ['id' => 'classificacao', 'class' => 'form-control selectpicker', 'placeholder' => __('components.selectepicker-default')]) !!}
+                {!! Form::select('classificacao',$classificacoes, !empty($documentoEdit) ?  $documentoEdit->classificacao_id : null, ['id' => 'classificacao', 'class' => 'form-control selectpicker', 'data-live-search' => 'true', 'data-actions-box' =>'true', 'placeholder' => __('components.selectepicker-default')]) !!}
                 <small class="text-danger">{{ $errors->first('classificacao') }}</small>
             </div>
         </div>
@@ -103,6 +103,15 @@
                     </td>    
                 </div>
                 <small class="text-danger">{{ $errors->first('obsoleto') }}</small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group{{ $errors->has('bpmn') ? ' has-error' : '' }}">
+                {!! Form::label('bpmn', 'BPMN 2.0') !!}
+                {!! Form::select('bpmn',$bpmns, !empty($documentoEdit) ?  $documentoEdit->bpmn_id : null, ['id' => 'bpmn', 'class' => 'form-control selectpicker', 'data-live-search' => 'true', 'data-actions-box' =>'true','placeholder' => __('components.selectepicker-default')]) !!}
+                <small class="text-danger">{{ $errors->first('bpmn') }}</small>
             </div>
         </div>
     </div>

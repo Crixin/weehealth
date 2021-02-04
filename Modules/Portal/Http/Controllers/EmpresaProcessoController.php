@@ -19,15 +19,11 @@ class EmpresaProcessoController extends Controller
     protected $processoRepository;
     private $ged;
 
-    public function __construct(
-        EmpresaRepository $empresaRepository,
-        EmpresaProcessoRepository $empresaProcessoRepository,
-        ProcessoRepository $processoRepository
-    )
+    public function __construct()
     {
-        $this->empresaRepository         = $empresaRepository;
-        $this->empresaProcessoRepository = $empresaProcessoRepository;
-        $this->processoRepository        = $processoRepository;
+        $this->empresaRepository         = new EmpresaRepository();
+        $this->empresaProcessoRepository = new EmpresaProcessoRepository();
+        $this->processoRepository        = new ProcessoRepository();
 
         $this->ged = new RESTServices();
     }

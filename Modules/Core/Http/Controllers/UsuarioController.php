@@ -14,11 +14,11 @@ class UsuarioController extends Controller
     protected $userRepository;
     protected $setorRepository;
 
-    public function __construct(UserRepository $user, PerfilRepository $perfil, SetorRepository $setorRepository)
+    public function __construct()
     {
-        $this->userRepository = $user;
-        $this->perfilRepository = $perfil;
-        $this->setorRepository = $setorRepository;
+        $this->userRepository = new UserRepository();
+        $this->perfilRepository = new PerfilRepository();
+        $this->setorRepository = new SetorRepository();
     }
 
 

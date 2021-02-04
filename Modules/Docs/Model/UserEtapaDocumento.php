@@ -17,6 +17,7 @@ class UserEtapaDocumento extends Model
         'etapa_fluxo_id',
         'documento_revisao',
         'aprovado',
+        'grupo_id'
     ];
 
     public function docsDocumento()
