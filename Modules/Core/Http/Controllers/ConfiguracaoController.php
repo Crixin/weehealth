@@ -15,16 +15,15 @@ class ConfiguracaoController extends Controller
     protected $parametroRepository;
     protected $userRepository;
 
-    public function __construct(ParametroRepository $parametroRepository, UserRepository $userRepository)
+    public function __construct()
     {
-        $this->parametroRepository = $parametroRepository;
-        $this->userRepository = $userRepository;
+        $this->parametroRepository = new ParametroRepository();
+        $this->userRepository = new UserRepository();
     }
 
     public function index()
     {
-        $params = $this->parametroRepository->findBy
-        (
+        $params = $this->parametroRepository->findBy(
             [],
             [],
             [

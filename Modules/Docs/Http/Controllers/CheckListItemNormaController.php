@@ -14,10 +14,10 @@ class CheckListItemNormaController extends Controller
     protected $checkListItemNormaRepository;
     protected $itemNormaRepository;
 
-    public function __construct(CheckListItemNormaRepository $checkListItemNormaRepository, ItemNormaRepository $itemNormaRepository)
+    public function __construct()
     {
-        $this->checkListItemNormaRepository = $checkListItemNormaRepository;
-        $this->itemNormaRepository = $itemNormaRepository;
+        $this->checkListItemNormaRepository = new CheckListItemNormaRepository();
+        $this->itemNormaRepository = new ItemNormaRepository();
     }
 
     /**

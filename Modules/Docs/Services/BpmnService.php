@@ -10,9 +10,9 @@ class BpmnService
 {
     protected $bpmnRepository;
 
-    public function __construct(BpmnRepository $bpmnRepository)
+    public function __construct()
     {
-        $this->bpmnRepository = $bpmnRepository;
+        $this->bpmnRepository = new BpmnRepository();
     }
 
     public function create(array $dados)

@@ -36,24 +36,15 @@ class DossieDocumentosController extends Controller
     /**
     * Construtor
     */
-    public function __construct(
-        GrupoUserRepository $grupoUser,
-        EmpresaGrupoRepository $empresaGrupo,
-        EmpresaUserRepository $empresaUserGrupo,
-        EmpresaRepository $empresa,
-        DossieRepository $dossie,
-        DossieEmpresaProcessoRepository $dossieEmpresaProcesso,
-        ParametroRepository $parametro,
-        EmpresaProcessoRepository $empresaProcesso
-    ) {
-        $this->grupoUserRepository = $grupoUser;
-        $this->empresaGrupoRepository = $empresaGrupo;
-        $this->empresaUserRepository = $empresaUserGrupo;
-        $this->empresaRepository = $empresa;
-        $this->dossieRepository = $dossie;
-        $this->dossieEmpresaProcessoRepository = $dossieEmpresaProcesso;
-        $this->parametroRepository = $parametro;
-        $this->empresaProcessoRepository = $empresaProcesso;
+    public function __construct() {
+        $this->grupoUserRepository = new GrupoUserRepository();
+        $this->empresaGrupoRepository = new EmpresaGrupoRepository();
+        $this->empresaUserRepository = new EmpresaUserRepository();
+        $this->empresaRepository = new EmpresaRepository();
+        $this->dossieRepository = new DossieRepository();
+        $this->dossieEmpresaProcessoRepository = new DossieEmpresaProcessoRepository();
+        $this->parametroRepository = new ParametroRepository();
+        $this->empresaProcessoRepository = new EmpresaProcessoRepository();
         $this->ged = new RESTServices();
     }
 

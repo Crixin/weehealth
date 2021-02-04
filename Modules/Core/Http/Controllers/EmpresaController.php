@@ -7,7 +7,7 @@ use Modules\Core\Model\{Cidade};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-use Modules\Core\Repositories\{ParametroRepository, EmpresaRepository, EmpresaTipoRepository, CidadeRepository};
+use Modules\Core\Repositories\{ParametroRepository, EmpresaRepository, EmpresaTipoRepository};
 
 class EmpresaController extends Controller
 {
@@ -19,11 +19,11 @@ class EmpresaController extends Controller
     /*
     * Construtor
     */
-    public function __construct(ParametroRepository $parametroRepository, EmpresaRepository $empresaRepository, EmpresaTipoRepository $empresaTipoRepository, CidadeRepository $cidadeRepository)
+    public function __construct()
     {
-        $this->parametroRepository = $parametroRepository;
-        $this->empresaRepository = $empresaRepository;
-        $this->empresaTipoRepository = $empresaTipoRepository;
+        $this->parametroRepository = new ParametroRepository();
+        $this->empresaRepository = new EmpresaRepository();
+        $this->empresaTipoRepository = new EmpresaTipoRepository();
     }
 
     public function index()

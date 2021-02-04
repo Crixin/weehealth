@@ -18,11 +18,11 @@ class EmpresaUserController extends Controller
     protected $userRepository;
 
 
-    public function __construct(EmpresaRepository $empresaRepository, EmpresaUserRepository $empresaUserRepository, UserRepository $userRepository)
+    public function __construct()
     {
-        $this->empresaRepository = $empresaRepository;
-        $this->empresaUserRepository = $empresaUserRepository;
-        $this->userRepository = $userRepository;
+        $this->empresaRepository = new EmpresaRepository();
+        $this->empresaUserRepository = new EmpresaUserRepository();
+        $this->userRepository = new UserRepository();
     }
 
     /**

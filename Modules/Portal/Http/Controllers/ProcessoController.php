@@ -29,20 +29,14 @@ class ProcessoController extends Controller
     /*
     * Construtor
     */
-    public function __construct(
-        EmpresaGrupoRepository $grupo,
-        GrupoUserRepository $grupoUser,
-        UserRepository $userRepository,
-        ProcessoRepository $processoRepository,
-        EmpresaProcessoRepository $empresaProcessoRepository
-    )
+    public function __construct()
     {
         $this->ged = new RESTServices();
-        $this->empresaGrupoRepository = $grupo;
-        $this->grupoUserRepository = $grupoUser;
-        $this->userRepository = $userRepository;
-        $this->processoRepository = $processoRepository;
-        $this->empresaProcessoRepository = $empresaProcessoRepository;
+        $this->empresaGrupoRepository = new EmpresaGrupoRepository();
+        $this->grupoUserRepository = new GrupoUserRepository();
+        $this->userRepository = new UserRepository();
+        $this->processoRepository = new ProcessoRepository();
+        $this->empresaProcessoRepository = new EmpresaProcessoRepository();
     }
 
 

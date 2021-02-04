@@ -4,7 +4,6 @@ namespace Modules\Core\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Classes\{Constants};
-use Modules\Core\Services\{GrupoService};
 use Modules\Core\Repositories\{EmpresaRepository, ParametroRepository, UserRepository, SetupRepository};
 
 class AjaxController extends Controller
@@ -14,15 +13,13 @@ class AjaxController extends Controller
     protected $paramentroRepository;
     protected $userRepository;
     protected $setupRepository;
-    protected $grupoService;
 
-    public function __construct(EmpresaRepository $empresaRepository, ParametroRepository $paramentroRepository, UserRepository $userRepository, SetupRepository $setupRepository, GrupoService $grupoService)
+    public function __construct()
     {
-        $this->empresaRepository = $empresaRepository;
-        $this->paramentroRepository = $paramentroRepository;
-        $this->userRepository = $userRepository;
-        $this->setupRepository = $setupRepository;
-        $this->grupoService = $grupoService;
+        $this->empresaRepository = new EmpresaRepository();
+        $this->paramentroRepository = new ParametroRepository();
+        $this->userRepository = new UserRepository();
+        $this->setupRepository = new SetupRepository();
     }
 
     // EMPRESA

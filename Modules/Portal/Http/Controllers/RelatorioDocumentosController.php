@@ -25,21 +25,14 @@ class RelatorioDocumentosController extends Controller
     protected $empresaUserRepository;
     protected $processoRepository;
 
-    public function __construct(
-        EmpresaRepository $empresaRepository,
-        GrupoUserRepository $grupoUserRepository,
-        EmpresaGrupoRepository $empresaGrupoRepository,
-        EmpresaProcessoRepository $empresaProcessoRepository,
-        EmpresaUserRepository $empresaUserRepository,
-        ProcessoRepository $processoRepository
-    )
+    public function __construct()
     {
-        $this->empresaRepository = $empresaRepository;
-        $this->grupoUserRepository = $grupoUserRepository;
-        $this->empresaGrupoRepository = $empresaGrupoRepository;
-        $this->empresaProcessoRepository = $empresaProcessoRepository;
-        $this->empresaUserRepository = $empresaUserRepository;
-        $this->processoRepository = $processoRepository;
+        $this->empresaRepository = new EmpresaRepository();
+        $this->grupoUserRepository = new GrupoUserRepository();
+        $this->empresaGrupoRepository = new EmpresaGrupoRepository();
+        $this->empresaProcessoRepository = new EmpresaProcessoRepository();
+        $this->empresaUserRepository = new EmpresaUserRepository();
+        $this->processoRepository = new ProcessoRepository();
     }
 
     public function index()

@@ -19,19 +19,13 @@ class EtapaFluxoController extends Controller
     protected $parametroRepository;
     protected $notificacaoRepository;
 
-    public function __construct(
-        EtapaFluxoRepository $etapaRepository,
-        FluxoRepository $fluxoRepository,
-        PerfilRepository $perfilRepository,
-        ParametroRepository $parametroRepository,
-        NotificacaoRepository $notificacaoRepository
-    )
+    public function __construct()
     {
-        $this->etapaRepository = $etapaRepository;
-        $this->fluxoRepository = $fluxoRepository;
-        $this->perfilRepository = $perfilRepository;
-        $this->parametroRepository = $parametroRepository;
-        $this->notificacaoRepository = $notificacaoRepository;
+        $this->etapaRepository = new EtapaFluxoRepository();
+        $this->fluxoRepository = new FluxoRepository();
+        $this->perfilRepository = new PerfilRepository();
+        $this->parametroRepository = new ParametroRepository();
+        $this->notificacaoRepository = new NotificacaoRepository();
     }
 
     /**

@@ -20,16 +20,11 @@ class EmpresaProcessoGrupoController extends Controller
     private $empresaProcessoGrupoRepository;
     private $empresaProcessoRepository;
 
-    public function __construct(
-        GrupoRepository $grupo,
-        EmpresaGrupoRepository $empresaGrupo,
-        EmpresaProcessoGrupoRepository $empresaProcessoGrupo,
-        EmpresaProcessoRepository $empresaProcesso
-    ) {
-        $this->grupoRepository = $grupo;
-        $this->empresaGrupoRepository = $empresaGrupo;
-        $this->empresaProcessoGrupoRepository = $empresaProcessoGrupo;
-        $this->empresaProcessoRepository = $empresaProcesso;
+    public function __construct() {
+        $this->grupoRepository = new GrupoRepository();
+        $this->empresaGrupoRepository = new EmpresaGrupoRepository();
+        $this->empresaProcessoGrupoRepository = new EmpresaProcessoGrupoRepository();
+        $this->empresaProcessoRepository = new EmpresaProcessoRepository();
     }
 
     /**

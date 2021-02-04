@@ -25,24 +25,16 @@ class TarefaController extends Controller
     protected $empresaRepository;
     protected $empresaProcessoRepository;
 
-    public function __construct(
-        TarefaRepository $tarefa,
-        ConfiguracaoTarefaRepository $configuracao,
-        GrupoUserRepository $grupoUser,
-        EmpresaGrupoRepository $empresaGrupo,
-        EmpresaUserRepository $empresaUserGrupo,
-        EmpresaRepository $empresa,
-        EmpresaProcessoRepository $empresaProcesso
-    )
+    public function __construct()
     {
-        $this->tarefaRepository = $tarefa;
-        $this->configuracaoTarefa = $configuracao;
+        $this->tarefaRepository = new TarefaRepository();
+        $this->configuracaoTarefa = new ConfiguracaoTarefaRepository();
 
-        $this->grupoUserRepository = $grupoUser;
-        $this->empresaGrupoRepository = $empresaGrupo;
-        $this->empresaUserRepository = $empresaUserGrupo;
-        $this->empresaRepository = $empresa;
-        $this->empresaProcessoRepository = $empresaProcesso;
+        $this->grupoUserRepository = new GrupoUserRepository();
+        $this->empresaGrupoRepository = new EmpresaGrupoRepository();
+        $this->empresaUserRepository = new EmpresaUserRepository();
+        $this->empresaRepository = new EmpresaRepository();
+        $this->empresaProcessoRepository = new EmpresaProcessoRepository();
     }
 
     public function index()

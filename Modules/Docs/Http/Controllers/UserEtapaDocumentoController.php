@@ -10,9 +10,9 @@ class UserEtapaDocumentoController extends Controller
 {
     protected $userEtapaDocumentoRepository;
 
-    public function __construct(UserEtapaDocumentoRepository $userEtapaDocumentoRepository)
+    public function __construct()
     {
-        $this->userEtapaDocumentoRepository = $userEtapaDocumentoRepository;
+        $this->userEtapaDocumentoRepository = new UserEtapaDocumentoRepository();
     }
 
     public function aprovadores(Request $request)

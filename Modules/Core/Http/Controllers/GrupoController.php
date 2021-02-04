@@ -13,19 +13,11 @@ class GrupoController extends Controller
 {
     protected $grupoRepository;
     private $setorRepository;
-    private $grupoUserService;
-    private $grupoService;
 
-    public function __construct(
-        GrupoRepository $grupoRepository,
-        SetorRepository $setorRepository,
-        GrupoUserService $grupoUserService,
-        GrupoService $grupoService
-    ) {
-        $this->grupoRepository = $grupoRepository;
-        $this->setorRepository = $setorRepository;
-        $this->grupoUserService = $grupoUserService;
-        $this->grupoService = $grupoService;
+    public function __construct()
+    {
+        $this->grupoRepository = new GrupoRepository();
+        $this->setorRepository = new SetorRepository();
     }
 
     public function index()
@@ -104,10 +96,11 @@ class GrupoController extends Controller
     {
         $data['grupo_id'] = $request->idGrupo;
         $data['user_id'] = $request->usuarios_grupo;
-        
+
         $grupo = $this->grupoRepository->find($data['grupo_id']);
 
-        $reponse = $this->grupoUserService->store($data);
+        $grupoUserService = new GrupoUserService();
+        $reponse = $grupoUserService->store($data);
 
         if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
             return $reponse;
@@ -151,6 +144,14 @@ class GrupoController extends Controller
 
     public function destroy(request $request)
     {
-        return $this->grupoService->delete($request->grupo_id);
+        $id = $request->grupo_id;
+        try {
+            $grupoService = new GrupoService();
+            $grupoService->delete($id);
+            return response()->json(['response' => 'sucesso']);
+        } catch (\Exception $th) {
+            return response()->json(['response' => 'erro']);
+        }
+
     }
 }

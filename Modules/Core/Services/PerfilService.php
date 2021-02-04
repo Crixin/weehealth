@@ -14,10 +14,11 @@ class PerfilService
     private $rules;
     private $perfilRepository;
 
-    public function __construct(Perfil $perfil, PerfilRepository $perfilRepository)
+    public function __construct()
     {
+        $perfil = new Perfil();
         $this->rules = $perfil->rules;
-        $this->perfilRepository = $perfilRepository;
+        $this->perfilRepository = new PerfilRepository();
     }
 
 

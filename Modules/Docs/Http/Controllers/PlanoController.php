@@ -13,9 +13,9 @@ class PlanoController extends Controller
 {
     protected $planoRepository;
 
-    public function __construct(PlanoRepository $planoRepository)
+    public function __construct()
     {
-        $this->planoRepository = $planoRepository;
+        $this->planoRepository = new PlanoRepository();
     }
 
     /**

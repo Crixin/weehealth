@@ -20,10 +20,10 @@ class RelatorioController extends Controller
     /*
     * Construtor
     */
-    public function __construct(EmpresaProcessoRepository $empresaProcessoRepository)
+    public function __construct()
     {
         $this->ged = new GEDServices(['id_user' => env('ID_GED_USER'), 'server' => env('URL_GED_WSDL')]);
-        $this->empresaProcessoRepository = $empresaProcessoRepository;
+        $this->empresaProcessoRepository = new EmpresaProcessoRepository();
     }
 
 

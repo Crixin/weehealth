@@ -17,15 +17,10 @@ class AnexoDocumentoController extends Controller
     protected $documentoRepository;
     protected $anexoService;
 
-    public function __construct(
-        AnexoRepository $anexoRepository,
-        DocumentoRepository $documentoRepository,
-        AnexoService $anexoService
-    )
+    public function __construct()
     {
-        $this->anexoRepository = $anexoRepository;
-        $this->documentoRepository = $documentoRepository;
-        $this->anexoService = $anexoService;
+        $this->anexoRepository = new AnexoRepository();
+        $this->documentoRepository = new DocumentoRepository();
     }
 
     /**
@@ -81,7 +76,8 @@ class AnexoDocumentoController extends Controller
                 ];
 
                 DB::transaction(function () use ($cadastro) {
-                    $this->anexoService->create($cadastro);
+                    $anexoService = new AnexoService();
+                    $anexoService->create($cadastro);
                 });
             }
             Helper::setNotify('Novo(s) anexo(s) criado com sucesso!', 'success|check-circle');
@@ -133,7 +129,8 @@ class AnexoDocumentoController extends Controller
         $id = $request = $request->id;
         try {
             DB::transaction(function () use ($id) {
-                $this->anexoService->delete($id);
+                $anexoService = new AnexoService()
+                $anexoService->delete($id);
             });
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {

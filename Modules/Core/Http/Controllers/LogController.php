@@ -16,10 +16,10 @@ class LogController extends Controller
     protected $usuarioRepository;
     protected $logRepository;
 
-    public function __construct(LogRepository $logRepository, UserRepository $usuarioRepository)
+    public function __construct()
     {
-        $this->logRepository = $logRepository;
-        $this->usuarioRepository = $usuarioRepository;
+        $this->logRepository = new LogRepository();
+        $this->usuarioRepository = new UserRepository();
     }
 
     /**

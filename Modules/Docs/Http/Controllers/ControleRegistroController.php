@@ -17,16 +17,12 @@ class ControleRegistroController extends Controller
     protected $setorRepository;
     protected $parametroRepository;
 
-    public function __construct(
-        ControleRegistroRepository $controleRegistroRepository,
-        OpcaoControleRegistroRepository $opcaoControleRegistroRepository,
-        SetorRepository $setorRepository,
-        ParametroRepository $parametroRepository
-    ) {
-        $this->controleRegistroRepository = $controleRegistroRepository;
-        $this->opcoesControleRegistroRepository = $opcaoControleRegistroRepository;
-        $this->setorRepository = $setorRepository;
-        $this->parametroRepository = $parametroRepository;
+    public function __construct()
+    {
+        $this->controleRegistroRepository = new ControleRegistroRepository();
+        $this->opcoesControleRegistroRepository = new OpcaoControleRegistroRepository();
+        $this->setorRepository = new SetorRepository();
+        $this->parametroRepository = new ParametroRepository();
     }
 
     /**

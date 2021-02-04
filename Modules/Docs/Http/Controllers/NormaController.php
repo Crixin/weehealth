@@ -20,22 +20,13 @@ class NormaController extends Controller
     protected $itemNormaRepository;
     protected $itemNormaService;
 
-    public function __construct(
-        NormaRepository $normaRepository,
-        ParametroRepository $parametroRepository,
-        CheckListItemNormaRepository $checkListItemNormaRepository,
-        ItemNormaRepository $itemNormaRepository,
-        ItemNormaService $itemNormaService,
-        CheckListItemNormaService $checkListItemNormaService
-    )
+    public function __construct()
     {
         $this->middleware('auth');
-        $this->normaRepository = $normaRepository;
-        $this->parametroRepository = $parametroRepository;
-        $this->itemNormaService = $itemNormaService;
-        $this->checkListItemNormaService = $checkListItemNormaService;
-        $this->checkListItemNormaRepository = $checkListItemNormaRepository;
-        $this->itemNormaRepository = $itemNormaRepository; 
+        $this->normaRepository = new NormaRepository();
+        $this->parametroRepository = new ParametroRepository();
+        $this->checkListItemNormaRepository = new CheckListItemNormaRepository();
+        $this->itemNormaRepository = new ItemNormaRepository();
     }
 
     /**
@@ -96,14 +87,16 @@ class NormaController extends Controller
                             "numero"   => $value[0],
                             "descricao" => $value[1]
                         ];
-                        $itemNorma = $this->itemNormaService->create($requestItemNorma);
+                        $itemNormaService = new ItemNormaService();
+                        $itemNorma = $itemNormaService->create($requestItemNorma);
  
                         if ($value[2] != '') {
                             $requestCheckList = [
                                 "item_norma_id" => $itemNorma->id,
                                 "descricao" => $value[2]
                             ];
-                            $this->checkListItemNormaService->create($requestCheckList);
+                            $checkListItemNormaService = new CheckListItemNormaService();
+                            $checkListItemNormaService->create($requestCheckList);
                         }
                     }
                 }
@@ -206,14 +199,16 @@ class NormaController extends Controller
                             "numero"   => $value[0],
                             "descricao" => $value[1]
                         ];
-                        $itemNorma = $this->itemNormaService->create($requestItemNorma);
+                        $itemNormaService = new ItemNormaService();
+                        $itemNorma = $itemNormaService->create($requestItemNorma);
  
                         if ($value[2] != '') {
                             $requestCheckList = [
                                 "item_norma_id" => $itemNorma->id,
                                 "descricao" => $value[2]
                             ];
-                            $this->checkListItemNormaService->create($requestCheckList);
+                            $checkListItemNormaService = new CheckListItemNormaService();
+                            $checkListItemNormaService->create($requestCheckList);
                         }
                     }
                 }

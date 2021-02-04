@@ -15,10 +15,10 @@ class SetorController extends Controller
     protected $setorRepository;
     protected $userRepository;
 
-    public function __construct(SetorRepository $setorRepository, UserRepository $userRepository)
+    public function __construct()
     {
-        $this->setorRepository = $setorRepository;
-        $this->userRepository  = $userRepository;
+        $this->setorRepository = new SetorRepository();
+        $this->userRepository  = new UserRepository();
     }
 
     /**

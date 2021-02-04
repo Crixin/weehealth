@@ -132,7 +132,11 @@
             deleteIt.then(resolvedValue => {
                 // ajaxMethod('POST', "/grupos/" + idGrupo, {}).then(response => {
                 ajaxMethod('POST', "{{ URL::route('core.grupo.deletar') }}", obj).then(response => {
-                    location.reload();  
+                    if(response.response != 'erro') {
+                        swal2_success("Excluído!", "Grupo excluído com sucesso.");
+                    } else {
+                        swal2_alert_error_support("Tivemos um problema ao excluir o grupo.");
+                    }
                 }, error => {
                     location.reload();  
                 });

@@ -11,9 +11,9 @@ class SetupController extends Controller
 {
     protected $setupRepository;
 
-    public function __construct(SetupRepository $setupRepository)
+    public function __construct()
     {
-        $this->setupRepository = $setupRepository;
+        $this->setupRepository = new SetupRepository();
     }
 
     public function index()

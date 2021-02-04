@@ -15,13 +15,11 @@ use Modules\Docs\Services\BpmnService;
 class BpmnController extends Controller
 {
     protected $bpmnRepository;
-    protected $bpmnService;
 
 
-    public function __construct(BpmnRepository $bpmnRepository, BpmnService $bpmnService)
+    public function __construct()
     {
-        $this->bpmnRepository = $bpmnRepository;
-        $this->bpmnService = $bpmnService;
+        $this->bpmnRepository = new BpmnRepository();
     }
 
     /**
@@ -57,7 +55,8 @@ class BpmnController extends Controller
         }
         try {
             $cadastro = $this->montaRequest($request);
-            $retorno = $this->bpmnService->create($cadastro);
+            $bpmnService = new BpmnService();
+            $retorno = $bpmnService->create($cadastro);
             if (!$retorno['success']) {
                 throw new Exception("Um erro ocorreu ao gravar o bpmn", 1);
             }
@@ -106,7 +105,8 @@ class BpmnController extends Controller
             $buscaFluxo = $this->bpmnRepository->find($request->idBPMN);
             $update = $this->montaRequest($request);
             $update['versao'] = $buscaFluxo->versao + 1;
-            $retorno = $this->bpmnService->update($update, $request->idBPMN);
+            $bpmnService = new BpmnService();
+            $retorno = $bpmnService->update($update, $request->idBPMN);
             if (!$retorno['success']) {
                 throw new Exception("Um erro ocorreu ao gravar o bpmn", 1);
             }
@@ -126,7 +126,8 @@ class BpmnController extends Controller
     {
         $id = $request = $request->id;
         try {
-            $retorno = $this->bpmnService->delete($id);
+            $bpmnService = new BpmnService();
+            $retorno = $bpmnService->delete($id);
             if (!$retorno['success']) {
                 throw new Exception("Um erro ocorreu ao excluir o bpmn", 1);
             }

@@ -17,18 +17,14 @@ class GrupoUserService
     private $agrupamentoUserDocumentoRepository;
     private $userEtapaDocumentoRepository;
 
-    public function __construct(
-        GrupoUser $grupoUser,
-        GrupoUserRepository $grupoUserRepository,
-        ParametroRepository $parametroRepository,
-        AgrupamentoUserDocumentoRepository $agrupamentoUserDocumentoRepository,
-        UserEtapaDocumentoRepository $userEtapaDocumentoRepository
-    ) {
+    public function __construct()
+    {
+        $grupoUser = new GrupoUser();
         $this->rules = $grupoUser->rules;
-        $this->grupoUserRepository = $grupoUserRepository;
-        $this->parametroRepository = $parametroRepository;
-        $this->agrupamentoUserDocumentoRepository = $agrupamentoUserDocumentoRepository;
-        $this->userEtapaDocumentoRepository = $userEtapaDocumentoRepository;
+        $this->grupoUserRepository = new GrupoUserRepository();
+        $this->parametroRepository = new ParametroRepository();
+        $this->agrupamentoUserDocumentoRepository = new AgrupamentoUserDocumentoRepository();
+        $this->userEtapaDocumentoRepository = new UserEtapaDocumentoRepository();
     }
 
 

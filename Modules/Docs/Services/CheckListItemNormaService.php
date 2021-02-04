@@ -9,9 +9,9 @@ class CheckListItemNormaService
 
     protected $checkListItemNormaRepository;
 
-    public function __construct(CheckListItemNormaRepository $checkListItemNormaRepository)
+    public function __construct()
     {
-        $this->checkListItemNormaRepository = $checkListItemNormaRepository;
+        $this->checkListItemNormaRepository = new CheckListItemNormaRepository();
     }
 
     public function create(array $data)

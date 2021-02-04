@@ -14,10 +14,10 @@ class ItemNormaController extends Controller
     protected $normaRepository;
     protected $itemNormaRepository;
 
-    public function __construct(NormaRepository $normaRepository, ItemNormaRepository $itemNormaRepository)
+    public function __construct()
     {
-        $this->normaRepository = $normaRepository;
-        $this->itemNormaRepository = $itemNormaRepository;
+        $this->normaRepository = new NormaRepository();
+        $this->itemNormaRepository = new ItemNormaRepository();
     }
     /**
      * Display a listing of the resource.

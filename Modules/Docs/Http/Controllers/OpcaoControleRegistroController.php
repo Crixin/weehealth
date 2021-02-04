@@ -15,10 +15,10 @@ class OpcaoControleRegistroController extends Controller
     protected $opcaoControleRegistroRepository;
     protected $parametroRepository;
 
-    public function __construct(OpcaoControleRegistroRepository $opcaoControleRegistroRepository, ParametroRepository $parametroRepository)
+    public function __construct()
     {
-        $this->opcaoControleRegistroRepository = $opcaoControleRegistroRepository;
-        $this->parametroRepository = $parametroRepository;
+        $this->opcaoControleRegistroRepository = new OpcaoControleRegistroRepository();
+        $this->parametroRepository = new ParametroRepository();
     }
 
     /**

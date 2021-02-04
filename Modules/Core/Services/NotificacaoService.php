@@ -15,10 +15,11 @@ class NotificacaoService
     private $rules;
     private $notificacaoRepository;
 
-    public function __construct(Notificacao $notificacao, NotificacaoRepository $notificacaoRepository)
+    public function __construct()
     {
+        $notificacao = new Notificacao();
         $this->rules = $notificacao->rules;
-        $this->notificacaoRepository = $notificacaoRepository;
+        $this->notificacaoRepository = new NotificacaoRepository();
     }
 
 
