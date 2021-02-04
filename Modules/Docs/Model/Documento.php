@@ -28,7 +28,8 @@ class Documento extends Model
         'classificacao_id',
         'ged_documento_id',
         'setor_id',
-        'extensao'
+        'extensao',
+        'em_revisao'
     ];
 
 
