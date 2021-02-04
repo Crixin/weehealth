@@ -427,19 +427,27 @@ class DocumentoService
                 $codigo = ( strlen($numero) <= 1 ) ? str_pad($numero, 2, '0', STR_PAD_LEFT) : $numero;
                 break;
             case 3:
-                if (strlen($numero) <= 1) $codigo = str_pad($numero, 3, '0', STR_PAD_LEFT);
-                elseif (strlen($numero) == 2) $codigo = str_pad($numero, 3, '0', STR_PAD_LEFT);
-                else $codigo = $numero;
+                if (strlen($numero) <= 1) {
+                    $codigo = str_pad($numero, 3, '0', STR_PAD_LEFT);
+                } elseif (strlen($numero) == 2) {
+                    $codigo = str_pad($numero, 3, '0', STR_PAD_LEFT);
+                } else {
+                    $codigo = $numero;
+                }
                 break;
             default:
                 $valor = $numero + ".01";
 
-                if (strlen($numero) <= 1) $codigo = str_pad($valor, 3, '0', STR_PAD_LEFT);
-                elseif (strlen($numero) == 2) $codigo = str_pad($valor, 2, '0', STR_PAD_LEFT);
-                else $codigo = $valor;
+                if (strlen($numero) <= 1) {
+                    $codigo = str_pad($valor, 3, '0', STR_PAD_LEFT);
+                } elseif (strlen($numero) == 2) {
+                    $codigo = str_pad($valor, 2, '0', STR_PAD_LEFT);
+                } else {
+                    $codigo = $valor;
+                }
                 break;
         }
-        return $codigo;  dfgdfgdfghdfghdfgdf
+        return $codigo;
     }
 
     public function validador($data)
