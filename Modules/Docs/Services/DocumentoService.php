@@ -32,70 +32,57 @@ class DocumentoService
     protected $agrupamentoUserDocumentoRepository;
     protected $documentoItemNormaRepository;
 
-    protected $hierarquiaDocumentoService;
-    protected $vinculoDocumentoService;
-    protected $agrupamentoUserDocumentoService;
-    protected $documentoItemNormaService;
-    protected $userEtapaDocumentoService;
-    protected $tipoDocumentoService;
-    protected $workflowService;
 
     protected $rules;
 
     public function __construct(
         Documento $documento,
-        DocumentoRepository $documentoRepository,
-        HierarquiaDocumentoService $hierarquiaDocumentoService,
-        VinculoDocumentoService $vinculoDocumentoService,
-        AgrupamentoUserDocumentoService $agrupamentoUserDocumentoService,
-        UserEtapaDocumentoService $userEtapaDocumentoService,
-        DocumentoItemNormaService $documentoItemNormaService,
-        TipoDocumentoService $tipoDocumentoService,
         UserRepository $userRepository,
+        DocumentoRepository $documentoRepository,
         ItemNormaRepository $itemNormaRepository,
-        UserEtapaDocumentoRepository $userEtapaDocumentoRepository,
-        HierarquiaDocumentoRepository $hierarquiaDocumentoRepository,
-        VinculoDocumentoRepository $vinculoDocumentoRepository,
         TipoDocumentoRepository $tipoDocumentoRepository,
-        AgrupamentoUserDocumentoRepository $agrupamentoUserDocumentoRepository,
+        VinculoDocumentoRepository $vinculoDocumentoRepository,
+        UserEtapaDocumentoRepository $userEtapaDocumentoRepository,
         DocumentoItemNormaRepository $documentoItemNormaRepository,
-        WorkflowService $workflowService
+        HierarquiaDocumentoRepository $hierarquiaDocumentoRepository,
+        AgrupamentoUserDocumentoRepository $agrupamentoUserDocumentoRepository
     ) {
         $this->rules = $documento->rules;
 
-        $this->documentoRepository = $documentoRepository;
         $this->userRepository = $userRepository;
+        $this->documentoRepository = $documentoRepository;
         $this->itemNormaRepository = $itemNormaRepository;
+        $this->tipoDocumentoRepository = $tipoDocumentoRepository;
+        $this->vinculoDocumentoRepository = $vinculoDocumentoRepository;
+        $this->documentoItemNormaRepository = $documentoItemNormaRepository;
         $this->userEtapaDocumentoRepository = $userEtapaDocumentoRepository;
         $this->hierarquiaDocumentoRepository = $hierarquiaDocumentoRepository;
-        $this->vinculoDocumentoRepository = $vinculoDocumentoRepository;
-        $this->tipoDocumentoRepository = $tipoDocumentoRepository;
         $this->agrupamentoUserDocumentoRepository = $agrupamentoUserDocumentoRepository;
-        $this->documentoItemNormaRepository = $documentoItemNormaRepository;
-
-        $this->hierarquiaDocumentoService = $hierarquiaDocumentoService;
-        $this->vinculoDocumentoService = $vinculoDocumentoService;
-        $this->agrupamentoUserDocumentoService = $agrupamentoUserDocumentoService;
-        $this->userEtapaDocumentoService = $userEtapaDocumentoService;
-        $this->documentoItemNormaService = $documentoItemNormaService;
-        $this->tipoDocumentoService = $tipoDocumentoService;
-        $this->workflowService = $workflowService;
     }
 
     public function store($data)
     {
-        $createDocumento = $data;
-        unset(
-            $createDocumento['hierarquia_documento'],
-            $createDocumento['vinculo_documento'],
-            $createDocumento['grupo_treinamento'],
-            $createDocumento['grupo_divulgacao'],
-            $createDocumento['item_normas'],
-            $createDocumento['etapa_aprovacao']
-        );
-
         try {
+            $createDocumento = $data;
+            unset(
+                $createDocumento['hierarquia_documento'],
+                $createDocumento['vinculo_documento'],
+                $createDocumento['grupo_treinamento'],
+                $createDocumento['grupo_divulgacao'],
+                $createDocumento['item_normas'],
+                $createDocumento['etapa_aprovacao']
+            );
+        
             $documento = DB::transaction(function () use ($createDocumento, $data) {
+                $workflowService = new WorkflowService();
+                $hierarquiaDocumentoService = new HierarquiaDocumentoService();
+                $vinculoDocumentoService = new VinculoDocumentoService();
+                $agrupamentoUserDocumentoService = new AgrupamentoUserDocumentoService();
+                $userEtapaDocumentoService = new UserEtapaDocumentoService();
+                $documentoItemNormaService = new DocumentoItemNormaService();
+                $tipoDocumentoService = new TipoDocumentoService();
+
+
                 $documento = $this->documentoRepository->create($createDocumento);
 
                 $versãoFluxo = $documento->docsTipoDocumento->docsFluxo->versao;
@@ -110,50 +97,50 @@ class DocumentoService
                     'avancar' => true
                 ];
 
-                if (!$this->workflowService->store($dataWorkflow)['success']) {
+                if (!$workflowService->store($dataWorkflow)['success']) {
                     throw new \Exception('Falha ao criar workflow');
                 }
 
                 /**Cria Hierarquia Documento */
                 foreach ($data['hierarquia_documento'] as $value) {
                     $value['documento_id'] = $documento->id;
-                    $resp = $this->hierarquiaDocumentoService->create($value);
+                    $resp = $hierarquiaDocumentoService->create($value);
                 }
 
                 /**Cria Vinculo de Documento */
                 foreach ($data['vinculo_documento'] as $value) {
                     $value['documento_id'] = $documento->id;
-                    $this->vinculoDocumentoService->create($value);
+                    $vinculoDocumentoService->create($value);
                 }
 
                 /**Cria Agrupamento de Documento (Treinamento) */
                 foreach ($data['grupo_treinamento'] as $value) {
                     $value['documento_id'] = $documento->id;
                     $value['tipo'] = 'TREINAMENTO';
-                    $this->agrupamentoUserDocumentoService->create($value);
+                    $agrupamentoUserDocumentoService->create($value);
                 }
 
                 /**Cria Agrupamento de Documento (Divulgacao) */
                 foreach ($data['grupo_divulgacao'] as $value) {
                     $value['documento_id'] = $documento->id;
                     $value['tipo'] = 'DIVULGACAO';
-                    $this->agrupamentoUserDocumentoService->create($value);
+                    $agrupamentoUserDocumentoService->create($value);
                 }
 
                 /**Cria Documento Item Norma */
                 foreach ($data['item_normas'] ?? [] as $value) {
                     $value['documento_id'] = $documento->id;
-                    $this->documentoItemNormaService->create($value);
+                    $documentoItemNormaService->create($value);
                 }
 
                 /**Etapa de Aprovação */
                 foreach ($data['etapa_aprovacao'] as $value) {
                     $value['documento_id'] = $documento->id;
                     $value['documento_revisao'] = "00";
-                    $this->userEtapaDocumentoService->create($value);
+                    $userEtapaDocumentoService->create($value);
                 }
 
-                $this->tipoDocumentoService->atualizaUltimoCodigoTipoDocumento($data['tipo_documento_id']);
+                $tipoDocumentoService->atualizaUltimoCodigoTipoDocumento($data['tipo_documento_id']);
 
 
                 return $documento;
@@ -167,18 +154,25 @@ class DocumentoService
 
     public function update($data, $id)
     {
-        $this->rules['tituloDocumento'] .= "," . $id;
-        $updateDocumento = $data;
-        unset(
-            $updateDocumento['codigo'],
-            $updateDocumento['hierarquia_documento'],
-            $updateDocumento['vinculo_documento'],
-            $updateDocumento['grupo_treinamento'],
-            $updateDocumento['grupo_divulgacao'],
-            $updateDocumento['item_normas'],
-            $updateDocumento['etapa_aprovacao']
-        );
         try {
+            $hierarquiaDocumentoService = new HierarquiaDocumentoService();
+            $vinculoDocumentoService = new VinculoDocumentoService();
+            $agrupamentoUserDocumentoService = new AgrupamentoUserDocumentoService();
+            $userEtapaDocumentoService = new UserEtapaDocumentoService();
+            $documentoItemNormaService = new DocumentoItemNormaService();
+            
+            $this->rules['tituloDocumento'] .= "," . $id;
+            $updateDocumento = $data;
+            unset(
+                $updateDocumento['codigo'],
+                $updateDocumento['hierarquia_documento'],
+                $updateDocumento['vinculo_documento'],
+                $updateDocumento['grupo_treinamento'],
+                $updateDocumento['grupo_divulgacao'],
+                $updateDocumento['item_normas'],
+                $updateDocumento['etapa_aprovacao']
+            );
+
             $documento = $this->documentoRepository->find($id);
             
             $this->documentoRepository->update($updateDocumento, $id);
@@ -195,7 +189,7 @@ class DocumentoService
 
             foreach ($data['hierarquia_documento'] as $key => $value) {
                 array_push($hierarquia, $value['documento_pai_id']);
-                $this->hierarquiaDocumentoService->firstOrCreate(
+                $hierarquiaDocumentoService->firstOrCreate(
                     [
                         "documento_id" => $id,
                         "documento_pai_id"  => $value['documento_pai_id']
@@ -215,7 +209,7 @@ class DocumentoService
                 );
                 array_push($idDelete, $busca->id);
             }
-            $this->hierarquiaDocumentoService->delete($idDelete, 'id');
+            $hierarquiaDocumentoService->delete($idDelete, 'id');
 
             /**Cria Vinculo de Documento */
             $buscaTodosDocumentosVinculados = $this->vinculoDocumentoRepository->findBy(
@@ -227,7 +221,7 @@ class DocumentoService
             $vinculado = array();
             foreach ($data['vinculo_documento'] as $key => $value) {
                 array_push($vinculado, $value['documento_vinculado_id']);
-                $this->vinculoDocumentoService->firstOrCreate(
+                $vinculoDocumentoService->firstOrCreate(
                     [
                         "documento_id" => $id,
                         "documento_vinculado_id"  => $value['documento_vinculado_id']
@@ -246,7 +240,7 @@ class DocumentoService
                 );
                 array_push($idDelete, $busca->id);
             }
-            $this->vinculoDocumentoService->delete($idDelete, 'id');
+            $vinculoDocumentoService->delete($idDelete, 'id');
 
             /**Cria Agrupamento de Documento (Treinamento) */
             $buscaTodosUsuarios = $this->agrupamentoUserDocumentoRepository->findBy(
@@ -261,7 +255,7 @@ class DocumentoService
             }
             $grupoTreinamento = array();
             foreach ($data['grupo_treinamento'] as $key => $value) {
-                $this->agrupamentoUserDocumentoService->firstOrCreate(
+                $agrupamentoUserDocumentoService->firstOrCreate(
                     [
                         "documento_id" => $id,
                         "user_id"  => $value['user_id'],
@@ -285,7 +279,7 @@ class DocumentoService
                 array_push($idDelete, $busca->id);
             }
             if (!empty($idDelete)) {
-                $this->agrupamentoUserDocumentoService->delete($idDelete, 'id');
+                $agrupamentoUserDocumentoService->delete($idDelete, 'id');
             }
 
             /**Cria Agrupamento de Documento (Divulgacao) */
@@ -302,7 +296,7 @@ class DocumentoService
 
             $grupoDivulgacao = array();
             foreach ($data['grupo_divulgacao'] as $key => $value) {
-                $this->agrupamentoUserDocumentoService->firstOrCreate(
+                $agrupamentoUserDocumentoService->firstOrCreate(
                     [
                         "documento_id" => $id,
                         "user_id"  => $value['user_id'],
@@ -326,7 +320,7 @@ class DocumentoService
                 array_push($idDelete, $busca->id);
             }
             if (!empty($idDelete)) {
-                $this->agrupamentoUserDocumentoService->delete($idDelete, 'id');
+                $agrupamentoUserDocumentoService->delete($idDelete, 'id');
             }
 
 
@@ -346,7 +340,7 @@ class DocumentoService
             $diff_para_create_item_norma  = array_diff($item, $itensNorma);
             $diff_para_detete_item_norma = array_diff($itensNorma, $item);
             foreach ($diff_para_create_item_norma as $key => $item) {
-                $this->documentoItemNormaService->create(["documento_id" => $id,"item_norma_id"  => $item]);
+                $documentoItemNormaService->create(["documento_id" => $id,"item_norma_id"  => $item]);
             }
 
             $idDelete = [];
@@ -359,7 +353,7 @@ class DocumentoService
                 );
                 array_push($idDelete, $busca->id);
             }
-            $this->documentoItemNormaService->delete($idDelete, 'id');
+            $documentoItemNormaService->delete($idDelete, 'id');
 
             /**Etapa de Aprovação */
             $userEtapaDocumentoDelecao = $this->userEtapaDocumentoRepository->findBy(
@@ -369,14 +363,14 @@ class DocumentoService
             );
             //Deleta
             foreach ($userEtapaDocumentoDelecao as $key => $value) {
-                $this->userEtapaDocumentoService->delete($value->id);
+                $userEtapaDocumentoService->delete($value->id);
             }
             //Cria
             foreach ($data['etapa_aprovacao'] as $value) {
                 $value['documento_id'] = (int) $id;
                 $value['documento_revisao'] = $documento->revisao;
  
-                $this->userEtapaDocumentoService->create($value);
+                $userEtapaDocumentoService->create($value);
             }
             return true;
         } catch (\Throwable $th) {
@@ -445,12 +439,12 @@ class DocumentoService
                 else $codigo = $valor;
                 break;
         }
-        return $codigo;
+        return $codigo;  dfgdfgdfghdfghdfgdf
     }
 
     public function validador($data)
     {
-       
+        $tipoDocumentoService = new TipoDocumentoService();
         $buscaTipoDocumento = $this->tipoDocumentoRepository->find($data->tipoDocumento);
         //verifica se o tipo de documento exige vinculo obrigatorio
         if ($buscaTipoDocumento->vinculo_obrigatorio == true) {
@@ -465,7 +459,7 @@ class DocumentoService
         }
 
         //verifica as etapas de aprovação
-        $etapas = $this->tipoDocumentoService->getEtapasFluxosPorComportamento(
+        $etapas = $tipoDocumentoService->getEtapasFluxosPorComportamento(
             $data->tipoDocumento,
             'comportamento_aprovacao'
         );

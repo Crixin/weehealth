@@ -29,6 +29,7 @@ class Documento extends Model
         'ged_documento_id',
         'setor_id',
         'extensao',
+        'em_revisao',
         'bpmn_id'
     ];
 
