@@ -9,9 +9,9 @@ class ListaPresencaService
 
     protected $listaPresencaRepository;
 
-    public function __construct(ListaPresencaRepository $listaPresencaRepository)
+    public function __construct()
     {
-        $this->listaPresencaRepository = $listaPresencaRepository;
+        $this->listaPresencaRepository = new ListaPresencaRepository();
     }
 
     public function create(array $data)

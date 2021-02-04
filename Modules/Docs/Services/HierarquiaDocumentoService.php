@@ -9,9 +9,9 @@ class HierarquiaDocumentoService
     protected $hierarquiaDocumentoRepository;
 
 
-    public function __construct(HierarquiaDocumentoRepository $hierarquiaDocumentoRepository)
+    public function __construct()
     {
-        $this->hierarquiaDocumentoRepository = $hierarquiaDocumentoRepository;
+        $this->hierarquiaDocumentoRepository = new HierarquiaDocumentoRepository();
     }
 
     public function create(array $dados)

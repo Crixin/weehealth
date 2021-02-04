@@ -9,9 +9,9 @@ class DocumentoObservacaoService
 
     protected $documentoObservacaoRepository;
 
-    public function __construct(DocumentoObservacaoRepository $documentoObservacaoRepository)
+    public function __construct()
     {
-        $this->documentoObservacaoRepository = $documentoObservacaoRepository;
+        $this->documentoObservacaoRepository = new DocumentoObservacaoRepository();
     }
 
     public function create(array $data)

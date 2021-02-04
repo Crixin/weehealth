@@ -9,9 +9,9 @@ class CopiaControladaService
 
     protected $copiaControladaRepository;
 
-    public function __construct(CopiaControladaRepository $copiaControladaRepository)
+    public function __construct()
     {
-        $this->copiaControladaRepository = $copiaControladaRepository;
+        $this->copiaControladaRepository = new CopiaControladaRepository();
     }
 
     public function create(array $data)

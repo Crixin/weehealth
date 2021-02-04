@@ -8,9 +8,9 @@ class DocumentoItemNormaService
 {
     protected $documentoItemNormaRepository;
 
-    public function __construct(DocumentoItemNormaRepository $documentoItemNormaRepository)
+    public function __construct()
     {
-        $this->documentoItemNormaRepository = $documentoItemNormaRepository;
+        $this->documentoItemNormaRepository = new DocumentoItemNormaRepository();
     }
 
     public function create(array $dados)

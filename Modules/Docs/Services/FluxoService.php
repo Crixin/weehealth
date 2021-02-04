@@ -12,15 +12,10 @@ class FluxoService
     protected $etapaFluxoRepository;
     protected $etapaFluxoService;
 
-    public function __construct(
-        FluxoRepository $fluxoRepository,
-        EtapaFluxoService $etapaFluxoService,
-        EtapaFluxoRepository $etapaFluxoRepository
-    )
+    public function __construct()
     {
-        $this->fluxoRepository = $fluxoRepository;
-        $this->etapaFluxoService = $etapaFluxoService;
-        $this->etapaFluxoRepository = $etapaFluxoRepository;
+        $this->fluxoRepository = new FluxoRepository();
+        $this->etapaFluxoRepository = new EtapaFluxoRepository();
     }
 
     public function create(array $data)
@@ -39,7 +34,8 @@ class FluxoService
                 $novaOrdem += 1 ;
                 $etapas = json_decode($value);
                 $requestCreate = $this->montaRequest($etapas, $fluxo, $novaOrdem);
-                $this->etapaFluxoService->create($requestCreate);
+                $etapaFluxoService = new EtapaFluxoService();
+                $etapaFluxoService->create($requestCreate);
             }
             DB::commit();
             return ["success" => true];

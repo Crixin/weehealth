@@ -7,10 +7,10 @@ use Modules\Docs\Repositories\AgrupamentoUserDocumentoRepository;
 class AgrupamentoUserDocumentoService
 {
     protected $agrupamentoUserDocumentoRepository;
-    
-    public function __construct(AgrupamentoUserDocumentoRepository $agrupamentoUserDocumentoRepository)
+
+    public function __construct()
     {
-        $this->agrupamentoUserDocumentoRepository = $agrupamentoUserDocumentoRepository;
+        $this->agrupamentoUserDocumentoRepository = new AgrupamentoUserDocumentoRepository();
     }
 
     public function create(array $dados)

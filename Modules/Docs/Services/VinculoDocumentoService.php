@@ -9,9 +9,9 @@ class VinculoDocumentoService
     protected $vinculoDocumentoRepository;
 
 
-    public function __construct(VinculoDocumentoRepository $vinculoDocumentoRepository)
+    public function __construct()
     {
-        $this->vinculoDocumentoRepository = $vinculoDocumentoRepository;
+        $this->vinculoDocumentoRepository = new VinculoDocumentoRepository();
     }
 
     public function create(array $dados)

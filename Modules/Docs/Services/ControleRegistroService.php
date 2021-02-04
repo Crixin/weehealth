@@ -9,9 +9,9 @@ class ControleRegistroService
 
     protected $controleRegistroRepository;
 
-    public function __construct(ControleRegistroRepository $controleRegistroRepository)
+    public function __construct()
     {
-        $this->controleRegistroRepository = $controleRegistroRepository;
+        $this->controleRegistroRepository = new ControleRegistroRepository();
     }
 
     public function create(array $data)

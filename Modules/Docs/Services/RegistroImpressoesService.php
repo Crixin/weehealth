@@ -9,9 +9,9 @@ class RegistroImpressoesService
 
     protected $registroImpressoesRepository;
 
-    public function __construct(RegistroImpressoesRepository $registroImpressoesRepository)
+    public function __construct()
     {
-        $this->registroImpressoesRepository = $registroImpressoesRepository;
+        $this->registroImpressoesRepository = new RegistroImpressoesRepository();
     }
 
     public function create(array $data)

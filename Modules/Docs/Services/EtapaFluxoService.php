@@ -9,9 +9,9 @@ class EtapaFluxoService
 
     protected $etapaFluxoRepository;
 
-    public function __construct(EtapaFluxoRepository $etapaFluxoRepository)
+    public function __construct()
     {
-        $this->etapaFluxoRepository = $etapaFluxoRepository;
+        $this->etapaFluxoRepository = new EtapaFluxoRepository();
     }
 
     public function create(array $data)

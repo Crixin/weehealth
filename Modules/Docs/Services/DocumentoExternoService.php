@@ -9,9 +9,9 @@ class DocumentoExternoService
 
     protected $documentoExternoRepository;
 
-    public function __construct(DocumentoExternoRepository $documentoExternoRepository)
+    public function __construct()
     {
-        $this->documentoExternoRepository = $documentoExternoRepository;
+        $this->documentoExternoRepository = new DocumentoExternoRepository();
     }
 
     public function create(array $data)

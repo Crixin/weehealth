@@ -9,9 +9,9 @@ class NormaService
 
     protected $normaRepository;
 
-    public function __construct(NormaRepository $normaRepository)
+    public function __construct()
     {
-        $this->normaRepository = $normaRepository;
+        $this->normaRepository = new NormaRepository();
     }
 
     public function create(array $data)

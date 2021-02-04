@@ -9,9 +9,9 @@ class UsuarioExtraService
 
     protected $usuarioExtraRepository;
 
-    public function __construct(UsuarioExtraRepository $usuarioExtraRepository)
+    public function __construct()
     {
-        $this->usuarioExtraRepository = $usuarioExtraRepository;
+        $this->usuarioExtraRepository = new UsuarioExtraRepository();
     }
 
     public function create(array $data)
