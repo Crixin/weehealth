@@ -22,7 +22,7 @@
                 </div>
                 <!-- Timeline do Documento -->
                 @component(
-                    'docs::components.linha-tempo-documento', 
+                    'docs::components.documento.linha-tempo', 
                     [
                         'historico' => $historico
                     ]
