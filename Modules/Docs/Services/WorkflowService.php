@@ -13,27 +13,27 @@ use App\Classes\Helper;
 use Illuminate\Support\Facades\Auth;
 use Modules\Docs\Model\Workflow;
 use App\Services\ValidacaoService;
+use Modules\Docs\Services\{
+    DocumentoService
+};
 
 class WorkflowService
 {
+    private $rules;
     private $workflowRepository;
     private $documentoRepository;
     private $etapaFluxoRepository;
     private $userEtapaDocumentoRepository;
-    private $rules;
 
-    public function __construct(
-        WorkflowRepository $workflowRepository,
-        DocumentoRepository $documentoRepository,
-        EtapaFluxoRepository $etapaFluxoRepository,
-        Workflow $workflow,
-        UserEtapaDocumentoRepository $userEtapaDocumentoRepository
-    ) {
+    public function __construct()
+    {
+        $workflow = new Workflow();
         $this->rules = $workflow->rules;
-        $this->workflowRepository = $workflowRepository;
-        $this->documentoRepository = $documentoRepository;
-        $this->etapaFluxoRepository = $etapaFluxoRepository;
-        $this->userEtapaDocumentoRepository = $userEtapaDocumentoRepository;
+
+        $this->workflowRepository = new WorkflowRepository();
+        $this->documentoRepository = new DocumentoRepository();
+        $this->etapaFluxoRepository = new EtapaFluxoRepository();
+        $this->userEtapaDocumentoRepository = new UserEtapaDocumentoRepository();
     }
 
     
@@ -269,9 +269,20 @@ class WorkflowService
     private function divulgaDocumento(array $data)
     {
         try {
+            $documentoService = new DocumentoService();
+
             if (!$this->store($data)['success']) {
+                throw new \Exception("Falha ao divulgar o documento (workflow) ");
+            }
+            
+            $info = [
+                "em_revisao" => false,
+            ];
+            
+            if (!$documentoService->update($info, $data['documento_id'])['success']) {
                 throw new \Exception("Falha ao divulgar o documento");
             }
+
             return ["success" => true];
         } catch (\Throwable $th) {
             dd($th);

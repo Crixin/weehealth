@@ -35,29 +35,20 @@ class DocumentoService
 
     protected $rules;
 
-    public function __construct(
-        Documento $documento,
-        UserRepository $userRepository,
-        DocumentoRepository $documentoRepository,
-        ItemNormaRepository $itemNormaRepository,
-        TipoDocumentoRepository $tipoDocumentoRepository,
-        VinculoDocumentoRepository $vinculoDocumentoRepository,
-        UserEtapaDocumentoRepository $userEtapaDocumentoRepository,
-        DocumentoItemNormaRepository $documentoItemNormaRepository,
-        HierarquiaDocumentoRepository $hierarquiaDocumentoRepository,
-        AgrupamentoUserDocumentoRepository $agrupamentoUserDocumentoRepository
-    ) {
+    public function __construct()
+    {
+        $documento = new Documento();
         $this->rules = $documento->rules;
 
-        $this->userRepository = $userRepository;
-        $this->documentoRepository = $documentoRepository;
-        $this->itemNormaRepository = $itemNormaRepository;
-        $this->tipoDocumentoRepository = $tipoDocumentoRepository;
-        $this->vinculoDocumentoRepository = $vinculoDocumentoRepository;
-        $this->documentoItemNormaRepository = $documentoItemNormaRepository;
-        $this->userEtapaDocumentoRepository = $userEtapaDocumentoRepository;
-        $this->hierarquiaDocumentoRepository = $hierarquiaDocumentoRepository;
-        $this->agrupamentoUserDocumentoRepository = $agrupamentoUserDocumentoRepository;
+        $this->userRepository = new UserRepository();
+        $this->documentoRepository = new DocumentoRepository();
+        $this->itemNormaRepository = new ItemNormaRepository();
+        $this->tipoDocumentoRepository = new TipoDocumentoRepository();
+        $this->vinculoDocumentoRepository = new VinculoDocumentoRepository();
+        $this->userEtapaDocumentoRepository = new UserEtapaDocumentoRepository();
+        $this->documentoItemNormaRepository = new DocumentoItemNormaRepository();
+        $this->hierarquiaDocumentoRepository = new HierarquiaDocumentoRepository();
+        $this->agrupamentoUserDocumentoRepository = new AgrupamentoUserDocumentoRepository();
     }
 
     public function store($data)
@@ -75,7 +66,6 @@ class DocumentoService
         
             $documento = DB::transaction(function () use ($createDocumento, $data) {
                 $workflowService = new WorkflowService();
-                $hierarquiaDocumentoService = new HierarquiaDocumentoService();
                 $vinculoDocumentoService = new VinculoDocumentoService();
                 $agrupamentoUserDocumentoService = new AgrupamentoUserDocumentoService();
                 $userEtapaDocumentoService = new UserEtapaDocumentoService();
@@ -102,9 +92,11 @@ class DocumentoService
                 }
 
                 /**Cria Hierarquia Documento */
-                foreach ($data['hierarquia_documento'] as $value) {
-                    $value['documento_id'] = $documento->id;
-                    $resp = $hierarquiaDocumentoService->create($value);
+                if (array_key_exists("hierarquia_documento", $data)) {
+                    $this->hierarquiaDocumentos($documento->id, $data['hierarquia_documento']);
+                    if (!$this->hierarquiaDocumentos($documento->id, $data['hierarquia_documento'])['success']) {
+                        throw new \Exception("Falha na hierarquia de documentos");
+                    }
                 }
 
                 /**Cria Vinculo de Documento */
@@ -155,8 +147,8 @@ class DocumentoService
     public function update($data, $id)
     {
         try {
-            $hierarquiaDocumentoService = new HierarquiaDocumentoService();
-            $vinculoDocumentoService = new VinculoDocumentoService();
+            DB::beginTransaction();
+
             $agrupamentoUserDocumentoService = new AgrupamentoUserDocumentoService();
             $userEtapaDocumentoService = new UserEtapaDocumentoService();
             $documentoItemNormaService = new DocumentoItemNormaService();
@@ -177,70 +169,22 @@ class DocumentoService
             
             $this->documentoRepository->update($updateDocumento, $id);
 
+
             /**Cria Hierarquia Documento */
-            $buscaTodosDocumentos = $this->hierarquiaDocumentoRepository->findBy(
-                [
-                    ['documento_id', '=', $id]
-                ]
-            );
-
-            $documentos =  array_column(json_decode(json_encode($buscaTodosDocumentos), true), 'documento_pai_id');
-            $hierarquia = [];
-
-            foreach ($data['hierarquia_documento'] as $key => $value) {
-                array_push($hierarquia, $value['documento_pai_id']);
-                $hierarquiaDocumentoService->firstOrCreate(
-                    [
-                        "documento_id" => $id,
-                        "documento_pai_id"  => $value['documento_pai_id']
-                    ]
-                );
+            if (array_key_exists("hierarquia_documento", $data)) {
+                if (!$this->hierarquiaDocumentos($id, $data['hierarquia_documento'])['success']) {
+                    throw new \Exception("Falha na hierarquia de documentos");
+                }
             }
-
-            $diff_para_delete = array_diff($documentos, $hierarquia);
-            $idDelete = [];
-
-            foreach ($diff_para_delete as $key => $doc) {
-                $busca = $this->hierarquiaDocumentoRepository->findOneBy(
-                    [
-                        ['documento_id','=',$id],
-                        ['documento_pai_id','=',$doc,"AND"]
-                    ]
-                );
-                array_push($idDelete, $busca->id);
-            }
-            $hierarquiaDocumentoService->delete($idDelete, 'id');
 
             /**Cria Vinculo de Documento */
-            $buscaTodosDocumentosVinculados = $this->vinculoDocumentoRepository->findBy(
-                [
-                    ['documento_id', '=', $id]
-                ]
-            );
-            $documentos =  array_column(json_decode(json_encode($buscaTodosDocumentosVinculados), true), 'documento_vinculado_id');
-            $vinculado = array();
-            foreach ($data['vinculo_documento'] as $key => $value) {
-                array_push($vinculado, $value['documento_vinculado_id']);
-                $vinculoDocumentoService->firstOrCreate(
-                    [
-                        "documento_id" => $id,
-                        "documento_vinculado_id"  => $value['documento_vinculado_id']
-                    ]
-                );
+            if (array_key_exists("vinculo_documento", $data)) {
+                if (!$this->vinculoDocumentos($id, $data['vinculo_documento'])['success']) {
+                    throw new \Exception("Falha no vinculo de documentos");
+                }
             }
 
-            $diff_para_detete_vinculo = array_diff($documentos, $vinculado);
-            $idDelete = [];
-            foreach ($diff_para_detete_vinculo as $key => $doc) {
-                $busca = $this->vinculoDocumentoRepository->findOneBy(
-                    [
-                        ['documento_id','=',$id],
-                        ['documento_vinculado_id','=',$doc,"AND"]
-                    ]
-                );
-                array_push($idDelete, $busca->id);
-            }
-            $vinculoDocumentoService->delete($idDelete, 'id');
+
 
             /**Cria Agrupamento de Documento (Treinamento) */
             $buscaTodosUsuarios = $this->agrupamentoUserDocumentoRepository->findBy(
@@ -254,7 +198,7 @@ class DocumentoService
                 array_push($users, $value['grupo_id'] . '-' . $value['user_id']);
             }
             $grupoTreinamento = array();
-            foreach ($data['grupo_treinamento'] as $key => $value) {
+            foreach ($data['grupo_treinamento'] ?? [] as $key => $value) {
                 $agrupamentoUserDocumentoService->firstOrCreate(
                     [
                         "documento_id" => $id,
@@ -289,13 +233,14 @@ class DocumentoService
                     ["tipo", "=", "DIVULGACAO", "AND"]
                 ]
             );
+            
             $users = [];
             foreach ($buscaTodosUsuarios as $key => $value) {
                 array_push($users, $value['grupo_id'] . '-' . $value['user_id']);
             }
 
             $grupoDivulgacao = array();
-            foreach ($data['grupo_divulgacao'] as $key => $value) {
+            foreach ($data['grupo_divulgacao'] ?? [] as $key => $value) {
                 $agrupamentoUserDocumentoService->firstOrCreate(
                     [
                         "documento_id" => $id,
@@ -309,6 +254,7 @@ class DocumentoService
 
             $diff_para_detete_user_div = array_diff($users, $grupoDivulgacao);
             $idDelete = [];
+
             foreach ($diff_para_detete_user_div as $key => $user) {
                 $busca = $this->agrupamentoUserDocumentoRepository->findOneBy(
                     [
@@ -334,7 +280,7 @@ class DocumentoService
             $itensNorma =  array_column(json_decode(json_encode($buscaTodosItemNorma), true), 'item_norma_id');
 
             $item = array();
-            foreach ($data['item_normas'] as $key => $value) {
+            foreach ($data['item_normas'] ?? [] as $key => $value) {
                 array_push($item, $value['item_norma_id']);
             }
 
@@ -367,16 +313,18 @@ class DocumentoService
                 $userEtapaDocumentoService->delete($value->id);
             }
             //Cria
-            foreach ($data['etapa_aprovacao'] as $value) {
+            foreach ($data['etapa_aprovacao'] ?? [] as $value) {
                 $value['documento_id'] = (int) $id;
                 $value['documento_revisao'] = $documento->revisao;
  
                 $userEtapaDocumentoService->create($value);
             }
-            return true;
+            DB::commit();
+            return ["success" => true];
         } catch (\Throwable $th) {
+            DB::rollback();
             dd($th);
-            return false;
+            return ["success" => false];
         }
     }
 
@@ -488,5 +436,69 @@ class DocumentoService
         }
 
         return false;
+    }
+
+    
+    private function hierarquiaDocumentos(int $documento, array $docsVincular)
+    {
+        try {
+            $hierarquiaDocumentoService = new HierarquiaDocumentoService();
+
+            $documentosHierarquiaDelete = $this->hierarquiaDocumentoRepository->findBy(
+                [
+                    ['documento_id', '=', $documento],
+                    ['documento_pai_id', "", $docsVincular ?? [] ,"NOTIN"]
+    
+                ]
+            )->pluck("id")->toArray();
+    
+            $infoCreate = [
+                "hierarquia_documento" => $docsVincular,
+                "documento_id" => $documento
+            ];
+
+            if (!$hierarquiaDocumentoService->store($infoCreate)['success']) {
+                throw new \Exception("falha ao inserir hierarquia");
+            }
+            if (!$hierarquiaDocumentoService->delete($documentosHierarquiaDelete)['success']) {
+                throw new \Exception("falha ao remover hierarquia");
+            }
+    
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            return ["success" => false];
+        }
+    }
+    
+    
+    private function vinculoDocumentos(int $documento, array $docsVincular)
+    {
+        try {
+            $vinculoDocumentoService = new VinculoDocumentoService();
+
+            $documentosVinculadosDelete = $this->vinculoDocumentoService->findBy(
+                [
+                    ['documento_id', '=', $documento],
+                    ['documento_vinculado_id', "", $docsVincular ?? [] ,"NOTIN"]
+    
+                ]
+            )->pluck("id")->toArray();
+    
+            $infoCreate = [
+                "documento_vinculado_id" => $docsVincular,
+                "documento_id" => $documento
+            ];
+
+            if (!$vinculoDocumentoService->store($infoCreate)['success']) {
+                throw new \Exception("falha ao inserir vinculo de documentos");
+            }
+            if (!$vinculoDocumentoService->delete($documentosVinculadosDelete)['success']) {
+                throw new \Exception("falha ao remover vinculo de documentos");
+            }
+    
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            return ["success" => false];
+        }
     }
 }
