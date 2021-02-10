@@ -66,8 +66,6 @@ class DocumentoService
         
             $documento = DB::transaction(function () use ($createDocumento, $data) {
                 $workflowService = new WorkflowService();
-                $userEtapaDocumentoService = new UserEtapaDocumentoService();
-                $documentoItemNormaService = new DocumentoItemNormaService();
                 $tipoDocumentoService = new TipoDocumentoService();
 
 
@@ -128,10 +126,10 @@ class DocumentoService
                 }
 
                 /**Etapa de Aprovação */
-                foreach ($data['etapa_aprovacao'] as $value) {
-                    $value['documento_id'] = $documento->id;
-                    $value['documento_revisao'] = "00";
-                    $userEtapaDocumentoService->create($value);
+                if (array_key_exists("etapa_aprovacao", $data)) {
+                    if (!$this->aprovadores($documento->id, $data['etapa_aprovacao'])['success']) {
+                        throw new \Exception("Falha no cad/alt de aprovadores");
+                    }
                 }
 
                 $tipoDocumentoService->atualizaUltimoCodigoTipoDocumento($data['tipo_documento_id']);
@@ -170,28 +168,28 @@ class DocumentoService
 
             /**Cria Hierarquia Documento */
             if (array_key_exists("hierarquia_documento", $data)) {
-                if (!$this->hierarquiaDocumentos($id, $data['hierarquia_documento'])['success']) {
+                if (!$this->hierarquiaDocumentos($documento->id, $data['hierarquia_documento'])['success']) {
                     throw new \Exception("Falha na hierarquia de documentos");
                 }
             }
 
             /**Cria Vinculo de Documento */
             if (array_key_exists("vinculo_documento", $data)) {
-                if (!$this->vinculoDocumentos($id, $data['vinculo_documento'])['success']) {
+                if (!$this->vinculoDocumentos($documento->id, $data['vinculo_documento'])['success']) {
                     throw new \Exception("Falha no vinculo de documentos");
                 }
             }
             
             /**Cria Agrupamento de Documento (Treinamento) */
             if (array_key_exists("grupo_treinamento", $data)) {
-                if (!$this->agrupamentosUserDocumento($id, $data['grupo_treinamento'], "TREINAMENTO")['success']) {
+                if (!$this->agrupamentosUserDocumento($documento->id, $data['grupo_treinamento'], "TREINAMENTO")['success']) {
                     throw new \Exception("Falha no grupo de treinamento");
                 }
             }
 
             /**Cria Agrupamento de Documento (Divulgacao) */
             if (array_key_exists("grupo_divulgacao", $data)) {
-                if (!$this->agrupamentosUserDocumento($id, $data['grupo_divulgacao'], "DIVULGACAO")['success']) {
+                if (!$this->agrupamentosUserDocumento($documento->id, $data['grupo_divulgacao'], "DIVULGACAO")['success']) {
                     throw new \Exception("Falha no grupo de divulgação");
                 }
             }
@@ -199,14 +197,14 @@ class DocumentoService
             /**Cria Itens Norma */
             if (array_key_exists("item_normas", $data)) {
                 $itensNorma =  array_column($data['item_normas'], 'item_norma_id');
-                if (!$this->itensNorma($id, $itensNorma)['success']) {
+                if (!$this->itensNorma($documento->id, $itensNorma)['success']) {
                     throw new \Exception("Falha nos itens da norma");
                 }
             }
             
             /**Etapa de Aprovação */
             if (array_key_exists("etapa_aprovacao", $data)) {
-                if (!$this->aprovadores($id, $data['etapa_aprovacao'])['success']) {
+                if (!$this->aprovadores($documento->id, $data['etapa_aprovacao'])['success']) {
                     throw new \Exception("Falha no cad/alt de aprovadores");
                 }
             }
@@ -480,28 +478,34 @@ class DocumentoService
     {
         try {
             $userEtapaDocumentoService = new UserEtapaDocumentoService();
+            $documento = $this->documentoRepository->find($documento);
 
-            $userEtapaDocumentoDelecao = $this->userEtapaDocumentoRepository->findBy(
+            $allUserEtapaDocumento = $this->userEtapaDocumentoRepository->findBy(
                 [
-                    ['documento_id','=',$id]
+                    ['documento_id', '=', $documento->id]
                 ]
-            );
-            //Deleta
-            foreach ($userEtapaDocumentoDelecao as $key => $value) {
-                $userEtapaDocumentoService->delete($value->id);
-            }
-            //Cria
-            foreach ($data['etapa_aprovacao'] ?? [] as $value) {
-                $value['documento_id'] = (int) $id;
-                $value['documento_revisao'] = $documento->revisao;
- 
-                $userEtapaDocumentoService->create($value);
-            }
+            )->toArray();
 
-            if (!$userEtapaDocumentoService->store($infoCreate)['success']) {
+            $delete = array_map(function ($arr) use ($aprovadores) {
+                foreach ($aprovadores['grupo_user_etapa'] as $aprovador) {
+                    if (
+                        $arr['user_id'] == $aprovador['user_id'] &&
+                        $arr['etapa_fluxo_id'] == $aprovador['etapa_fluxo_id'] &&
+                        $arr['grupo_id'] == $aprovador['grupo_id']
+                    ) {
+                        return false;
+                    }
+                }
+                return $arr['id'];
+            }, $allUserEtapaDocumento);
+
+            $aprovadores['documento_id'] = $documento->id;
+            $aprovadores['documento_revisao'] = $documento->revisao;
+
+            if (!$userEtapaDocumentoService->store($aprovadores)['success']) {
                 throw new \Exception("falha ao inserir aprovadores no documento");
             }
-            if (!$userEtapaDocumentoService->delete($buscaTodosItemNormaDelete)['success']) {
+            if (!$userEtapaDocumentoService->delete($delete)['success']) {
                 throw new \Exception("falha ao remover aprovadores no documento");
             }
 

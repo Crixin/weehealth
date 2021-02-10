@@ -685,16 +685,20 @@ class DocumentoController extends Controller
             $request->tipoDocumento,
             'comportamento_aprovacao'
         );
-        foreach ($etapas['etapas'] as $key => $value) {
-            $variavel = 'grupo' . $value['id'];
+
+        foreach ($etapas['etapas'] as $etapa) {
+            $variavel = 'grupo' . $etapa['id'];
+
             if (!empty($request->$variavel)) {
-                $foreach = !is_array($request->$variavel) ? json_decode($request->$variavel) : $request->$variavel;
-                foreach ($foreach as $key => $idAprovadores) {
-                    $aux = explode('-', $idAprovadores);
-                    $montaRequestEtapa[$key] = [
-                        "user_id" => (int) $aux[1],
-                        "etapa_fluxo_id" => $value['id'],
-                        'grupo_id' => (int) $aux[0]
+                $gruposUsersEtapas = !is_array($request->$variavel) ? json_decode($request->$variavel) : $request->$variavel;
+
+                foreach ($gruposUsersEtapas as $grupoUserEtapa) {
+                    [$grupo, $user] = explode('-', $grupoUserEtapa);
+                    
+                    $montaRequestEtapa["grupo_user_etapa"][] = [
+                        'grupo_id' => (int) $grupo,
+                        "user_id" => (int) $user,
+                        "etapa_fluxo_id" => $etapa['id']
                     ];
                 }
             }

@@ -2,6 +2,7 @@
 
 namespace Modules\Docs\Services;
 
+use Illuminate\Support\Facades\DB;
 use Modules\Docs\Repositories\UserEtapaDocumentoRepository;
 
 class UserEtapaDocumentoService
@@ -13,18 +14,43 @@ class UserEtapaDocumentoService
         $this->userEtapaDocumentoRepository = new UserEtapaDocumentoRepository();
     }
 
-    public function create(array $dados)
+    public function store(array $data)
     {
-        return $this->userEtapaDocumentoRepository->create($dados);
+        try {
+            DB::beginTransaction();
+            foreach ($data['grupo_user_etapa'] ?? [] as $grupoUserEtapa) {
+                $this->userEtapaDocumentoRepository->firstOrCreate(
+                    [
+                        "grupo_id" => $grupoUserEtapa['grupo_id'],
+                        "user_id" => $grupoUserEtapa['user_id'],
+                        "etapa_fluxo_id" => $grupoUserEtapa['etapa_fluxo_id'],
+                        "documento_revisao" => $data['documento_revisao'],
+                        'documento_id' => $data['documento_id']
+                    ]
+                );
+            }
+
+            DB::commit();
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return ["success" => false];
+        }
     }
 
-    public function update(array $dados, int $id)
-    {
-        return $this->userEtapaDocumentoRepository->update($dados, $id);
-    }
 
-    public function delete(int $delete)
+    public function delete(array $data)
     {
-        return $this->userEtapaDocumentoRepository->delete($delete);
+        try {
+            DB::beginTransaction();
+
+            $this->userEtapaDocumentoRepository->delete($data, 'id');
+            
+            DB::commit();
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return ["success" => false];
+        }
     }
 }

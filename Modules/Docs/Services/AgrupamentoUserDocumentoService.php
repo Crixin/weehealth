@@ -36,7 +36,6 @@ class AgrupamentoUserDocumentoService
             return ["success" => true];
         } catch (\Throwable $th) {
             DB::rollback();
-            dd($th);
             return ["success" => false];
         }
     }
