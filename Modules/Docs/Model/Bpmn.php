@@ -18,4 +18,9 @@ class Bpmn extends Model
         'arquivo'
     ];
 
+    public $rules = [
+        'nome'      => 'required|string|min:5|unique:docs_bpmn,nome',
+        'versao'    => 'required',
+        'arquivo'   => 'required'
+    ];
 }

@@ -21,7 +21,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-
+                @component('components.validation-error', ['errors'])@endcomponent
 
                 @if(Session::has('message'))
                     @component('components.alert')@endcomponent

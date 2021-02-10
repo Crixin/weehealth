@@ -22,6 +22,13 @@ class Fluxo extends Model
         'ativo'
     ];
 
+    public $rules = [
+        'nome'               => 'required|string|max:100|unique:docs_fluxo,nome',
+        'descricao'          => 'required|string|max:200',
+        'grupo'              => 'required|numeric',
+        'perfil'             => 'required|numeric'
+    ];
+
     public function docsEtapaFluxo()
     {
         return $this->hasMany('Modules\Docs\Model\EtapaFluxo', 'fluxo_id', 'id')->orderBy('ordem', 'asc');

@@ -59,7 +59,10 @@ Route::group(['middleware' => ['auth' , 'changeUser']], function () {
             Route::post('deletar',          ['as' => 'core.usuario.deletar',         'uses' => 'AjaxController@deleteUser'])->middleware('blockAdmin');
             Route::get('register',          ['as' => 'core.usuario.register',        'uses' => 'Auth\RegisterController@showRegistrationForm']);
             Route::post('save',             ['as' => 'core.usuario.save',            'uses' => 'Auth\RegisterController@register']);
-        
+            Route::get('substituir/{id}',   ['as' => 'core.usuario.substituir',      'uses' => 'UsuarioController@changeUser']);
+            Route::post('substituir-modulo',['as' => 'core.usuario.substituir-modulo','uses' => 'UsuarioController@changeUserMod']);
+            Route::post('usuario-por-grupo',['as' => 'core.usuario.usuario-por-grupo','uses' => 'UsuarioController@userByGroup']);
+            Route::post('substituir-user-documento',['as' => 'core.usuario.substituir-user-documento','uses' => 'UsuarioController@replaceUserDoc']);
         });
 
 

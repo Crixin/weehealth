@@ -33,43 +33,16 @@
                     {{ csrf_field() }}
                     <input type="hidden" name="id" value="{{ $plano->id }}">
                     
-                    <div class="form-body">
-                        <div class="row p-t-20">
-                            <div class="col-md-6">
-                                <div class="form-group{{ $errors->has('nome') ? ' has-error' : '' }}">
-                                    <label class="control-label">Nome</label>
-                                    <input type="text" id="nome" name="nome" value="{{ $plano->nome }}" class="form-control" required autofocus>
-                                    <small class="form-control-feedback"> Digite o novo nome para o plano. </small> 
+                    @component(
+                        'docs::components.plano', 
+                        [
+                            'planoEdit' => $plano,
+                            'nome' => $plano->nome, 
+                            'status' => $plano->status
+                        ]
+                    )
+                    @endcomponent
 
-                                    @if ($errors->has('nome'))
-                                        <br/>    
-                                        <span class="help-block text-danger">
-                                            <strong>{{ $errors->first('nome') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
-                                    <label class="control-label">Status</label>
-                                   
-                                    <td class="text-center text-nowrap">
-                                        <div class="switch">
-                                            <label>Inativo
-                                                <input name="status" id="status" type="checkbox" class="switch-elaborador"  @if ($plano->ativo == true) checked @endif ><span class="lever switch-col-light-blue"></span>Ativo
-                                            </label>
-                                        </div>
-                                    </td>
-                                    @if ($errors->has('status'))
-                                        <br/>
-                                        <span class="help-block text-danger">
-                                            <strong>{{ $errors->first('status') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
                         <a href="{{ route('docs.plano') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>

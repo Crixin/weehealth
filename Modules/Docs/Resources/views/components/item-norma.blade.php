@@ -10,15 +10,20 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-
             <div class="form-group required{{ $errors->has('descricao') ? ' has-error' : '' }}">
             {!! Form::label('descricao', 'Descrição', ['class' => 'control-label']) !!}
             {!! Form::textarea('descricao',$descricao, ['class' => 'form-control', 'rows'=>'5', 'required' => 'required']) !!}
             <small class="text-danger">{{ $errors->first('descricao') }}</small>
             </div>  
-            
-
-
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group {{ $errors->has('checklist') ? ' has-error' : '' }}">
+            {!! Form::label('checklist', 'CheckList') !!}
+            {!! Form::textarea('checklist',$checklist, ['class' => 'form-control', 'rows'=>'5']) !!}
+            <small class="text-danger">{{ $errors->first('checklist') }}</small>
+            </div>
         </div>
     </div>
 </div>

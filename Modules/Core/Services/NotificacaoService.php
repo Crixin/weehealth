@@ -23,47 +23,66 @@ class NotificacaoService
     }
 
 
-    public function create(Request $request, array $montaRequest)
+    public function store(array $montaRequest)
     {
         try {
-            $validacao = new ValidacaoService($this->rules, $request->all());
+            $insert = [
+                "nome"              => $montaRequest['nome'],
+                "tipoNotificacao"   => $montaRequest['tipo_id'],
+                "titulo"            => $montaRequest['titulo_email'],
+                "corpo"             => $montaRequest['corpo_email'],
+                "tipoEnvio"         => $montaRequest['tipo_envio_notificacao_id'],
+                "delay"             => $montaRequest['tempo_delay_envio'],
+                "tentativas"        => $montaRequest['numero_tentativas_envio']
+            ];
 
+            $validacao = new ValidacaoService($this->rules, $insert);
             $errors = $validacao->make();
-
             if ($errors) {
-                return redirect()->back()->withErrors($errors)->withInput();
+                return ["success" => false, "redirect" => redirect()->back()->withErrors($errors)->withInput()];
             }
+
             DB::transaction(function () use ($montaRequest) {
                 $notificacao = $this->notificacaoRepository->create($montaRequest);
             });
-
-            return true;
+            return ["success" => true];
         } catch (\Throwable $th) {
-            return false;
+            Helper::setNotify("Erro ao cadastrar a notificação. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+            return ["success" => false, "redirect" => redirect()->back()->withInput()];
         }
     }
 
 
-    public function update(Request $request, array $montaRequest)
+    public function update(array $montaRequest)
     {
         try {
-            $this->rules['nome'] .= "," . $request->idModeloNotificacao;
+            $this->rules['nome'] .= "," . $montaRequest['id'];
 
-            $validacao = new ValidacaoService($this->rules, $request->all());
+            $insert = [
+                "nome"              => $montaRequest['nome'],
+                "tipoNotificacao"   => $montaRequest['tipo_id'],
+                "titulo"            => $montaRequest['titulo_email'],
+                "corpo"             => $montaRequest['corpo_email'],
+                "tipoEnvio"         => $montaRequest['tipo_envio_notificacao_id'],
+                "delay"             => $montaRequest['tempo_delay_envio'],
+                "tentativas"        => $montaRequest['numero_tentativas_envio']
+            ];
+
+            $validacao = new ValidacaoService($this->rules, $insert);
 
             $errors = $validacao->make();
 
             if ($errors) {
-                return redirect()->back()->withErrors($errors)->withInput();
+                return ["success" => false, "redirect" => redirect()->back()->withErrors($errors)->withInput()];
             }
-
-            DB::transaction(function () use ($request, $montaRequest) {
-                $notificacao = $this->notificacaoRepository->update($montaRequest, $request->idModeloNotificacao);
+            DB::transaction(function () use ($montaRequest) {
+                $notificacao = $this->notificacaoRepository->update($montaRequest, $montaRequest['id']);
             });
 
-            return true;
+            return ["success" => true];
         } catch (\Throwable $th) {
-            return false;
+            Helper::setNotify("Erro ao atualizar a notificação. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+            return ["success" => false, "redirect" => redirect()->back()->withInput()];
         }
     }
 

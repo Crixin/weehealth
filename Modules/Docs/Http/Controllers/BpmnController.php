@@ -49,22 +49,14 @@ class BpmnController extends Controller
      */
     public function store(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
-        }
-        try {
-            $cadastro = $this->montaRequest($request);
-            $bpmnService = new BpmnService();
-            $retorno = $bpmnService->create($cadastro);
-            if (!$retorno['success']) {
-                throw new Exception("Um erro ocorreu ao gravar o bpmn", 1);
-            }
+        $cadastro = $this->montaRequest($request);
+        $bpmnService = new BpmnService();
+        $retorno = $bpmnService->create($cadastro);
+        if (!$retorno['success']) {
+            return $retorno['redirect'];
+        } else {
             Helper::setNotify('Novo BPMN criado com sucesso!', 'success|check-circle');
             return redirect()->route('docs.bpmn');
-        } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao gravar o BPMN', 'danger|close-circle');
-            return redirect()->back()->withInput();
         }
     }
 
@@ -106,9 +98,9 @@ class BpmnController extends Controller
             $update = $this->montaRequest($request);
             $update['versao'] = $buscaFluxo->versao + 1;
             $bpmnService = new BpmnService();
-            $retorno = $bpmnService->update($update, $request->idBPMN);
+            $retorno = $bpmnService->update($update);
             if (!$retorno['success']) {
-                throw new Exception("Um erro ocorreu ao gravar o bpmn", 1);
+                return $retorno['redirect'];
             }
             Helper::setNotify('Informações do BPMN atualizadas com sucesso!', 'success|check-circle');
         } catch (\Throwable $th) {
@@ -158,10 +150,15 @@ class BpmnController extends Controller
 
     public function montaRequest(Request $request)
     {
-        return [
+        $retorno = [
             "nome"      => $request->get('nome'),
             "versao"    => $request->get('versao') ?? 1,
-            "arquivo"   => $request->get('arquivoXML2'),
+            "arquivo"   => $request->get('arquivoXML2')
         ];
+        if ($request->idBPMN) {
+            $retorno["id"] = $request->idBPMN;
+        }
+
+        return $retorno;
     }
 }

@@ -65,6 +65,12 @@
                                     <td>
                                         <a href="#" class="btn waves-effect waves-light btn-warning sa-warning" data-id="{{ $usuario->id }}"> <i class="mdi mdi-account-off"></i> @lang('buttons.general.disable') </a>
                                         <a href="{{ route('core.usuario.editar', ['id' => $usuario->id ]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="{{ route('core.usuario.substituir', ['id' => $usuario->id]) }}"> <i class="mdi mdi-account-convert"></i> @lang('buttons.core.user.change-users') </a>  
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

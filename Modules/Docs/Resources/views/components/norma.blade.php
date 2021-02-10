@@ -55,72 +55,51 @@
 <legend>@lang('page_titles.docs.item-norma.index')</legend>
 <hr>
 <div class="table-responsive m-t-40">
-    <table id="example" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+    <button type="button" id="btnItemNorma" class="btn btn-info">@lang('buttons.docs.item-norma.create')</button>
+    <table id="itens" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Descricao</th>
-                <th>Checklist</th>           
+                <th>Checklist</th>
+                <th>Controle</th>           
             </tr>
         </thead>
-        <tbody>
-            
+        <tbody id="itens">
+            @foreach ($itens ?? [] as $item)
+                @php
+                    $conteudoBotao = 
+                    [
+                        "id"        => $item['id'],
+                        "numero"    => $item['numero'],
+                        "descricao" => $item['descricao'],
+                        "checklist" => $item['checklist'],
+                    ];
+                @endphp
+                <tr>
+                    <td data-id="{{$item['id']}}">{{$item['numero']}}</td>
+                    <td>{{$item['descricao']}}</td>
+                    <td>{{$item['checklist']}}</td>
+                    <td>
+                        <a class="btn waves-effect waves-light btn-danger sa-warning btnExcluirItem" data-id='{{$item['id']}}'><i class="mdi mdi-delete"></i> @lang('buttons.general.delete')</a>
+                        <a class="btn waves-effect waves-light btn-info btnEditNorma" data-id='{{$item['id']}}' ><input type="hidden" name="dados[]" id="dados{{$item['id']}}" value='{{JSON_encode($conteudoBotao)}}'><i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit')</a>
+                    </td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
 </div>
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+
 @section('footer')
+<!-- This is data table -->
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('js/dataTables/dataTables.rowReorder.min.js') }}"></script>
 
-
-<link rel="stylesheet" href="{{ asset('plugins/datatables-edit/css/jquery.dataTables.css') }}" />
-<link rel="stylesheet" href="{{ asset('plugins/datatables-edit/css/buttons.dataTables.css') }}" />
-<link rel="stylesheet" href="{{ asset('plugins/datatables-edit/css/select.dataTables.css') }}" />
-<link rel="stylesheet" href="{{ asset('plugins/datatables-edit/css/responsive.dataTables.css') }}" />
-
-<script src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
-
-<script src="{{ asset('plugins/datatables-edit/js/jquery.dataTables.js') }}" ></script>
-<script src="{{ asset('plugins/datatables-edit/js/dataTables.buttons.js') }}" ></script>
-<script src="{{ asset('plugins/datatables-edit/js/dataTables.select.js') }}" ></script>
-<script src="{{ asset('plugins/datatables-edit/js/dataTables.responsive.js') }}" ></script>
-<script src="{{ asset('plugins/datatables-edit/dataTables.altEditor.free.js') }}"></script>
 <script>
-    var itens = {!!json_encode($itens)!!};
-    var objeto = {};
-    var array = [];
-    for(var i=0;i<itens.length;i++){
-        objeto = {
-            0 : itens[i][0],
-            1 : itens[i][1],
-            2 : itens[i][2],
-        }
-        array.push(objeto);
-    }
-    var arrayDataTable = array;
-    $('#arrayDataTable').val(JSON.stringify(array));
-    
+    var myTable;
     $(document).ready(function() {
-        var dataSet = {!!json_encode($itens)!!};
-        var columnDefs = [             
-        {
-            title: "Id",
-            type: "text",
-            required: true,
-            unique: true
-        }, {
-            title: "Descrição",
-            type: "textarea",
-            required: true,
-        },{
-            title: "CheckList",
-            type: "textarea"
-        }
-        
-        ];
-        console.log('passou');
-
-        var myTable;
-
-        myTable = $('#example').DataTable({
+        myTable = $('#itens').DataTable({
             "language": {
                 "sEmptyTable": "Nenhum registro encontrado",
                 "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
@@ -142,57 +121,31 @@
                 "oAria": {
                     "sSortAscending": ": Ordenar colunas de forma ascendente",
                     "sSortDescending": ": Ordenar colunas de forma descendente"
-                },
-                "altEditor" : {
-                    "modalClose" : "Cancelar",
-                    "edit" : {
-                        "title" : "Alterar",
-                        "button" : "Alterar"
-                    },
-                    "add" : {
-                        "title" : "Novo item da norma",
-                        "button" : "Criar"
-                    },
-                    "delete" : {
-                        "title" : "Deletar",
-                        "button" : "Deletar"
-                    },
-                    "success" : "Sucesso.",
-                    "error" : {
-                        "message" : "Favor verificar os erros.",
-                        "label" : "Erros",
-                        "responseCode" : "Response code:",
-                        "required" : "Valor Obrigatório",
-                        "unique" : "Valor Duplicado"
-                    }
                 }
             },
-            "sPaginationType": "full_numbers",
-            data: dataSet,
-            columns: columnDefs,
-            dom: 'Bfrtip',        // Needs button container
-            select: 'single',
-            responsive: true,
-            altEditor: true,     // Enable altEditor
-            buttons: [
-                {
-                text: 'Novo',
-                name: 'add'        // do not change name
-                },
-                {
-                extend: 'selected', // Bind to Selected row
-                text: 'Editar',
-                name: 'edit'        // do not change name
-                },
-                {
-                extend: 'selected', // Bind to Selected row
-                text: 'Deletar',
-                name: 'delete'      // do not change name
-                }
-            ]
+            dom: 'frt',
+            rowReorder: false
         });
+
+        $(document).on('click','#btnItemNorma', function(){
+            
+            var $inputsModal = $('#formItemNorma :input');
+            $inputsModal.each(function() {
+                    $(this).val('').prop('checked',false).selectpicker('refresh');
+            });
+            $('#normaAlteracaoId').val('');
+            $('#modalEtapaFluxo').modal('show');
+
+        });
+
+        $('#itens').on( 'click', 'tbody tr td .btnExcluirItem', function () {
+            deleteTR($(this).parent().parent());
+        } );
+
     });
 
+    function deleteTR(trDeletar){
+        myTable.row( trDeletar ).remove().draw();
+    }
 </script>
-
 @endsection

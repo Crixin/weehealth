@@ -16,4 +16,9 @@ class GrupoPlano extends Model
         'grupo_id',
         'norma_id'
     ];
+
+    public $rules = [
+        'grupo_id' => 'required|integer|exists:core_grupo,id',
+        'norma_id' => 'required|integer|exists:docs_norma,id'
+    ];
 }

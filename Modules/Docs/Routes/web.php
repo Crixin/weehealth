@@ -124,6 +124,7 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
             
             Route::get('proxima-etapa',    ['as' => 'documento.proxima-etapa', 'uses' => 'DocumentoController@proximaEtapa']);
             Route::post('documento-por-tipo', ['as' => 'documento.documento-por-tipo', 'uses' => 'DocumentoController@buscaDocumentoPorTipo']);
+            Route::post('documento-por-grupo', ['as' => 'documento.documento-por-grupo', 'uses' => 'DocumentoController@buscaDocumentoPorGrupo']);
         });
 
         /**ANEXO */

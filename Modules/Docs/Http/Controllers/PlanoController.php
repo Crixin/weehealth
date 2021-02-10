@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\{DB, Validator};
 use Modules\Docs\Repositories\PlanoRepository;
+use Modules\Docs\Services\PlanoService;
 
 class PlanoController extends Controller
 {
@@ -45,21 +46,15 @@ class PlanoController extends Controller
      */
     public function store(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
-        }
-        $cadastro = self::montaRequest($request);
-        try {
-            DB::transaction(function () use ($cadastro, $request) {
-                $plano = $this->planoRepository->create($cadastro);
-            });
+        $planoService = new PlanoService();
+        $montaRequest = $this->montaRequest($request);
+        $reponse = $planoService->store($montaRequest);
+
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
             Helper::setNotify('Novo plano criado com sucesso!', 'success|check-circle');
             return redirect()->route('docs.plano');
-        } catch (\Throwable $th) {
-            dd($th);
-            Helper::setNotify('Um erro ocorreu ao gravar plano.', 'danger|close-circle');
-            return redirect()->back()->withInput();
         }
     }
 
@@ -92,22 +87,15 @@ class PlanoController extends Controller
      */
     public function update(Request $request)
     {
-        $id = $request->id;
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
-        }
-        $update = self::montaRequest($request);
-        try {
-            DB::transaction(function () use ($update, $id) {
-                $plano = $this->planoRepository->update($update, $id);
-            });
-            Helper::setNotify('Plano alterado com sucesso!', 'success|check-circle');
+        $planoService = new PlanoService();
+        $montaRequest = $this->montaRequest($request);
+        $reponse = $planoService->update($montaRequest);
+
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
+            Helper::setNotify('Plano atualizado com sucesso!', 'success|check-circle');
             return redirect()->route('docs.plano');
-        } catch (\Throwable $th) {
-            dd($th);
-            Helper::setNotify('Um erro ocorreu ao alterar o plano.', 'danger|close-circle');
-            return redirect()->back()->withInput();
         }
     }
 
@@ -130,28 +118,17 @@ class PlanoController extends Controller
         }
     }
 
-    public function validador(Request $request)
-    {
-        $validator = Validator::make
-        (
-            $request->all(),
-            [
-                'nome'                  => empty($request->id) ? 'required|string|min:5|max:100|unique:docs_plano,nome' : 'required|string|min:5|max:100|unique:docs_plano,nome,' . $request->id,
-                'status'                => 'required',
-            ]
-        );
-        if ($validator->fails()) {
-            return $validator;
-        }
-
-        return false;
-    }
-
     public function montaRequest(Request $request)
     {
-        return [
+        $retorno = [
             "nome" => $request->get('nome'),
-            "ativo" => $request->get('status') == 'on' ? true : false
+            "ativo" => $request->get('status') == '1' ? true : false
         ];
+
+        if ($request->id) {
+            $retorno['id'] = $request->id;
+        }
+
+        return $retorno;
     }
 }

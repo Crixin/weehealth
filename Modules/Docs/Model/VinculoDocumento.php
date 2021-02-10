@@ -16,4 +16,9 @@ class VinculoDocumento extends Model
         'documento_id',
         'documento_vinculado_id'
     ];
+
+    public $rules = [
+        'documento_id' => 'required|integer|exists:docs_documento,id',
+        'documento_vinculado_id' => 'required|integer|exists:docs_documento,id'
+    ];
 }

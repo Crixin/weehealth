@@ -22,7 +22,8 @@ return [
             'create'        => 'Novo Usuário',
             'update'        => 'Alterando Usuário ',
             'person_info'   => 'Informações pessoais',
-            'password'      => 'Senha'
+            'password'      => 'Senha',
+            'change-user'   => 'Substituir Usuário'
         ],
         'enterprise'                => [
             'index'                 => 'Empresas',

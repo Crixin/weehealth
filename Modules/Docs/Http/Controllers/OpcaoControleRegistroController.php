@@ -9,6 +9,7 @@ use App\Classes\Helper;
 use Modules\Core\Repositories\ParametroRepository;
 use Modules\Docs\Repositories\OpcaoControleRegistroRepository;
 use Illuminate\Support\Facades\{DB, Validator};
+use Modules\Docs\Services\OpcaoControleRegistroService;
 
 class OpcaoControleRegistroController extends Controller
 {
@@ -49,21 +50,15 @@ class OpcaoControleRegistroController extends Controller
      */
     public function store(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
-        }
-        $cadastro = $this->montaRequest($request);
-        try {
-            DB::transaction(function () use ($cadastro) {
-                $this->opcaoControleRegistroRepository->create($cadastro);
-            });
+        $opcaoControleRegistroService = new OpcaoControleRegistroService();
+        $montaRequest = $this->montaRequest($request);
+        $reponse = $opcaoControleRegistroService->store($montaRequest);
 
-            Helper::setNotify('Nova opção de controle de registro criada com sucesso!', 'success|check-circle');
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
+            Helper::setNotify('Nova opção criada com sucesso!', 'success|check-circle');
             return redirect()->route('docs.opcao-controle');
-        } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao gravar a opção de controle de registro', 'danger|close-circle');
-            return redirect()->back()->withInput();
         }
     }
 
@@ -100,24 +95,16 @@ class OpcaoControleRegistroController extends Controller
      */
     public function update(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
+        $opcaoControleRegistroService = new OpcaoControleRegistroService();
+        $montaRequest = $this->montaRequest($request);
+        $reponse = $opcaoControleRegistroService->update($montaRequest);
+
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
+            Helper::setNotify('Opção atualizada com sucesso!', 'success|check-circle');
+            return redirect()->route('docs.opcao-controle');
         }
-
-        $id = $request->get('idOpcaoControle');
-        $update  = $this->montaRequest($request);
-        try {
-            DB::transaction(function () use ($update, $id) {
-                $this->opcaoControleRegistroRepository->update($update, $id);
-            });
-
-            Helper::setNotify('Informações da opção do controle de registro atualizadas com sucesso!', 'success|check-circle');
-        } catch (\Throwable $th) {
-
-            Helper::setNotify('Um erro ocorreu ao atualizar a opção do controle de registro', 'danger|close-circle');
-        }
-        return redirect()->back()->withInput();
     }
 
     /**
@@ -138,28 +125,18 @@ class OpcaoControleRegistroController extends Controller
         }
     }
 
-    public function validador(Request $request)
-    {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'descricao'          => empty($request->get('idOpcaoControle')) ? 'required|string|min:5|max:100|unique:docs_opcoes_controle_registros,descricao' : 'required|string|min:5|max:100|unique:docs_opcoes_controle_registros,descricao,' . $request->idOpcaoControle,
-                'tipoControle'       => 'required|string',
-            ]
-        );
-
-        if ($validator->fails()) {
-            return $validator;
-        }
-        return false;
-    }
-
     public function montaRequest(Request $request)
     {
-        return [
+        $retorno =  [
             "descricao"             => $request->get('descricao'),
             "campo_id"              => $request->get('tipoControle'),
             "ativo"                 => $request->get('ativo') == 1 ? true : false,
         ];
+
+        if ($request->idOpcaoControle) {
+            $retorno['id'] = $request->idOpcaoControle;
+        }
+
+        return $retorno;
     }
 }

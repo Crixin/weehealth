@@ -27,4 +27,10 @@ class ItemNorma extends Model
     {
         return $this->hasMany('Modules\Docs\Model\CheckListItemNorma', 'item_norma_id', 'id');
     }
+
+    public $rules =  [
+        'descricao'   => 'required|string|min:5|max:300',
+        'numero'      => 'required|string',
+        'norma_id'    => 'required|integer|exists:docs_norma,id',
+    ];
 }

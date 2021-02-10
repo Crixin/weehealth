@@ -37,6 +37,20 @@ class ControleRegistro extends Model
         'ativo'
     ];
 
+    public $rules = [
+        'codigo'          => 'required|string|unique:docs_controle_registros,codigo',
+        'descricao'       => 'required|string|min:5|max:100',
+        'responsavel'     => 'required|numeric',
+        'meio'            => 'required|numeric',
+        'armazenamento'   => 'required|numeric',
+        'protecao'        => 'required|numeric',
+        'recuperacao'     => 'required|numeric',
+        'nivelAcesso'     => 'required|numeric',
+        'retencaoLocal'   => 'required|numeric',
+        'retencaoDeposito' => 'required|numeric',
+        'disposicao'      => 'required|numeric'
+    ];
+
 
     /**
      * O setor desse registro

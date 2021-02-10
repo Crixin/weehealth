@@ -6,19 +6,21 @@ use App\Classes\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{DB, Validator};
 use Modules\Core\Model\User;
-use Modules\Core\Repositories\{UserRepository, PerfilRepository, SetorRepository};
+use Modules\Core\Repositories\{GrupoUserRepository, UserRepository, PerfilRepository, SetorRepository};
 
 class UsuarioController extends Controller
 {
 
     protected $userRepository;
     protected $setorRepository;
+    protected $grupoUserRepository;
 
     public function __construct()
     {
         $this->userRepository = new UserRepository();
         $this->perfilRepository = new PerfilRepository();
         $this->setorRepository = new SetorRepository();
+        $this->grupoUserRepository = new GrupoUserRepository();
     }
 
 
@@ -114,5 +116,76 @@ class UsuarioController extends Controller
         }
 
         return $retorno;
+    }
+
+    public function changeUser($id)
+    {
+        $usuario = $this->userRepository->find($id);
+        $modulos = ["Docs" => ["Documentos" => "Documentos"]];
+        return view('core::usuario.change-user-modulo', compact('usuario', 'modulos'));
+    }
+
+    public function changeUserMod(Request $request)
+    {
+        $id = $request->id;
+        $modulos = $request->modulos;
+        switch ($modulos) {
+            case 'Documentos':
+                return $this->substituirModDoc($id);
+                break;
+        }
+    }
+
+    public function userByGroup(Request $request)
+    {
+        try {
+            $grupo   = $request->grupo;
+            $usuario = $request->usuario;
+            $buscaUsuarios = $this->grupoUserRepository->findBy(
+                [
+                    ['grupo_id', '=', $grupo],
+                    ['user_id', '!=', $usuario, "AND"]
+                ]
+            );
+
+            $usuarios = [];
+            foreach ($buscaUsuarios as $key => $value) {
+                $usuarios[$key] = [
+                    'id' => $value->coreUsers->id,
+                    'nome' => $value->coreUsers->name
+                ];
+            }
+            return response()->json(['response' => 'sucesso', 'data' => json_encode($usuarios)]);
+        } catch (\Exception $th) {
+            return response()->json(['response' => 'erro']);
+        }
+    }
+
+    public function substituirModDoc($id)
+    {
+        $usuario = $this->userRepository->find($id);
+        $buscaGrupos = $this->grupoUserRepository->findBy(
+            [
+                ['user_id', '=', $id]
+            ],
+            ['coreGrupo']
+        );
+        $grupos = [];
+        foreach ($buscaGrupos as $key => $value) {
+            $grupos[$value->coreGrupo->id] = $value->coreGrupo->nome;
+        }
+        return view('core::usuario.change-user-doc', compact('usuario', 'grupos'));
+    }
+
+    public function replaceUserDoc(Request $request)
+    {
+        $idUsuario = $request->idUsuario;
+        $idGrupo   = $request->grupo;
+        $documentos = $request->documento;
+        $idUsuarioSubstituto = $request->usuario;
+        foreach ($documentos as $key => $value) {
+
+            //substituir usuário;
+        }
     }
 }

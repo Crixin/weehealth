@@ -37,6 +37,14 @@ class EtapaFluxo extends Model
         'exigir_lista_presenca'
     ];
 
+    public $rules = [
+        'nome'               => 'required|string|min:5|max:100',
+        'descricao'          => 'required|string|min:5|max:200',
+        'status'             => 'required|numeric',
+        'perfil'             => 'required|numeric',
+        'tipoAprovacao'      => 'sometimes|required|numeric',
+    ];
+
     public function docsFluxo()
     {
         return $this->belongsTo('Modules\Docs\Model\Fluxo', 'fluxo_id');

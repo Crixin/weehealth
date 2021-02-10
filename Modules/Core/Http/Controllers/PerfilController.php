@@ -65,8 +65,8 @@ class PerfilController extends Controller
 
         $reponse = $perfilService->store($data);
 
-        if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
-            return $reponse;
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
         }
 
         if ($reponse) {
@@ -116,8 +116,8 @@ class PerfilController extends Controller
 
         $reponse = $perfilService->update($data);
 
-        if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
-            return $reponse;
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
         }
 
         if ($reponse) {

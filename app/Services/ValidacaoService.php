@@ -22,7 +22,7 @@ class ValidacaoService
         $validator = Validator::make($this->data, $this->rules);
 
         if ($validator->fails()) {
-            Helper::setNotify($validator->messages(), 'danger|close-circle');
+            //Helper::setNotify($validator->messages(), 'danger|close-circle');
             return $validator;
         }
         return false;

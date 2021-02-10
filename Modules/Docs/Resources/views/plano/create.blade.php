@@ -33,41 +33,15 @@
                     {{ csrf_field() }}
                     <div class="form-body">
                         
-                        <div class="row p-t-20">
-                            <div class="col-md-6">
-                                <div class="form-group{{ $errors->has('nome') ? ' has-error' : '' }}">
-                                    <label class="control-label">Nome</label>
-                                    <input type="text" id="nome" name="nome" value="{{ old('nome') }}" class="form-control" required autofocus>
-                                    <small class="form-control-feedback"> Digite o nome do plano que será criado. </small> 
-
-                                    @if ($errors->has('nome'))
-                                        <br/>    
-                                        <span class="help-block text-danger">
-                                            <strong>{{ $errors->first('nome') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
-                                    <label class="control-label">Status</label>
-                                   
-                                    <td class="text-center text-nowrap">
-                                        <div class="switch">
-                                            <label>Inativo
-                                                <input name="status" id="status" type="checkbox" class="switch-elaborador"  checked ><span class="lever switch-col-light-blue"></span>Ativo
-                                            </label>
-                                        </div>
-                                    </td>
-                                    @if ($errors->has('status'))
-                                        <br/>
-                                        <span class="help-block text-danger">
-                                            <strong>{{ $errors->first('status') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
+                    @component(
+                        'docs::components.plano', 
+                        [
+                            'planoEdit' => [],
+                            'nome' => '', 
+                            'status' => ''
+                        ]
+                    )
+                    @endcomponent
 
                     </div>
                     <div class="form-actions">

@@ -18,4 +18,9 @@ class OpcoesControleRegistros extends Model
         'ativo',
         'campo_id'
     ];
+
+    public $rules = [
+        'descricao'          => 'required|string|min:5|max:100|unique:docs_opcoes_controle_registros,descricao',
+        'campo_id'           => 'required|string',
+    ];
 }

@@ -101,13 +101,8 @@ class GrupoController extends Controller
 
         $grupoUserService = new GrupoUserService();
         $reponse = $grupoUserService->store($data);
-
-        if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
-            return $reponse;
-        }
-
-        if ($reponse) {
-            return redirect()->back();
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
         }
 
         return redirect()->back()->withInput();

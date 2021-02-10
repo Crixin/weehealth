@@ -5,19 +5,19 @@ namespace Modules\Docs\Services;
 use App\Classes\Helper;
 use App\Services\ValidacaoService;
 use Illuminate\Support\Facades\DB;
-use Modules\Docs\Model\Plano;
-use Modules\Docs\Repositories\PlanoRepository;
+use Modules\Docs\Model\OpcoesControleRegistros;
+use Modules\Docs\Repositories\OpcaoControleRegistroRepository;
 
-class PlanoService
+class OpcaoControleRegistroService
 {
 
-    protected $planoRepository;
+    protected $opcaoControleRegistroRepository;
     private $rules;
 
     public function __construct()
     {
-        $this->planoRepository = new PlanoRepository();
-        $plano = new Plano();
+        $this->opcaoControleRegistroRepository = new OpcaoControleRegistroRepository();
+        $plano = new OpcoesControleRegistros();
         $this->rules = $plano->rules;
     }
 
@@ -25,10 +25,9 @@ class PlanoService
     {
         try {
             $insert = [
-                "nome"     => $data['nome'],
-                "status"   => $data['ativo'],
+                "descricao"     => $data['descricao'],
+                "campo_id"      => $data['campo_id'],
             ];
-
             $validacao = new ValidacaoService($this->rules, $insert);
             $errors = $validacao->make();
             if ($errors) {
@@ -36,23 +35,23 @@ class PlanoService
             }
 
             DB::transaction(function () use ($data) {
-                $notificacao = $this->planoRepository->create($data);
+                $notificacao = $this->opcaoControleRegistroRepository->create($data);
             });
             return ["success" => true];
         } catch (\Throwable $th) {
-            Helper::setNotify("Erro ao cadastrar a plano. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+            Helper::setNotify("Erro ao cadastrar a opção de controle. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
             return ["success" => false, "redirect" => redirect()->back()->withInput()];
         }
     }
 
-    public function update(array $montaRequest)
+    public function update(array $data)
     {
         try {
-            $this->rules['nome'] .= "," . $montaRequest['id'];
+            $this->rules['descricao'] .= "," . $data['id'];
 
             $insert = [
-                "nome"     => $montaRequest['nome'],
-                "status"   => $montaRequest['ativo']
+                "descricao"     => $data['descricao'],
+                "campo_id"      => $data['campo_id'],
             ];
 
             $validacao = new ValidacaoService($this->rules, $insert);
@@ -62,13 +61,13 @@ class PlanoService
             if ($errors) {
                 return ["success" => false, "redirect" => redirect()->back()->withErrors($errors)->withInput()];
             }
-            DB::transaction(function () use ($montaRequest) {
-                $notificacao = $this->planoRepository->update($montaRequest, $montaRequest['id']);
+            DB::transaction(function () use ($data) {
+                $notificacao = $this->opcaoControleRegistroRepository->update($data, $data['id']);
             });
 
             return ["success" => true];
         } catch (\Throwable $th) {
-            Helper::setNotify("Erro ao atualizar o plano. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+            Helper::setNotify("Erro ao atualizar a opção de controle. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
             return ["success" => false, "redirect" => redirect()->back()->withInput()];
         }
     }

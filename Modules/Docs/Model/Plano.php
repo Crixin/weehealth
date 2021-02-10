@@ -17,4 +17,9 @@ class Plano extends Model
     ];
 
     protected $table = "docs_plano";
+
+    public $rules = [
+        'nome'      => 'required|string|min:5|unique:docs_plano,nome',
+        'status'    => 'required'
+    ];
 }
