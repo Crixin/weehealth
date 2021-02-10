@@ -204,7 +204,6 @@ class WorkflowService
     public function validarEtapaAprovacao(array $data)
     {
         try {
-
             $etapaAtual = $this->getEtapaAtual($data['documento_id']);
             $documento = $this->documentoRepository->find($data["documento_id"]);
         
@@ -285,7 +284,6 @@ class WorkflowService
 
             return ["success" => true];
         } catch (\Throwable $th) {
-            dd($th);
             return ["success" => false];
         }
     }

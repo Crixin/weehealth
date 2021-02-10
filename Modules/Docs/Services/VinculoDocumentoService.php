@@ -2,6 +2,7 @@
 
 namespace Modules\Docs\Services;
 
+use Illuminate\Support\Facades\DB;
 use Modules\Docs\Repositories\VinculoDocumentoRepository;
 
 class VinculoDocumentoService
@@ -14,23 +15,41 @@ class VinculoDocumentoService
         $this->vinculoDocumentoRepository = new VinculoDocumentoRepository();
     }
 
-    public function create(array $dados)
+    public function store(array $dados)
     {
-        return $this->vinculoDocumentoRepository->create($dados);
+        try {
+            DB::beginTransaction();
+            foreach ($dados['documento_vinculado_id'] as $key => $value) {
+
+                $this->vinculoDocumentoRepository->firstOrCreate(
+                    [
+                        "documento_id" => $dados['documento_id'],
+                        "documento_vinculado_id"  => $value['documento_vinculado_id']
+                    ]
+                );
+            }
+
+            DB::commit();
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return ["success" => false];
+        }
     }
 
-    public function update(array $data, int $id)
-    {
-        return $this->vinculoDocumentoRepository->update($data, $id);
-    }
 
-    public function delete($delete, $column = '')
+    public function delete(array $data)
     {
-        return $this->vinculoDocumentoRepository->delete($delete, $column);
-    }
+        try {
+            DB::beginTransaction();
 
-    public function firstOrCreate(array $data)
-    {
-        return $this->vinculoDocumentoRepository->firstOrCreate($data);
+            $this->vinculoDocumentoRepository->delete($data, 'id');
+            
+            DB::commit();
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return ["success" => false];
+        }
     }
 }

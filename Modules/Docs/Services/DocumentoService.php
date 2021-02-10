@@ -66,8 +66,6 @@ class DocumentoService
         
             $documento = DB::transaction(function () use ($createDocumento, $data) {
                 $workflowService = new WorkflowService();
-                $vinculoDocumentoService = new VinculoDocumentoService();
-                $agrupamentoUserDocumentoService = new AgrupamentoUserDocumentoService();
                 $userEtapaDocumentoService = new UserEtapaDocumentoService();
                 $documentoItemNormaService = new DocumentoItemNormaService();
                 $tipoDocumentoService = new TipoDocumentoService();
@@ -93,36 +91,40 @@ class DocumentoService
 
                 /**Cria Hierarquia Documento */
                 if (array_key_exists("hierarquia_documento", $data)) {
-                    $this->hierarquiaDocumentos($documento->id, $data['hierarquia_documento']);
                     if (!$this->hierarquiaDocumentos($documento->id, $data['hierarquia_documento'])['success']) {
                         throw new \Exception("Falha na hierarquia de documentos");
                     }
                 }
 
                 /**Cria Vinculo de Documento */
-                foreach ($data['vinculo_documento'] as $value) {
-                    $value['documento_id'] = $documento->id;
-                    $vinculoDocumentoService->create($value);
+                if (array_key_exists("vinculo_documento", $data)) {
+                    if (!$this->vinculoDocumentos($documento->id, $data['vinculo_documento'])['success']) {
+                        throw new \Exception("Falha no vinculo de documentos");
+                    }
                 }
 
                 /**Cria Agrupamento de Documento (Treinamento) */
-                foreach ($data['grupo_treinamento'] as $value) {
-                    $value['documento_id'] = $documento->id;
-                    $value['tipo'] = 'TREINAMENTO';
-                    $agrupamentoUserDocumentoService->create($value);
+                if (array_key_exists("grupo_treinamento", $data)) {
+                    if (!$this->agrupamentosUserDocumento($documento->id, $data['grupo_treinamento'], "TREINAMENTO")['success']) {
+                        throw new \Exception("Falha no grupo de treinamento");
+                    }
                 }
+
 
                 /**Cria Agrupamento de Documento (Divulgacao) */
-                foreach ($data['grupo_divulgacao'] as $value) {
-                    $value['documento_id'] = $documento->id;
-                    $value['tipo'] = 'DIVULGACAO';
-                    $agrupamentoUserDocumentoService->create($value);
+                if (array_key_exists("grupo_divulgacao", $data)) {
+                    if (!$this->agrupamentosUserDocumento($documento->id, $data['grupo_divulgacao'], "DIVULGACAO")['success']) {
+                        throw new \Exception("Falha no grupo de divulgação");
+                    }
                 }
+                
 
-                /**Cria Documento Item Norma */
-                foreach ($data['item_normas'] ?? [] as $value) {
-                    $value['documento_id'] = $documento->id;
-                    $documentoItemNormaService->create($value);
+                /**Cria Itens Norma */
+                if (array_key_exists("item_normas", $data)) {
+                    $itensNorma =  array_column($data['item_normas'], 'item_norma_id');
+                    if (!$this->itensNorma($documento->id, $itensNorma)['success']) {
+                        throw new \Exception("Falha nos itens da norma");
+                    }
                 }
 
                 /**Etapa de Aprovação */
@@ -149,9 +151,6 @@ class DocumentoService
         try {
             DB::beginTransaction();
 
-            $agrupamentoUserDocumentoService = new AgrupamentoUserDocumentoService();
-            $userEtapaDocumentoService = new UserEtapaDocumentoService();
-            $documentoItemNormaService = new DocumentoItemNormaService();
             
             $this->rules['tituloDocumento'] .= "," . $id;
             $updateDocumento = $data;
@@ -169,7 +168,6 @@ class DocumentoService
             
             $this->documentoRepository->update($updateDocumento, $id);
 
-
             /**Cria Hierarquia Documento */
             if (array_key_exists("hierarquia_documento", $data)) {
                 if (!$this->hierarquiaDocumentos($id, $data['hierarquia_documento'])['success']) {
@@ -183,142 +181,36 @@ class DocumentoService
                     throw new \Exception("Falha no vinculo de documentos");
                 }
             }
-
-
-
+            
             /**Cria Agrupamento de Documento (Treinamento) */
-            $buscaTodosUsuarios = $this->agrupamentoUserDocumentoRepository->findBy(
-                [
-                    ["documento_id", "=", $id],
-                    ["tipo", "=", "TREINAMENTO", "AND"]
-                ]
-            );
-            $users = [];
-            foreach ($buscaTodosUsuarios as $key => $value) {
-                array_push($users, $value['grupo_id'] . '-' . $value['user_id']);
-            }
-            $grupoTreinamento = array();
-            foreach ($data['grupo_treinamento'] ?? [] as $key => $value) {
-                $agrupamentoUserDocumentoService->firstOrCreate(
-                    [
-                        "documento_id" => $id,
-                        "user_id"  => $value['user_id'],
-                        "grupo_id" => $value['grupo_id'],
-                        'tipo' => 'TREINAMENTO'
-                    ]
-                );
-                array_push($grupoTreinamento, $value['grupo_id'] . '-' . $value['user_id']);
-            }
-            $diff_para_detete_user = array_diff($users, $grupoTreinamento);
-            $idDelete = [];
-            foreach ($diff_para_detete_user as $key => $delete) {
-                $busca = $this->agrupamentoUserDocumentoRepository->findOneBy(
-                    [
-                        ['documento_id','=',$id],
-                        ['user_id','=',explode('-', $delete)[1],"AND"],
-                        ['grupo_id','=',explode('-', $delete)[0],"AND"],
-                        ['tipo', '=', 'TREINAMENTO', "AND"]
-                    ]
-                );
-                array_push($idDelete, $busca->id);
-            }
-            if (!empty($idDelete)) {
-                $agrupamentoUserDocumentoService->delete($idDelete, 'id');
+            if (array_key_exists("grupo_treinamento", $data)) {
+                if (!$this->agrupamentosUserDocumento($id, $data['grupo_treinamento'], "TREINAMENTO")['success']) {
+                    throw new \Exception("Falha no grupo de treinamento");
+                }
             }
 
             /**Cria Agrupamento de Documento (Divulgacao) */
-            $buscaTodosUsuarios = $this->agrupamentoUserDocumentoRepository->findBy(
-                [
-                    ["documento_id", "=", $id],
-                    ["tipo", "=", "DIVULGACAO", "AND"]
-                ]
-            );
+            if (array_key_exists("grupo_divulgacao", $data)) {
+                if (!$this->agrupamentosUserDocumento($id, $data['grupo_divulgacao'], "DIVULGACAO")['success']) {
+                    throw new \Exception("Falha no grupo de divulgação");
+                }
+            }
+
+            /**Cria Itens Norma */
+            if (array_key_exists("item_normas", $data)) {
+                $itensNorma =  array_column($data['item_normas'], 'item_norma_id');
+                if (!$this->itensNorma($id, $itensNorma)['success']) {
+                    throw new \Exception("Falha nos itens da norma");
+                }
+            }
             
-            $users = [];
-            foreach ($buscaTodosUsuarios as $key => $value) {
-                array_push($users, $value['grupo_id'] . '-' . $value['user_id']);
-            }
-
-            $grupoDivulgacao = array();
-            foreach ($data['grupo_divulgacao'] ?? [] as $key => $value) {
-                $agrupamentoUserDocumentoService->firstOrCreate(
-                    [
-                        "documento_id" => $id,
-                        "user_id"  => $value['user_id'],
-                        "grupo_id" => $value['grupo_id'],
-                        'tipo' => 'DIVULGACAO'
-                    ]
-                );
-                array_push($grupoDivulgacao, $value['grupo_id'] . '-' . $value['user_id']);
-            }
-
-            $diff_para_detete_user_div = array_diff($users, $grupoDivulgacao);
-            $idDelete = [];
-
-            foreach ($diff_para_detete_user_div as $key => $user) {
-                $busca = $this->agrupamentoUserDocumentoRepository->findOneBy(
-                    [
-                        ['documento_id','=',$id],
-                        ['user_id','=',explode('-', $user)[1],"AND"],
-                        ['grupo_id','=',explode('-', $user)[0],"AND"],
-                        ['tipo', '=', 'DIVULGACAO', "AND"]
-                    ]
-                );
-                array_push($idDelete, $busca->id);
-            }
-            if (!empty($idDelete)) {
-                $agrupamentoUserDocumentoService->delete($idDelete, 'id');
-            }
-
-
-            /**Cria Documento Item Norma */
-            $buscaTodosItemNorma = $this->documentoItemNormaRepository->findBy(
-                [
-                    ['documento_id','=',$id]
-                ]
-            );
-            $itensNorma =  array_column(json_decode(json_encode($buscaTodosItemNorma), true), 'item_norma_id');
-
-            $item = array();
-            foreach ($data['item_normas'] ?? [] as $key => $value) {
-                array_push($item, $value['item_norma_id']);
-            }
-
-            $diff_para_create_item_norma  = array_diff($item, $itensNorma);
-            $diff_para_detete_item_norma = array_diff($itensNorma, $item);
-            foreach ($diff_para_create_item_norma as $key => $item) {
-                $documentoItemNormaService->create(["documento_id" => $id,"item_norma_id"  => $item]);
-            }
-
-            $idDelete = [];
-            foreach ($diff_para_detete_item_norma as $key => $item) {
-                $busca = $this->documentoItemNormaRepository->findOneBy(
-                    [
-                        ['documento_id','=',$id],
-                        ['item_norma_id','=',$item,"AND"]
-                    ]
-                );
-                array_push($idDelete, $busca->id);
-            }
-            $documentoItemNormaService->delete($idDelete, 'id');
-
             /**Etapa de Aprovação */
-            $userEtapaDocumentoDelecao = $this->userEtapaDocumentoRepository->findBy(
-                [
-                    ['documento_id','=',$id]
-                ]
-            );
-            //Deleta
-            foreach ($userEtapaDocumentoDelecao as $key => $value) {
-                $userEtapaDocumentoService->delete($value->id);
+            if (array_key_exists("etapa_aprovacao", $data)) {
+                if (!$this->aprovadores($id, $data['etapa_aprovacao'])['success']) {
+                    throw new \Exception("Falha no cad/alt de aprovadores");
+                }
             }
-            //Cria
-            foreach ($data['etapa_aprovacao'] ?? [] as $value) {
-                $value['documento_id'] = (int) $id;
-                $value['documento_revisao'] = $documento->revisao;
- 
-                $userEtapaDocumentoService->create($value);
-            }
+
             DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {
@@ -476,7 +368,7 @@ class DocumentoService
         try {
             $vinculoDocumentoService = new VinculoDocumentoService();
 
-            $documentosVinculadosDelete = $this->vinculoDocumentoService->findBy(
+            $documentosVinculadosDelete = $this->vinculoDocumentoRepository->findBy(
                 [
                     ['documento_id', '=', $documento],
                     ['documento_vinculado_id', "", $docsVincular ?? [] ,"NOTIN"]
@@ -496,6 +388,123 @@ class DocumentoService
                 throw new \Exception("falha ao remover vinculo de documentos");
             }
     
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            return ["success" => false];
+        }
+    }
+    
+
+    private function agrupamentosUserDocumento(int $documento, array $usersGrupoAgrupamento, string $tipo)
+    {
+        try {
+            $agrupamentoUserDocumentoService = new AgrupamentoUserDocumentoService();
+
+            $buscaTodosUsuarios = $this->agrupamentoUserDocumentoRepository->findBy(
+                [
+                    ["documento_id", "=", $documento],
+                    ["tipo", "=", $tipo, "AND"]
+                ]
+            );
+           
+            $userGrupoAux = [];
+            $usersAgrupamentoCadastrados = [];
+           
+            foreach ($buscaTodosUsuarios as $key => $value) {
+                $usersAgrupamentoCadastrados[$value['id']] = $value['grupo_id'] . '-' . $value['user_id'];
+            }
+
+            foreach ($usersGrupoAgrupamento ?? [] as $key => $value) {
+                $userGrupoAux[] = $value['grupo_id'] . '-' . $value['user_id'];
+            }
+   
+            $delete = array_filter($usersAgrupamentoCadastrados, function ($arr) use ($userGrupoAux) {
+                if (!in_array($arr, $userGrupoAux)) {
+                    return $arr;
+                }
+            });
+    
+            $delete = array_keys($delete);
+    
+            $infoCreate = [
+                "documento_id" => $documento,
+                "grupo_and_user" => $usersGrupoAgrupamento,
+                "tipo" => $tipo,
+            ];
+
+            if (!$agrupamentoUserDocumentoService->store($infoCreate)['success']) {
+                throw new \Exception("falha ao inserir agrupamentos no documento");
+            }
+            if (!$agrupamentoUserDocumentoService->delete($delete)['success']) {
+                throw new \Exception("falha ao remover agrupamentos no documento");
+            }
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            return ["success" => false];
+        }
+    }
+
+
+    private function itensNorma(int $documento, array $itensNormas)
+    {
+        try {
+            $documentoItemNormaService = new DocumentoItemNormaService();
+
+            $buscaTodosItemNormaDelete = $this->documentoItemNormaRepository->findBy(
+                [
+                    ['documento_id', '=', $documento],
+                    ['item_norma_id', "", $itensNormas ?? [] ,"NOTIN"]
+                ]
+            )->pluck("id")->toArray();
+
+            $infoCreate = [
+                "item_norma_id" => $itensNormas,
+                "documento_id" => $documento
+            ];
+
+            if (!$documentoItemNormaService->store($infoCreate)['success']) {
+                throw new \Exception("falha ao inserir normas no documentos");
+            }
+            if (!$documentoItemNormaService->delete($buscaTodosItemNormaDelete)['success']) {
+                throw new \Exception("falha ao remover normas no documentos");
+            }
+
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            return ["success" => false];
+        }
+    }
+
+
+    private function aprovadores(int $documento, array $aprovadores)
+    {
+        try {
+            $userEtapaDocumentoService = new UserEtapaDocumentoService();
+
+            $userEtapaDocumentoDelecao = $this->userEtapaDocumentoRepository->findBy(
+                [
+                    ['documento_id','=',$id]
+                ]
+            );
+            //Deleta
+            foreach ($userEtapaDocumentoDelecao as $key => $value) {
+                $userEtapaDocumentoService->delete($value->id);
+            }
+            //Cria
+            foreach ($data['etapa_aprovacao'] ?? [] as $value) {
+                $value['documento_id'] = (int) $id;
+                $value['documento_revisao'] = $documento->revisao;
+ 
+                $userEtapaDocumentoService->create($value);
+            }
+
+            if (!$userEtapaDocumentoService->store($infoCreate)['success']) {
+                throw new \Exception("falha ao inserir aprovadores no documento");
+            }
+            if (!$userEtapaDocumentoService->delete($buscaTodosItemNormaDelete)['success']) {
+                throw new \Exception("falha ao remover aprovadores no documento");
+            }
+
             return ["success" => true];
         } catch (\Throwable $th) {
             return ["success" => false];

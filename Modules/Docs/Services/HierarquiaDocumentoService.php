@@ -3,34 +3,53 @@
 namespace Modules\Docs\Services;
 
 use Modules\Docs\Repositories\HierarquiaDocumentoRepository;
+use Illuminate\Support\Facades\DB;
 
 class HierarquiaDocumentoService
 {
     protected $hierarquiaDocumentoRepository;
-
 
     public function __construct()
     {
         $this->hierarquiaDocumentoRepository = new HierarquiaDocumentoRepository();
     }
 
-    public function create(array $dados)
+
+    public function store(array $dados)
     {
-        return $this->hierarquiaDocumentoRepository->create($dados);
+        try {
+            DB::beginTransaction();
+            
+            foreach ($dados['hierarquia_documento'] as $key => $value) {
+                $this->hierarquiaDocumentoRepository->firstOrCreate(
+                    [
+                        "documento_id" => $dados['documento_id'],
+                        "documento_pai_id"  => $value['documento_pai_id']
+                    ]
+                );
+            }
+
+            DB::commit();
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return ["success" => false];
+        }
     }
 
-    public function update(array $dados, int $id)
-    {
-        return $this->hierarquiaDocumentoRepository->update($dados, $id);
-    }
 
-    public function delete($delete, $column = '')
+    public function delete(array $data)
     {
-        return $this->hierarquiaDocumentoRepository->delete($delete, $column);
-    }
+        try {
+            DB::beginTransaction();
 
-    public function firstOrCreate(array $data)
-    {
-        return $this->hierarquiaDocumentoRepository->firstOrCreate($data);
+            $this->hierarquiaDocumentoRepository->delete($data, 'id');
+            
+            DB::commit();
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return ["success" => false];
+        }
     }
 }

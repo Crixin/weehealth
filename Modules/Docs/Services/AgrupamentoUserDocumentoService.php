@@ -2,34 +2,58 @@
 
 namespace Modules\Docs\Services;
 
+use Illuminate\Support\Facades\DB;
 use Modules\Docs\Repositories\AgrupamentoUserDocumentoRepository;
 
 class AgrupamentoUserDocumentoService
 {
     protected $agrupamentoUserDocumentoRepository;
 
+    
     public function __construct()
     {
         $this->agrupamentoUserDocumentoRepository = new AgrupamentoUserDocumentoRepository();
     }
 
-    public function create(array $dados)
+    
+    public function store(array $data)
     {
-        return $this->agrupamentoUserDocumentoRepository->create($dados);
+        try {
+            DB::beginTransaction();
+            
+            foreach ($data['grupo_and_user'] ?? [] as $key => $value) {
+                $this->agrupamentoUserDocumentoRepository->firstOrCreate(
+                    [
+                        "documento_id" => $data['documento_id'],
+                        "user_id"  => $value['user_id'],
+                        "grupo_id" => $value['grupo_id'],
+                        'tipo' => $data['tipo']
+                    ]
+                );
+            }
+
+            DB::commit();
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            dd($th);
+            return ["success" => false];
+        }
     }
 
-    public function update(array $dados, int $id)
-    {
-        return $this->agrupamentoUserDocumentoRepository->update($dados, $id);
-    }
 
-    public function delete($delete, $column = '')
+    public function delete(array $data)
     {
-        return  $this->agrupamentoUserDocumentoRepository->delete($delete, $column);
-    }
+        try {
+            DB::beginTransaction();
 
-    public function firstOrCreate(array $data)
-    {
-        return $this->agrupamentoUserDocumentoRepository->firstOrCreate($data);
+            $this->agrupamentoUserDocumentoRepository->delete($data, 'id');
+            
+            DB::commit();
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return ["success" => false];
+        }
     }
 }

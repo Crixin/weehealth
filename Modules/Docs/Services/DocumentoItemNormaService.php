@@ -2,6 +2,7 @@
 
 namespace Modules\Docs\Services;
 
+use Illuminate\Support\Facades\DB;
 use Modules\Docs\Repositories\DocumentoItemNormaRepository;
 
 class DocumentoItemNormaService
@@ -13,19 +14,42 @@ class DocumentoItemNormaService
         $this->documentoItemNormaRepository = new DocumentoItemNormaRepository();
     }
 
-    public function create(array $dados)
-    {
 
-        return $this->documentoItemNormaRepository->create($dados);
+    public function store(array $data)
+    {
+        try {
+            DB::beginTransaction();
+            
+            foreach ($data['item_norma_id'] ?? [] as $key => $value) {
+                $this->documentoItemNormaRepository->firstOrCreate(
+                    [
+                        "item_norma_id" => $value,
+                        'documento_id' => $data['documento_id']
+                    ]
+                );
+            }
+
+            DB::commit();
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return ["success" => false];
+        }
     }
 
-    public function update(array $dados, int $id)
-    {
-        return $this->documentoItemNormaRepository->update($dados, $id);
-    }
 
-    public function delete($delete, $column = '')
+    public function delete(array $data)
     {
-        return $this->documentoItemNormaRepository->delete($delete, $column);
+        try {
+            DB::beginTransaction();
+
+            $this->documentoItemNormaRepository->delete($data, 'id');
+            
+            DB::commit();
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return ["success" => false];
+        }
     }
 }

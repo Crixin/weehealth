@@ -12,7 +12,6 @@
 
 @section('content')
 <div class="col-md-12">
-    
     <div class="row">
         @if (!$etapaAtual->comportamento_treinamento && $etapaAtual->docsFluxo->coreGrupo->coreUsers->contains("id", Auth::id()))
             @component('docs::components.documento.cancelar-revisao') @endcomponent
