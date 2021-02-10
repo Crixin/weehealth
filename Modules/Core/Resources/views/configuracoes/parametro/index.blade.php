@@ -39,7 +39,7 @@
                             <th>Identificador Parâmetro</th>
                             <th>Descrição</th>
                             <th>Valor Padrão</th>
-                            
+                            <th>Valor Usuário</th>
                             <th>Controle</th>
                         </tr>
                     </thead>
@@ -59,7 +59,9 @@
                                 <td  id="valor_padrao-{{ $p->id }}">
                                     {{ trim($p->valor_padrao) }}  
                                 </td>
-            
+                                <td  id="valor_usuario-{{ $p->id }}">
+                                    {{ trim($p->valor_usuario) }}  
+                                </td>
                                 <td> 
                                     
                                     <a href="#" class="btn btn-block waves-effect waves-light btn-{{ ($p->ativo) ? 'danger' : 'success' }} changeParamValue" data-id="{{ $p->id }}" data-value="{{ !$p->ativo }}" style="width: 85px">  {{ ($p->ativo) ? 'Inativar' : 'Ativar' }}  </a>

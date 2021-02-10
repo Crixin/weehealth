@@ -887,4 +887,48 @@ class DocumentoController extends Controller
             return response()->json(['response' => 'erro']);
         }
     }
+
+    public function buscaDocumentoPorGrupo(Request $request)
+    {
+        try {
+            $idGrupo = $request->grupo;
+            $idUsuario = $request->usuario;
+            $buscaDocumentos = $this->documentoRepository->findBy(
+                [
+                    ['user_id', '=', $idUsuario,'HAS', 'docsUserEtapaDocumento'],
+                    ['grupo_id', '=', $idGrupo, 'HAS', 'docsUserEtapaDocumento'],
+                ],
+                [],
+                [
+                    ['id', 'DESC']
+                ]
+            )->toArray();
+
+            $buscaDocumentosAgrupamento = $this->documentoRepository->findBy(
+                [
+                    ['user_id', '=', $idUsuario,'HAS', 'docsAgrupamentoUserDocumento'],
+                    ['grupo_id', '=', $idGrupo, 'HAS', 'docsAgrupamentoUserDocumento'],
+                    ['id', '', array_column($buscaDocumentos, 'id') , 'NOTIN']
+                ],
+                [],
+                [
+                    ['id', 'DESC']
+                ]
+            )->toArray();
+
+            $arrayMergeDocumentos = array_merge($buscaDocumentos, $buscaDocumentosAgrupamento);
+            $teste = array_column($arrayMergeDocumentos, 'codigo', 'id');
+            $documentos = [];
+            foreach ($teste as $key => $value) {
+                $aux = [
+                    'id' => $key,
+                    'codigo' => $value
+                ];
+                array_push($documentos, $aux);
+            }
+            return response()->json(['response' => 'sucesso', 'data' => json_encode($documentos)]);
+        } catch (\Exception $th) {
+            return response()->json(['response' => 'erro']);
+        }
+    }
 }

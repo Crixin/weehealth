@@ -51,38 +51,11 @@ class PadraoDocs extends Mailable
         $buscaTipoNotificacao = $this->modeloNotificacaoRepository->find($this->tipoNotificacao);
 
         //INICIO APROVADORES
-        $buscaAprovadores = $this->aprovadores->findBy(
-            [
-                ['documento_id', '=', $this->documentoId]
-            ]
-        );
-        $arrayAprovadores = [];
-        foreach ($buscaAprovadores as $key => $value) {
-            $arrayAprovadores[$value->docsEtapa->nome][$key] = $value->coreUsers->name;
-        }
-
-        $montaAprovadores = '';
-        foreach ($arrayAprovadores as $keyEtapa => $valueEtapa) {
-            $montaAprovadores .= "Etapa - " . $keyEtapa . ", o(s) aprovador(es) são :";
-            foreach ($valueEtapa as $key => $valueUsuario) {
-                $nome = count($valueEtapa) - 1 != $key ? $valueUsuario . ", " : $valueUsuario;
-                $montaAprovadores .= $nome;
-            }
-            $montaAprovadores .= ' <br> ';
-        }
+        $montaAprovadores = $this->getAprovadores();
         // FIM APROVADORES
 
         //INICIO BUSCA ETAPA DIVULGACAO
-        $buscaWorkflow = $this->workflowRepository->findBy(
-            [
-                ['documento_id', '=', $this->documentoId],
-                ['comportamento_divulgacao', '=', true, 'HAS', 'docsEtapaFluxo']
-            ],
-            ['docsEtapaFluxo'],
-            [
-                ['created_at', 'DESC']
-            ]
-        );
+        $buscaWorkflow = $this->getEtapaDivulgacao();
         //FIM BUSCA ETAPA DIVULGACAO
 
         $titulo = $buscaTipoNotificacao->titulo_email;
@@ -134,5 +107,44 @@ class PadraoDocs extends Mailable
         ->with([
             'corpo' => $corpo
         ]);
+    }
+
+    public function getAprovadores()
+    {
+        $buscaAprovadores = $this->aprovadores->findBy(
+            [
+                ['documento_id', '=', $this->documentoId]
+            ]
+        );
+        $arrayAprovadores = [];
+        foreach ($buscaAprovadores as $key => $value) {
+            $arrayAprovadores[$value->docsEtapa->nome][$key] = $value->coreUsers->name;
+        }
+
+        $montaAprovadores = '';
+        foreach ($arrayAprovadores as $keyEtapa => $valueEtapa) {
+            $montaAprovadores .= "Etapa - " . $keyEtapa . ", o(s) aprovador(es) são :";
+            foreach ($valueEtapa as $key => $valueUsuario) {
+                $nome = count($valueEtapa) - 1 != $key ? $valueUsuario . ", " : $valueUsuario;
+                $montaAprovadores .= $nome;
+            }
+            $montaAprovadores .= ' <br> ';
+        }
+        return $montaAprovadores;
+    }
+
+    public function getEtapaDivulgacao()
+    {
+        $retorno = $this->workflowRepository->findBy(
+            [
+                ['documento_id', '=', $this->documentoId],
+                ['comportamento_divulgacao', '=', true, 'HAS', 'docsEtapaFluxo']
+            ],
+            ['docsEtapaFluxo'],
+            [
+                ['created_at', 'DESC']
+            ]
+        );
+        return $retorno;
     }
 }

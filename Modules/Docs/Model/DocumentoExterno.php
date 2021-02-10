@@ -26,6 +26,13 @@ class DocumentoExterno extends Model
         'validade',
     ];
 
+    public $rules = [
+        'setor'           => 'required|numeric',
+        'fornecedor'      => 'required|numeric',
+        'versao'          => 'required|numeric',
+        'validade'        => 'required|date'
+    ];
+
 
     public function getAprovadorAttribute()
     {

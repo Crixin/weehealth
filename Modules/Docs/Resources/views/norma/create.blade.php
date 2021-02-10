@@ -17,7 +17,10 @@
 
 
 @section('content')
-
+@include('docs::modal/item-norma',
+[
+    "itens"          => []
+])
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -33,7 +36,7 @@
 
                 <form method="POST" action="{{ route('docs.norma.salvar') }}"> 
                     {{ csrf_field() }}
-                    <input type="hidden" name="arrayDataTable[]" id="arrayDataTable">
+                    <input type="hidden" name="ordemHidden" id="ordemHidden" value="0"> 
                     @component(
                         'docs::components.norma', 
                         [

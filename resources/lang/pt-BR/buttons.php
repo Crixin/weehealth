@@ -55,7 +55,8 @@ return [
             'create'    => 'Criar Empresa',
         ],
         'user'          => [
-            'create'    => 'Criar Usuário'
+            'create'    => 'Criar Usuário',
+            'change-users' => 'Substituir Usuário'
         ],
         'perfil'          => [
             'create'    => 'Criar Perfil',

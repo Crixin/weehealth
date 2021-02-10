@@ -21,8 +21,10 @@ class Helper
      */
     public static function setNotify($_message, $_style)
     {
-        Session::flash('message', $_message);
-        Session::flash('style', $_style);
+        if (!str_before(Session::get('style'), '|') == 'danger') {
+            Session::flash('message', $_message);
+            Session::flash('style', $_style);
+        }
     }
 
 

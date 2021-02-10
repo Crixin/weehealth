@@ -18,11 +18,6 @@
 
             @component('components.validation-error', ['errors']) @endcomponent
 
-            @if(Session::has('message'))
-                @component('components.alert') @endcomponent
-                {{ Session::forget('message') }}
-            @endif
-            
             <form method="POST" action="{{ route('core.perfil.alterar', ['id' => $perfil->id]) }}">
                 {{ Form::token() }}
                 

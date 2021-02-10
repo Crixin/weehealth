@@ -33,6 +33,19 @@ class TipoDocumento extends Model
         'extensao'
     ];
 
+    public $rules = [
+        'nome'                  => 'required|string|min:5|max:100|unique:docs_tipo_documento,nome',
+        'descricao'             => 'required|string|min:5|max:200',
+        'sigla'                 => 'required|string|min:1|max:5',
+        'fluxo'                 => 'required|string|max:50',
+        'periodoVigencia'       => 'required|numeric',
+        'periodoAviso'          => 'required|numeric',
+        'documentoModelo'       => 'required|mimes:xlsx,xls,docx,doc',
+        'codigoPadrao'          => 'required',
+        'numeroPadrao'          => 'required',
+        'ultimoDocumento'       => 'required|numeric|min:0'
+    ];
+
     public function docsFluxo()
     {
         return $this->hasOne('Modules\Docs\Model\Fluxo', 'id', 'fluxo_id');

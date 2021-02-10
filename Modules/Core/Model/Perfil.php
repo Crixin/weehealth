@@ -25,7 +25,7 @@ class Perfil extends Model
 
 
     public $rules = [
-        'nome' => 'required|string|unique:core_perfil,nome'
+        'nome' => 'required|string|min:5|unique:core_perfil,nome'
     ];
 
 

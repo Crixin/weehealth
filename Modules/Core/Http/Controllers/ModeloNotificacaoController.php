@@ -54,21 +54,17 @@ class ModeloNotificacaoController extends Controller
      */
     public function store(Request $request)
     {
+
         $notificacaoService = new NotificacaoService();
         $montaRequest = $this->montaRequest($request);
-        $reponse = $notificacaoService->create($request, $montaRequest);
+        $reponse = $notificacaoService->store($montaRequest);
 
-        if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
-            return $reponse;
-        }
-
-        if ($reponse) {
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
             Helper::setNotify('Nova notificação criada com sucesso!', 'success|check-circle');
             return redirect()->route('core.modelo-notificacao');
         }
-
-        Helper::setNotify("Erro ao criar a notificação. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
-        return redirect()->back();
     }
 
     /**
@@ -89,7 +85,7 @@ class ModeloNotificacaoController extends Controller
     public function edit($id)
     {
         $modeloNotificacao = $this->notificacaoRepository->find($id);
-        
+
         $buscaTiposEnvio = $this->parametroRepository->getParametro('TIPO_ENVIO_NOTIFICACAO');
         $tiposEnvio = json_decode($buscaTiposEnvio);
 
@@ -109,19 +105,14 @@ class ModeloNotificacaoController extends Controller
     {
         $notificacaoService = new NotificacaoService();
         $montaRequest = $this->montaRequest($request);
-        $reponse = $notificacaoService->update($request, $montaRequest);
+        $reponse = $notificacaoService->update($montaRequest);
 
-        if (is_object($reponse) && get_class($reponse) === "Illuminate\Http\RedirectResponse") {
-            return $reponse;
-        }
-
-        if ($reponse) {
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
             Helper::setNotify('Notificação atualizada com sucesso!', 'success|check-circle');
             return redirect()->route('core.modelo-notificacao');
         }
-
-        Helper::setNotify("Erro ao atualizar a notificação. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
-        return redirect()->back();
     }
 
     /**
@@ -131,7 +122,6 @@ class ModeloNotificacaoController extends Controller
      */
     public function destroy(Request $request)
     {
-        
         $id = $request = $request->id;
         try {
             DB::transaction(function () use ($id) {
@@ -146,16 +136,21 @@ class ModeloNotificacaoController extends Controller
 
     public function montaRequest(Request $request)
     {
-        return [
-            "nome"    => $request->nome,
-            "tipo_id" => 0,
-            "titulo_email" => $request->titulo,
-            "corpo_email" => $request->corpo,
+        $retorno =  [
+            "nome"                    => $request->nome,
+            "tipo_id"                 => 0,
+            "titulo_email"            => $request->titulo,
+            "corpo_email"             => $request->corpo,
             "tipo_envio_notificacao_id" => $request->tipoEnvio,
-            "documento_anexo" => $request->enviarAnexo == '1' ? true : false,
-            'tipo_id' => $request->tipoNotificacao,
-            'tempo_delay_envio' => $request->delay,
+            "documento_anexo"         => $request->enviarAnexo == '1' ? true : false,
+            'tipo_id'                 => $request->tipoNotificacao,
+            'tempo_delay_envio'       => $request->delay,
             'numero_tentativas_envio' => $request->tentativas
         ];
+
+        if ($request->idModeloNotificacao) {
+            $retorno['id'] = $request->idModeloNotificacao;
+        }
+        return $retorno;
     }
 }

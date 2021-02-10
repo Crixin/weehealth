@@ -16,4 +16,9 @@ class HierarquiaDocumento extends Model
         'documento_id',
         'documento_pai_id'
     ];
+
+    public $rules = [
+        'documento_id' => 'required|integer|exists:docs_documento,id',
+        'documento_pai_id' => 'required|integer|exists:docs_documento,id'
+    ];
 }

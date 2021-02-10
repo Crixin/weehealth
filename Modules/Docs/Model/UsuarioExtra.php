@@ -16,4 +16,9 @@ class UsuarioExtra extends Model
         'user_id',
         'documento_id'
     ];
+
+    public $rules = [
+        'documento_id' => 'required|integer|exists:docs_documento,id',
+        'user_id' => 'required|integer|exists:core_users,id'
+    ];
 }

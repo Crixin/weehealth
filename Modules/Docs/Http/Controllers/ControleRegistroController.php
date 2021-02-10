@@ -9,6 +9,7 @@ use App\Classes\Helper;
 use Illuminate\Support\Facades\{DB, Validator};
 use Modules\Core\Repositories\{ParametroRepository, SetorRepository};
 use Modules\Docs\Repositories\{OpcaoControleRegistroRepository, ControleRegistroRepository};
+use Modules\Docs\Services\ControleRegistroService;
 
 class ControleRegistroController extends Controller
 {
@@ -77,22 +78,15 @@ class ControleRegistroController extends Controller
      */
     public function store(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
-        }
-        $cadastro = $this->montaRequest($request);
-        //dd($cadastro);
-        try {
-            DB::transaction(function () use ($cadastro) {
-                $this->controleRegistroRepository->create($cadastro);
-            });
+        $controleRegistroService = new ControleRegistroService();
+        $montaRequest = $this->montaRequest($request);
+        $reponse = $controleRegistroService->store($montaRequest);
 
-            Helper::setNotify('Novo controle de registro criado com sucesso!', 'success|check-circle');
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
+            Helper::setNotify('Novo controle de registro cadastrado com sucesso!', 'success|check-circle');
             return redirect()->route('docs.controle-registro');
-        } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao gravar o controle de registro', 'danger|close-circle');
-            return redirect()->back()->withInput();
         }
     }
 
@@ -152,23 +146,16 @@ class ControleRegistroController extends Controller
      */
     public function update(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
-        }
+        $controleRegistroService = new ControleRegistroService();
+        $montaRequest = $this->montaRequest($request);
+        $reponse = $controleRegistroService->update($montaRequest);
 
-        $id = $request->get('idControleRegistro');
-        $update  = $this->montaRequest($request);
-        try {
-            DB::transaction(function () use ($update, $id) {
-                $this->controleRegistroRepository->update($update, $id);
-            });
-
-            Helper::setNotify('Informações do controle de registro atualizadas com sucesso!', 'success|check-circle');
-        } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao atualizar o controle de registro', 'danger|close-circle');
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
+            Helper::setNotify('Controle de registro atualizada com sucesso!', 'success|check-circle');
+            return redirect()->route('docs.controle-registro');
         }
-        return redirect()->back()->withInput();
     }
 
     /**
@@ -216,7 +203,7 @@ class ControleRegistroController extends Controller
 
     public function montaRequest(Request $request)
     {
-        return [
+        $retorno = [
             "codigo"                      => $request->get('codigo'),
             "titulo"                      => $request->get('descricao'),
             "nivel_acesso_id"             => $request->get('nivelAcesso'),
@@ -232,6 +219,11 @@ class ControleRegistroController extends Controller
             "tempo_retencao_local_id"     => $request->get('retencaoLocal'),
             "ativo"                       => $request->get('ativo') == 1 ? true : false,
         ];
+
+        if ($request->idControleRegistro) {
+            $retorno['id'] = $request->idControleRegistro;
+        }
+        return $retorno;
     }
 
     private function getOption($_key)

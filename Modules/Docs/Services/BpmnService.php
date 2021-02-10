@@ -3,20 +3,39 @@
 namespace Modules\Docs\Services;
 
 use App\Classes\Helper;
+use App\Services\ValidacaoService;
 use Illuminate\Support\Facades\DB;
+use Modules\Docs\Model\Bpmn;
 use Modules\Docs\Repositories\BpmnRepository;
 
 class BpmnService
 {
     protected $bpmnRepository;
+    private $rules;
 
     public function __construct()
     {
         $this->bpmnRepository = new BpmnRepository();
+
+        $bpmn = new Bpmn();
+        $this->rules = $bpmn->rules;
     }
 
     public function create(array $dados)
     {
+        $insert = [
+            "nome"              => $dados['nome'],
+            "versao"            => $dados['versao'],
+            "arquivo"           => $dados['arquivo']
+        ];
+
+        $validacao = new ValidacaoService($this->rules, $insert);
+        $errors = $validacao->make();
+
+        if ($errors) {
+            return ["success" => false, "redirect" => redirect()->back()->withErrors($errors)->withInput()];
+        }
+
         DB::beginTransaction();
         try {
             $this->bpmnRepository->create($dados);
@@ -24,20 +43,37 @@ class BpmnService
             return ["success" => true];
         } catch (\Throwable $th) {
             DB::rollback();
-            return ["success" => false];
+            Helper::setNotify("Erro ao cadastrar o BPMN. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+            return ["success" => false, "redirect" => redirect()->back()->withInput()];
         }
     }
 
-    public function update(array $dados, int $id)
+    public function update(array $dados)
     {
+        $this->rules['nome'] .= "," . $dados['id'];
+
+        $insert = [
+            "nome"              => $dados['nome'],
+            "versao"            => $dados['versao'],
+            "arquivo"           => $dados['arquivo']
+        ];
+
+        $validacao = new ValidacaoService($this->rules, $insert);
+        $errors = $validacao->make();
+
+        if ($errors) {
+            return ["success" => false, "redirect" => redirect()->back()->withErrors($errors)->withInput()];
+        }
+
         DB::beginTransaction();
         try {
-            $this->bpmnRepository->update($dados, $id);
+            $this->bpmnRepository->update($dados, $dados['idBPMN']);
             DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {
             DB::rollback();
-            return ["success" => false];
+            Helper::setNotify("Erro ao atualizar o BPMN. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+            return ["success" => false, "redirect" => redirect()->back()->withInput()];
         }
     }
 

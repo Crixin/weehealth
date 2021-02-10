@@ -22,12 +22,14 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
+                            @component('components.validation-error', ['errors'])@endcomponent
+
                             @if(Session::has('message'))
                                 @component('components.alert')@endcomponent
-
+        
                                 {{ Session::forget('message') }}
                             @endif
-                
+
                             <form method="POST" action="{{ route('docs.bpmn.salvar') }}" id="formBpmn" name="formBpmn">     
                                 {{ csrf_field() }}
                                 

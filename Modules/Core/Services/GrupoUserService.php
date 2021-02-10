@@ -40,8 +40,10 @@ class GrupoUserService
                 ]
             )->pluck('id')->toArray();
 
-            if (!$this->delete($gruposUserDelete)) {
-                throw new \Exception('Falha da deleção dos registros');
+            if (!empty($gruposUserDelete)) {
+                if (!$this->delete($gruposUserDelete)) {
+                    throw new \Exception('Falha da deleção dos registros');
+                }
             }
 
             foreach ($data['user_id'] ?? [] as $key => $user) {
@@ -55,7 +57,7 @@ class GrupoUserService
 
                 if ($errors) {
                     DB::rollBack();
-                    return redirect()->back()->withErrors($errors)->withInput();
+                    return ["success" => false, "redirect" => redirect()->back()->withErrors($errors)->withInput()];
                 }
                 $this->grupoUserRepository->firstOrCreate($inserir);
             }
@@ -81,11 +83,11 @@ class GrupoUserService
 
             DB::commit();
             Helper::setNotify(__("messages.grupoUser.storeSuccess"), 'success|check-circle');
-            return true;
+            return ["success" => true, "redirect" => redirect()->back()->withInput()];
         } catch (\Throwable $th) {
             DB::rollBack();
             Helper::setNotify(__("messages.grupoUser.storeFail"), 'danger|close-circle');
-            return false;
+            return ["success" => false, "redirect" => redirect()->back()->withInput()];
         }
     }
 
@@ -103,11 +105,11 @@ class GrupoUserService
             DB::commit();
 
             Helper::setNotify(__("messages.grupoUser.deleteSucess"), 'success|check-circle');
-            return true;
+            return ["success" => true, "redirect" => redirect()->back()->withInput()];
         } catch (\Throwable $th) {
             DB::rollBack();
             Helper::setNotify(__("messages.grupoUser.deleteFail"), 'danger|close-circle');
-            return false;
+            return ["success" => false, "redirect" => redirect()->back()->withInput()];
         }
     }
 }

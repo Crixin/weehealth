@@ -2,22 +2,97 @@
 
 namespace Modules\Docs\Services;
 
+use App\Classes\Helper;
+use App\Services\ValidacaoService;
+use Illuminate\Support\Facades\DB;
+use Modules\Docs\Model\TipoDocumento;
 use Modules\Docs\Repositories\TipoDocumentoRepository;
 
 class TipoDocumentoService
 {
     protected $tipoDocumentoRepository;
+    private $rules;
 
     public function __construct()
     {
+        $tipoDocumento = new TipoDocumento();
+        $this->rules = $tipoDocumento->rules;
         $this->tipoDocumentoRepository = new TipoDocumentoRepository();
     }
 
+    public function store(array $data)
+    {
+        try {
+            $insert = [
+                'nome'                  => $data['nome'],
+                'descricao'             => $data['descricao'],
+                'sigla'                 => $data['sigla'],
+                'fluxo'                 => $data['fluxo_id'],
+                'periodoVigencia'       => $data['periodo_vigencia'],
+                'periodoAviso'          => $data['periodo_aviso'],
+                'documentoModelo'       => $data['mime_type'],
+                'codigoPadrao'          => $data['codigo_padrao'],
+                'numeroPadrao'          => $data['numero_padrao_id'],
+                'ultimoDocumento'       => $data['ultimo_documento'],
+            ];
+
+            $validacao = new ValidacaoService($this->rules, $insert);
+            $errors = $validacao->make();
+
+            if ($errors) {
+                return ["success" => false, "redirect" => redirect()->back()->withErrors($errors)->withInput()];
+            }
+
+            DB::transaction(function () use ($data) {
+                $notificacao = $this->tipoDocumentoRepository->create($data);
+            });
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            dd($th);
+            Helper::setNotify("Erro ao cadastrar o tipo de documento. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+            return ["success" => false, "redirect" => redirect()->back()->withInput()];
+        }
+    }
+
+    public function update(array $data)
+    {
+        try {
+            $buscaTipoDocumento = $this->tipoDocumentoRepository->find($data['id']);
+            $this->rules['nome'] .= "," . $data['id'];
+            $insert = [
+                'nome'                  => $data['nome'],
+                'descricao'             => $data['descricao'],
+                'sigla'                 => $data['sigla'],
+                'fluxo'                 => $data['fluxo_id'],
+                'periodoVigencia'       => $data['periodo_vigencia'],
+                'periodoAviso'          => $data['periodo_aviso'],
+                'documentoModelo'       => $data['mime_type'] ?? '',
+                'codigoPadrao'          => $data['codigo_padrao'],
+                'numeroPadrao'          => $data['numero_padrao_id'],
+                'ultimoDocumento'       => $data['ultimo_documento'],
+            ];
+            if (empty($data['mime_type'])) {
+                unset($this->rules['documentoModelo']);
+            }
+            $validacao = new ValidacaoService($this->rules, $insert);
+            $errors = $validacao->make();
+
+            if ($errors) {
+                return ["success" => false, "redirect" => redirect()->back()->withErrors($errors)->withInput()];
+            }
+            DB::transaction(function () use ($data) {
+                $notificacao = $this->tipoDocumentoRepository->update($data, $data['id']);
+            });
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            Helper::setNotify("Erro ao tipo de documento. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+            return ["success" => false, "redirect" => redirect()->back()->withInput()];
+        }
+    }
 
     public function getEtapasFluxosPorComportamento($idTipoDocumento, $comportamento)
     {
         $etapas = [];
-        
         $buscaTipoDocumento = $this->tipoDocumentoRepository->findOneBy(
             [
                 ['ativo', '=', true],
@@ -55,11 +130,6 @@ class TipoDocumentoService
             "ultimo_documento" => $buscaUltimoCodigo->ultimo_documento + 1
         ];
         return $this->update($request, $tipoDocumentoId);
-    }
-
-    public function update(array $data, int $id)
-    {
-        return $this->tipoDocumentoRepository->update($data, $id);
     }
 
     public function ordenacaoArray(&$array, $column, $direction = SORT_ASC)

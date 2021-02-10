@@ -16,4 +16,9 @@ class DocumentoItemNorma extends Model
         'documento_id',
         'item_norma_id'
     ];
+
+    public $rules = [
+        'documento_id' => 'required|integer|exists:docs_documento,id',
+        'item_norma_id' => 'required|integer|exists:docs_item_norma,id'
+    ];
 }

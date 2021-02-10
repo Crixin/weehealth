@@ -77,4 +77,14 @@ class Documento extends Model
     {
         return $this->hasOne('Modules\Core\Model\Setor', 'id', 'setor_id');
     }
+
+    public function docsUserEtapaDocumento()
+    {
+        return $this->hasMany('Modules\Docs\Model\UserEtapaDocumento', 'documento_id', 'id');
+    }
+
+    public function docsAgrupamentoUserDocumento()
+    {
+        return $this->hasMany('Modules\Docs\Model\AgrupamentoUserDocumento', 'documento_id', 'id');
+    }
 }

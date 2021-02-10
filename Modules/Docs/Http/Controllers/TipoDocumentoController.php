@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\{DB, Validator};
 use Modules\Core\Repositories\ParametroRepository;
+use Modules\Core\Services\NotificacaoService;
 use Modules\Docs\Repositories\{FluxoRepository, TipoDocumentoRepository};
 use Modules\Docs\Services\TipoDocumentoService;
 
@@ -87,22 +88,15 @@ class TipoDocumentoController extends Controller
      */
     public function store(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
-        }
+        $tipoDocumento = new TipoDocumentoService();
+        $montaRequest = $this->montaRequest($request);
+        $reponse = $tipoDocumento->store($montaRequest);
 
-        $cadastro = $this->montaRequest($request);
-        try {
-            DB::transaction(function () use ($cadastro, $request) {
-                $this->tipoDocumentoRepository->create($cadastro);
-            });
-
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
             Helper::setNotify('Novo tipo de documento criado com sucesso!', 'success|check-circle');
             return redirect()->route('docs.tipo-documento');
-        } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao gravar o tipo de documento', 'danger|close-circle');
-            return redirect()->back()->withInput();
         }
     }
 
@@ -183,24 +177,16 @@ class TipoDocumentoController extends Controller
      */
     public function update(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
-        }
+        $tipoDocumento = new TipoDocumentoService();
+        $montaRequest = $this->montaRequest($request);
+        $reponse = $tipoDocumento->update($montaRequest);
 
-        $tipoDocumento = $request->get('idTipoDocumento');
-        $update  = $this->montaRequest($request);
-
-        try {
-            DB::transaction(function () use ($update, $tipoDocumento) {
-                $this->tipoDocumentoRepository->update($update, $tipoDocumento);
-            });
-
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
             Helper::setNotify('Informações do tipo de documento atualizadas com sucesso!', 'success|check-circle');
-        } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao atualizar o tipo de documento', 'danger|close-circle');
+            return redirect()->route('docs.tipo-documento');
         }
-        return redirect()->back()->withInput();
     }
 
     /**
@@ -235,31 +221,6 @@ class TipoDocumentoController extends Controller
         }
     }
 
-    public function validador(Request $request)
-    {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'nome'                  => empty($request->get('idTipoDocumento')) ? 'required|string|max:100|unique:docs_tipo_documento,nome' : 'required|string|max:100|unique:docs_tipo_documento,nome,' . $request->idTipoDocumento,
-                'descricao'             => 'required|string|min:5|max:200',
-                'sigla'                 => 'required|string|min:1|max:5',
-                'fluxo'                 => 'required|string|max:50',
-                'periodoVigencia'       => 'required|numeric',
-                'periodoAviso'          => 'required|numeric',
-                'documentoModelo'       => empty($request->get('idTipoDocumento')) ? 'required|mimes:xlsx,xls,docx,doc' : '',
-                'codigoPadrao'          => 'required',
-                'numeroPadrao'          => 'required',
-                'ultimoDocumento'       => 'required|numeric|min:0'
-            ]
-        );
-
-
-        if ($validator->fails()) {
-            return $validator;
-        }
-        return false;
-    }
-
     public function montaRequest(Request $request)
     {
 
@@ -284,6 +245,7 @@ class TipoDocumentoController extends Controller
             "permitir_impressao"    => $request->get('permitirImpressao') == 1 ? true : false,
             "periodo_aviso"         => $request->get('periodoAviso'),
             "modelo_documento"      => $imageBase64 ?? '',
+            "mime_type"             => $request->file('documentoModelo'),
             "extensao"              => $extensao ?? '',
             "codigo_padrao"         => json_encode($request->get('codigoPadrao')),
             "numero_padrao_id"      => $request->get('numeroPadrao'),
@@ -293,7 +255,7 @@ class TipoDocumentoController extends Controller
         //REMOVENDO OS CAMPOS DO DOCUMENTO MODELO NO MOMENTO DO UPDATE PARA CASO O USUÁRIO NAO
         //TENHA SUBIDO UM NOVO ARQUIVO PARA QUE ASSIM NÃO SUBSTITUA O MODELO ATUAL POR VAZIO
         if (!$request->documentoModelo) {
-            unset($retorno["modelo_documento"], $retorno["extensao"]);
+            unset($retorno["modelo_documento"], $retorno["extensao"], $retorno['mime_type']);
         }
 
         //SE TIVER DOCUMENTO VINCULADO A ESSE FLUXO NÃO ALTERA O ULTIMO DOCUMENTO
@@ -302,7 +264,10 @@ class TipoDocumentoController extends Controller
             if ($buscaDocumento->docsDocumento->count() > 0) {
                 unset($retorno["ultimo_documento"]);
             }
+
+            $retorno['id'] = $request->get('idTipoDocumento');
         }
+
         return $retorno;
     }
 }

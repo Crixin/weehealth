@@ -9,6 +9,7 @@ use Modules\Core\Repositories\{EmpresaRepository, SetorRepository};
 use Modules\Docs\Repositories\DocumentoExternoRepository;
 use App\Classes\Helper;
 use Illuminate\Support\Facades\{Auth, DB, Validator};
+use Modules\Docs\Services\DocumentoExternoService;
 
 class DocumentoExternoController extends Controller
 {
@@ -63,23 +64,15 @@ class DocumentoExternoController extends Controller
      */
     public function store(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
-        }
-        $cadastro = $this->montaRequest($request);
+        $documentoExternoService = new DocumentoExternoService();
+        $montaRequest = $this->montaRequest($request);
+        $reponse = $documentoExternoService->store($montaRequest);
 
-        try {
-            DB::transaction(function () use ($cadastro) {
-                $this->documentoExternoRepository->create($cadastro);
-            });
-
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
             Helper::setNotify('Novo documento externo criado com sucesso!', 'success|check-circle');
             return redirect()->route('docs.documento-externo');
-        } catch (\Throwable $th) {
-            dd($th);
-            Helper::setNotify('Um erro ocorreu ao gravar o documento externo', 'danger|close-circle');
-            return redirect()->back()->withInput();
         }
     }
 
@@ -126,24 +119,16 @@ class DocumentoExternoController extends Controller
      */
     public function update(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
+        $documentoExternoService = new DocumentoExternoService();
+        $montaRequest = $this->montaRequest($request);
+        $reponse = $documentoExternoService->update($montaRequest);
+
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
+            Helper::setNotify('Documento externo atualizado com sucesso!', 'success|check-circle');
+            return redirect()->route('docs.documento-externo');
         }
-
-        $fluxo = $request->get('idDocumento');
-        $update  = $this->montaRequest($request);
-
-        try {
-            DB::transaction(function () use ($update, $fluxo) {
-                $this->documentoExternoRepository->update($update, $fluxo);
-            });
-
-            Helper::setNotify('Informações do documento externo atualizadas com sucesso!', 'success|check-circle');
-        } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao atualizar o documento externo', 'danger|close-circle');
-        }
-        return redirect()->back()->withInput();
     }
 
     /**
@@ -164,28 +149,9 @@ class DocumentoExternoController extends Controller
         }
     }
 
-    public function validador(Request $request)
-    {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'setor'           => 'required|numeric',
-                'fornecedor'      => 'required|numeric',
-                'versao'          => 'required|numeric',
-                'validade'        => 'required|date'
-            ]
-        );
-
-        if ($validator->fails()) {
-            return $validator;
-        }
-
-        return false;
-    }
-
     public function montaRequest(Request $request)
     {
-        return [
+        $retorno =  [
             "validado"                   => $request->get('lido') == 'on' ? true : false,
             "user_responsavel_upload_id" => Auth::user()->id,
             "user_id"                    => Auth::user()->id,
@@ -197,5 +163,11 @@ class DocumentoExternoController extends Controller
             "ged_registro_id"            => '',
             "ged_area_id"                => ''
         ];
+
+        if ($request->idDocumento) {
+            $retorno['id'] = $request->idDocumento;
+        }
+
+        return $retorno;
     }
 }

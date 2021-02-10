@@ -34,4 +34,13 @@ class UserEtapaDocumento extends Model
     {
         return $this->hasOne('Modules\Core\Model\User', 'id', 'user_id');
     }
+
+    public $rules = [
+        'documento_id' => 'required|integer|exists:docs_documento,id',
+        'user_id' => 'required|integer|exists:core_users,id',
+        'etapa_fluxo_id' => 'required|integer|exists:docs_etapa_fluxo,id',
+        'grupo_id' => 'required|integer|exists:core_grupo,id',
+        'documento_revisao' => 'required|string',
+        'aprovado' => 'required|boolean'
+    ];
 }

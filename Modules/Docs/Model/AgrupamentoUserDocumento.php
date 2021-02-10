@@ -18,5 +18,4 @@ class AgrupamentoUserDocumento extends Model
         'tipo',
         'grupo_id'
     ];
-
 }

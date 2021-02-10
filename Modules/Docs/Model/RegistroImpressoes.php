@@ -18,4 +18,9 @@ class RegistroImpressoes extends Model
         'documento_id',
         'user_id'
     ];
+
+    public $rules = [
+        'documento_id' => 'required|integer|exists:docs_documento,id',
+        'user_id' => 'required|integer|exists:core_users,id'
+    ];
 }

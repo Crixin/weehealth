@@ -17,6 +17,11 @@ class CheckListItemNorma extends Model
         'item_norma_id'
     ];
 
+    public $rules = [
+        'descricao'          => 'required|string|min:5|max:100',
+        'item_norma_id'      => 'required|integer|exists:docs_item_norma,id',
+    ];
+
     public function docsItemNorma()
     {
         return $this->hasOne('Modules\Docs\Model\ItemNorma', 'id', 'item_norma_id');

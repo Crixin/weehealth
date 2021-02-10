@@ -20,6 +20,12 @@ class Norma extends Model
         'data_acreditacao'
     ];
 
+    public $rules = [
+        'descricao'          => 'required|string|min:5|max:100|unique:docs_norma,descricao',
+        'orgaoRegulador'     => 'required|numeric',
+        'cicloAuditoria'     => 'required|numeric',
+    ];
+
     public function docsItemNorma()
     {
         return $this->hasMany('Modules\Docs\Model\ItemNorma', 'norma_id', 'id');

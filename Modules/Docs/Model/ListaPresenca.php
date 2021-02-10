@@ -21,4 +21,5 @@ class ListaPresenca extends Model
         'destinatarios_email',
         'revisao_documento'
     ];
+
 }

@@ -29,16 +29,16 @@ class PerfilService
             $errors = $validacao->make();
 
             if ($errors) {
-                return redirect()->back()->withErrors($errors)->withInput();
+                return ["success" => false, "redirect" => redirect()->back()->withErrors($errors)->withInput()];
             }
 
             DB::transaction(function () use ($data) {
                 $perfil = $this->perfilRepository->create($data);
             });
 
-            return true;
+            return ["success" => true];
         } catch (\Throwable $th) {
-            return false;
+            return ["success" => false];
         }
     }
 
@@ -53,16 +53,16 @@ class PerfilService
             $errors = $validacao->make();
 
             if ($errors) {
-                return redirect()->back()->withErrors($errors)->withInput();
+                return ["success" => false, "redirect" => redirect()->back()->withErrors($errors)->withInput()];
             }
 
             DB::transaction(function () use ($data) {
                 $perfil = $this->perfilRepository->update($data, $data['id']);
             });
 
-            return true;
+            return ["success" => true];
         } catch (\Throwable $th) {
-            return false;
+            return ["success" => false];
         }
     }
 }
