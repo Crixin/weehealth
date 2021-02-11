@@ -83,6 +83,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group{{ $errors->has('tipoVencimento') ? ' has-error' : '' }}">
                                         {!! Form::label('tipoVencimento', 'Vencimento') !!}
+                                        {!! Form::select('tipoVencimento',$opcoesVencimento, $opcoesSelecionado, ['id' => 'tipoVencimento', 'class' => 'form-control selectpicker', 'placeholder' => __('components.selectepicker-default')]) !!}
                                         <small class="text-danger">{{ $errors->first('tipoVencimento') }}</small>
                                     </div>
                                 </div>

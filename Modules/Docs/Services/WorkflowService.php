@@ -13,6 +13,9 @@ use App\Classes\Helper;
 use Illuminate\Support\Facades\Auth;
 use Modules\Docs\Model\Workflow;
 use App\Services\ValidacaoService;
+use Carbon\Carbon;
+use DateTime;
+use DateTimeZone;
 use Modules\Docs\Services\{
     DocumentoService
 };
@@ -36,7 +39,7 @@ class WorkflowService
         $this->userEtapaDocumentoRepository = new UserEtapaDocumentoRepository();
     }
 
-    
+
     public function store(array $dados)
     {
         try {
@@ -44,7 +47,17 @@ class WorkflowService
 
             $etapa = $this->etapaFluxoRepository->find($dados['etapa_id']);
             $documento = $this->documentoRepository->find($dados['documento_id']);
-            
+            $etapaAtual = $this->getEtapaAtual($dados['documento_id']);
+
+            $buscaWorkFlowAnterior = $this->getWorkflowAnterior($dados['documento_id']);
+            if (!empty($buscaWorkFlowAnterior) && $buscaWorkFlowAnterior->id != $dados['etapa_id']) {
+                $duracao_etapa = $this->getDuracao($buscaWorkFlowAnterior->created_at);
+                $updateWorkflowAnterior = [
+                    'tempo_duracao_etapa' => $duracao_etapa
+                ];
+                $this->update($updateWorkflowAnterior, $buscaWorkFlowAnterior->id);
+            }
+
             $descricao = $dados['avancar'] ? $this->replaceText($etapa->descricao) : "A etapa '{$etapa->nome}' foi rejeitada";
 
             $inserir = [
@@ -52,7 +65,7 @@ class WorkflowService
                 'descricao' => $descricao,
                 'etapa_fluxo_id' => $etapa->id,
                 'user_id' => Auth::id(),
-                'documento_revisao' => $documento->revisao,
+                'documento_revisao' => $documento->revisao
             ];
 
             $validacao = new ValidacaoService($this->rules, $inserir);
@@ -63,7 +76,7 @@ class WorkflowService
                 Helper::setNotify(__("messages.workflow.validationFail"), 'danger|close-circle');
                 return ['success' => false, 'redirect' => redirect()->back()->withErrors($errors)->withInput()];
             }
-            
+
             $this->workflowRepository->create($inserir);
 
             DB::commit();
@@ -77,9 +90,8 @@ class WorkflowService
         }
     }
 
-    
     public function update(array $data, int $id)
-    {
+    {   
         return $this->workflowRepository->update($data, $id);
     }
 
@@ -120,10 +132,21 @@ class WorkflowService
         )->toArray();
 
         $ultimo = end($historico);
-            
-        return $this->etapaFluxoRepository->find($ultimo['etapa_fluxo_id']);
+        return $this->etapaFluxoRepository->find(!empty($ultimo) ? $ultimo['etapa_fluxo_id'] : $documento->docsTipoDocumento->docsFluxo->docsEtapaFluxo[0]->id);
     }
 
+    public function getWorkflowAnterior(int $documento)
+    {
+        $etapaAtual = $this->getEtapaAtual($documento);
+        $buscaDocumento = $this->documentoRepository->find($documento);
+        return $this->workflowRepository->findOneBy(
+            [
+                ['documento_id', '=', $documento],
+                ['documento_revisao', '=', $buscaDocumento->revisao, "AND"],
+                ['etapa_fluxo_id', '=', $etapaAtual->id, "AND"]
+            ]
+        );
+    }
 
     public function getProximaEtapa(int $documento)
     {
@@ -286,5 +309,10 @@ class WorkflowService
         } catch (\Throwable $th) {
             return ["success" => false];
         }
+    }
+
+    public function getDuracao($data)
+    {
+        return  Helper::format_interval(date_diff(new DateTime(date('Y-m-d H:i:s', strtotime($data)), new DateTimeZone('America/Sao_Paulo')), new DateTime("now", new DateTimeZone('America/Sao_Paulo'))));
     }
 }

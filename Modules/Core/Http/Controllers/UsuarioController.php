@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{DB, Validator};
 use Modules\Core\Model\User;
 use Modules\Core\Repositories\{GrupoUserRepository, UserRepository, PerfilRepository, SetorRepository};
+use Modules\Core\Services\UserService;
+use Modules\Docs\Services\AgrupamentoUserDocumentoService;
 
 class UsuarioController extends Controller
 {
@@ -48,20 +50,24 @@ class UsuarioController extends Controller
         $usuario = $this->userRepository->find($request->get('idUsuario'));
 
         if ($request->get('username') != $usuario->username) {
-            $arrRegras['username'] = 'required|string|max:20|unique:users';
+            $arrRegras['username'] = 'required|string|max:20|unique:core_users';
         }
 
         if ($request->get('email') != $usuario->email) {
-            $arrRegras['email'] = 'required|string|email|max:255|unique:users';
+            $arrRegras['email'] = 'required|string|email|max:255|unique:core_users';
         }
 
-        $arrRegras['foto'] = 'image|mimes:jpeg,png,jpg';
+        if ($request->foto) {
+            $arrRegras['foto'] = 'image|mimes:jpeg,png,jpg';
+        }
 
         $validator = Validator::make($request->all(), $arrRegras);
+
         if ($validator->fails()) {
             Helper::setNotify($validator->messages()->first(), 'danger|close-circle');
             return redirect()->back()->withInput();
         }
+
 
         $montaUpdate = $this->montaRequest($request);
         $this->userRepository->update($montaUpdate, $request->get('idUsuario'));
@@ -179,13 +185,32 @@ class UsuarioController extends Controller
 
     public function replaceUserDoc(Request $request)
     {
-        $idUsuario = $request->idUsuario;
-        $idGrupo   = $request->grupo;
-        $documentos = $request->documento;
-        $idUsuarioSubstituto = $request->usuario;
-        foreach ($documentos as $key => $value) {
+        try {
+            $idUsuario = $request->idUsuario;
+            $idGrupo   = $request->grupo;
+            $documentos = $request->documento;
+            $idUsuarioSubstituto = $request->usuario;
 
-            //substituir usuário;
+            $montaUpdate = [
+                "documentos" => $documentos,
+                "user_id" =>  $idUsuario,
+                "grupo_id" => $idGrupo,
+                "user_substituto_id" => $idUsuarioSubstituto
+            ];
+
+            $userService = new UserService();
+            $return = $userService->replaceUserDoc($montaUpdate);
+
+            if (!$return['success']) {
+                throw new Exception("Erro ao desvincular usuário.", 1);
+            }
+
+            Helper::setNotify('Usuário substituido com sucesso!', 'success|check-circle');
+            return redirect()->route('core.usuario');
+        } catch (\Throwable $th) {
+
+            Helper::setNotify("Erro ao desvincular usuário. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+            return redirect()->route('core.usuario');
         }
     }
 }

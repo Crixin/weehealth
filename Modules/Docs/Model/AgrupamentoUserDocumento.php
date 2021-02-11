@@ -18,4 +18,11 @@ class AgrupamentoUserDocumento extends Model
         'tipo',
         'grupo_id'
     ];
+
+    public $rules = [
+        'grupo_id'        => 'required|integer|exists:core_grupo,id',
+        'user_id'         => 'required|integer|exists:core_users,id',
+        'documento_id'    => 'required|integer|exists:docs_documento,id',
+        'tipo'            => 'requided|string'
+    ];
 }

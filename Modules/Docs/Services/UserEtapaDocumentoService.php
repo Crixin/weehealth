@@ -2,16 +2,24 @@
 
 namespace Modules\Docs\Services;
 
+use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Modules\Core\Repositories\UserRepository;
+use Modules\Docs\Repositories\EtapaFluxoRepository;
 use Modules\Docs\Repositories\UserEtapaDocumentoRepository;
 
 class UserEtapaDocumentoService
 {
     protected $userEtapaDocumentoRepository;
+    protected $userRepository;
+    protected $etapaFluxoRepository;
 
     public function __construct()
     {
         $this->userEtapaDocumentoRepository = new UserEtapaDocumentoRepository();
+        $this->userRepository = new UserRepository();
+        $this->etapaFluxoRepository = new EtapaFluxoRepository();
     }
 
     public function store(array $data)
@@ -19,17 +27,25 @@ class UserEtapaDocumentoService
         try {
             DB::beginTransaction();
             foreach ($data['grupo_user_etapa'] ?? [] as $grupoUserEtapa) {
-                $this->userEtapaDocumentoRepository->firstOrCreate(
+                $response = $this->userEtapaDocumentoRepository->firstOrCreate(
                     [
-                        "grupo_id" => $grupoUserEtapa['grupo_id'],
-                        "user_id" => $grupoUserEtapa['user_id'],
-                        "etapa_fluxo_id" => $grupoUserEtapa['etapa_fluxo_id'],
+                        "grupo_id"          => $grupoUserEtapa['grupo_id'],
+                        "user_id"           => $grupoUserEtapa['user_id'],
+                        "etapa_fluxo_id"    => $grupoUserEtapa['etapa_fluxo_id'],
                         "documento_revisao" => $data['documento_revisao'],
-                        'documento_id' => $data['documento_id']
+                        'documento_id'      => $data['documento_id']
                     ]
                 );
+                if ($response->wasRecentlyCreated) {
+                    $buscaUsuario = $this->userRepository->find($grupoUserEtapa['user_id']);
+                    $etapaFluxo   = $this->etapaFluxoRepository->find($grupoUserEtapa['etapa_fluxo_id']);
+                    $descricao = 'O usuário ' . $buscaUsuario->name . ' tornou-se aprovador da etapa ' . $etapaFluxo->nome;
+                    $responseHistorico = $this->storeHistorico($data['documento_id'], $descricao, $data['documento_revisao']);
+                    if (!$responseHistorico['success']) {
+                        throw new Exception("Erro ao gravar histórico", 1);
+                    }
+                }
             }
-
             DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {
@@ -43,14 +59,33 @@ class UserEtapaDocumentoService
     {
         try {
             DB::beginTransaction();
-
-            $this->userEtapaDocumentoRepository->delete($data, 'id');
-            
+            foreach ($data as $key => $userEtapaDocumento) {
+                $buscaEtapaDocumento = $this->userEtapaDocumentoRepository->find($userEtapaDocumento);
+                $descricao = 'O usuário ' . $buscaEtapaDocumento->coreUsers->name . ' foi retirado de aprovador da etapa ' . $buscaEtapaDocumento->docsEtapa->nome;
+                $responseHistorico = $this->storeHistorico($buscaEtapaDocumento->documento_id, $descricao, $buscaEtapaDocumento->documento_revisao);
+                if (!$responseHistorico['success']) {
+                    throw new Exception("Erro ao gravar histórico", 1);
+                }
+            }
+            $deleteEtapaDocumento = $this->userEtapaDocumentoRepository->delete($data, 'id');
             DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollback();
             return ["success" => false];
         }
+    }
+
+    public function storeHistorico($documento_id, $descricao, $revisao)
+    {
+        $historicoDocumentoService = new HistoricoDocumentoService();
+        $insert = [
+            "descricao"    => $descricao,
+            "documento_id" => $documento_id,
+            "user_id"      => Auth::user()->id,
+            "documento_revisao" => $revisao
+        ];
+        return $historicoDocumentoService->store($insert);
     }
 }

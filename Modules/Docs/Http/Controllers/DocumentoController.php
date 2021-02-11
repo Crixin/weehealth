@@ -3,6 +3,8 @@
 namespace Modules\Docs\Http\Controllers;
 
 use App\Classes\Helper;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Support\Renderable;
@@ -19,7 +21,8 @@ use Modules\Docs\Repositories\{
     UserEtapaDocumentoRepository,
     VinculoDocumentoRepository,
     WorkflowRepository,
-    EtapaFluxoRepository
+    EtapaFluxoRepository,
+    HistoricoDocumentoRepository
 };
 use Modules\Core\Repositories\{GrupoRepository, ParametroRepository, SetorRepository, UserRepository};
 use Modules\Docs\Services\{DocumentoService, RegistroImpressoesService, TipoDocumentoService, WorkflowService};
@@ -40,55 +43,39 @@ class DocumentoController extends Controller
     protected $workFlowRepository;
     protected $listaPresencaRepository;
     protected $grupoRepository;
-    protected $documentoService;
-    protected $tipoDocumentoService;
-    protected $workflowService;
     protected $registroImpressoesService;
     protected $etapaFluxoRepository;
     protected $bpmnRepository;
+    protected $historicoDocumentoRepository;
 
-    public function __construct(
-        DocumentoRepository $documentoRepository,
-        SetorRepository $setorRepository,
-        UserRepository $userRepository,
-        NormaRepository $normaRepository,
-        TipoDocumentoRepository $tipoDocumentoRepository,
-        ParametroRepository $parametroRepository,
-        UserEtapaDocumentoRepository $userEtapaDocumentoRepository,
-        DocumentoItemNormaRepository $documentoItemNormaRepository,
-        AgrupamentoUserDocumentoRepository $agrupamentoUserDocumentoRepository,
-        VinculoDocumentoRepository $vinculoDocumentoRepository,
-        HierarquiaDocumentoRepository $hierarquiaDocumentoRepository,
-        WorkflowRepository $workflowRepository,
-        GrupoRepository $grupoRepository,
-        ListaPresencaRepository $listaPresencaRepository,
-        DocumentoService $documentoService,
-        TipoDocumentoService $tipoDocumentoService,
-        WorkflowService $workflowService,
-        RegistroImpressoesService $registroImpressoesService,
-        EtapaFluxoRepository $etapaFluxoRepository,
-        BpmnRepository $bpmnRepository
-    ) {
-        $this->documentoRepository = $documentoRepository;
-        $this->setorRepository = $setorRepository;
-        $this->userRepository = $userRepository;
-        $this->normaRepositorty = $normaRepository;
-        $this->tipoDocumentoRepository = $tipoDocumentoRepository;
-        $this->parametroRepository = $parametroRepository;
-        $this->userEtapaDocumentoRepository = $userEtapaDocumentoRepository;
-        $this->documentoItemNormaRepository = $documentoItemNormaRepository;
-        $this->agrupamentoUserDocumentoRepository = $agrupamentoUserDocumentoRepository;
-        $this->vinculoDocumentoRepository = $vinculoDocumentoRepository;
-        $this->hierarquiaDocumentorepository = $hierarquiaDocumentoRepository;
-        $this->workFlowRepository = $workflowRepository;
-        $this->grupoRepository = $grupoRepository;
-        $this->listaPresencaRepository = $listaPresencaRepository;
-        $this->documentoService = $documentoService;
-        $this->tipoDocumentoService = $tipoDocumentoService;
-        $this->workflowService = $workflowService;
-        $this->registroImpressoesService = $registroImpressoesService;
-        $this->etapaFluxoRepository = $etapaFluxoRepository;
-        $this->bpmnRepository = $bpmnRepository;
+    protected $documentoService;
+    protected $tipoDocumentoService;
+    protected $workflowService;
+
+
+    public function __construct() {
+        $this->documentoRepository = new DocumentoRepository();
+        $this->setorRepository = new SetorRepository();
+        $this->userRepository = new UserRepository();
+        $this->normaRepositorty = new NormaRepository();
+        $this->tipoDocumentoRepository = new TipoDocumentoRepository();
+        $this->parametroRepository = new ParametroRepository();
+        $this->userEtapaDocumentoRepository = new UserEtapaDocumentoRepository();
+        $this->documentoItemNormaRepository = new DocumentoItemNormaRepository();
+        $this->agrupamentoUserDocumentoRepository = new AgrupamentoUserDocumentoRepository();
+        $this->vinculoDocumentoRepository = new VinculoDocumentoRepository();
+        $this->hierarquiaDocumentorepository = new HierarquiaDocumentoRepository();
+        $this->workFlowRepository = new WorkflowRepository();
+        $this->grupoRepository = new GrupoRepository();
+        $this->listaPresencaRepository = new ListaPresencaRepository();
+        $this->etapaFluxoRepository = new EtapaFluxoRepository();
+        $this->bpmnRepository = new BpmnRepository();
+        $this->historicoDocumentoRepository = new HistoricoDocumentoRepository();
+
+        $this->documentoService = new DocumentoService();
+        $this->tipoDocumentoService = new TipoDocumentoService();
+        $this->workflowService = new WorkflowService();
+        $this->registroImpressoesService = new RegistroImpressoesService();
     }
 
     /**
@@ -836,7 +823,7 @@ class DocumentoController extends Controller
     public function visualizar($id)
     {
         $documento = $this->documentoRepository->find($id);
-        $historico = $this->workFlowRepository->findBy(
+        $workFlow = $this->workFlowRepository->findBy(
             [
                 ['documento_id', '=', $id],
                 ['documento_revisao', '=', $documento->revisao]
@@ -846,15 +833,28 @@ class DocumentoController extends Controller
                 ['created_at', 'ASC']
             ]
         );
-        
+
+        $historicoDocumento = $this->historicoDocumentoRepository->findBy(
+            [
+                ['documento_id', '=', $id],
+                ['documento_revisao', '=', $documento->revisao]
+            ],
+            ['coreUsers'],
+            [
+                ['created_at', 'ASC']
+            ]
+        );
+
+        $historico = $workFlow->merge($historicoDocumento)->sortBy('created_at');
+
         $etapaAtual = $this->workflowService->getEtapaAtual($documento->id);
-        
+
         $proximaEtapa = $this->workflowService->getProximaEtapa($documento->id);
 
         $revisoes  = Helper::getListAllReviewsDocument($documento->nome);
 
         $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
-        
+
         $extensoesPermitidas = implode(", ", json_decode(Helper::buscaParametro('EXTENSAO_DOCUMENTO_ONLYOFFICE')));
         $docPath = $documento->nome . $buscaPrefixo . $documento->revisao . "." . $documento->extensao;
 
