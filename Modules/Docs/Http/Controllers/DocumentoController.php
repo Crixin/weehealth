@@ -832,7 +832,6 @@ class DocumentoController extends Controller
             [
                 ['created_at', 'ASC']
             ]
-<<<<<<< Updated upstream
         );
 
         $historicoDocumento = $this->historicoDocumentoRepository->findBy(
@@ -848,10 +847,6 @@ class DocumentoController extends Controller
 
         $historico = $workFlow->merge($historicoDocumento)->sortBy('created_at');
 
-=======
-        )->toArray();
-        
->>>>>>> Stashed changes
         $etapaAtual = $this->workflowService->getEtapaAtual($documento->id);
 
         $proximaEtapa = $this->workflowService->getProximaEtapa($documento->id);
