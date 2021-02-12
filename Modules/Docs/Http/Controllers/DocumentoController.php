@@ -832,6 +832,7 @@ class DocumentoController extends Controller
             [
                 ['created_at', 'ASC']
             ]
+<<<<<<< Updated upstream
         );
 
         $historicoDocumento = $this->historicoDocumentoRepository->findBy(
@@ -847,6 +848,10 @@ class DocumentoController extends Controller
 
         $historico = $workFlow->merge($historicoDocumento)->sortBy('created_at');
 
+=======
+        )->toArray();
+        
+>>>>>>> Stashed changes
         $etapaAtual = $this->workflowService->getEtapaAtual($documento->id);
 
         $proximaEtapa = $this->workflowService->getProximaEtapa($documento->id);
@@ -857,6 +862,8 @@ class DocumentoController extends Controller
 
         $extensoesPermitidas = implode(", ", json_decode(Helper::buscaParametro('EXTENSAO_DOCUMENTO_ONLYOFFICE')));
         $docPath = $documento->nome . $buscaPrefixo . $documento->revisao . "." . $documento->extensao;
+        
+        $workflow = end($historico);
 
         return view(
             'docs::documento.view',
@@ -868,7 +875,8 @@ class DocumentoController extends Controller
                 'docPath',
                 'etapaAtual',
                 'proximaEtapa',
-                'extensoesPermitidas'
+                'extensoesPermitidas',
+                'workflow',
             )
         );
     }

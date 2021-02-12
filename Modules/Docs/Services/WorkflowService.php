@@ -64,6 +64,7 @@ class WorkflowService
                 'documento_id' => $documento->id,
                 'descricao' => $descricao,
                 'etapa_fluxo_id' => $etapa->id,
+                'justificativa' => $dados['justificativa'] ?? null,
                 'user_id' => Auth::id(),
                 'documento_revisao' => $documento->revisao
             ];
@@ -203,13 +204,12 @@ class WorkflowService
         try {
             $etapa = $this->getEtapaAtual($data['documento_id']);
             
-            
             $info = [
                 'documento_id' => $data['documento_id'],
+                'justificativa' => $data['justificativa'],
                 'etapa_id' => $etapa->etapa_rejeicao_id,
                 'avancar' => false
             ];
-            
             if (!$this->store($info)['success']) {
                 throw new \Exception('Falha ao salvar o retrocesso da etapa');
             }
@@ -275,7 +275,7 @@ class WorkflowService
                 return ["success" => true];
             }
 
-            if (!$this->retrocederEtapa(['documento_id' => $data['documento_id']])['success']) {
+            if (!$this->retrocederEtapa($data)['success']) {
                 throw new \Exception("Falha ao retroceder etapa");
             }
             

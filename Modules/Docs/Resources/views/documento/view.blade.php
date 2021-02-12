@@ -13,38 +13,45 @@
 @section('content')
 <div class="col-md-12">
     <div class="row">
-        @if (!$etapaAtual->comportamento_treinamento && $etapaAtual->docsFluxo->coreGrupo->coreUsers->contains("id", Auth::id()))
-            @component('docs::components.documento.cancelar-revisao') @endcomponent
-        @endif
 
-        @if ($etapaAtual->comportamento_criacao || $etapaAtual->comportamento_edicao)
-            @component(
-                'docs::components.documento.substituicao', 
-                [
-                    "documento" => $documento->id,
-                    "extensoes" => $extensoesPermitidas
-                ]
-            ) @endcomponent
+        @if ($documento->em_revisao)
+            @if (!$etapaAtual->comportamento_treinamento && $etapaAtual->docsFluxo->coreGrupo->coreUsers->contains("id", Auth::id()))
+                @component('docs::components.documento.cancelar-revisao') @endcomponent
+            @endif
+            
+            @if ($etapaAtual->comportamento_criacao || $etapaAtual->comportamento_edicao)
+                @component(
+                    'docs::components.documento.substituicao', 
+                    [
+                        "documento" => $documento->id,
+                        "extensoes" => $extensoesPermitidas
+                    ]
+                ) @endcomponent
+            @endif
         @endif
     </div>
 
     <div class="card">
         <div class="card-body">
             <legend><b>{{ $documento->nome . " - " . $documento->codigo}}</b></legend>
+
+            @if ($workflow['justificativa'])
+                <h4 class="card-title" style="color:red"><b>Justificativa da rejeição: {{ $workflow['justificativa'] ?? '' }}</h4>
+            @endif
             <hr>
 
             <!-- Timeline do Documento -->
             <div class="col-md-12 mb-3">
                 <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2"><i class="mdi mdi-chart-timeline"></i> Linha do Tempo</button>
             </div>
-            @component(
+{{--             @component(
                 'docs::components.documento.linha-tempo', 
                 [
                     'historico' => $historico
                 ]
             )
             @endcomponent
-
+ --}}
             @if ($etapaAtual->comportamento_aprovacao)
                 @component(
                     'docs::components.documento.aprovacao',
@@ -76,13 +83,12 @@
                                 <iframe width="100%" id="speed-onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=review&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
                             </div>
                         @endif
+                        <!-- End Editor -->
                         
                         @if ($etapaAtual->comportamento_treinamento)
                             @component('docs::components.documento.treinamento', ["documento" => $documento]) @endcomponent
                         @endif
                         
-                         <!-- End Editor -->
-
                         <div class="col-lg-12 col-md-12 mt-3">
                             <div class="pull-right">
                                 {!! Form::open(['method' => 'POST', 'route' => 'docs.workflow.avancar-etapa']) !!}
@@ -90,13 +96,15 @@
                                     {{ Form::token() }}
                                     {!! Form::hidden('documento_id', $documento->id) !!}
 
-                                    @if (!$etapaAtual->comportamento_aprovacao)
-                                        {!! Form::submit("Encaminhar para " . $proximaEtapa->nome, ['class' => 'btn btn-success']) !!}
+                                    @if ($documento->em_revisao)
+                                        @if (!$etapaAtual->comportamento_aprovacao)
+                                            {!! Form::submit("Encaminhar para " . $proximaEtapa->nome, ['class' => 'btn btn-success']) !!}
+                                        @endif
                                     @endif
-                                
+                                    
                                     <button type="button" class="btn btn-info anexos-documento" data-id="{{$documento->id}}">@lang('buttons.general.attachments')</button>
                                     <a href="{{ route('docs.documento') }}" type="button" class="btn btn-inverse">@lang('buttons.general.back')</a>
-                                
+                                    
                                 {!! Form::close() !!}
                             </div>
                         </div>
@@ -114,7 +122,6 @@
         'idDocumento' => $documento->id
     ]
 )
-
 @endsection
 
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
