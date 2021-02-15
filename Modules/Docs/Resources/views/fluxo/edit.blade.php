@@ -32,14 +32,15 @@
 
                     {{ Session::forget('message') }}
                 @endif
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <!--<div class="alert alert-danger alert-dismissible fade show" role="alert">
                     Ao salvar alguma alteração no fluxo ou em suas etapas, será gerado uma nova versão do fluxo.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                      <span aria-hidden="true">&times;</span>
                     </button>
-               </div>
-                <form method="POST" action="{{ route('docs.fluxo.alterar') }}" enctype="multipart/form-data">
+               </div>-->
+                <form method="POST" action="{{ route('docs.fluxo.alterar') }}" id="formFluxoEdit" onsubmit="msgConfirmacao()" enctype="multipart/form-data">
                     {{ csrf_field() }}
+                    <input type="hidden" name="novaVersaoFluxo" id="novaVersaoFluxo">
                     <input type="hidden" name="idFluxo" value="{{ $fluxo->id }}">
                     <input type="hidden" name="ordemHidden" id="ordemHidden" value="{{$fluxo->docsEtapaFluxoInversao[0]->ordem ?? 0}}"> 
                     @component(

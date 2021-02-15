@@ -265,7 +265,8 @@ return [
             'stage_create'    => 'Dt.Início:',
             'doc_number'      => 'Documento n°: ',
             'stage_time'      =>  'Duração:',
-            'justification'   => 'Justificativa: '
+            'justification'   => 'Justificativa: ',
+            'version'         => 'Versão: '
         ],
 
         'documento-externo' => [

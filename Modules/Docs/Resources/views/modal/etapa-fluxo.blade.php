@@ -94,7 +94,7 @@
             ).draw( false );
         }else{
             //editar
-            values['ordem'] = ordem;
+            values['ordem'] = $('#normaAlteracaoId').val();
             values['id'] =  parseInt( $('#idEtapaEdicao').val());
             let idBotao = $('#normaAlteracaoId').val();
             var botaoEdicao = montaBotao(ordem, values);

@@ -50,13 +50,14 @@ class FluxoService
         $createFluxo = $data;
         unset(
             $createFluxo['etapas'],
+            $createFluxo['nova_versao']
         );
         DB::beginTransaction();
         try {
             $this->fluxoRepository->update($createFluxo, $id);
             $buscaFluxo = $this->fluxoRepository->find($id);
+
             /**Etapas */
-            /*
             $etapasRequest = [];
             foreach ($data['etapas'] as $key => $value) {
                 $etapas = json_decode($value);
@@ -65,28 +66,34 @@ class FluxoService
                     array_push($etapasRequest, $etapas->id);
                 }
             }
-
             $etapaDelete = $this->etapaFluxoRepository->findBy(
                 [
                     ['fluxo_id', "=", $id],
+                    ['versao_fluxo', '=', $buscaFluxo->versao],
                     ['id', "", $etapasRequest ?? [] , "NOTIN"]
                 ]
             )->pluck('id')->toArray();
-
             if ($etapaDelete) {
                 if (!$this->etapaFluxoRepository->delete($etapaDelete, 'id')) {
                     throw new \Exception('Falha da deleção dos registros');
                 }
             }
-            */
+
             //Cria etapas
-            $novaOrdem = 0;
-            foreach ($data['etapas'] as $key => $value) {
-                $novaOrdem += 1 ;
-                $etapas = json_decode($value);
-                $requestUpdate = $this->montaRequest($etapas, $buscaFluxo, $novaOrdem);
-                $this->etapaFluxoRepository->create($requestUpdate);
+            foreach ($data['etapas'] as $key => $etapa) {
+                $etapaAux = json_decode($etapa);
+                $novaOrdem = $etapaAux->ordem ;
+                $requestUpdate = $this->montaRequest($etapaAux, $buscaFluxo, $novaOrdem);
+
+                if ($data['nova_versao'] || $etapaAux->id == '') {
+                    $this->etapaFluxoRepository->firstOrCreate($requestUpdate);
+                } else {
+                    $this->etapaFluxoRepository->update($requestUpdate, $etapaAux->id);
+                }
             }
+
+            
+
             DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {
@@ -115,8 +122,8 @@ class FluxoService
             "comportamento_visualizacao" => $etapas->comportamentoVizualizacao  == 1 ? true : false,
             "comportamento_treinamento" => $etapas->comportamentoTreinamento  == 1 ? true : false,
             "comportamento_divulgacao" => $etapas->comportamentoDivulgacao  == 1 ? true : false,
-            "tipo_aprovacao_id" => empty($etapas->tipoAprovacao) ? null : $etapas->tipoAprovacao,
-            "etapa_rejeicao_id" => empty($etapas->etapaRejeicao) ? null : $etapas->etapaRejeicao,
+            "tipo_aprovacao_id" => empty($etapas->tipoAprovacao) ? null : (int) $etapas->tipoAprovacao,
+            "etapa_rejeicao_id" => empty($etapas->etapaRejeicao) ? null : (int) $etapas->etapaRejeicao,
             "exigir_lista_presenca" => $etapas->listaPresenca  == 1 ? true : false
         ];
     }

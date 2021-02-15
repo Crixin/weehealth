@@ -129,7 +129,7 @@ class AnexoDocumentoController extends Controller
         $id = $request = $request->id;
         try {
             DB::transaction(function () use ($id) {
-                $anexoService = new AnexoService()
+                $anexoService = new AnexoService();
                 $anexoService->delete($id);
             });
             return response()->json(['response' => 'sucesso']);

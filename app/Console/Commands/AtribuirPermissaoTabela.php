@@ -42,10 +42,10 @@ class AtribuirPermissaoTabela extends Command
         ini_set('memory_limit', '3000M');
         ini_set('max_execution_time', '0');
 
-        DB::purge('pgsql');
-        Config::set('database.connections.pgsql.username', 'postgres');
-        Config::set('database.connections.pgsql.password', 'admin');
-        DB::reconnect('pgsql');
+        DB::purge(getenv('DB_CONNECTION'));
+        Config::set('database.connections.pgsql.username', getenv('DB_USERNAME'));
+        Config::set('database.connections.pgsql.password', getenv('DB_PASSWORD'));
+        DB::reconnect(getenv('DB_CONNECTION'));
 
         $criaTrigger = DB::select("select geracao_inicial_triggers('public')");
         $criacaoLote = DB::select($criaTrigger[0]->geracao_inicial_triggers);
