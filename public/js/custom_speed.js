@@ -45,18 +45,18 @@ function ajaxMethod(method, url, obj) {
  * 
  * @param {*} text message that will be displayed for more details of the consequence of the action
  */
-function swal2_warning(text, buttonText = 'Sim, excluir!', colorConfirm = "#DD6B55" ) {
+function swal2_warning(text, buttonText = 'Sim, excluir!', colorConfirm = "#DD6B55", title = "Você tem certeza?", buttonTextCancel = 'Cancelar' ) {
     return new Promise((resolve, reject) => {
         swal({   
-            title: "Você tem certeza?",   
+            title: title,   
             text: text,   
             type: "warning",   
             showCancelButton: true,   
             confirmButtonColor: colorConfirm,   
             confirmButtonText: buttonText,   
-            cancelButtonText: "Cancelar",   
+            cancelButtonText: buttonTextCancel,   
             closeOnConfirm: false,   
-            closeOnCancel: false 
+            closeOnCancel: false
         }, function(isConfirm){   
             if (isConfirm) {     
                 resolve(true);

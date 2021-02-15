@@ -21,7 +21,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             {{ Form::open(['route' => 'docs.workflow.aprovar', 'method' => 'POST']) }}
-                {{ Form::token() }}
+            {{ csrf_field() }}
 
                 {{ Form::hidden('documento_id', $documento) }}
                 {{ Form::hidden('aprovado', "false") }}

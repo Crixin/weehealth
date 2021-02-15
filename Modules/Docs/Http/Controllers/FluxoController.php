@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Modules\Core\Repositories\{GrupoRepository, PerfilRepository, ParametroRepository, NotificacaoRepository};
 use Modules\Docs\Repositories\{FluxoRepository, EtapaFluxoRepository};
 use Modules\Docs\Services\FluxoService;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class FluxoController extends Controller
 {
@@ -82,13 +83,14 @@ class FluxoController extends Controller
 
         $etapasRejeicao = [];
 
-        return view('docs::fluxo.create', compact(
-            'grupos',
-            'perfis',
-            'status',
-            'notificacoes',
-            'tiposAprovacao',
-            'etapasRejeicao'
+        return view('docs::fluxo.create',
+            compact(
+                'grupos',
+                'perfis',
+                'status',
+                'notificacoes',
+                'tiposAprovacao',
+                'etapasRejeicao'
             )
         );
     }
@@ -198,7 +200,9 @@ class FluxoController extends Controller
         $buscaFluxo = $this->fluxoRepository->find($fluxo);
 
         $update  = $this->montaRequest($request);
-        $update['versao'] = $buscaFluxo->versao + 1;
+        if ($request->novaVersaoFluxo == 'true') {
+            $update['versao'] = $buscaFluxo->versao + 1;
+        }
 
         try {
             $retorno = $this->fluxoService->update($update, $fluxo);
@@ -262,7 +266,8 @@ class FluxoController extends Controller
             "grupo_id"  => $request->get('grupo'),
             "versao"    => $request->get('versao'),
             "ativo"     => $request->get('ativo') == 1 ? true : false,
-            "etapas"    => $request->get('dados')
+            "etapas"    => $request->get('dados'),
+            "nova_versao" => $request->novaVersaoFluxo == 'true' ? true : false
         ];
     }
 }

@@ -110,6 +110,7 @@ class Helper
             }
         }
         else {
+            /*
             foreach (Auth::user()->coreGroups as $kGrupo => $grupo) {
                 foreach ($grupo->coreEnterprises as $kEmpresa => $empresa) {
                     $empresaAtual = Empresa::find($empresa->id);
@@ -117,6 +118,7 @@ class Helper
                     $empresas[] = $empresaAtual;
                 }
             }
+            */
 
             $roles = collect($empresas)->unique('id');
             foreach ($roles as $key => $value) {

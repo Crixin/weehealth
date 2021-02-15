@@ -71,7 +71,6 @@
                 <th>Ordem</th>
                 <th>Nome</th>
                 <th>Descrição</th>
-                <th>Versão</th>
                 <th>Controle</th>        
             </tr>
         </thead>
@@ -105,7 +104,6 @@
                     <td data-id="{{$etapa->ordem}}">{{$etapa->ordem}}</td>
                     <td>{{$etapa->nome}}</td>
                     <td>{{$etapa->descricao}}</td>
-                    <td>{{$etapa->versao_fluxo}}</td>
                     <td>
                         <a class="btn waves-effect waves-light btn-danger sa-warning btnExcluirEtapa" data-id='{{$etapa->ordem}}'><i class="mdi mdi-delete"></i> @lang('buttons.general.delete')</a>
                         <a class="btn waves-effect waves-light btn-info btnEditEtapa" data-id='{{$etapa->ordem}}' data-etapa='{{$etapa->id}}'><input type="hidden" name="dados[]" id="dados{{$etapa->ordem}}" value='{{JSON_encode($conteudoBotao)}}'><i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit')</a>
@@ -188,11 +186,35 @@
                 $('#dados'+id).val(JSON.stringify(valorBotao));
             });
         } );
+
+
+        $(document).on('click','.sweet-overlay', function(){
+            swal.close();
+        });
         
     });
 
+    $(document).keyup(function(e) { 
+        if (e.keyCode === 27) 
+            swal.close();
+    }); 
+
     function deleteTR(trDeletar){
         myTable.row( trDeletar ).remove().draw();
+    }
+
+    function msgConfirmacao() {
+        event.preventDefault();
+        event.stopPropagation();
+        let gerarVersaoFluxo = swal2_warning("Você deseja gerar uma nova versão do fluxo", "Sim, Gerar", '#DD6B55', 'Gerar nova versão do fluxo ?', 'Não, Não Gerar');
+        gerarVersaoFluxo.then(resolvedValue => {
+            $('#novaVersaoFluxo').val(new Boolean(true));
+            $('#formFluxoEdit').submit();
+        }, error => {
+            $('#novaVersaoFluxo').val(new Boolean(false));
+            swal.close();
+            $('#formFluxoEdit').submit();
+        });
     }
 </script>
 @endsection

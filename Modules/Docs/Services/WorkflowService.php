@@ -240,7 +240,6 @@ class WorkflowService
                         ["documento_revisao", "=", $documento->revisao],
                     ]
                 );
-                
                 $etapaUser = array_first($userEtapaDocumento->filter(function ($value, $key) {
                     return $value->user_id == Auth::id();
                 }));

@@ -17,7 +17,11 @@
                                                 <i class="mdi mdi-file-document" style="display: flex;align-items: center"></i>
                                             </div>
                                             <div class="timeline-panel">
+                                                    
                                                 <div class="timeline-heading" >
+                                                    <div class="row">
+                                                        <h7 class="pull-right timeline-title" style="display: flex;justify-content: flex-end;flex: 1;flex-direction: row"><b>{{__('page_titles.docs.documento.version')}}</b>{{$hist->documento_revisao}}</h7>
+                                                    </div>
                                                     <h4 class="timeline-title"><b>{{ ($hist->coreUsers->name != null) ? $hist->coreUsers->name : 'Usuário Inválido' }}</b></h4>
                                                     <h7 class="timeline-title"><b>{{ __('page_titles.docs.documento.stage_create')}}</b>{{' ' . date('d/m/Y h:i:s', strToTime($hist->created_at))}}</h7>
                                                     <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ $hist->created_at->diffForHumans() }}</small> </p>
