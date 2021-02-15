@@ -8,7 +8,7 @@
                     <div class="col-md-6">
                         <div class="row" style="font-size:14px">
                             <div class="form-group col-md-12">
-                                <?php \Carbon\Carbon::setLocale('pt_BR') ?>
+                                <?php \Carbon\Carbon::setLocale('pt_BR') ?>&nbsp
                                 <ul class="timeline text-center">
                                     @php $i =0; @endphp
                                     @foreach( $historico as $key => $hist )
@@ -20,7 +20,7 @@
                                                     
                                                 <div class="timeline-heading" >
                                                     <div class="row">
-                                                        <h7 class="pull-right timeline-title" style="display: flex;justify-content: flex-end;flex: 1;flex-direction: row"><b>{{__('page_titles.docs.documento.version')}}</b>{{$hist->documento_revisao}}</h7>
+                                                        <h7 class="pull-right timeline-title" style="display: flex;justify-content: flex-end;flex: 1;flex-direction: row"><b>{{__('page_titles.docs.documento.revision')}}&nbsp</b>{{$hist->documento_revisao}}</h7>
                                                     </div>
                                                     <h4 class="timeline-title"><b>{{ ($hist->coreUsers->name != null) ? $hist->coreUsers->name : 'Usuário Inválido' }}</b></h4>
                                                     <h7 class="timeline-title"><b>{{ __('page_titles.docs.documento.stage_create')}}</b>{{' ' . date('d/m/Y h:i:s', strToTime($hist->created_at))}}</h7>

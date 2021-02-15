@@ -264,9 +264,9 @@ return [
             'view'            => 'Visualização do Documento',
             'stage_create'    => 'Dt.Início:',
             'doc_number'      => 'Documento n°: ',
-            'stage_time'      =>  'Duração:',
+            'stage_time'      => 'Duração:',
             'justification'   => 'Justificativa: ',
-            'version'         => 'Versão: '
+            'revision'        => 'Revisão: '
         ],
 
         'documento-externo' => [
