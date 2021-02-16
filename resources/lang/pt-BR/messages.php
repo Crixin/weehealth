@@ -27,6 +27,12 @@ return [
         'advanceStepFail' => "Falha ao avançar a etapa.",
         'retreatStepSuccess' => "Etapa retrocedida com sucesso!",
         'retreatStepFail' => "Falha ao retroceder a etapa.",
-        'validationFail' => "Falha ao validar campos do workflow."
+        'validationFail' => "Falha ao validar campos do workflow.",
+        'startReview' => "<NOME_USUARIO> iniciou a revisão",
+        'startValidation' => "<NOME_USUARIO> iniciou a validação"
+    ],
+    'documento' => [
+        'startReview' => "Revisão do documento iniciada",
+        'startReviewFailed' => "<Falha ao iniciar a revisão do documento"
     ]
 ];

@@ -40,7 +40,7 @@ class DocumentoController extends Controller
     protected $agrupamentoUserDocumentoRepository;
     protected $vinculoDocumentoRepository;
     protected $hierarquiaDocumentorepository;
-    protected $workFlowRepository;
+    protected $workflowRepository;
     protected $listaPresencaRepository;
     protected $grupoRepository;
     protected $registroImpressoesService;
@@ -65,7 +65,7 @@ class DocumentoController extends Controller
         $this->agrupamentoUserDocumentoRepository = new AgrupamentoUserDocumentoRepository();
         $this->vinculoDocumentoRepository = new VinculoDocumentoRepository();
         $this->hierarquiaDocumentorepository = new HierarquiaDocumentoRepository();
-        $this->workFlowRepository = new WorkflowRepository();
+        $this->workflowRepository = new WorkflowRepository();
         $this->grupoRepository = new GrupoRepository();
         $this->listaPresencaRepository = new ListaPresencaRepository();
         $this->etapaFluxoRepository = new EtapaFluxoRepository();
@@ -769,7 +769,18 @@ class DocumentoController extends Controller
 
     public function iniciarRevisao(Request $request)
     {
+        $documentoService = new DocumentoService();
 
+        $data = [
+            'documento_id' => $request->documento
+        ];
+
+        if (!$documentoService->iniciarRevisao($data)['success']) {
+            return redirect()->route('docs.documento');
+        }
+        
+        return redirect()->route('docs.documento');
+        //return redirect()->route('docs.documento.visualizar');
     }
 
     public function tornarObsoleto(Request $request)
@@ -798,7 +809,7 @@ class DocumentoController extends Controller
             $filename       = '';
             $documento      = $this->documentoRepository->find($id);
             $setorQualidade = $this->parametroRepository->getParametro('ID_SETOR_QUALIDADE');
-            $historico = $this->workFlowRepository->findBy(
+            $historico = $this->workflowRepository->findBy(
                 [
                     ['documento_id', '=', $id],
                     ['documento_revisao', '=', $documento->revisao]
@@ -823,29 +834,20 @@ class DocumentoController extends Controller
     public function visualizar($id)
     {
         $documento = $this->documentoRepository->find($id);
-        $workFlow = $this->workFlowRepository->findBy(
+
+
+        $historico = $this->linhaTempo($documento->id);
+      
+        $workflow = $this->workflowRepository->findBy(
             [
                 ['documento_id', '=', $id],
-                ['documento_revisao', '=', $documento->revisao]
+                ['documento_revisao', '=', $documento->revisao],
             ],
             ['coreUsers'],
             [
                 ['created_at', 'ASC']
             ]
         );
-
-        $historicoDocumento = $this->historicoDocumentoRepository->findBy(
-            [
-                ['documento_id', '=', $id],
-                ['documento_revisao', '=', $documento->revisao]
-            ],
-            ['coreUsers'],
-            [
-                ['created_at', 'ASC']
-            ]
-        );
-
-        $historico = $workFlow->merge($historicoDocumento)->sortBy('created_at');
 
         $etapaAtual = $this->workflowService->getEtapaAtual($documento->id);
 
@@ -858,7 +860,8 @@ class DocumentoController extends Controller
         $extensoesPermitidas = implode(", ", json_decode(Helper::buscaParametro('EXTENSAO_DOCUMENTO_ONLYOFFICE')));
         $docPath = $documento->nome . $buscaPrefixo . $documento->revisao . "." . $documento->extensao;
         
-        $workflow = end($historico);
+        $workflow = $workflow->toArray();
+        $workflow = end($workflow);
 
         return view(
             'docs::documento.view',
@@ -937,5 +940,32 @@ class DocumentoController extends Controller
         } catch (\Exception $th) {
             return response()->json(['response' => 'erro']);
         }
+    }
+
+
+    private function linhaTempo($documento)
+    {
+        $workflow = $this->workflowRepository->findBy(
+            [
+                ['documento_id', '=', $documento],
+            ],
+            ['coreUsers'],
+            [
+                ['created_at', 'ASC']
+            ]
+        );
+
+        $historicoDocumento = $this->historicoDocumentoRepository->findBy(
+            [
+                ['documento_id', '=', $documento],
+            ],
+            ['coreUsers'],
+            [
+                ['created_at', 'ASC']
+            ]
+        );
+
+        $historico = $workflow->merge($historicoDocumento)->sortBy('created_at');
+        return $historico;
     }
 }

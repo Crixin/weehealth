@@ -131,5 +131,4 @@ abstract class BaseRepository
     {
         return $this->findBy($where, $with)->first();
     }
-
 }

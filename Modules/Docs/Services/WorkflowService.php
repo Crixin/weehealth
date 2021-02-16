@@ -40,31 +40,37 @@ class WorkflowService
     }
 
 
-    public function store(array $dados)
+    public function store(array $data)
     {
         try {
             DB::beginTransaction();
 
-            $etapa = $this->etapaFluxoRepository->find($dados['etapa_id']);
-            $documento = $this->documentoRepository->find($dados['documento_id']);
-            $etapaAtual = $this->getEtapaAtual($dados['documento_id']);
+            $etapa = $this->etapaFluxoRepository->find($data['etapa_id']);
+            $documento = $this->documentoRepository->find($data['documento_id']);
+            $etapaAtual = $this->getEtapaAtual($data['documento_id']);
 
-            $buscaWorkFlowAnterior = $this->getWorkflowAnterior($dados['documento_id']);
-            if (!empty($buscaWorkFlowAnterior) && $buscaWorkFlowAnterior->id != $dados['etapa_id']) {
-                $duracao_etapa = $this->getDuracao($buscaWorkFlowAnterior->created_at);
+            $buscaWorkFlowAnterior = $this->getWorkflowAnterior($data['documento_id']);
+            
+            if (!empty($buscaWorkFlowAnterior) && $buscaWorkFlowAnterior->id != $data['etapa_id']) {
                 $updateWorkflowAnterior = [
-                    'tempo_duracao_etapa' => $duracao_etapa
+                    'tempo_duracao_etapa' => $this->getDuracao($buscaWorkFlowAnterior->created_at)
                 ];
                 $this->update($updateWorkflowAnterior, $buscaWorkFlowAnterior->id);
             }
 
-            $descricao = $dados['avancar'] ? $this->replaceText($etapa->descricao) : "A etapa '{$etapa->nome}' foi rejeitada";
-
+            if (array_key_exists('iniciar_revisao', $data)) {
+                $descricao = $this->replaceText(__('messages.workflow.startReview'));
+            } elseif (array_key_exists('iniciar_validacao', $data)) {
+                $descricao = $this->replaceText(__('messages.workflow.startValidation'));
+            } else {
+                $descricao = $data['avancar'] ? $this->replaceText($etapa->descricao) : "A etapa '{$etapa->nome}' foi rejeitada";
+            }
+                
             $inserir = [
                 'documento_id' => $documento->id,
                 'descricao' => $descricao,
                 'etapa_fluxo_id' => $etapa->id,
-                'justificativa' => $dados['justificativa'] ?? null,
+                'justificativa' => $data['justificativa'] ?? null,
                 'user_id' => Auth::id(),
                 'documento_revisao' => $documento->revisao
             ];
@@ -78,8 +84,7 @@ class WorkflowService
                 return ['success' => false, 'redirect' => redirect()->back()->withErrors($errors)->withInput()];
             }
 
-            $this->workflowRepository->create($inserir);
-
+            $resp = $this->workflowRepository->create($inserir);
             DB::commit();
             Helper::setNotify(__("messages.workflow.storeSuccess"), 'success|check-circle');
             return ['success' => true];
@@ -92,7 +97,7 @@ class WorkflowService
     }
 
     public function update(array $data, int $id)
-    {   
+    {
         return $this->workflowRepository->update($data, $id);
     }
 
@@ -100,6 +105,33 @@ class WorkflowService
     public function delete($delete)
     {
         return $this->workflowRepository->delete($delete);
+    }
+
+
+    public function iniciarRevisao($data)
+    {
+        try {
+            DB::beginTransaction();
+            $documento = $data['documento_id'];
+
+            $documento = $this->documentoRepository->find($documento);
+            
+            $primeiraEtapaFluxo = array_first($documento->docsTipoDocumento->docsFluxo->docsEtapaFluxo->sortBy('ordem')->toArray());
+            $info = [
+                'documento_id' => $data['documento_id'],
+                'etapa_id' => $primeiraEtapaFluxo['id'],
+                'iniciar_revisao' => true,
+
+            ];
+            if (!$this->store($info)['success']) {
+                throw new \Exception('Falha ao salvar o workflow da revisao');
+            }
+            DB::commit();
+            return ['success' => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return ['success' => false];
+        }
     }
 
 

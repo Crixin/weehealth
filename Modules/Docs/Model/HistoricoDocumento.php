@@ -14,7 +14,8 @@ class HistoricoDocumento extends Model
     protected $fillable = [
         'descricao',
         'documento_id',
-        'user_id'
+        'user_id',
+        'documento_revisao'
     ];
 
     public $rules =  [

@@ -6,8 +6,7 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Repositories\UserRepository;
-use Modules\Docs\Repositories\EtapaFluxoRepository;
-use Modules\Docs\Repositories\UserEtapaDocumentoRepository;
+use Modules\Docs\Repositories\{EtapaFluxoRepository, DocumentoRepository, UserEtapaDocumentoRepository};
 
 class UserEtapaDocumentoService
 {
@@ -20,6 +19,7 @@ class UserEtapaDocumentoService
         $this->userEtapaDocumentoRepository = new UserEtapaDocumentoRepository();
         $this->userRepository = new UserRepository();
         $this->etapaFluxoRepository = new EtapaFluxoRepository();
+        $this->documentoRepository = new DocumentoRepository();
     }
 
     public function store(array $data)
@@ -50,6 +50,7 @@ class UserEtapaDocumentoService
             return ["success" => true];
         } catch (\Throwable $th) {
             DB::rollback();
+            dd($th);
             return ["success" => false];
         }
     }
@@ -77,6 +78,7 @@ class UserEtapaDocumentoService
         }
     }
 
+
     public function storeHistorico($documento_id, $descricao, $revisao)
     {
         $historicoDocumentoService = new HistoricoDocumentoService();
@@ -87,5 +89,46 @@ class UserEtapaDocumentoService
             "documento_revisao" => $revisao
         ];
         return $historicoDocumentoService->store($insert);
+    }
+
+
+    public function iniciarRevisao($data)
+    {
+        try {
+            DB::beginTransaction();
+
+            $documento = $data['documento_id'];
+
+            $documento = $this->documentoRepository->find($documento);
+            $usersEtapaDocumento = $this->userEtapaDocumentoRepository->findBy(
+                [
+                    ['documento_id', "=", $documento->id],
+                    ['documento_revisao', "=", str_pad($documento->revisao - 1, strlen($documento->revisao), "0", STR_PAD_LEFT)],
+                ]
+            )->toArray();
+
+            $inserir['grupo_user_etapa'] = array_map(function ($userEtapaDoc) {
+                return [
+                    'user_id' => $userEtapaDoc['user_id'],
+                    'etapa_fluxo_id' => $userEtapaDoc['etapa_fluxo_id'],
+                    'grupo_id' => $userEtapaDoc['grupo_id'],
+                ];
+            }, $usersEtapaDocumento);
+            
+
+            $inserir['documento_id'] = $documento->id;
+            $inserir['documento_revisao'] = str_pad($documento->revisao + 1, strlen($documento->revisao), "0", STR_PAD_LEFT);
+
+            if (!$this->store($inserir)) {
+                throw new \Exception("Falha ao cadastrar aprovadores da nova revisao");
+            }
+
+            DB::commit();
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            dd($th);
+            DB::rollback();
+            return ["success" => false];
+        }
     }
 }

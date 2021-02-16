@@ -44,14 +44,14 @@
             <div class="col-md-12 mb-3">
                 <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2"><i class="mdi mdi-chart-timeline"></i> Linha do Tempo</button>
             </div>
-{{--             @component(
+            @component(
                 'docs::components.documento.linha-tempo', 
                 [
                     'historico' => $historico
                 ]
             )
             @endcomponent
- --}}
+
             @if ($etapaAtual->comportamento_aprovacao)
                 @component(
                     'docs::components.documento.aprovacao',

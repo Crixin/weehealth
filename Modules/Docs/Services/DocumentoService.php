@@ -2,6 +2,7 @@
 
 namespace Modules\Docs\Services;
 
+use App\Classes\Helper;
 use App\Services\ValidacaoService;
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Repositories\ParametroRepository;
@@ -18,7 +19,7 @@ use Modules\Docs\Repositories\{
     UserEtapaDocumentoRepository,
     VinculoDocumentoRepository
 };
-use Modules\Docs\Services\WorkflowService;
+use Modules\Docs\Services\{WorkflowService, UserEtapaDocumentoService};
 
 class DocumentoService
 {
@@ -329,6 +330,48 @@ class DocumentoService
     }
 
     
+    public function iniciarRevisao($data)
+    {
+        try {
+            DB::beginTransaction();
+
+            $documento = $data['documento_id'];
+
+            $update = [
+                'revisao' => $this->getNextCodigoRevisao($documento),
+                'em_revisao' => true
+            ];
+
+            $this->documentoRepository->update($update, $documento);
+
+            $workflowService = new WorkflowService();
+            $userEtapaDocumentoService = new UserEtapaDocumentoService();
+
+            if (!$workflowService->iniciarRevisao($data)['success']) {
+                throw new \Exception("Falha ao iniciar o workflow de revisao");
+            }
+            
+            if (!$userEtapaDocumentoService->iniciarRevisao($data)['success']) {
+                throw new \Exception("Falha ao criar lista de aprovadires para a nova revisao");
+            }
+
+            Helper::setNotify(__("messages.documento.startReview"), 'success|check-circle');
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            Helper::setNotify(__("messages.documento.startReviewFailed"), 'danger|close-circle');
+            return ["success" => false];
+        }
+    }
+
+
+    private function getNextCodigoRevisao($documento)
+    {
+        $documento = $this->documentoRepository->find($documento);
+        return str_pad($documento->revisao + 1, strlen($documento->revisao), "0", STR_PAD_LEFT);
+    }
+
+
     private function hierarquiaDocumentos(int $documento, array $docsVincular)
     {
         try {
@@ -486,7 +529,7 @@ class DocumentoService
                 ]
             )->toArray();
 
-            $delete = array_map(function ($arr) use ($aprovadores) {
+            $delete = array_filter($allUserEtapaDocumento, function ($arr) use ($aprovadores) {
                 foreach ($aprovadores['grupo_user_etapa'] as $aprovador) {
                     if (
                         $arr['user_id'] == $aprovador['user_id'] &&
@@ -496,8 +539,10 @@ class DocumentoService
                         return false;
                     }
                 }
-                return $arr['id'];
-            }, $allUserEtapaDocumento);
+                return $arr;
+            });
+
+            $delete = array_column($delete, "id");
 
             $aprovadores['documento_id'] = $documento->id;
             $aprovadores['documento_revisao'] = $documento->revisao;

@@ -8,10 +8,10 @@ use DateTime;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\{Auth, Log, Storage};
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Modules\Portal\Model\{Grupo, EmpresaUser, EmpresaGrupo};
 use Modules\Core\Model\{Empresa, Parametro};
-use Modules\Core\Repositories\{EmpresaRepository};
-use Modules\Core\Repositories\{ParametroRepository,GrupoUserRepository};
+use Modules\Portal\Model\{Grupo, EmpresaUser, EmpresaGrupo};
+use Modules\Docs\Repositories\{DocumentoRepository};
+use Modules\Core\Repositories\{ParametroRepository, GrupoUserRepository, EmpresaRepository};
 use Modules\Portal\Repositories\{EmpresaGrupoRepository, EmpresaUserRepository};
 
 class Helper
@@ -612,6 +612,31 @@ class Helper
 
         return Auth::user()->setor_id == $idSetorQualidade || Auth::user()->id == $documento->elaborador_id;
     }
+    
+    
+    public static function permissaoRevisaoDocumento($documento)
+    {
+        $documentoRepository = new DocumentoRepository();
+        $grupoUserRepository = new GrupoUserRepository();
+        $parametroRepository = new ParametroRepository();
+
+        $perfilElaborador = $parametroRepository->getParametro('PERFIL_ELABORADOR');
+
+        $documento = $documentoRepository->find($documento);
+        $fluxo = $documento->docsTipoDocumento->docsFluxo;
+        
+        $grupoUser = $grupoUserRepository->findBy(
+            [
+                ["grupo_id", "=", $fluxo->grupo_id],
+                ["user_id", "=", Auth::id()]
+            ]
+        )->count();
+
+        return
+            Auth::user()->perfil_id == $perfilElaborador && Auth::user()->setor_id == $documento->setor_id ||
+            Auth::user()->perfil_id == $fluxo->perfil_id && $grupoUser;
+    }
+
 
     public static function isSetorQualidade()
     {

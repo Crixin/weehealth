@@ -34,7 +34,8 @@ class HistoricoDocumentoService
             });
             return ["success" => true];
         } catch (\Throwable $th) {
-            return ["success" => false, "redirect" => redirect()->back()->withInput()];
+            dd($th);
+            return ["success" => false];
         }
     }
 }
