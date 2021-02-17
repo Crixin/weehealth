@@ -40,7 +40,7 @@ class TipoDocumento extends Model
         'fluxo'                 => 'required|string|max:50',
         'periodoVigencia'       => 'required|numeric',
         'periodoAviso'          => 'required|numeric',
-        'documentoModelo'       => 'required|mimes:xlsx,xls,docx,doc',
+        'documentoModelo'       => 'sometimes|mimes:xlsx,xls,docx,doc',
         'codigoPadrao'          => 'required',
         'numeroPadrao'          => 'required',
         'ultimoDocumento'       => 'required|numeric|min:0'

@@ -260,11 +260,11 @@ class TipoDocumentoController extends Controller
 
         //SE TIVER DOCUMENTO VINCULADO A ESSE FLUXO NÃO ALTERA O ULTIMO DOCUMENTO
         if ($request->get('idTipoDocumento')) {
-            $buscaDocumento = $this->tipoDocumentoRepository->find($request->get('idTipoDocumento'));
+/*             $buscaDocumento = $this->tipoDocumentoRepository->find($request->get('idTipoDocumento'));
             if ($buscaDocumento->docsDocumento->count() > 0) {
                 unset($retorno["ultimo_documento"]);
             }
-
+ */
             $retorno['id'] = $request->get('idTipoDocumento');
         }
 
