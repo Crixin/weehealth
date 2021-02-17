@@ -48,7 +48,7 @@ class TipoDocumento extends Model
 
     public function docsFluxo()
     {
-        return $this->hasOne('Modules\Docs\Model\Fluxo', 'id', 'fluxo_id');
+        return $this->hasOne('Modules\Docs\Model\Fluxo', 'id', 'fluxo_id')->orderBy('versao', 'desc')->limit(1);
     }
 
     public function docsDocumento()

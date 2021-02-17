@@ -107,9 +107,8 @@ class TipoDocumentoService
             'vinculo_obrigatorio_outros_doc' => $buscaTipoDocumento->vinculo_obrigatorio_outros_documento,
             'tipo_documento_pai' => $buscaTipoDocumento->tipo_documento_pai_id
         ];
-        
         foreach ($buscaTipoDocumento->docsFluxo->docsEtapaFluxo as $key => $value2) {
-            if ($value2->$comportamento == true) {
+            if ($value2->$comportamento == true && $value2->versao_fluxo == $buscaTipoDocumento->docsFluxo->versao) {
                 $etapas[] =
                 [
                     'id'    => $value2->id,
@@ -131,7 +130,7 @@ class TipoDocumentoService
         $request = [
             "ultimo_documento" => $buscaUltimoCodigo->ultimo_documento + 1
         ];
-        return $this->update($request, $tipoDocumentoId);
+        return $this->tipoDocumentoRepository->update($request, $tipoDocumentoId);
     }
 
     public function ordenacaoArray(&$array, $column, $direction = SORT_ASC)
