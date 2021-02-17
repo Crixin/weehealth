@@ -2,6 +2,7 @@
 
 namespace Modules\Docs\Model;
 
+use App\Classes\Constants;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -40,7 +41,6 @@ class TipoDocumento extends Model
         'fluxo'                 => 'required|string|max:50',
         'periodoVigencia'       => 'required|numeric',
         'periodoAviso'          => 'required|numeric',
-        'documentoModelo'       => 'sometimes|mimes:xlsx,xls,docx,doc',
         'codigoPadrao'          => 'required',
         'numeroPadrao'          => 'required',
         'ultimoDocumento'       => 'required|numeric|min:0'

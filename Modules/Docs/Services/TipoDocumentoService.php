@@ -2,6 +2,7 @@
 
 namespace Modules\Docs\Services;
 
+use App\Classes\Constants;
 use App\Classes\Helper;
 use App\Services\ValidacaoService;
 use Illuminate\Support\Facades\DB;
@@ -12,12 +13,15 @@ class TipoDocumentoService
 {
     protected $tipoDocumentoRepository;
     private $rules;
+    private $extensoes;
 
     public function __construct()
     {
         $tipoDocumento = new TipoDocumento();
         $this->rules = $tipoDocumento->rules;
         $this->tipoDocumentoRepository = new TipoDocumentoRepository();
+        $this->extensoes = implode(', ', Constants:: $EXTENSAO_ONLYOFFICE);
+        $this->rules['documentoModelo'] = 'sometimes|mimes:' . $this->extensoes;
     }
 
     public function store(array $data)
@@ -48,7 +52,6 @@ class TipoDocumentoService
             });
             return ["success" => true];
         } catch (\Throwable $th) {
-            dd($th);
             Helper::setNotify("Erro ao cadastrar o tipo de documento. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
             return ["success" => false, "redirect" => redirect()->back()->withInput()];
         }
