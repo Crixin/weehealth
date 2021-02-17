@@ -18,7 +18,7 @@ class FluxoService
         $this->etapaFluxoRepository = new EtapaFluxoRepository();
     }
 
-    public function create(array $data)
+    public function store(array $data)
     {
         $createFluxo = $data;
         unset(
@@ -30,13 +30,45 @@ class FluxoService
             $fluxo = $this->fluxoRepository->create($createFluxo);
             //Cria etapas
             $novaOrdem = 0;
+            $etapasComRejeicao = [];
+            $etapaFluxoService = new EtapaFluxoService();
             foreach ($data['etapas'] as $key => $value) {
                 $novaOrdem += 1 ;
                 $etapas = json_decode($value);
+
+                if (!empty($etapas->etapaRejeicao)) {
+                    array_push($etapasComRejeicao, $etapas);
+                }
+
                 $requestCreate = $this->montaRequest($etapas, $fluxo, $novaOrdem);
-                $etapaFluxoService = new EtapaFluxoService();
-                $etapaFluxoService->create($requestCreate);
+                unset($requestCreate['etapa_rejeicao_id']);
+                $etapaFluxoService->store($requestCreate);
             }
+
+            //percorre novamente o request salvar etapas de rejeicao
+            foreach ($etapasComRejeicao as $key => $etapa) {
+                $buscaEtapasRejeicaoCadastradas = $this->etapaFluxoRepository->findOneBy(
+                    [
+                        ['ordem', '=', $etapa->etapaRejeicao],
+                        ['versao_fluxo', '=', $fluxo->versao],
+                        ['fluxo_id', "=", $fluxo->id],
+                    ]
+                );
+
+                $buscaEtapasCadastradas = $this->etapaFluxoRepository->findOneBy(
+                    [
+                        ['nome', '=', $etapa->nome],
+                        ['descricao', '=', $etapa->descricao],
+                        ['versao_fluxo', '=', $fluxo->versao],
+                        ['fluxo_id', "=", $fluxo->id]
+                    ]
+                );
+                $updateEtapa = $etapaFluxoService->update(
+                    ["etapa_rejeicao_id" => $buscaEtapasRejeicaoCadastradas->id],
+                    $buscaEtapasCadastradas->id
+                );
+            }
+
             DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {
@@ -80,20 +112,24 @@ class FluxoService
             }
 
             //Cria etapas
+            $etapasComRejeicaoUpdate = [];
             foreach ($data['etapas'] as $key => $etapa) {
                 $etapaAux = json_decode($etapa);
                 $novaOrdem = $etapaAux->ordem ;
                 $requestUpdate = $this->montaRequest($etapaAux, $buscaFluxo, $novaOrdem);
+                if (!empty($etapaAux->etapaRejeicao)) {
+                    array_push($etapasComRejeicaoUpdate, $etapaAux);
+                }
 
                 if ($data['nova_versao'] || $etapaAux->id == '') {
+                    unset($requestUpdate['etapa_rejeicao_id']);
                     $this->etapaFluxoRepository->firstOrCreate($requestUpdate);
                 } else {
                     $this->etapaFluxoRepository->update($requestUpdate, $etapaAux->id);
                 }
             }
 
-            
-
+            $this->updateEtapaRejeicao($etapasComRejeicaoUpdate, $buscaFluxo);
             DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {
@@ -126,5 +162,33 @@ class FluxoService
             "etapa_rejeicao_id" => empty($etapas->etapaRejeicao) ? null : (int) $etapas->etapaRejeicao,
             "exigir_lista_presenca" => $etapas->listaPresenca  == 1 ? true : false
         ];
+    }
+
+    private function updateEtapaRejeicao($etapasComRejeicaoUpdate, $fluxo)
+    {
+
+        foreach ($etapasComRejeicaoUpdate as $key => $etapaComRejeicao) {
+
+            $buscaEtapaUpdate = $this->etapaFluxoRepository->findOneBy(
+                [
+                    ['ordem', '=' , $etapaComRejeicao->ordem],
+                    ['versao_fluxo', '=', $fluxo->versao],
+                    ['fluxo_id', '=', $fluxo->id]
+                ]
+            );
+            $buscaOrdemEtapaRejeicao = $this->etapaFluxoRepository->findOneBy(
+                [
+                    ['id', '=' , $etapaComRejeicao->etapaRejeicao]
+                ]
+            );
+            $buscaEtapaRejeicao = $this->etapaFluxoRepository->findOneBy(
+                [
+                    ['ordem', '=' , $buscaOrdemEtapaRejeicao->ordem],
+                    ['versao_fluxo', '=', $fluxo->versao],
+                    ['fluxo_id', '=', $fluxo->id]
+                ]
+            );
+            $update = $this->etapaFluxoRepository->update(['etapa_rejeicao_id' => $buscaEtapaRejeicao->id ], $buscaEtapaUpdate->id);
+        }
     }
 }

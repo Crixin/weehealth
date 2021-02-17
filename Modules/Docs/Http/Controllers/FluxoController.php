@@ -108,7 +108,7 @@ class FluxoController extends Controller
         }
         try {
             $cadastro = $this->montaRequest($request);
-            $retorno = $this->fluxoService->create($cadastro);
+            $retorno = $this->fluxoService->store($cadastro);
             if (!$retorno['success']) {
                 throw new Exception("Um erro ocorreu ao gravar o fluxo", 1);
             }

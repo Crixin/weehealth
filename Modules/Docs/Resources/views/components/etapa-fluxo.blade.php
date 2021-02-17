@@ -21,7 +21,6 @@
         <div class="col-md-6">
             <div class="form-group required{{ $errors->has('status') ? ' has-error' : '' }}">
                 {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
-            
                 {!! Form::select('status', $status, !empty($etapaEdit) ?  $etapaEdit->status_id : null, ['id' => 'status', 'class' => 'form-control selectpicker ', 'required' => true, 'placeholder' => __('components.selectepicker-default') ]) !!}
                 <small class="text-danger">{{ $errors->first('status') }}</small>
             </div>

@@ -46,8 +46,9 @@
                             'status' => $status,
                             'notificacoes' => $notificacoes,
                             'tiposAprovacao' => $tiposAprovacao,
-                            'etapasRejeicao' => $etapasRejeicao
-                        ]
+                            'etapasRejeicao' => $etapasRejeicao,
+                            'fluxo' => $etapaEdit->docsFluxo
+                        ] 
                     )
                     @endcomponent
                     

@@ -14,7 +14,7 @@ class EtapaFluxoService
         $this->etapaFluxoRepository = new EtapaFluxoRepository();
     }
 
-    public function create(array $data)
+    public function store(array $data)
     {
         return $this->etapaFluxoRepository->create($data);
     }

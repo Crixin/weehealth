@@ -158,6 +158,7 @@ class EtapaFluxoController extends Controller
      */
     public function update(Request $request)
     {
+        dd($request);
         $error = $this->validador($request);
         if ($error) {
             return redirect()->back()->withInput()->withErrors($error);

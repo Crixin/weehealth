@@ -44,7 +44,8 @@
                             'status' => $status,
                             'notificacoes' => $notificacoes,
                             'tiposAprovacao' => $tiposAprovacao,
-                            'etapasRejeicao' => $etapasRejeicao
+                            'etapasRejeicao' => $etapasRejeicao,
+                            'fluxo' => []
                         ]
                     )
                     @endcomponent

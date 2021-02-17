@@ -158,8 +158,25 @@
                     $(this).val('').prop('checked',false).selectpicker('refresh');
             });
             $('#normaAlteracaoId').val('');
-            $('#modalEtapaFluxo').modal('show');
 
+            
+            //monta etapa rejeicao
+            let linhaRejeicao = '<option value="">Nada selecionado</option>';
+            let dadosGrid = document.getElementsByName('dados[]');
+            dadosGrid.forEach(element => {
+                let aux = JSON.parse(element.value);
+
+                let valueMontaRejeicao = $('#idEtapaEdicao').val() == '' && $('#idfluxo') == '' ? aux.ordem : aux.id;
+                console.log(valueMontaRejeicao);
+                let selectMontaRejeicao = $('#idEtapaEdicao').val() == '' ? '' :  (aux.id == $('#etapaRejeicaoHidden').val() ? 'selected="selected"': '' );
+                linhaRejeicao += '<option '+selectMontaRejeicao+'  value="'+ valueMontaRejeicao +'">'+aux.nome+'</option>';
+                
+            });
+            //console.log(linhaRejeicao);
+            $('#etapaRejeicao').empty().append(linhaRejeicao).selectpicker("refresh");
+
+
+            $('#modalEtapaFluxo').modal('show');
         });
 
         $('#dataTable-etapas').on( 'click', 'tbody tr td .btnExcluirEtapa', function () {
@@ -180,6 +197,9 @@
                 let id = element.node.childNodes[1].dataset.id;
                 let valorOld = element.oldData;
                 let valorNew = element.newData;
+
+                console.log(valorOld);
+                console.log(valorNew);
 
                 let valorBotao = JSON.parse($('#dados'+id).val());
                 valorBotao['ordem'] = parseInt(valorNew);

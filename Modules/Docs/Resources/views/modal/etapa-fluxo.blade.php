@@ -1,9 +1,11 @@
 
     <div class="modal"  id="modalEtapaFluxo" tabindex="-1" role="dialog" >
         <div class="modal-dialog modal-xl" role="document">
-            <input type="hidden"  id="normaAlteracaoId">
-            <input type="hidden"  id="idEtapaEdicao">
+            
             <form action="#" onsubmit="validacao()"  id="formEtapaNorma" name="formEtapaNorma">
+                <input type="hidden"  id="normaAlteracaoId">
+                <input type="hidden"  id="idEtapaEdicao">
+                <input type="hidden"  id="idfluxo" value="{{$etapa->id ?? ''}}">
                 <div class="modal-content">
                     <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">@lang('buttons.docs.etapa-fluxo.create')</h5>
@@ -44,6 +46,7 @@
             let dados = $('#dados'+id).val();
             let obj = JSON.parse(dados);
             for( const key in obj){
+                
                 if(obj[key] == true || obj[key] == false){
                     $('#'+key).prop('checked', obj[key]);
                 }
@@ -68,7 +71,20 @@
         var values = {};
         $inputs.each(function() {
             if(this.name != ''){
-                values[this.name] = (this.type == 'checkbox') ? $(this).prop('checked') : $(this).val().replace(/ /g,'&nbsp;');
+                 let valor = '';
+                 switch (this.type) {
+                     case 'checkbox':
+                         valor = $(this).prop('checked');
+                         break;
+                    case 'text':
+                         valor = $(this).val().replace(/ /g,'&nbsp;');
+                         break; 
+                    case 'select-one':
+                         valor = $(this).val();
+                         break;
+                 }
+                
+                values[this.name] = valor;
             }
         });
         montaLinha(values);
@@ -97,7 +113,7 @@
             values['ordem'] = $('#normaAlteracaoId').val();
             values['id'] =  parseInt( $('#idEtapaEdicao').val());
             let idBotao = $('#normaAlteracaoId').val();
-            var botaoEdicao = montaBotao(ordem, values);
+            var botaoEdicao = montaBotao($('#normaAlteracaoId').val(), values);
 
             deleteTR(tr);
             t.row.add(
