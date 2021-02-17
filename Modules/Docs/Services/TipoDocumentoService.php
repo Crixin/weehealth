@@ -2,7 +2,6 @@
 
 namespace Modules\Docs\Services;
 
-use App\Classes\Constants;
 use App\Classes\Helper;
 use App\Services\ValidacaoService;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +19,7 @@ class TipoDocumentoService
         $tipoDocumento = new TipoDocumento();
         $this->rules = $tipoDocumento->rules;
         $this->tipoDocumentoRepository = new TipoDocumentoRepository();
-        $this->extensoes = implode(', ', Constants:: $EXTENSAO_ONLYOFFICE);
+        $this->extensoes = str_replace('.', '', implode(", ", json_decode(Helper::buscaParametro('EXTENSAO_DOCUMENTO_ONLYOFFICE'))));
         $this->rules['documentoModelo'] = 'sometimes|mimes:' . $this->extensoes;
     }
 
