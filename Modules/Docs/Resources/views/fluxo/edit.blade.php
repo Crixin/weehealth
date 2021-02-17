@@ -41,7 +41,7 @@
                 <form method="POST" action="{{ route('docs.fluxo.alterar') }}" id="formFluxoEdit" onsubmit="msgConfirmacao()" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <input type="hidden" name="novaVersaoFluxo" id="novaVersaoFluxo">
-                    <input type="hidden" name="idFluxo" value="{{ $fluxo->id }}">
+                    <input type="hidden" id="idFluxo" name="idFluxo" value="{{ $fluxo->id }}">
                     <input type="hidden" name="ordemHidden" id="ordemHidden" value="{{$fluxo->docsEtapaFluxoInversao[0]->ordem ?? 0}}"> 
                     @component(
                         'docs::components.fluxo', 
