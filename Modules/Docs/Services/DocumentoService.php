@@ -576,7 +576,7 @@ class DocumentoService
             $documento = $this->documentoRepository->find($data['documento_id']);
 
             
-            $response = $ged->getRegistro($documento->ged_documento_id, ["docs" => "true"]);
+            $response = $ged->getRegistro($documento->ged_registro_id, ["docs" => "true"]);
 
             if ($response['error']) {
                 throw new \Exception("Falha na busca do registro para criar uma cópia para a nova revisão");

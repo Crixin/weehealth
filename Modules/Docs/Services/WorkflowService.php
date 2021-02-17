@@ -345,7 +345,7 @@ class WorkflowService
             $docPath = $documento->nome . $buscaPrefixo . $documento->revisao . "." . $documento->extensao;
             $base64file = base64_encode(Storage::disk('weecode_office')->get($docPath));
             
-            $idRegistro = $documento->ged_documento_id;
+            $idRegistro = $documento->ged_registro_id;
             
             $areaGed = $this->parametroRepository->getParametro('AREA_GED_DOCUMENTOS');
 
@@ -391,7 +391,7 @@ class WorkflowService
 
             $info = [
                 "em_revisao" => false,
-                "ged_documento_id" => $idRegistro,
+                "ged_registro_id" => $idRegistro,
             ];
 
             
