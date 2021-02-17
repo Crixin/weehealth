@@ -8,8 +8,11 @@ use Modules\Docs\Repositories\{
     EtapaFluxoRepository,
     UserEtapaDocumentoRepository
 };
-use Illuminate\Support\Facades\DB;
-use App\Classes\Helper;
+use Modules\Core\Repositories\{
+    ParametroRepository,
+};
+use Illuminate\Support\Facades\{DB, Storage};
+use App\Classes\{Helper, RESTServices};
 use Illuminate\Support\Facades\Auth;
 use Modules\Docs\Model\Workflow;
 use App\Services\ValidacaoService;
@@ -27,6 +30,7 @@ class WorkflowService
     private $documentoRepository;
     private $etapaFluxoRepository;
     private $userEtapaDocumentoRepository;
+    private $parametroRepository;
 
     public function __construct()
     {
@@ -37,6 +41,7 @@ class WorkflowService
         $this->documentoRepository = new DocumentoRepository();
         $this->etapaFluxoRepository = new EtapaFluxoRepository();
         $this->userEtapaDocumentoRepository = new UserEtapaDocumentoRepository();
+        $this->parametroRepository = new ParametroRepository();
     }
 
 
@@ -322,22 +327,83 @@ class WorkflowService
     private function divulgaDocumento(array $data)
     {
         try {
+            DB::beginTransaction();
+
             $documentoService = new DocumentoService();
+            $ged = new RESTServices();
+
+
+            $documento = $this->documentoRepository->find($data['documento_id']);
+
 
             if (!$this->store($data)['success']) {
                 throw new \Exception("Falha ao divulgar o documento (workflow) ");
             }
+   
+            $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
             
+            $docPath = $documento->nome . $buscaPrefixo . $documento->revisao . "." . $documento->extensao;
+            $base64file = base64_encode(Storage::disk('weecode_office')->get($docPath));
+            
+            $idRegistro = $documento->ged_documento_id;
+            
+            $areaGed = $this->parametroRepository->getParametro('AREA_GED_DOCUMENTOS');
+
+            if (!$idRegistro) {
+                
+                $newRegister = [
+                    "idArea" => $areaGed,
+                    "removido" => false,
+                    "listaIndice" => [
+                        (object) [
+                            'idTipoIndice' => 15,
+                            'identificador' => 'documento',
+                            'valor' => $documento->codigo
+                        ]
+                    ]
+                    
+                ];
+
+                $idRegistro = $ged->postRegistro($newRegister);
+                if ($idRegistro['error']) {
+                    throw new \Exception("Falha ao criar o registro do documento no GED");
+                    
+                    return back();
+                }
+                $idRegistro = $idRegistro['response'];
+            }
+
+            $insereDocumento = [
+                'endereco' => $documento->revisao . "." . $documento->extensao,
+                'idArea' => $areaGed,
+                'idRegistro' => $idRegistro,
+                'idUsuario' => env('ID_GED_USER'),
+                'removido' => false,
+                'bytes'    => $base64file
+            ];
+            
+            $response = $ged->postDocumento($insereDocumento);
+
+            if ($response['error']) {
+                throw new \Exception("Falha ao criar o documento do registro no GED ");
+            }
+
+
             $info = [
                 "em_revisao" => false,
+                "ged_documento_id" => $idRegistro,
             ];
+
             
             if (!$documentoService->update($info, $data['documento_id'])['success']) {
                 throw new \Exception("Falha ao divulgar o documento");
             }
 
+            DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {
+            dd($th);
+            DB::rollback();
             return ["success" => false];
         }
     }

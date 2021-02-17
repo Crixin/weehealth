@@ -2,9 +2,9 @@
 
 namespace Modules\Docs\Services;
 
-use App\Classes\Helper;
+use App\Classes\{Helper, RESTServices};
 use App\Services\ValidacaoService;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{DB, Storage};
 use Modules\Core\Repositories\ParametroRepository;
 use Modules\Core\Repositories\SetorRepository;
 use Modules\Core\Repositories\UserRepository;
@@ -32,6 +32,7 @@ class DocumentoService
     protected $tipoDocumentoRepository;
     protected $agrupamentoUserDocumentoRepository;
     protected $documentoItemNormaRepository;
+    protected $parametroRepository;
 
 
     protected $rules;
@@ -50,6 +51,8 @@ class DocumentoService
         $this->documentoItemNormaRepository = new DocumentoItemNormaRepository();
         $this->hierarquiaDocumentoRepository = new HierarquiaDocumentoRepository();
         $this->agrupamentoUserDocumentoRepository = new AgrupamentoUserDocumentoRepository();
+        $this->parametroRepository = new ParametroRepository();
+
     }
 
     public function store($data)
@@ -337,13 +340,15 @@ class DocumentoService
 
             $documento = $data['documento_id'];
 
+            $this->criaCopiaDocumento($data);        
+
             $update = [
                 'revisao' => $this->getNextCodigoRevisao($documento),
                 'em_revisao' => true
             ];
 
             $this->documentoRepository->update($update, $documento);
-
+            
             $workflowService = new WorkflowService();
             $userEtapaDocumentoService = new UserEtapaDocumentoService();
 
@@ -355,6 +360,7 @@ class DocumentoService
                 throw new \Exception("Falha ao criar lista de aprovadires para a nova revisao");
             }
 
+            DB::commit();
             Helper::setNotify(__("messages.documento.startReview"), 'success|check-circle');
             return ["success" => true];
         } catch (\Throwable $th) {
@@ -556,6 +562,54 @@ class DocumentoService
 
             return ["success" => true];
         } catch (\Throwable $th) {
+            return ["success" => false];
+        }
+    }
+
+
+    private function criaCopiaDocumento(array $data)
+    {
+        try {
+            $ged = new RESTServices();
+                
+            $documentoService = new DocumentoService();
+            $documento = $this->documentoRepository->find($data['documento_id']);
+
+            
+            $response = $ged->getRegistro($documento->ged_documento_id, ["docs" => "true"]);
+
+            if ($response['error']) {
+                throw new \Exception("Falha na busca do registro para criar uma cópia para a nova revisão");
+            }
+
+            $registro = $response['response'];
+
+            $nomeDocumento = $documento->revisao . "." . $documento->extensao;
+
+            foreach ($registro->listaDocumento as $documentoGed) {
+                if ($documentoGed->endereco == $nomeDocumento) {
+
+                    $response = $ged->getDocumento($documentoGed->id, ['docs' => 'true']);
+
+                    if ($response['error']) {
+                        throw new \Exception("Falha na busca do documento para criar uma cópia para a nova revisão");
+                    }
+
+                    $documentoToClone = $response['response'];
+
+                    $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
+
+                    $novaRev = str_pad($documento->revisao + 1, strlen($documento->revisao), "0", STR_PAD_LEFT);
+                    $nomeDocumentoFinal = $documento->nome . $buscaPrefixo . $novaRev . "." . $documento->extensao;
+
+                    $storagePath = Storage::disk('weecode_office')->put($nomeDocumentoFinal, base64_decode($documentoToClone->bytes));
+                    break;
+                }
+            } 
+       
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            dd($th);
             return ["success" => false];
         }
     }

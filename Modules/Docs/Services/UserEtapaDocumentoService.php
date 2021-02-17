@@ -117,12 +117,11 @@ class UserEtapaDocumentoService
             
 
             $inserir['documento_id'] = $documento->id;
-            $inserir['documento_revisao'] = str_pad($documento->revisao + 1, strlen($documento->revisao), "0", STR_PAD_LEFT);
+            $inserir['documento_revisao'] = $documento->revisao;
 
             if (!$this->store($inserir)) {
                 throw new \Exception("Falha ao cadastrar aprovadores da nova revisao");
             }
-
             DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {

@@ -20,7 +20,7 @@ class Helper
      * Define as propriedades da notificação na sessão para utilizar o componente 'alert' (/resources/views/componentes/alert.blade.php)
      */
     public static function setNotify($_message, $_style)
-    {
+    {   
         if (!str_before(Session::get('style'), '|') == 'danger') {
             Session::flash('message', $_message);
             Session::flash('style', $_style);
