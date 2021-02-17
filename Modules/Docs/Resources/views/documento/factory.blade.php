@@ -23,7 +23,6 @@
         <div class="card">
             <div class="card-body">
 
-                <input type="hidden" name="permitirAnexo" id="permitirAnexo" value="{{$permissaoEtapa->permitir_anexo}}">
                 @component('components.validation-error', ['errors'])@endcomponent
 
                 @if(Session::has('message'))
@@ -100,11 +99,6 @@
 @endsection
 
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-@include('docs::modal/anexo-documento',
-    [
-        'comportamento_modal' => 'CRIACAO'
-    ]
-)
 
 @section('footer')
     <script>
@@ -124,14 +118,8 @@
                 processData: false,
                 success: function(ret) {
                     if(ret.success == true) {
-                        if($('#permitirAnexo').val() == true){
-                            $('#idDocumento').val(ret.data);
-                            $("#modal-anexos").modal({ backdrop: 'static', keyboard: false});
-                            $("#btn-lista-anexos").trigger('click');
-                        }else{
-                            swal2_success_not_reload("Sucesso!", "Documento criado com sucesso.");
-                            document.location.href="{!! route('docs.documento'); !!}";
-                        }
+                        swal2_success_not_reload("Sucesso!", "Documento criado com sucesso.");
+                        document.location.href="{!! route('docs.documento'); !!}";
                     }else{
                         swal2_alert_error_not_reload("Erro ao criar documento.");
                     }

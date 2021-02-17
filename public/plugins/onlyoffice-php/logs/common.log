@@ -6429,3 +6429,23 @@ getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
 getStoragePath result: C:\Users\Cristian\Documents\weecode\weehealth\public\plugins\onlyoffice-php\Storage\texte ext_rev00.docx
 getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
 getStoragePath result: C:\Users\Cristian\Documents\weecode\weehealth\public\plugins\onlyoffice-php\Storage\texte ext_rev00.docx
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\Users\Cristian\Documents\weecode\weehealth\public\plugins\onlyoffice-php\Storage\teste ext 2_rev00.xlsx
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\Users\Cristian\Documents\weecode\weehealth\public\plugins\onlyoffice-php\Storage\teste ext 2_rev00.xlsx
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\Users\Cristian\Documents\weecode\weehealth\public\plugins\onlyoffice-php\Storage\aaaaaaaaa ext2_rev00.xlsx
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\Users\Cristian\Documents\weecode\weehealth\public\plugins\onlyoffice-php\Storage\aaaaaaaaa ext2_rev00.xlsx
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\Users\Cristian\Documents\weecode\weehealth\public\plugins\onlyoffice-php\Storage\aaaaaaaaa ext2546_rev00.xlsx
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\Users\Cristian\Documents\weecode\weehealth\public\plugins\onlyoffice-php\Storage\aaaaaaaaa ext2546_rev00.xlsx
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\Users\Cristian\Documents\weecode\weehealth\public\plugins\onlyoffice-php\Storage\aaaaaaaaa ext2546_rev00.
+getVirtualPath virtPath: http://localhost:8000/plugins/onlyoffice-php/Storage/
+getStoragePath result: C:\Users\Cristian\Documents\weecode\weehealth\public\plugins\onlyoffice-php\Storage\aaaaaaaaa ext2546_rev00.
