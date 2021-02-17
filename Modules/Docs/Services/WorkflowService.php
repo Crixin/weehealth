@@ -55,12 +55,14 @@ class WorkflowService
             $etapaAtual = $this->getEtapaAtual($data['documento_id']);
 
             $buscaWorkFlowAnterior = $this->getWorkflowAnterior($data['documento_id']);
+            
             if (!empty($buscaWorkFlowAnterior) && $buscaWorkFlowAnterior->id != $data['etapa_id']) {
                 $updateWorkflowAnterior = [
                     'tempo_duracao_etapa' => $this->getDuracao($buscaWorkFlowAnterior->created_at)
                 ];
                 $this->update($updateWorkflowAnterior, $buscaWorkFlowAnterior->id);
             }
+
             if (array_key_exists('iniciar_revisao', $data)) {
                 $descricao = $this->replaceText(__('messages.workflow.startReview'));
             } elseif (array_key_exists('iniciar_validacao', $data)) {
@@ -68,7 +70,7 @@ class WorkflowService
             } else {
                 $descricao = $data['avancar'] ? $this->replaceText($etapa->descricao) : "A etapa '{$etapa->nome}' foi rejeitada";
             }
-
+                
             $inserir = [
                 'documento_id' => $documento->id,
                 'descricao' => $descricao,

@@ -63,8 +63,8 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
-                                    {!! Form::label('status', 'Status do Documento(NÃO FUNCIONA VER)') !!}
-                                    {!! Form::select('status[]',$status, $statusSelecionado, ['id' => 'status', 'class' => 'form-control selectpicker' , 'data-live-search' => 'true', 'data-actions-box' => 'true' , 'multiple']) !!}
+                                    {!! Form::label('status', 'Status do Documento') !!}
+                                    {!! Form::select('status',$status, $statusSelecionado, ['id' => 'status', 'class' => 'form-control selectpicker' , 'data-live-search' => 'true', 'data-actions-box' => 'true' ,'placeholder' => __('components.selectepicker-default')]) !!}
                                     <small class="text-danger">{{ $errors->first('status') }}</small>
                                 </div>
                             </div>

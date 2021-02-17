@@ -165,6 +165,10 @@ class DocumentoController extends Controller
             array_push($where, ['obsoleto','=',$request->obsoleto == 1 ? true : false , "AND"]);
         }
 
+        if ($request->status != null) {
+            array_push($where, ['status_id', '=', $request->status, 'HAS', 'docsEtapaFluxoDocumento']);
+        }
+       
         $documentos = $this->documentoRepository->findBy($where);
         return view(
             'docs::documento.index',

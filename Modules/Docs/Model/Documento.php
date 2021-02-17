@@ -85,4 +85,16 @@ class Documento extends Model
     {
         return $this->hasMany('Modules\Docs\Model\AgrupamentoUserDocumento', 'documento_id', 'id');
     }
+
+    public function docsEtapaFluxoDocumento()
+    {
+        return $this->hasManyThrough(
+            'Modules\Docs\Model\EtapaFluxo',
+            'Modules\Docs\Model\Workflow',
+            'documento_id',
+            'id',
+            'id',
+            'etapa_fluxo_id'
+        );
+    }
 }
