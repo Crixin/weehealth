@@ -183,7 +183,15 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
         });
 
 
-
+        Route::group(['prefix' => 'copia-controlada', 'as' => 'docs.'], function() {
+            Route::get('',              ['as' => 'copia-controlada',         'uses' => 'CopiaControladaController@index']);
+            Route::get('novo',          ['as' => 'copia-controlada.novo',    'uses' => 'CopiaControladaController@create']);
+            Route::post('salvar',       ['as' => 'copia-controlada.salvar',  'uses' => 'CopiaControladaController@store']);
+            Route::get('editar/{id}',   ['as' => 'copia-controlada.editar',  'uses' => 'CopiaControladaController@edit']);
+            Route::post('alterar',      ['as' => 'copia-controlada.alterar', 'uses' => 'CopiaControladaController@update']);
+            Route::post('deletar',      ['as' => 'copia-controlada.deletar', 'uses' => 'CopiaControladaController@destroy']);
+            Route::post('buscar',       ['as' => 'copia-controlada.buscar',  'uses' => 'CopiaControladaController@getCopiaControlada']);
+        });
 
 
     });

@@ -16,7 +16,16 @@ class CopiaControlada extends Model
         'numero_copias',
         'revisao',
         'documento_id',
-        'user_id'
+        'user_id',
+        'setor'
+    ];
+
+    public $rules = [
+        'documento_id'    => 'required|integer|exists:docs_documento,id',
+        'user_id'         => 'required|integer|exists:core_users,id',
+        'numero_copias'   => 'required|string',
+        'revisao'         => 'required|string',
+        'setor'           => 'required|string'
     ];
 
     /** O usuário 'responsável' pela substituição da cópia física */

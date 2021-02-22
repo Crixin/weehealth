@@ -157,7 +157,9 @@
                                                     <a href="#" style="cursor: default">
                                                         <div class="btn btn-info btn-circle" style="cursor: default"><i class="ti-comment"></i></div>
                                                         <div class="mail-contnet">
-                                                            <h5>{{ $notification->data['title'] }}</h5> <span class="mail-desc"> {{ $notification->data['content'] }} </span> <span> {{ date('H:i', strtotime($notification->updated_at)) }} </span> 
+                                                            <h6>{{ $notification->data['title'] }}</h6> 
+                                                            <span class="mail-desc"> {{ $notification->data['content'] }} </span> 
+                                                            <span> {{ date('H:i', strtotime($notification->updated_at)) }} </span> 
                                                         </div>
                                                     </a>
                                                 @endforeach                                            
@@ -168,7 +170,7 @@
                                         </div>
                                     </li>
                                     <li>
-                                        <a class="nav-link text-center" href="{{ route('core.notificacao') }}"> <strong> @lang('sidebar_and_header.notifications_see_all') </strong> <i class="fa fa-angle-right"></i> </a>
+                                        <a class="nav-link text-center" href="{{ route('core.notificacao.marcar-todas-como-lidas') }}"> <strong> @lang('sidebar_and_header.notifications_see_all') </strong> <i class="fa fa-angle-right"></i> </a>
                                     </li>
                                 </ul>
                             </div>

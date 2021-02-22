@@ -18,7 +18,7 @@ class CreateParametroExtensoesDocsOnlyofficeTableSeeder extends Seeder
         $newParametro = new Parametro();
         $newParametro->identificador_parametro = "EXTENSAO_DOCUMENTO_ONLYOFFICE";
         $newParametro->descricao = "Extensões de documentos aceitas para criar novos documentos";
-        $newParametro->valor_padrao = '.doc, .docx, .xls, .xlsx, .odt';
+        $newParametro->valor_padrao = '[".doc", ".docx", ".xls", ".xlsx", ".odt"]';
         $newParametro->ativo = true;
         $newParametro->save();
     }

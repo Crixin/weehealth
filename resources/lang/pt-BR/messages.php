@@ -29,7 +29,9 @@ return [
         'retreatStepFail' => "Falha ao retroceder a etapa.",
         'validationFail' => "Falha ao validar campos do workflow.",
         'startReview' => "<NOME_USUARIO> iniciou a revisão",
-        'startValidation' => "<NOME_USUARIO> iniciou a validação"
+        'startValidation' => "<NOME_USUARIO> iniciou a validação",
+        'notificationSuccess' => "Notificação enviada com sucesso!",
+        'notificationFail' => "Falha ao enviar notificação."
     ],
     'documento' => [
         'startReview' => "Revisão do documento iniciada",

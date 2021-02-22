@@ -4,6 +4,7 @@ namespace Modules\Core\Http\Controllers;
 
 use App\Classes\Helper;
 use Illuminate\Http\Request;
+use Notification;
 use Illuminate\Support\Facades\Auth;
 
 class NotificacaoController extends Controller
@@ -18,4 +19,5 @@ class NotificacaoController extends Controller
         }
         return redirect()->back()->withInput();
     }
+
 }

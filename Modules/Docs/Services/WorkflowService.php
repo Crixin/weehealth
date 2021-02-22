@@ -3,22 +3,28 @@
 namespace Modules\Docs\Services;
 
 use Modules\Docs\Repositories\{
+    AgrupamentoUserDocumentoRepository,
     WorkflowRepository,
     DocumentoRepository,
     EtapaFluxoRepository,
     UserEtapaDocumentoRepository
 };
 use Modules\Core\Repositories\{
+    NotificacaoRepository,
     ParametroRepository,
+    UserRepository,
 };
 use Illuminate\Support\Facades\{DB, Storage};
 use App\Classes\{Helper, RESTServices};
+use App\Mail\PadraoDocs;
+use App\Mail\TagDocumentos;
 use Illuminate\Support\Facades\Auth;
 use Modules\Docs\Model\Workflow;
 use App\Services\ValidacaoService;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
+use Modules\Core\Services\NotificacaoService;
 use Modules\Docs\Services\{
     DocumentoService
 };
@@ -31,6 +37,9 @@ class WorkflowService
     private $etapaFluxoRepository;
     private $userEtapaDocumentoRepository;
     private $parametroRepository;
+    private $notificacaoRepository;
+    private $agrupamentoUserDocumentoRepository;
+    private $userRepository;
 
     public function __construct()
     {
@@ -42,6 +51,9 @@ class WorkflowService
         $this->etapaFluxoRepository = new EtapaFluxoRepository();
         $this->userEtapaDocumentoRepository = new UserEtapaDocumentoRepository();
         $this->parametroRepository = new ParametroRepository();
+        $this->notificacaoRepository = new NotificacaoRepository();
+        $this->agrupamentoUserDocumentoRepository = new AgrupamentoUserDocumentoRepository();
+        $this->userRepository = new UserRepository();
     }
 
 
@@ -55,7 +67,7 @@ class WorkflowService
             $etapaAtual = $this->getEtapaAtual($data['documento_id']);
 
             $buscaWorkFlowAnterior = $this->getWorkflowAnterior($data['documento_id']);
-            
+
             if (!empty($buscaWorkFlowAnterior) && $buscaWorkFlowAnterior->id != $data['etapa_id']) {
                 $updateWorkflowAnterior = [
                     'tempo_duracao_etapa' => $this->getDuracao($buscaWorkFlowAnterior->created_at)
@@ -70,7 +82,7 @@ class WorkflowService
             } else {
                 $descricao = $data['avancar'] ? $this->replaceText($etapa->descricao) : "A etapa '{$etapa->nome}' foi rejeitada";
             }
-                
+
             $inserir = [
                 'documento_id' => $documento->id,
                 'descricao' => $descricao,
@@ -120,7 +132,7 @@ class WorkflowService
             $documento = $data['documento_id'];
 
             $documento = $this->documentoRepository->find($documento);
-            
+
             $primeiraEtapaFluxo = array_first($documento->docsTipoDocumento->docsFluxo->docsEtapaFluxo->sortBy('ordem')->toArray());
             $info = [
                 'documento_id' => $data['documento_id'],
@@ -145,7 +157,7 @@ class WorkflowService
         $arrayTexts = [
             "<NOME_USUARIO>" => Auth::user()->name
         ];
-        
+
         foreach ($arrayTexts as $textToFind => $replace) {
             $text = str_replace($textToFind, $replace, $text);
         }
@@ -189,7 +201,7 @@ class WorkflowService
     public function getProximaEtapa(int $documento)
     {
         $etapaAtual = $this->getEtapaAtual($documento);
-        
+
         return $this->etapaFluxoRepository->findOneBy(
             [
                 ['fluxo_id', '=', $etapaAtual->fluxo_id],
@@ -199,13 +211,13 @@ class WorkflowService
         );
     }
 
-    
+
     public function avancarEtapa(array $data)
     {
         try {
             $etapaAtual = $this->getEtapaAtual($data['documento_id']);
             $proxEtapa = $this->getProximaEtapa($data['documento_id']);
-            
+
             $info = [
                 'documento_id' => $data['documento_id'],
                 'etapa_id' => $proxEtapa->id,
@@ -217,16 +229,25 @@ class WorkflowService
                     throw new \Exception('Falha ao divulgar o doc');
                 }
             }
-            
+
             if ($proxEtapa->comportamento_treinamento) {
                 //
             }
-            
+
             if ($proxEtapa->comportamento_aprovacao) {
                 if (!$this->store($info)) {
                     throw new \Exception('Falha ao salvar a aprovação da etapa');
                 }
             }
+
+            //Notificação
+            if ($proxEtapa->enviar_notificacao && !empty($proxEtapa->notificacao_id)) {
+                if (!$this->enviarNotificacao($proxEtapa, $data)) {
+                    throw new \Exception('Falha ao enviar notificação');
+                }
+            }
+
+
             Helper::setNotify(__("messages.workflow.advanceStepSuccess"), 'success|check-circle');
             return ['success' => true];
         } catch (\Throwable $th) {
@@ -235,12 +256,11 @@ class WorkflowService
         }
     }
 
-    
+
     private function retrocederEtapa(array $data)
     {
         try {
             $etapa = $this->getEtapaAtual($data['documento_id']);
-            
             $info = [
                 'documento_id' => $data['documento_id'],
                 'justificativa' => $data['justificativa'],
@@ -258,15 +278,13 @@ class WorkflowService
             return ['success' => false];
         }
     }
-    
-
 
     public function validarEtapaAprovacao(array $data)
     {
         try {
             $etapaAtual = $this->getEtapaAtual($data['documento_id']);
             $documento = $this->documentoRepository->find($data["documento_id"]);
-        
+
             if (filter_var($data["aprovado"], FILTER_VALIDATE_BOOLEAN)) {
                 DB::beginTransaction();
 
@@ -280,9 +298,7 @@ class WorkflowService
                 $etapaUser = array_first($userEtapaDocumento->filter(function ($value, $key) {
                     return $value->user_id == Auth::id();
                 }));
-                $this->userEtapaDocumentoRepository->update([
-                    "aprovado" => true
-                ], $etapaUser->id);
+                $this->userEtapaDocumentoRepository->update(["aprovado" => true], $etapaUser->id);
 
                 $avancar = false;
 
@@ -314,7 +330,7 @@ class WorkflowService
             if (!$this->retrocederEtapa($data)['success']) {
                 throw new \Exception("Falha ao retroceder etapa");
             }
-            
+
             return ["success" => true];
         } catch (\Throwable $th) {
             DB::rollback();
@@ -322,7 +338,6 @@ class WorkflowService
             return ["success" => false];
         }
     }
-
 
     private function divulgaDocumento(array $data)
     {
@@ -411,5 +426,114 @@ class WorkflowService
     public function getDuracao($data)
     {
         return  Helper::format_interval(date_diff(new DateTime(date('Y-m-d H:i:s', strtotime($data)), new DateTimeZone('America/Sao_Paulo')), new DateTime("now", new DateTimeZone('America/Sao_Paulo'))));
+    }
+
+    public function enviarNotificacao($proxEtapa, $data)
+    {
+        try {
+            $notificacaoService = new NotificacaoService();
+
+            $objEmailCorpo = $this->getCorpoNotificacao($proxEtapa->notificacao_id, $data['documento_id']);
+
+            $buscaCorpo = new TagDocumentos($proxEtapa->notificacao_id, $data['documento_id']);
+            $tagDocumento = $buscaCorpo->substituirTags();
+
+            if ($proxEtapa->comportamento_divulgacao) {
+                $usuarios = $this->getUserTreinamentoDivulgacao('DIVULGACAO', $data['documento_id']);
+                $responseNotificacao = $notificacaoService->sendNotification($proxEtapa->notificacao_id, $usuarios, $objEmailCorpo, $tagDocumento['titulo'], $tagDocumento['corpo']);
+            }
+
+            if ($proxEtapa->comportamento_treinamento) {
+                $usuarios = $this->getUserTreinamentoDivulgacao('TREINAMENTO', $data['documento_id']);
+                $responseNotificacao = $notificacaoService->sendNotification($proxEtapa->notificacao_id, $usuarios, $objEmailCorpo, $tagDocumento['titulo'], $tagDocumento['corpo']);
+            }
+
+            if ($proxEtapa->comportamento_aprovacao) {
+                $usuarios = $this->getUserAprovadores($data['documento_id'], $proxEtapa->id);
+                $responseNotificacao = $notificacaoService->sendNotification($proxEtapa->notificacao_id, $usuarios, $objEmailCorpo, $tagDocumento['titulo'], $tagDocumento['corpo']);
+            }
+
+            //Envio de notificacao msg no sistema OBS: SEMPRE VAI ENVIAR
+            $responseNotificacao = $notificacaoService->createNotificacao($usuarios, $tagDocumento['titulo'], $tagDocumento['corpo']);
+
+            if (!$responseNotificacao) {
+                throw new \Exception("Erro ao enviar notificação", 1);
+            }
+
+            Helper::setNotify(__("messages.workflow.notificationSuccess"), 'success|check-circle');
+            return ['success' => true];
+        } catch (\Throwable $th) {
+            Helper::setNotify(__("messages.workflow.notificationFail"), 'danger|close-circle');
+            return ['success' => false];
+        }
+    }
+
+    public function getCorpoNotificacao($idNotificacao, $idDocumento)
+    {
+        $buscaNotificacao = $this->notificacaoRepository->find($idNotificacao);
+        $corpo = '';
+        switch ($buscaNotificacao->tipo_id) {
+            //Pode haver varios tipos de corpo de email (hoje soh tem um para teste)
+            case '2':
+                //Documento publicado
+                $corpo = new PadraoDocs($idNotificacao, $idDocumento);
+                break;
+            case '3':
+                //Documento com copia controlada
+                $corpo = new PadraoDocs($idNotificacao, $idDocumento);
+                break;
+            case '5':
+                //Documento que precisa de Verificacao
+                $corpo = new PadraoDocs($idNotificacao, $idDocumento);
+                break;
+            case '6':
+                //Rejeição do documento
+                $corpo = new PadraoDocs($idNotificacao, $idDocumento);
+                break;
+            case '7':
+                //Aprovação do documento
+                $corpo = new PadraoDocs($idNotificacao, $idDocumento);
+                break;
+        }
+        return $corpo;
+    }
+
+    public function getUserTreinamentoDivulgacao(string $tipo, int $idDocumento)
+    {
+        $buscaUsuarios = $this->agrupamentoUserDocumentoRepository->findBy(
+            [
+                ['documento_id', '=', $idDocumento],
+                ['tipo', '=', $tipo]
+            ]
+        );
+        $usuarios = array_column($buscaUsuarios->toArray(), 'user_id');
+
+        $email = $this->userRepository->findBy(
+            [
+                ['id', '', $usuarios, 'IN']
+            ]
+        );
+
+        return array_column($email->toArray(), 'email');
+    }
+
+    public function getUserAprovadores(int $idDocumento, int $etapa)
+    {
+        $buscaDocumento = $this->documentoRepository->find($idDocumento);
+        $buscaUsuarios = $this->userEtapaDocumentoRepository->findBy(
+            [
+                ['documento_id', '=', $idDocumento],
+                ['documento_revisao', '=', $buscaDocumento->revisao],
+                ['etapa_fluxo_id', '=', $etapa]
+            ]
+        );
+        $usuarios = array_column($buscaUsuarios->toArray(), 'user_id');
+        $email = $this->userRepository->findBy(
+            [
+                ['id', '', $usuarios, 'IN']
+            ]
+        );
+
+        return array_column($email->toArray(), 'email');
     }
 }

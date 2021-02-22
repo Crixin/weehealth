@@ -159,22 +159,6 @@
                 </div>
             </div>
         </div>
-        
-        <div class="col-md-4">
-            <div class="form-group">
-                <div class="checkbox{{ $errors->has('comportamentoDivulgacao') ? ' has-error' : '' }}">
-                    <label class="control-label">Divulgação</label>
-                    <td class="text-center text-nowrap">
-                        <div class="switch">
-                            <label>Não
-                                {!! Form::checkbox('comportamentoDivulgacao', '1', !empty($etapaEdit) ?  $etapaEdit->comportamento_divulgacao : false, ['id' => 'comportamentoDivulgacao', 'class'=> 'switch-elaborador']) !!}<span class="lever switch-col-light-blue"></span>Sim
-                            </label>
-                        </div>
-                    </td>
-                    <small class="text-danger">{{ $errors->first('comportamentoDivulgacao') }}</small>
-                </div>
-            </div>
-        </div>
         <div class="col-md-4">
             <div class="form-group">
                 <div class="checkbox{{ $errors->has('comportamentoTreinamento') ? ' has-error' : '' }}">
@@ -190,6 +174,22 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="checkbox{{ $errors->has('comportamentoDivulgacao') ? ' has-error' : '' }}">
+                    <label class="control-label">Divulgação</label>
+                    <td class="text-center text-nowrap">
+                        <div class="switch">
+                            <label>Não
+                                {!! Form::checkbox('comportamentoDivulgacao', '1', !empty($etapaEdit) ?  $etapaEdit->comportamento_divulgacao : false, ['id' => 'comportamentoDivulgacao', 'class'=> 'switch-elaborador']) !!}<span class="lever switch-col-light-blue"></span>Sim
+                            </label>
+                        </div>
+                    </td>
+                    <small class="text-danger">{{ $errors->first('comportamentoDivulgacao') }}</small>
+                </div>
+            </div>
+        </div>
+        
     </div>
     <h5 >Complemento</h5>
     <hr>

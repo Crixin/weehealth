@@ -85,7 +85,6 @@ Route::group(['middleware' => ['auth' , 'changeUser']], function () {
         * NOTIFICAÇãO
         */
         Route::group(['prefix' => 'notificacao', 'as' => 'core.'], function () {
-            Route::get('',                          ['as' => 'notificacao',                           'uses' => 'NotificacaoController@index']);
             Route::get('marcar-todas-como-lidas',   ['as' => 'notificacao.marcar-todas-como-lidas',   'uses' => 'NotificacaoController@markAllAsRead']);
         });
 

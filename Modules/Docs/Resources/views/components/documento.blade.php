@@ -80,12 +80,17 @@
                     <td class="text-center text-nowrap">
                         <div class="switch">
                             <label for="copiaControlada">Não
-                                {!! Form::checkbox('copiaControlada', '1', !empty($normaEdit) ?  $normaEdit->copia_controlada : false, ['id' => 'copiaControlada', 'class'=> 'switch-elaborador']) !!}
+                                {!! Form::checkbox('copiaControlada', '1', !empty($documentoEdit) ?  $documentoEdit->copia_controlada : false, ['id' => 'copiaControlada', 'class'=> 'switch-elaborador']) !!}
                                 <span class="lever switch-col-light-blue"></span>Sim
                             </label>
+                            
                         </div>
+                        @if ( !empty($documentoEdit) && $documentoEdit->copia_controlada)
+                            <button type="button" id="btnGerenciarCopiaControlada" class="btn btn-success pull-right">Gerenciar</button>
+                        @endif
                     </td>    
                 </div>
+                
                 <small class="text-danger">{{ $errors->first('copiaControlada') }}</small>
             </div>
         </div>
@@ -187,9 +192,8 @@
             </div>   
         </div>       
     </div>
-
-    
 </div>
+
 
 
 @section('footer')
@@ -252,8 +256,15 @@
                 document.createDocumento.action = "{{ route('docs.documento.criar-documento') }}";
             }
         });
-        
 
+        $('#copiaControlada').on('change', function(){
+            if($(this).prop('checked') == true){
+                $('#btnGerenciarCopiaControlada').show();
+            }else{
+                $('#btnGerenciarCopiaControlada').hide();
+            }
+        });
+        
     });
 
     function buscaEtapas()

@@ -15,7 +15,7 @@ class JobController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function enqueue($_destinatarios, $corpo, $tries = 2, $delay = 1)
+    public function enqueueEmail($_destinatarios, $corpo, $tries = 2, $delay = 1)
     {
         foreach ($_destinatarios as $key => $destinatario) {
             SendEmail::dispatch(
@@ -24,5 +24,6 @@ class JobController extends Controller
                 $tries
             )->delay(now()->addSeconds($delay));
         }
+        return true;
     }
 }

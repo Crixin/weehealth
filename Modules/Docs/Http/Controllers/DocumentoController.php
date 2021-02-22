@@ -168,7 +168,7 @@ class DocumentoController extends Controller
         if ($request->status != null) {
             array_push($where, ['status_id', '=', $request->status, 'HAS', 'docsEtapaFluxoDocumento']);
         }
-       
+
         $documentos = $this->documentoRepository->findBy($where);
         return view(
             'docs::documento.index',
@@ -442,6 +442,9 @@ class DocumentoController extends Controller
         }
         $grupoDivulgacaoSelecionado = json_decode(json_encode($arrayGrupoDivulgacao), true);
 
+        /*Usuarios */
+        $usuarios = $this->userRepository->findAll()->pluck('name', 'id')->toArray();
+
         return view(
             'docs::documento.edit',
             compact(
@@ -457,7 +460,8 @@ class DocumentoController extends Controller
                 'documentosVinculadosSelecionados',
                 'normasSelecionados',
                 'grupoTreinamentoSelecionado',
-                'grupoDivulgacaoSelecionado'
+                'grupoDivulgacaoSelecionado',
+                'usuarios'
             )
         );
     }

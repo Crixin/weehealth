@@ -55,17 +55,23 @@
                             'documentosVinculadosSelecionados' => $documentosVinculadosSelecionados,
                             'normasSelecionados' => $normasSelecionados,
                             'grupoTreinamentoSelecionado' => $grupoTreinamentoSelecionado,
-                            'grupoDivulgacaoSelecionado' => $grupoDivulgacaoSelecionado
+                            'grupoDivulgacaoSelecionado' => $grupoDivulgacaoSelecionado,
+                            'usuarios' => $usuarios
                         ]
                     )
                     @endcomponent
-
-        
                     <div class="form-actions ">
                         <button type="submit" class="btn btn-success"> <i class="mdi mdi-chevron-double-right"></i> @lang('buttons.general.save')</button>
                         <a href="{{ route('docs.documento') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                     </div>
                 </form>
+
+                @include('docs::modal/copia-controlada',
+                    [
+                        'usuarios' => $usuarios,
+                        'documento' => $documento
+                    ]
+                )
 
             </div>
         </div>
