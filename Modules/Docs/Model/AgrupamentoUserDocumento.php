@@ -16,7 +16,9 @@ class AgrupamentoUserDocumento extends Model
         'documento_id',
         'user_id',
         'tipo',
-        'grupo_id'
+        'grupo_id',
+        'documento_revisao',
+        'documento_lido'
     ];
 
     public $rules = [

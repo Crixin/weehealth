@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Repositories\{SetorRepository, UserRepository, PerfilRepository};
 
@@ -135,6 +136,10 @@ class RegisterController extends Controller
             $busca = DB::select("SELECT count(*) as total FROM pg_roles WHERE rolname ILIKE '" . $usuario . "'");
             if ($busca[0]->total == 0) {
                 $user = '"' . $usuario . '"';
+                DB::purge(getenv('DB_CONNECTION'));
+                Config::set('database.connections.pgsql.username', getenv('DB_USERNAME'));
+                Config::set('database.connections.pgsql.password', getenv('DB_PASSWORD'));
+                DB::reconnect(getenv('DB_CONNECTION'));
                 $cria   = DB::select("CREATE ROLE $usuario WITH LOGIN NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION VALID UNTIL 'infinity' ");
                 $altera = DB::unprepared("ALTER USER $usuario WITH PASSWORD '" . $password . "'");
                 $setFrupo = DB::unprepared("GRANT weehealth TO $usuario ");

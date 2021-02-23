@@ -76,17 +76,39 @@
                             </div>
                         </div>
 
-                        <!-- Editor -->
-                        
+                        <!-- Edicao/Criacao Editor -->
                         @if ($etapaAtual->comportamento_criacao || $etapaAtual->comportamento_edicao)
                             <div class="row iframe_box">
-                                <iframe width="100%" id="speed-onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=review&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
+                                <iframe width="100%" id="speed-onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=edit' . $permissaoOnlyOffice . '&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
                             </div>
                         @endif
                         <!-- End Editor -->
                         
-                        @if ($etapaAtual->comportamento_treinamento)
-                            @component('docs::components.documento.treinamento', ["documento" => $documento]) @endcomponent
+                        <!-- Visualizador -->
+                        @if ($etapaAtual->comportamento_visualizacao)
+                            <div class="row iframe_box">
+                                <iframe width="100%" id="speed-onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=review&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
+                            </div>
+                        @endif
+                        <!-- end Visualizador -->
+                        
+                        @if ($etapaAtual->comportamento_treinamento && $etapaAtual->exigir_lista_presenca)
+                            @component('docs::components.documento.treinamento', 
+                            [
+                                "documento" => $documento,
+                                "docPath" => $docPath
+                            ]) 
+                            @endcomponent
+                        @endif
+
+                        @if ($etapaAtual->comportamento_divulgacao)
+                            @component('docs::components.documento.confirmacao-leitura-divulgacao',
+                            [
+                                "lido" => $agrupamentoDivulgacaoLido,
+                                "documento" => $documento->id
+                                 
+                            ]
+                            ) @endcomponent
                         @endif
                         
                         <div class="col-lg-12 col-md-12 mt-3">
@@ -95,9 +117,9 @@
                                 
                                     {{ Form::token() }}
                                     {!! Form::hidden('documento_id', $documento->id) !!}
-
+                                    
                                     @if ($documento->em_revisao)
-                                        @if (!$etapaAtual->comportamento_aprovacao)
+                                        @if ((!$etapaAtual->comportamento_aprovacao && !$etapaAtual->comportamento_divulgacao && !$etapaAtual->comportamento_treinamento) || ($etapaAtual->comportamento_treinamento && !$etapaAtual->exigir_lista_presenca))
                                             {!! Form::submit("Encaminhar para " . $proximaEtapa->nome, ['class' => 'btn btn-success']) !!}
                                         @endif
                                     @endif
@@ -108,6 +130,7 @@
                                 {!! Form::close() !!}
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>

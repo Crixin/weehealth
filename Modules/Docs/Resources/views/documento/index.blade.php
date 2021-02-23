@@ -172,12 +172,12 @@
                                                 
                                                 @if (Helper::permissaoRevisaoDocumento($documento->id) && !$documento->em_revisao)
                                                     <a class="dropdown-item documento-iniciar-validacao" data-id="{{$documento->id}}" href="javascript:void(0)"> <i class="fa fa-eye text-danger"></i>&nbsp; @lang('buttons.docs.documento.start-validation') </a> 
-
-                                                    <a class="dropdown-item documento-iniciar-revisao" data-documento="{{$documento->id}}" href="javascript:void(0)"> <i class="fa fa-eye text-warning"></i>&nbsp; @lang('buttons.docs.documento.start-review') </a>
                                                 @endif
+                                                <a class="dropdown-item documento-iniciar-revisao" data-documento="{{$documento->id}}" href="javascript:void(0)"> <i class="fa fa-eye text-warning"></i>&nbsp; @lang('buttons.docs.documento.start-review') </a>
+
 
                                                 @if (Helper::isSetorQualidade())
-                                                    <a class="dropdown-item" href="{{ route('docs.documento.lista-presenca', ['id' => $documento->id]) }}"> <i class="fa fa-file-text-o text-info"></i>&nbsp; @lang('buttons.docs.documento.list') </a> 
+                                                    <a class="dropdown-item" href="{{ route('docs.lista-presenca', ['id' => $documento->id]) }}"> <i class="fa fa-file-text-o text-info"></i>&nbsp; @lang('buttons.docs.documento.list') </a> 
                                                 @endif
 
                                                 @if (Helper::isSetorQualidade())

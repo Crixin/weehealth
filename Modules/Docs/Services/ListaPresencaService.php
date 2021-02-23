@@ -2,6 +2,7 @@
 
 namespace Modules\Docs\Services;
 
+use App\Classes\Helper;
 use Modules\Docs\Repositories\ListaPresencaRepository;
 
 class ListaPresencaService
@@ -14,8 +15,19 @@ class ListaPresencaService
         $this->listaPresencaRepository = new ListaPresencaRepository();
     }
 
-    public function create(array $data)
+    public function store(array $data)
     {
-        return $this->listaPresencaRepository->create($data);
+        try {
+            //falta salvar a lista de presenca
+            //$this->listaPresencaRepository->create($data);
+            $workFlowService = new WorkflowService();
+            if (!$workFlowService->avancarEtapa(['documento_id' => $data['documento_id']])['success']) {
+                throw new \Exception("Falha ao avançar etapa etapa");
+            }
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            Helper::setNotify("Erro ao avançar a etapa. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+            return ["success" => false, "redirect" => redirect()->back()->withInput()];
+        }
     }
 }

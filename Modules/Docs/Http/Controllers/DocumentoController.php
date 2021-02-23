@@ -15,7 +15,6 @@ use Modules\Docs\Repositories\{
     BpmnRepository,
     DocumentoItemNormaRepository,
     HierarquiaDocumentoRepository,
-    ListaPresencaRepository,
     NormaRepository,
     TipoDocumentoRepository,
     UserEtapaDocumentoRepository,
@@ -41,7 +40,6 @@ class DocumentoController extends Controller
     protected $vinculoDocumentoRepository;
     protected $hierarquiaDocumentorepository;
     protected $workflowRepository;
-    protected $listaPresencaRepository;
     protected $grupoRepository;
     protected $registroImpressoesService;
     protected $etapaFluxoRepository;
@@ -67,7 +65,6 @@ class DocumentoController extends Controller
         $this->hierarquiaDocumentorepository = new HierarquiaDocumentoRepository();
         $this->workflowRepository = new WorkflowRepository();
         $this->grupoRepository = new GrupoRepository();
-        $this->listaPresencaRepository = new ListaPresencaRepository();
         $this->etapaFluxoRepository = new EtapaFluxoRepository();
         $this->bpmnRepository = new BpmnRepository();
         $this->historicoDocumentoRepository = new HistoricoDocumentoRepository();
@@ -419,7 +416,8 @@ class DocumentoController extends Controller
         $buscaGrupoTreinamentoSelecionado = $this->agrupamentoUserDocumentoRepository->findBy(
             [
                 ['documento_id', '=', $id],
-                ['tipo', '=', 'TREINAMENTO', 'AND']
+                ['tipo', '=', 'TREINAMENTO', 'AND'],
+                ['documento_revisao', '=', $documento->revisao, "AND"]
             ]
         );
 
@@ -432,7 +430,8 @@ class DocumentoController extends Controller
         $buscaGrupoDivulgacaoSelecionado = $this->agrupamentoUserDocumentoRepository->findBy(
             [
                 ['documento_id', '=', $id],
-                ['tipo', '=', 'DIVULGACAO', 'AND']
+                ['tipo', '=', 'DIVULGACAO', 'AND'],
+                ['documento_revisao', '=', $documento->revisao, "AND"]
             ]
         );
 
@@ -794,17 +793,6 @@ class DocumentoController extends Controller
 
     }
 
-    public function listaPresenca($id)
-    {
-        $documento = $this->documentoRepository->find($id);
-        $listaPresenca = $this->listaPresencaRepository->findBy(
-            [
-                ['documento_id', '=', $id]
-            ]
-        );
-        return view('docs::documento.presence-list', compact('documento', 'listaPresenca'));
-    }
-
     public function imprimir($id, $tipo)
     {
         try {
@@ -841,9 +829,8 @@ class DocumentoController extends Controller
     {
         $documento = $this->documentoRepository->find($id);
 
-
         $historico = $this->linhaTempo($documento->id);
-      
+
         $workflow = $this->workflowRepository->findBy(
             [
                 ['documento_id', '=', $id],
@@ -865,9 +852,23 @@ class DocumentoController extends Controller
 
         $extensoesPermitidas = implode(", ", json_decode(Helper::buscaParametro('EXTENSAO_DOCUMENTO_ONLYOFFICE')));
         $docPath = $documento->nome . $buscaPrefixo . $documento->revisao . "." . $documento->extensao;
-        
+
         $workflow = $workflow->toArray();
         $workflow = end($workflow);
+
+        $agrupamentoUserDocumento = $this->agrupamentoUserDocumentoRepository->findOneBy(
+            [
+                ['documento_id', '=', $id],
+                ['user_id', '=', Auth::user()->id, "AND"],
+                ['tipo', '=', 'DIVULGACAO', "AND"],
+                ['documento_revisao', '=', $documento->revisao]
+            ]
+        );
+        $agrupamentoDivulgacaoLido = $agrupamentoUserDocumento->documento_lido ?? false;
+
+        $permissaoOnlyOffice = '';
+        $permissaoOnlyOffice .= $documento->docsTipoDocumento->permitir_download ? '&d=1' : '';
+        $permissaoOnlyOffice .= $documento->docsTipoDocumento->permitir_impressao ? '&p=1' : '';
 
         return view(
             'docs::documento.view',
@@ -881,6 +882,8 @@ class DocumentoController extends Controller
                 'proximaEtapa',
                 'extensoesPermitidas',
                 'workflow',
+                'agrupamentoDivulgacaoLido',
+                'permissaoOnlyOffice'
             )
         );
     }

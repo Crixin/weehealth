@@ -114,7 +114,7 @@ class UserEtapaDocumentoService
                     'grupo_id' => $userEtapaDoc['grupo_id'],
                 ];
             }, $usersEtapaDocumento);
-            
+
 
             $inserir['documento_id'] = $documento->id;
             $inserir['documento_revisao'] = $documento->revisao;

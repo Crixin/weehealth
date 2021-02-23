@@ -133,7 +133,7 @@ class WorkflowService
 
             $documento = $this->documentoRepository->find($documento);
 
-            $primeiraEtapaFluxo = array_first($documento->docsTipoDocumento->docsFluxo->docsEtapaFluxo->sortBy('ordem')->toArray());
+            $primeiraEtapaFluxo = array_first($documento->docsTipoDocumento->docsFluxo->docsEtapaFluxo->sortBy('versao_fluxo')->sortBy('ordem')->toArray());
             $info = [
                 'documento_id' => $data['documento_id'],
                 'etapa_id' => $primeiraEtapaFluxo['id'],
@@ -231,7 +231,10 @@ class WorkflowService
             }
 
             if ($proxEtapa->comportamento_treinamento) {
-                //
+                //coloquei isso para testar não sei c eh assim
+                if (!$this->store($info)) {
+                    throw new \Exception('Falha ao salvar ao enviar para próxima etapa');
+                }
             }
 
             if ($proxEtapa->comportamento_aprovacao) {
@@ -287,17 +290,17 @@ class WorkflowService
 
             if (filter_var($data["aprovado"], FILTER_VALIDATE_BOOLEAN)) {
                 DB::beginTransaction();
-
                 $userEtapaDocumento = $this->userEtapaDocumentoRepository->findBy(
                     [
-                        ["etapa_fluxo_id", "=", $etapaAtual->id],
-                        ["documento_id", "=", $documento->id],
-                        ["documento_revisao", "=", $documento->revisao],
+                        ["etapa_fluxo_id", "=", $etapaAtual->id, "AND"],
+                        ["documento_id", "=", $documento->id, "AND"],
+                        ["documento_revisao", "=", $documento->revisao, "AND"],
                     ]
                 );
                 $etapaUser = array_first($userEtapaDocumento->filter(function ($value, $key) {
                     return $value->user_id == Auth::id();
                 }));
+
                 $this->userEtapaDocumentoRepository->update(["aprovado" => true], $etapaUser->id);
 
                 $avancar = false;
@@ -354,18 +357,18 @@ class WorkflowService
             if (!$this->store($data)['success']) {
                 throw new \Exception("Falha ao divulgar o documento (workflow) ");
             }
-   
+
             $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
-            
+
             $docPath = $documento->nome . $buscaPrefixo . $documento->revisao . "." . $documento->extensao;
             $base64file = base64_encode(Storage::disk('weecode_office')->get($docPath));
-            
+
             $idRegistro = $documento->ged_registro_id;
-            
+
             $areaGed = $this->parametroRepository->getParametro('AREA_GED_DOCUMENTOS');
 
             if (!$idRegistro) {
-                
+
                 $newRegister = [
                     "idArea" => $areaGed,
                     "removido" => false,
@@ -376,13 +379,12 @@ class WorkflowService
                             'valor' => $documento->codigo
                         ]
                     ]
-                    
+
                 ];
 
                 $idRegistro = $ged->postRegistro($newRegister);
                 if ($idRegistro['error']) {
                     throw new \Exception("Falha ao criar o registro do documento no GED");
-                    
                     return back();
                 }
                 $idRegistro = $idRegistro['response'];
@@ -396,7 +398,7 @@ class WorkflowService
                 'removido' => false,
                 'bytes'    => $base64file
             ];
-            
+
             $response = $ged->postDocumento($insereDocumento);
 
             if ($response['error']) {
@@ -409,7 +411,6 @@ class WorkflowService
                 "ged_registro_id" => $idRegistro,
             ];
 
-            
             if (!$documentoService->update($info, $data['documento_id'])['success']) {
                 throw new \Exception("Falha ao divulgar o documento");
             }
@@ -438,8 +439,8 @@ class WorkflowService
             $buscaCorpo = new TagDocumentos($proxEtapa->notificacao_id, $data['documento_id']);
             $tagDocumento = $buscaCorpo->substituirTags();
 
-            if ($proxEtapa->comportamento_divulgacao) {
-                $usuarios = $this->getUserTreinamentoDivulgacao('DIVULGACAO', $data['documento_id']);
+            if ($proxEtapa->comportamento_aprovacao) {
+                $usuarios = $this->getUserAprovadores($data['documento_id'], $proxEtapa->id);
                 $responseNotificacao = $notificacaoService->sendNotification($proxEtapa->notificacao_id, $usuarios, $objEmailCorpo, $tagDocumento['titulo'], $tagDocumento['corpo']);
             }
 
@@ -448,8 +449,8 @@ class WorkflowService
                 $responseNotificacao = $notificacaoService->sendNotification($proxEtapa->notificacao_id, $usuarios, $objEmailCorpo, $tagDocumento['titulo'], $tagDocumento['corpo']);
             }
 
-            if ($proxEtapa->comportamento_aprovacao) {
-                $usuarios = $this->getUserAprovadores($data['documento_id'], $proxEtapa->id);
+            if ($proxEtapa->comportamento_divulgacao) {
+                $usuarios = $this->getUserTreinamentoDivulgacao('DIVULGACAO', $data['documento_id']);
                 $responseNotificacao = $notificacaoService->sendNotification($proxEtapa->notificacao_id, $usuarios, $objEmailCorpo, $tagDocumento['titulo'], $tagDocumento['corpo']);
             }
 

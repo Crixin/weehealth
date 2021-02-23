@@ -107,7 +107,7 @@ class DocumentoService
 
                 /**Cria Agrupamento de Documento (Treinamento) */
                 if (array_key_exists("grupo_treinamento", $data)) {
-                    if (!$this->agrupamentosUserDocumento($documento->id, $data['grupo_treinamento'], "TREINAMENTO")['success']) {
+                    if (!$this->agrupamentosUserDocumento($documento->id, $documento->revisao, $data['grupo_treinamento'], "TREINAMENTO")['success']) {
                         throw new \Exception("Falha no grupo de treinamento");
                     }
                 }
@@ -115,11 +115,11 @@ class DocumentoService
 
                 /**Cria Agrupamento de Documento (Divulgacao) */
                 if (array_key_exists("grupo_divulgacao", $data)) {
-                    if (!$this->agrupamentosUserDocumento($documento->id, $data['grupo_divulgacao'], "DIVULGACAO")['success']) {
+                    if (!$this->agrupamentosUserDocumento($documento->id, $documento->revisao, $data['grupo_divulgacao'], "DIVULGACAO")['success']) {
                         throw new \Exception("Falha no grupo de divulgação");
                     }
                 }
-                
+
 
                 /**Cria Itens Norma */
                 if (array_key_exists("item_normas", $data)) {
@@ -153,7 +153,7 @@ class DocumentoService
         try {
             DB::beginTransaction();
 
-            
+
             $this->rules['tituloDocumento'] .= "," . $id;
             $updateDocumento = $data;
             unset(
@@ -167,7 +167,7 @@ class DocumentoService
             );
 
             $documento = $this->documentoRepository->find($id);
-            
+
             $this->documentoRepository->update($updateDocumento, $id);
 
             /**Cria Hierarquia Documento */
@@ -183,17 +183,17 @@ class DocumentoService
                     throw new \Exception("Falha no vinculo de documentos");
                 }
             }
-            
+
             /**Cria Agrupamento de Documento (Treinamento) */
             if (array_key_exists("grupo_treinamento", $data)) {
-                if (!$this->agrupamentosUserDocumento($documento->id, $data['grupo_treinamento'], "TREINAMENTO")['success']) {
+                if (!$this->agrupamentosUserDocumento($documento->id, $documento->revisao, $data['grupo_treinamento'], "TREINAMENTO")['success']) {
                     throw new \Exception("Falha no grupo de treinamento");
                 }
             }
 
             /**Cria Agrupamento de Documento (Divulgacao) */
             if (array_key_exists("grupo_divulgacao", $data)) {
-                if (!$this->agrupamentosUserDocumento($documento->id, $data['grupo_divulgacao'], "DIVULGACAO")['success']) {
+                if (!$this->agrupamentosUserDocumento($documento->id, $documento->revisao, $data['grupo_divulgacao'], "DIVULGACAO")['success']) {
                     throw new \Exception("Falha no grupo de divulgação");
                 }
             }
@@ -205,7 +205,7 @@ class DocumentoService
                     throw new \Exception("Falha nos itens da norma");
                 }
             }
-            
+
             /**Etapa de Aprovação */
             if (array_key_exists("etapa_aprovacao", $data)) {
                 if (!$this->aprovadores($documento->id, $data['etapa_aprovacao'])['success']) {
@@ -332,7 +332,7 @@ class DocumentoService
         return false;
     }
 
-    
+
     public function iniciarRevisao($data)
     {
         try {
@@ -340,7 +340,7 @@ class DocumentoService
 
             $documento = $data['documento_id'];
 
-            $this->criaCopiaDocumento($data);        
+            $this->criaCopiaDocumento($data);
 
             $update = [
                 'revisao' => $this->getNextCodigoRevisao($documento),
@@ -348,17 +348,23 @@ class DocumentoService
             ];
 
             $this->documentoRepository->update($update, $documento);
-            
+
             $workflowService = new WorkflowService();
             $userEtapaDocumentoService = new UserEtapaDocumentoService();
+            $agrupamentoUserDocumentoService = new AgrupamentoUserDocumentoService();
 
             if (!$workflowService->iniciarRevisao($data)['success']) {
                 throw new \Exception("Falha ao iniciar o workflow de revisao");
             }
-            
+
             if (!$userEtapaDocumentoService->iniciarRevisao($data)['success']) {
-                throw new \Exception("Falha ao criar lista de aprovadires para a nova revisao");
+                throw new \Exception("Falha ao criar lista de aprovadores para a nova revisao");
             }
+            
+            if (!$agrupamentoUserDocumentoService->iniciarRevisao($data)['success']) {
+                throw new \Exception("Falha ao criar grupo de treinamento e divulgação para a nova revisao");
+            }
+            
 
             DB::commit();
             Helper::setNotify(__("messages.documento.startReview"), 'success|check-circle');
@@ -440,9 +446,9 @@ class DocumentoService
             return ["success" => false];
         }
     }
-    
 
-    private function agrupamentosUserDocumento(int $documento, array $usersGrupoAgrupamento, string $tipo)
+
+    private function agrupamentosUserDocumento(int $documento, string $revisao, array $usersGrupoAgrupamento, string $tipo)
     {
         try {
             $agrupamentoUserDocumentoService = new AgrupamentoUserDocumentoService();
@@ -450,13 +456,14 @@ class DocumentoService
             $buscaTodosUsuarios = $this->agrupamentoUserDocumentoRepository->findBy(
                 [
                     ["documento_id", "=", $documento],
-                    ["tipo", "=", $tipo, "AND"]
+                    ["tipo", "=", $tipo, "AND"],
+                    ["documento_revisao", "=", $revisao, "AND"]
                 ]
             );
-           
+
             $userGrupoAux = [];
             $usersAgrupamentoCadastrados = [];
-           
+
             foreach ($buscaTodosUsuarios as $key => $value) {
                 $usersAgrupamentoCadastrados[$value['id']] = $value['grupo_id'] . '-' . $value['user_id'];
             }
@@ -464,19 +471,20 @@ class DocumentoService
             foreach ($usersGrupoAgrupamento ?? [] as $key => $value) {
                 $userGrupoAux[] = $value['grupo_id'] . '-' . $value['user_id'];
             }
-   
+
             $delete = array_filter($usersAgrupamentoCadastrados, function ($arr) use ($userGrupoAux) {
                 if (!in_array($arr, $userGrupoAux)) {
                     return $arr;
                 }
             });
-    
+
             $delete = array_keys($delete);
-    
+
             $infoCreate = [
                 "documento_id" => $documento,
                 "grupo_and_user" => $usersGrupoAgrupamento,
                 "tipo" => $tipo,
+                "documento_revisao" => $revisao
             ];
 
             if (!$agrupamentoUserDocumentoService->store($infoCreate)['success']) {
@@ -571,11 +579,11 @@ class DocumentoService
     {
         try {
             $ged = new RESTServices();
-                
+
             $documentoService = new DocumentoService();
             $documento = $this->documentoRepository->find($data['documento_id']);
 
-            
+
             $response = $ged->getRegistro($documento->ged_registro_id, ["docs" => "true"]);
 
             if ($response['error']) {
@@ -606,7 +614,6 @@ class DocumentoService
                     break;
                 }
             } 
-       
             return ["success" => true];
         } catch (\Throwable $th) {
             dd($th);

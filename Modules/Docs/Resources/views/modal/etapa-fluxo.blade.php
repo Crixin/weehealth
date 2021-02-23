@@ -40,6 +40,29 @@
 <script>
     var tr;
     $(document).ready(function(){
+        $(document).on('show.bs.modal', '.modal', function () {
+            notificacao();
+            tipoAprovacao();
+            treinamento();
+            criacaoEdicaoVisualizacao();
+        });
+
+        $('#enviarNotificacao').on('change',function(){
+            notificacao();
+        });
+        
+        $('#comportamentoAprovacao').on('change', function () {
+            tipoAprovacao();
+        });
+        
+        $('#comportamentoTreinamento').on('change', function () {
+            treinamento();
+        });
+
+        $('#comportamentoCriacao, #comportamentoEdicao, #comportamentoVizualizacao').on('change', function (){
+            criacaoEdicaoVisualizacao();
+        });
+
         $(document).on('click', '.btnEditEtapa', function(){
             let id = $(this).data('id');
             let etapa = $(this).data('etapa');
@@ -58,6 +81,8 @@
 
             tr= $(this).parent().parent();
         });
+
+
     });
 
     function validacao() {
@@ -131,5 +156,53 @@
         var botao = '<a  class="btn waves-effect waves-light btn-danger sa-warning btnExcluirEtapa mr-1" data-id='+ordem+'><i class="mdi mdi-delete"></i> Excluir</a>'; 
             botao += '<a  class="btn waves-effect waves-light btn-info btnEditEtapa" data-id='+ordem+'><input type="hidden" name="dados[]" id="dados'+ordem+'" value='+JSON.stringify(values)+'><i class="mdi mdi-lead-pencil"></i> Editar</a>';
         return botao;
+    }
+
+    function notificacao()
+    {
+        if($('#enviarNotificacao').prop('checked') == true){
+            $("#notificacao").prop("disabled", false);
+            $("#notificacao").selectpicker("refresh");
+            $(".div-notificacao").show();
+        }else{
+            $("#notificacao").prop("disabled", true);
+            $(".div-notificacao").hide();
+        }
+    }
+
+    function tipoAprovacao()
+    {
+        if ($("#comportamentoAprovacao").is(':checked')) {
+            $("#tipoAprovacao").prop("disabled", false);
+            $("#etapaRejeicao").prop("disabled", false);
+            $("#tipoAprovacao,#etapaRejeicao").selectpicker("refresh");
+            $(".div-aprovacao").show();
+        } else {
+            $("#tipoAprovacao").prop("disabled", true);
+            $("#etapaRejeicao").prop("disabled", true);
+            $(".div-aprovacao").hide();
+        }
+    }
+
+    function treinamento()
+    {
+        if($('#comportamentoTreinamento').is(':checked')){
+            $(".div-lista-presenca").show();
+        } else {
+            $(".div-lista-presenca").hide();
+        }
+    }
+
+    function criacaoEdicaoVisualizacao()
+    {
+        if($('#comportamentoCriacao').is(':checked') || $('#comportamentoEdicao').is(':checked')){
+            $('#comportamentoVizualizacao').attr('disabled', true);
+            $('#comportamentoCriacao, #comportamentoEdicao').removeAttr('disabled');
+        }else if($('#comportamentoVizualizacao').is(':checked')){
+            $('#comportamentoCriacao, #comportamentoEdicao').attr('disabled', true);
+            $('#comportamentoVizualizacao').removeAttr('disabled');
+        }else {
+            $('#comportamentoVizualizacao, #comportamentoCriacao, #comportamentoEdicao').removeAttr('disabled');
+        }
     }
 </script>

@@ -118,7 +118,6 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
             Route::post('iniciar-validacao',  ['as' => 'documento.iniciar-validacao', 'uses' => 'DocumentoController@iniciarValidacao']);
             Route::post('iniciar-revisao',    ['as' => 'documento.iniciar-revisao', 'uses' => 'DocumentoController@iniciarRevisao']);
             Route::post('obsoleto',           ['as' => 'documento.obsoleto', 'uses' => 'DocumentoController@tornarObsoleto']);
-            Route::get('{id}/lista-presenca', ['as' => 'documento.lista-presenca',	'uses' => 'DocumentoController@listaPresenca']);
             Route::get('{id}/imprimir/{tipo}',['as' => 'documento.imprimir',	'uses' => 'DocumentoController@imprimir']);
             Route::get('visualizar/{id}',     ['as' => 'documento.visualizar',  'uses' => 'DocumentoController@visualizar']);
             
@@ -144,6 +143,15 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
             Route::post('aprovadores',      ['as' => 'user-etapa-documento.aprovadores', 'uses' => 'UserEtapaDocumentoController@aprovadores']);
         });
 
+        Route::group(['prefix' => 'agrupamento-user-documento','as' => 'docs.'], function() {
+            Route::post('confirmar-leitura',      ['as' => 'agrupamento-user-documento.confirmar-leitura', 'uses' => 'AgrupamentoUserDocumentoController@confirmarLeitura']);
+        });
+
+
+        Route::group(['prefix' => 'lista-presenca','as' => 'docs.'], function() {
+            Route::get('/{id}', ['as' => 'lista-presenca',	'uses' => 'ListaPresencaController@index']);
+            Route::post('salva',['as' => 'lista-presenca.salva', 'uses' => 'ListaPresencaController@store']);
+        });
 
         Route::group(['prefix' => 'documento-externo', 'as' => 'docs.'], function() {
             Route::get('',              ['as' => 'documento-externo',         'uses' => 'DocumentoExternoController@index']);

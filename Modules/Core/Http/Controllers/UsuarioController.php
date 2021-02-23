@@ -4,6 +4,7 @@ namespace Modules\Core\Http\Controllers;
 
 use App\Classes\Helper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\{DB, Validator};
 use Modules\Core\Model\User;
 use Modules\Core\Repositories\{GrupoUserRepository, UserRepository, PerfilRepository, SetorRepository};
@@ -93,6 +94,10 @@ class UsuarioController extends Controller
                 $senha = bcrypt($request->get('password'));
                 $usuario->password = $senha;
                 $usuario->save();
+                DB::purge(getenv('DB_CONNECTION'));
+                Config::set('database.connections.pgsql.username', getenv('DB_USERNAME'));
+                Config::set('database.connections.pgsql.password', getenv('DB_PASSWORD'));
+                DB::reconnect(getenv('DB_CONNECTION'));
                 $altera = DB::unprepared("ALTER USER $usuario->username WITH PASSWORD '" . $senha . "'");
             });
 

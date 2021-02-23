@@ -230,59 +230,5 @@
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <script>
     $(document).ready(function() {
-
-        $(document).on('show.bs.modal', '.modal', function () {
-            notificacao();
-            tipoAprovacao();
-            treinamento();
-        });
-
-        $('#enviarNotificacao').on('change',function(){
-            notificacao();
-        });
-        
-        $('#comportamentoAprovacao').on('change', function () {
-            tipoAprovacao();
-        });
-        
-        $('#comportamentoTreinamento').on('change', function () {
-            treinamento();
-        });
-
     });
-
-    function notificacao()
-    {
-        if($('#enviarNotificacao').prop('checked') == true){
-            $("#notificacao").prop("disabled", false);
-            $("#notificacao").selectpicker("refresh");
-            $(".div-notificacao").show();
-        }else{
-            $("#notificacao").prop("disabled", true);
-            $(".div-notificacao").hide();
-        }
-    }
-
-    function tipoAprovacao()
-    {
-        if ($("#comportamentoAprovacao").is(':checked')) {
-            $("#tipoAprovacao").prop("disabled", false);
-            $("#etapaRejeicao").prop("disabled", false);
-            $("#tipoAprovacao,#etapaRejeicao").selectpicker("refresh");
-            $(".div-aprovacao").show();
-        } else {
-            $("#tipoAprovacao").prop("disabled", true);
-            $("#etapaRejeicao").prop("disabled", true);
-            $(".div-aprovacao").hide();
-        }
-    }
-
-    function treinamento()
-    {
-        if($('#comportamentoTreinamento').is(':checked')){
-            $(".div-lista-presenca").show();
-        } else {
-            $(".div-lista-presenca").hide();
-        }
-    }
 </script>
