@@ -140,9 +140,9 @@ class RegisterController extends Controller
                 Config::set('database.connections.pgsql.username', getenv('DB_USERNAME'));
                 Config::set('database.connections.pgsql.password', getenv('DB_PASSWORD'));
                 DB::reconnect(getenv('DB_CONNECTION'));
-                $cria   = DB::select("CREATE ROLE $usuario WITH LOGIN NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION VALID UNTIL 'infinity' ");
-                $altera = DB::unprepared("ALTER USER $usuario WITH PASSWORD '" . $password . "'");
-                $setFrupo = DB::unprepared("GRANT weehealth TO $usuario ");
+                $cria   = DB::select("CREATE ROLE $user WITH LOGIN NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION VALID UNTIL 'infinity' ");
+                $altera = DB::unprepared("ALTER USER $user WITH PASSWORD '" . $password . "'");
+                $setFrupo = DB::unprepared("GRANT weehealth TO $user ");
             }
             DB::commit();
             // $this->guard()->login($user);
