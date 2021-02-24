@@ -67,10 +67,11 @@ class BpmnService
 
         DB::beginTransaction();
         try {
-            $this->bpmnRepository->update($dados, $dados['idBPMN']);
+            $this->bpmnRepository->update($dados, $dados['id']);
             DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollback();
             Helper::setNotify("Erro ao atualizar o BPMN. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
             return ["success" => false, "redirect" => redirect()->back()->withInput()];

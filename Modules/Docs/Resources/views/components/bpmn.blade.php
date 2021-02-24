@@ -54,7 +54,6 @@
     $(document).on("click","#btn-bpmn", function() {
         let valorIframe = '';
         valorIframe = window.parent.iframeTeste.document.getElementById('arquivoXML').value;
-
         if(valorIframe == '' || $('#nome').val() == ''){
             swal2_alert_error_not_reload("Favor preencher o nome e desenhar algum BPMN.");
         }else{

@@ -56,7 +56,7 @@
             
                                     <div class="col-md-12 mt-3">
                                         <div class="col-md-9 pull-left">
-                                            {!! Form::hidden('idDocumento', null, ['id' => 'idDocumento']) !!}
+                                            <input type="hidden" name="idDocumento" id="idDocumento" value="{{$idDocumento}}">
                                         </div>
                                         <div class="col-md-1 pull-right">
                                             <button type="submit"  class="btn btn-success">@lang('buttons.general.save')</button>

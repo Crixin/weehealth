@@ -104,6 +104,7 @@ class BpmnController extends Controller
             }
             Helper::setNotify('Informações do BPMN atualizadas com sucesso!', 'success|check-circle');
         } catch (\Throwable $th) {
+            dd($th);
             Helper::setNotify('Um erro ocorreu ao atualizar o BPMN', 'danger|close-circle');
         }
         return redirect()->back()->withInput();

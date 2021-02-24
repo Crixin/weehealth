@@ -34,7 +34,7 @@
                      <span aria-hidden="true">&times;</span>
                     </button>
                </div>
-                <form method="POST" action="{{ route('docs.bpmn.alterar') }}">
+                <form method="POST" action="{{ route('docs.bpmn.alterar') }}" id="formBpmn" name="formBpmn">
                     {{ csrf_field() }}
                     <input type="hidden" name="idBPMN" id="idBPMN" value="{{ $bpmn->id }}">
                     
@@ -49,7 +49,7 @@
                     @endcomponent
                     <div class="col-md-12 mt-5">
                         <div class="pull-right">
-                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
+                            <button type="button" id="btn-bpmn" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
                             <a href="{{ route('docs.bpmn') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
                         </div>
                     </div>
