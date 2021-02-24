@@ -71,17 +71,25 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(Request $request)
     {
-        return Validator::make($data, [
-            'name'     => 'required|string|max:255',
-            'username' => 'required|string|max:20|unique:core_users',
-            'email'    => 'required|string|email|max:255|unique:core_users',
-            'password' => 'required|string|min:6|confirmed',
-            'foto'     => 'image|mimes:jpeg,png,jpg',
-            'perfil'   => 'required|numeric',
-            'setor'    => 'required|numeric',
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name'     => 'required|string|max:255',
+                'username' => 'required|string|max:20|unique:core_users',
+                'email'    => 'required|string|email|max:255|unique:core_users',
+                'password' => 'required|string|min:6|confirmed',
+                'foto'     => 'image|mimes:jpeg,png,jpg',
+                'perfil'   => 'required|numeric',
+                'setor'    => 'required|numeric'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return $validator;
+        }
+        return false;
     }
 
     /**
@@ -109,9 +117,7 @@ class RegisterController extends Controller
             $imageBase64 = 'data:' . $mimeType . ';base64,' . $imageBase64;
             $createUser['foto'] = $imageBase64;
         }
-
         return User::create($createUser);
-
     }
 
     /**
@@ -126,35 +132,35 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         try {
-            DB::beginTransaction();
-            $this->validator($request->all())->validate();
-            event(new Registered($user = $this->create($request->all())));
+            $error = $this->validator($request);
+            if ($error) {
+                return redirect()->back()->withInput()->withErrors($error);
+            }
 
+            DB::beginTransaction();
+            event(new Registered($user = $this->create($request->all())));
             //Verifica existencia usuario no bd
             $usuario = $user->username;
             $password = $user->password;
             $busca = DB::select("SELECT count(*) as total FROM pg_roles WHERE rolname ILIKE '" . $usuario . "'");
             if ($busca[0]->total == 0) {
-                $user = '"' . $usuario . '"';
+                $userAux = '"' . $usuario . '"';
                 DB::purge(getenv('DB_CONNECTION'));
                 Config::set('database.connections.pgsql.username', getenv('DB_USERNAME'));
                 Config::set('database.connections.pgsql.password', getenv('DB_PASSWORD'));
                 DB::reconnect(getenv('DB_CONNECTION'));
-                $cria   = DB::select("CREATE ROLE $user WITH LOGIN NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION VALID UNTIL 'infinity' ");
-                $altera = DB::unprepared("ALTER USER $user WITH PASSWORD '" . $password . "'");
-                $setFrupo = DB::unprepared("GRANT weehealth TO $user ");
+                $cria   = DB::select("CREATE ROLE $userAux WITH LOGIN NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION VALID UNTIL 'infinity' ");
+                $altera = DB::unprepared("ALTER USER $userAux WITH PASSWORD '" . $password . "'");
+                $setFrupo = DB::unprepared("GRANT weehealth TO $userAux ");
             }
-            DB::commit();
             // $this->guard()->login($user);
-            return $this->registered($request, $user)
-            ?: redirect()->route('core.usuario')->with(['message' => 'Novo usuário criado com sucesso!', 'style' => 'success|check-circle']);
+            $retorno = $this->registered($request, $user);
+            DB::commit();
+            return redirect()->route('core.usuario')->with(['message' => 'Novo usuário criado com sucesso!', 'style' => 'success|check-circle']);
         } catch (\Throwable $th) {
-            dd($th);
-            DB::rollback();
+            DB::rollBack();
             Helper::setNotify('Um erro ocorreu ao gravar o usuario.', 'danger|close-circle');
             return redirect()->back()->withInput();
         }
     }
-
-    
 }
