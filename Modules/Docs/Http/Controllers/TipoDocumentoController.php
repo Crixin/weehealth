@@ -257,7 +257,7 @@ class TipoDocumentoController extends Controller
         if (!$request->documentoModelo) {
             unset($retorno["modelo_documento"], $retorno["extensao"], $retorno['mime_type']);
         }
-
+        
         //SE TIVER DOCUMENTO VINCULADO A ESSE FLUXO NÃO ALTERA O ULTIMO DOCUMENTO
         if ($request->get('idTipoDocumento')) {
 /*             $buscaDocumento = $this->tipoDocumentoRepository->find($request->get('idTipoDocumento'));

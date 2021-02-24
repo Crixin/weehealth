@@ -566,32 +566,6 @@
                         }
                     }
                 },
-                "Tipo-Documento": {
-                    "descricao": "Tipos de Documentos",
-                    "icone": "",
-                    "filhos_perfil": {
-                        "Cadastro": {
-                            "name": "docs_tipo_doc_cad",
-                            "descricao": "Cadastro",
-                            "icone": "mdi mdi-pencil"
-                        },
-                        "Edição": {
-                            "name": "docs_tipo_doc_edit",
-                            "descricao": "Edição",
-                            "icone": "mdi mdi-pencil"
-                        },
-                        "Consulta": {
-                            "name": "docs_tipo_doc_cons",
-                            "descricao": "Consulta",
-                            "icone": "mdi mdi-magnify"
-                        },
-                        "Exclusão": {
-                            "name": "docs_tipo_doc_exc",
-                            "descricao": "Exclusão",
-                            "icone": "mdi mdi-delete"
-                        }
-                    }
-                },
                 "Fluxos": {
                     "descricao": "Fluxos",
                     "icone": "",
@@ -613,6 +587,32 @@
                         },
                         "Exclusão": {
                             "name": "docs_fluxo_exc",
+                            "descricao": "Exclusão",
+                            "icone": "mdi mdi-delete"
+                        }
+                    }
+                },
+                "Tipo-Documento": {
+                    "descricao": "Tipos de Documentos",
+                    "icone": "",
+                    "filhos_perfil": {
+                        "Cadastro": {
+                            "name": "docs_tipo_doc_cad",
+                            "descricao": "Cadastro",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Edição": {
+                            "name": "docs_tipo_doc_edit",
+                            "descricao": "Edição",
+                            "icone": "mdi mdi-pencil"
+                        },
+                        "Consulta": {
+                            "name": "docs_tipo_doc_cons",
+                            "descricao": "Consulta",
+                            "icone": "mdi mdi-magnify"
+                        },
+                        "Exclusão": {
+                            "name": "docs_tipo_doc_exc",
                             "descricao": "Exclusão",
                             "icone": "mdi mdi-delete"
                         }
@@ -652,18 +652,18 @@
                     "icone": "",
                     "route": "docs.plano"
                 },
+                "Fluxos": {
+                    "permissao": ["docs_fluxo_cons"],
+                    "descricao": "Fluxos",
+                    "icone": "",
+                    "route": "docs.fluxo"
+                },
                 "Tipos-Documento": {
                     "permissao": ["docs_tipo_doc_cons"],
                     "descricao": "Tipo de Documento",
                     "icone": "",
                     "route": "docs.tipo-documento"
 
-                },
-                "Fluxos": {
-                    "permissao": ["docs_fluxo_cons"],
-                    "descricao": "Fluxos",
-                    "icone": "",
-                    "route": "docs.fluxo"
                 },
                 "Normas": {
                     "permissao": ["docs_norma_cons"],

@@ -19,7 +19,7 @@
         <div class="col-md-6">
             <div class="form-group {{ $errors->has('versao') ? ' has-error' : '' }}">
                 {!! Form::label('versao', 'Versão') !!}
-                {!! Form::text('versao', $versao, ['class' => 'form-control', 'readonly' => true]) !!}
+                {!! Form::text('versao', $versao, ['class' => 'form-control', 'readonly' => true, 'disabled'=> true]) !!}
                 
                 <small class="text-danger">{{ $errors->first('versao') }}</small>
             </div>

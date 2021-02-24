@@ -20,7 +20,7 @@ class TipoDocumentoService
         $this->rules = $tipoDocumento->rules;
         $this->tipoDocumentoRepository = new TipoDocumentoRepository();
         $this->extensoes = str_replace('.', '', implode(", ", json_decode(Helper::buscaParametro('EXTENSAO_DOCUMENTO_ONLYOFFICE'))));
-        $this->rules['documentoModelo'] = 'sometimes|mimes:' . $this->extensoes;
+        $this->rules['documentoModelo'] = 'sometimes|mimes:' . str_replace(' ', '', $this->extensoes);
     }
 
     public function store(array $data)
@@ -38,7 +38,6 @@ class TipoDocumentoService
                 'numeroPadrao'          => $data['numero_padrao_id'],
                 'ultimoDocumento'       => $data['ultimo_documento'],
             ];
-
             $validacao = new ValidacaoService($this->rules, $insert);
             $errors = $validacao->make();
 

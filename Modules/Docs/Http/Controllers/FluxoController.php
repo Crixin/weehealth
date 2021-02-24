@@ -264,7 +264,7 @@ class FluxoController extends Controller
             "descricao" => $request->get('descricao'),
             "perfil_id" => $request->get('perfil'),
             "grupo_id"  => $request->get('grupo'),
-            "versao"    => $request->get('versao'),
+            "versao"    => $request->get('versao') ?? 1 ,
             "ativo"     => $request->get('ativo') == 1 ? true : false,
             "etapas"    => $request->get('dados'),
             "nova_versao" => $request->novaVersaoFluxo == 'true' ? true : false
