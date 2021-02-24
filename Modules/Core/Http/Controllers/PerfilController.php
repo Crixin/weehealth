@@ -66,7 +66,7 @@ class PerfilController extends Controller
         $reponse = $perfilService->store($data);
 
         if (!$reponse['success']) {
-            return $reponse['redirect'];
+            return redirect()->back()->withInput();
         }
 
         if ($reponse) {

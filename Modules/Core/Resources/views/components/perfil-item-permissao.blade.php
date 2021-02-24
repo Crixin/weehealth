@@ -12,7 +12,7 @@
         @endphp
         
         <li>
-            <input type="checkbox" name="{{ $menu->name}}" {{$checked}} id="{{ $menu->name}}" />
+            <input type="checkbox" class="{{$modulo}}" name="{{ $menu->name}}" {{$checked}} id="{{ $menu->name}}" />
             <label for="{{ $menu->name}}"> <i class="{{ $menu->icone}}"></i> {{ $menu->descricao }}</label>
         </li>
     @endif

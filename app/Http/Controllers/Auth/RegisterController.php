@@ -122,7 +122,6 @@ class RegisterController extends Controller
             ?: redirect($this->redirectPath())->with(['message' => 'Novo usuário criado com sucesso!', 'style' => 'success|check-circle']);
 
         } catch (\Throwable $th) {
-            dd($th);
             Helper::setNotify('Um erro ocorreu ao gravar o usuario.', 'danger|close-circle');
             return redirect()->back()->withInput();
         }

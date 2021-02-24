@@ -23,13 +23,21 @@
             @endphp
             
             @foreach ($menus as $key => $menu)
-                <h3> {{$key}} </h3>
+                <div class="checkbox">
+                    <h5 style="font-size: 20px"> {{$key}} </h5>
+                    <div class="">
+                        <input type="checkbox"  id="{{$key}}" data-id="{{$key}}"/>
+                        <label for="{{$key}}">Marcar <span class="font-weight-bold">todas</span> permissões do módulo {{$key}}.</label>
+                    </div>
+                </div>
+                
                 <div class="ml-5">
                     @include(
                         'core::components.perfil-item-permissao',
                         [
                             'menus' => $menu, 
-                            'permissoes' => $permissoes ?? []
+                            'permissoes' => $permissoes ?? [],
+                            'modulo' => $key
                         ]
                     )
                 </div>
@@ -37,3 +45,23 @@
         </ul>
     </div>
 </div>
+
+@section('footer')
+    <script>
+        $(document).ready(function() {
+
+            $('input[type=checkbox]').on('click', function(){
+                let id = $(this).data('id');
+    
+                
+                $('.'+id).each(function(index, value){
+                    var check = $("#" + value.id).is(':checked');
+	                if (check == false) $("#" + value.id).prop('checked', true);
+	                else $("#" + value.id).prop('checked', false);
+                });
+                
+            });
+        });
+    </script>
+
+@endsection 
