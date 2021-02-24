@@ -149,6 +149,7 @@ class RegisterController extends Controller
             return $this->registered($request, $user)
             ?: redirect()->route('core.usuario')->with(['message' => 'Novo usuário criado com sucesso!', 'style' => 'success|check-circle']);
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollback();
             Helper::setNotify('Um erro ocorreu ao gravar o usuario.', 'danger|close-circle');
             return redirect()->back()->withInput();

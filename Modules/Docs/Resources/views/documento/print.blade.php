@@ -50,7 +50,7 @@
                                 <div class="col-md-12 col-sm-12 p-20">
                                     <h2 class="card-title">
                                         <b>{{ $documento->nome ?? '' }}</b> 
-                                        <small class="text-success"> &nbsp; | &nbsp; Validade: {{ Carbon\Carbon::parse($documento->validade ?? '')->format('d/m/Y') }}</small>
+                                        <small class="text-success"> &nbsp; | &nbsp; Validade: {{ $documento->validade ? date('d/m/Y', $documento->validade) : ' Documento sem validade informada' }}</small>
                                         
                                         @if (Auth::user()->setor_id == $setorQualidade)
                                             <span class="pull-right">

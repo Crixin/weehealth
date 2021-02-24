@@ -165,8 +165,9 @@ class DocumentoController extends Controller
         if ($request->status != null) {
             array_push($where, ['status_id', '=', $request->status, 'HAS', 'docsEtapaFluxoDocumento']);
         }
-
+        //DB::enableQueryLog(); 
         $documentos = $this->documentoRepository->findBy($where);
+        //dd(DB::getQueryLog()); 
         return view(
             'docs::documento.index',
             [
@@ -812,10 +813,8 @@ class DocumentoController extends Controller
                 [
                     ['created_at', 'ASC']
                 ]
-            );
-
-            //O SISTEMA ESTA DUPLICADO A GRAVACAO NA TABELA DE IMPRESSOES BUG 
-            //$this->registroImpressoesService->create(['documento_id' => $id, 'user_id' => Auth::user()->id]);
+            ); 
+            $this->registroImpressoesService->create(['documento_id' => $id, 'user_id' => Auth::user()->id]);
 
             return view('docs::documento.print', compact('mode', 'documento', 'setorQualidade', 'message', 'messageClass', 'filename', 'historico'));
         } catch (\Throwable $th) {
