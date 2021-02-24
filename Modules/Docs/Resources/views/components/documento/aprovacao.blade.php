@@ -31,7 +31,7 @@
                                 {!! Form::label('justificativaRejeicao', 'Justificativa') !!}
                             </div>
                             <div class="col-md-12">
-                                {!! Form::textarea('justificativaRejeicao', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                                {!! Form::textarea('justificativaRejeicao', null, ['class' => 'form-control', 'required' => 'required', 'cols'=>'58']) !!}
                             </div>
                         </div>
                     </div>

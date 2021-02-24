@@ -18,5 +18,8 @@ class DocsDatabaseSeeder extends Seeder
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroTipoControleRegistroTableSeeder::class);
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroPadraoNumeroTableSeeder::class);
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroNivelAcessoTableSeeder::class);
+        $this->call(\Modules\Docs\Database\Seeders\CreateParametroExtensoesDocsOnlyofficeTableSeeder::class);
+        $this->call(\Modules\Docs\Database\Seeders\DocsCreateParametroPerfilElaboradorSeeder::class);
+        $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroPrefixoNameDocumentoTableSeeder::class);
     }
 }

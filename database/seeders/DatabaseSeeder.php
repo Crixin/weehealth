@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
         $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateParametroTipoEnvioNotificacaoTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateParametroTipoNotificacaoTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateGrupoUserBDTableSeeder::class);
+        $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateFunctionInsereLogTableSeeder::class);
+        $this->call(\Modules\Core\Database\Seeders\CreateParamAreaGedTableSeeder::class);
 
         /**PORTAL */
         $this->call(\Modules\Portal\Database\Seeders\SeedPortalProcessoTableSeeder::class);
@@ -33,6 +35,8 @@ class DatabaseSeeder extends Seeder
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroTipoControleRegistroTableSeeder::class);
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroPadraoNumeroTableSeeder::class);
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroNivelAcessoTableSeeder::class);
+        $this->call(\Modules\Docs\Database\Seeders\CreateParametroExtensoesDocsOnlyofficeTableSeeder::class);
+        $this->call(\Modules\Docs\Database\Seeders\DocsCreateParametroPerfilElaboradorSeeder::class);
         $this->call(\Modules\Docs\Database\Seeders\SeedDocsCreateParametroPrefixoNameDocumentoTableSeeder::class);
     }
 }
