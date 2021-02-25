@@ -585,8 +585,10 @@ class DocumentoController extends Controller
         $tipoArquivo = substr($buscaTipoDocumento->modelo_documento, 11, strpos($buscaTipoDocumento->modelo_documento, ';') - 11);
         $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
 
+        $extensao = $buscaTipoDocumento->extensao;
+
         $codigo = $this->documentoService->gerarCodigoDocumento($request->tipoDocumento, $buscaSetores->id);
-        $docPath = $request->tituloDocumento . $buscaPrefixo . '00.' . ($tipoArquivo == 'ation/vnd.ms-excel' ? 'xlsx' : 'docx');
+        $docPath = $request->tituloDocumento . $buscaPrefixo . '00.' . $extensao;
 
         /**SALVAR NA PASTA DO ONLYOFFICE */
         $storagePath = Storage::disk('weecode_office')->getDriver()->getAdapter()->getPathPrefix();
