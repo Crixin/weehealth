@@ -266,7 +266,8 @@ return [
             'doc_number'      => 'Documento n°: ',
             'stage_time'      => 'Duração:',
             'justification'   => 'Justificativa: ',
-            'revision'        => 'Revisão: '
+            'revision'        => 'Revisão: ',
+            'filter'          => 'Filtros' 
         ],
 
         'documento-externo' => [

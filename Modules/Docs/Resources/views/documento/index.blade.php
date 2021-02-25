@@ -30,6 +30,12 @@
                 <form method="POST" action="{{route('docs.documento')}}" name="createDocumento" id="createDocumento"> 
                     {{ csrf_field() }}
                     <div class="col-md-12">
+                        <div class="row">
+                            <h3>@lang('page_titles.docs.documento.filter')</h3>
+                            <div class="col-md-12">
+                                <a href="{{ route('docs.documento.novo') }}" class=" pull-right mr-1 btn waves-effect waves-light btn-success pull-right"><i class="fa fa-pencil"></i>&nbsp; @lang('buttons.docs.documento.create') </a>
+                            </div>    
+                        </div>
                         {{-- Aviso: prioridade do título do documento no filtro --}}
                         <!--<div class="row">
                             <h5 class="alert alert-info alert-dismissible" role="alert">
@@ -121,7 +127,6 @@
                         <div class="form-actions ">
                             <button type="submit" class="btn btn-success  pull-right "> <i class="fa fa-search"></i> @lang('buttons.general.search')</button>
                             <a href="{{ route('docs.documento') }}" class="btn btn-inverse pull-right mr-1 "><i class="fa fa-ban"></i> @lang('buttons.general.clear')</a>
-                            <a href="{{ route('docs.documento.novo') }}" class=" pull-right mr-1 btn waves-effect waves-light btn-success pull-right"><i class="fa fa-pencil"></i>&nbsp; @lang('buttons.docs.documento.create') </a>
                         </div> 
                         {{-- Aviso: pesquisa com datatable --}}
                         
