@@ -25,30 +25,30 @@
     </div>
 </div>
 @section('footer')
-
 <script>
     $(document).ready(function() {
 
-        if($('#idBPMN').val() !== undefined)
-        {
-            let bpmn =  window.parent.document.getElementById('arquivoXML2').value;
-            let encodedData = encodeURIComponent(bpmn);
+        setTimeout(() => {
+            if($('#idBPMN').val() !== undefined)
+                {
+                    let bpmn =  window.parent.document.getElementById('arquivoXML2').value;
+                    let encodedData = encodeURIComponent(bpmn);
 
-            window.parent.iframeTeste.document.getElementById('js-drop-zone').classList.add('with-diagram');
+                    window.parent.iframeTeste.document.getElementById('js-drop-zone').classList.add('with-diagram');
 
-            window.parent.iframeTeste.document.getElementById('js-download-diagram').classList.add('active');
-            window.parent.iframeTeste.document.getElementById('js-download-diagram').href = 'data:application/bpmn20-xml;charset=UTF-8,' + encodedData;
-            window.parent.iframeTeste.document.getElementById('js-download-diagram').download = 'diagram.bpmn'
+                    window.parent.iframeTeste.document.getElementById('js-download-diagram').classList.add('active');
+                    window.parent.iframeTeste.document.getElementById('js-download-diagram').href = 'data:application/bpmn20-xml;charset=UTF-8,' + encodedData;
+                    window.parent.iframeTeste.document.getElementById('js-download-diagram').download = 'diagram.bpmn'
 
-            window.parent.iframeTeste.document.getElementById('js-download-svg').classList.add('active');
-            window.parent.iframeTeste.document.getElementById('js-download-svg').href = 'data:application/bpmn20-xml;charset=UTF-8,' + encodedData;
-            window.parent.iframeTeste.document.getElementById('js-download-svg').download = 'diagram.svg'
+                    window.parent.iframeTeste.document.getElementById('js-download-svg').classList.add('active');
+                    window.parent.iframeTeste.document.getElementById('js-download-svg').href = 'data:application/bpmn20-xml;charset=UTF-8,' + encodedData;
+                    window.parent.iframeTeste.document.getElementById('js-download-svg').download = 'diagram.svg'
 
-            window.parent.iframeTeste.document.getElementById('arquivoXML').value = bpmn;
+                    window.parent.iframeTeste.document.getElementById('arquivoXML').value = bpmn;
+                }
 
-            
-        }
-
+        }, 2000);
+        
     });
 
     $(document).on("click","#btn-bpmn", function() {
