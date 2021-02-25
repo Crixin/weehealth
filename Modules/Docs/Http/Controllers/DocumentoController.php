@@ -710,7 +710,7 @@ class DocumentoController extends Controller
             $extensao = $file->getClientOriginalExtension();
         }
 
-        return [
+        $retorno = [
             "nome"                           => $request->get('tituloDocumento'),
             "codigo"                         => $request->get('codigoDocumento'),
             "validade"                       => null,
@@ -733,6 +733,11 @@ class DocumentoController extends Controller
             "etapa_aprovacao"                => $montaRequestEtapa
 
         ];
+
+        if ($request->idDocumento) {
+            unset($retorno['extensao']);
+        }
+        return $retorno;
     }
 
     public function buscaDocumentoPaiPorTipo(Request $request)
