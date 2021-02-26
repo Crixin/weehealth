@@ -14,16 +14,18 @@ class GeneralNotification extends Notification implements ShouldQueue
 
     protected $title;
     protected $content;
+    protected $link;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($_title, $_content)
+    public function __construct($_title, $_content, $_link)
     {
         $this->title = $_title;
         $this->content = $_content;
+        $this->link = $_link;
     }
 
     /**
@@ -62,6 +64,7 @@ class GeneralNotification extends Notification implements ShouldQueue
         return [
             'title' => $this->title,
             'content' => $this->content,
+            'link' => $this->link
         ];
     }
 

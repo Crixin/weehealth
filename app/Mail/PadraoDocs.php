@@ -11,18 +11,20 @@ class PadraoDocs extends Mailable
     use Queueable, SerializesModels;
 
     protected $server;
-    protected $tipoNotificacao;
+    protected $etapa;
     protected $documentoId;
+    protected $notificacaoPreferencial;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(int $tipoNotificacao, int $documentoId)
+    public function __construct($etapa, int $documentoId, $notificacaoPreferencial = '')
     {
         $this->server = 'http' . (empty($_SERVER['HTTPS']) ? '' : 's') . '://' . $_SERVER['HTTP_HOST'];
-        $this->tipoNotificacao = $tipoNotificacao;
+        $this->etapa = $etapa;
         $this->documentoId = $documentoId;
+        $this->notificacaoPreferencial = $notificacaoPreferencial;
     }
 
     /**
@@ -32,13 +34,14 @@ class PadraoDocs extends Mailable
      */
     public function build()
     {
-        $tagDocumento = new TagDocumentos($this->tipoNotificacao, $this->documentoId);
+        $tagDocumento = new TagDocumentos($this->etapa, $this->documentoId, $this->notificacaoPreferencial);
         $retorno = $tagDocumento->substituirTags();
         return $this->from('portal_conferencia@weecode.com.br', 'Weecode')
         ->subject($retorno['titulo'])
         ->view('emails.padrao')
         ->with([
-            'corpo' => $retorno['corpo']
+            'corpo' => $retorno['corpo'],
+            'link'  => $retorno['link']
         ]);
     }
 }

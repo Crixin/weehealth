@@ -154,13 +154,13 @@
                                             
                                             @if (Auth::user()->unreadNotifications->count() > 0)
                                                 @foreach (Auth::user()->unreadNotifications as $notification)
-                                                    <a href="#" style="cursor: default">
+                                                    <a href=" {{$notification->data['link'] ?? '#' }} " target="_blank" style="cursor: default">
                                                         <div class="btn btn-info btn-circle" style="cursor: default"><i class="ti-comment"></i></div>
                                                         <div class="mail-contnet">
                                                             <h6>{{ $notification->data['title'] }}</h6> 
                                                             <span class="mail-desc"> {{ $notification->data['content'] }} </span> 
-                                                            <span> {{ date('H:i', strtotime($notification->updated_at)) }} </span> 
-                                                        </div>
+                                                            <span> {{ date('H:i', strtotime($notification->updated_at)) }} </span>
+                                                        </div>                                
                                                     </a>
                                                 @endforeach                                            
                                             @else

@@ -50,4 +50,8 @@ class EtapaFluxo extends Model
         return $this->belongsTo('Modules\Docs\Model\Fluxo', 'fluxo_id');
     }
 
+    public function docsNotificacao()
+    {
+        return $this->hasOne('Modules\Docs\Model\Notificacao', 'id', 'notificacao_id');
+    }
 }

@@ -16,12 +16,10 @@ use Modules\Core\Repositories\{
 };
 use Illuminate\Support\Facades\{DB, Storage};
 use App\Classes\{Helper, RESTServices};
-use App\Mail\PadraoDocs;
 use App\Mail\TagDocumentos;
 use Illuminate\Support\Facades\Auth;
 use Modules\Docs\Model\Workflow;
 use App\Services\ValidacaoService;
-use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
 use Modules\Core\Services\NotificacaoService;
@@ -55,7 +53,6 @@ class WorkflowService
         $this->agrupamentoUserDocumentoRepository = new AgrupamentoUserDocumentoRepository();
         $this->userRepository = new UserRepository();
     }
-
 
     public function store(array $data)
     {
@@ -118,12 +115,10 @@ class WorkflowService
         return $this->workflowRepository->update($data, $id);
     }
 
-
     public function delete($delete)
     {
         return $this->workflowRepository->delete($delete);
     }
-
 
     public function iniciarRevisao($data)
     {
@@ -151,7 +146,6 @@ class WorkflowService
         }
     }
 
-
     private function replaceText(string $text)
     {
         $arrayTexts = [
@@ -164,7 +158,6 @@ class WorkflowService
 
         return $text;
     }
-
 
     public function getEtapaAtual(int $documento)
     {
@@ -217,7 +210,6 @@ class WorkflowService
         try {
             $etapaAtual = $this->getEtapaAtual($data['documento_id']);
             $proxEtapa = $this->getProximaEtapa($data['documento_id']);
-
             $info = [
                 'documento_id' => $data['documento_id'],
                 'etapa_id' => $proxEtapa->id,
@@ -245,15 +237,15 @@ class WorkflowService
 
             //Notificação
             if ($proxEtapa->enviar_notificacao && !empty($proxEtapa->notificacao_id)) {
-                if (!$this->enviarNotificacao($proxEtapa, $data)) {
+                if (!$this->enviarNotificacaoProxEtapa($proxEtapa, $data)) {
                     throw new \Exception('Falha ao enviar notificação');
                 }
             }
 
-
             Helper::setNotify(__("messages.workflow.advanceStepSuccess"), 'success|check-circle');
             return ['success' => true];
         } catch (\Throwable $th) {
+            dd($th);
             Helper::setNotify(__("messages.workflow.advanceStepFail"), 'danger|close-circle');
             return ['success' => false];
         }
@@ -273,7 +265,6 @@ class WorkflowService
             if (!$this->store($info)['success']) {
                 throw new \Exception('Falha ao salvar o retrocesso da etapa');
             }
-
             Helper::setNotify(__("messages.workflow.retreatStepSuccess"), 'success|check-circle');
             return ['success' => true];
         } catch (\Throwable $th) {
@@ -325,19 +316,20 @@ class WorkflowService
                         throw new \Exception("Falha ao retroceder etapa");
                     }
                 }
-
                 DB::commit();
+                 //Envio de notificacao de documento aprovado
+                $this->validarNotificacaoAprovRejeicao($etapaAtual, $data);
                 return ["success" => true];
             }
 
             if (!$this->retrocederEtapa($data)['success']) {
                 throw new \Exception("Falha ao retroceder etapa");
             }
-
+            //Envio de notificacao de documento reprovado
+            $this->validarNotificacaoAprovRejeicao($etapaAtual, $data);
             return ["success" => true];
         } catch (\Throwable $th) {
             DB::rollback();
-            dd($th);
             return ["success" => false];
         }
     }
@@ -429,14 +421,12 @@ class WorkflowService
         return  Helper::format_interval(date_diff(new DateTime(date('Y-m-d H:i:s', strtotime($data)), new DateTimeZone('America/Sao_Paulo')), new DateTime("now", new DateTimeZone('America/Sao_Paulo'))));
     }
 
-    public function enviarNotificacao($proxEtapa, $data)
+    public function enviarNotificacaoProxEtapa($proxEtapa, $data)
     {
         try {
             $notificacaoService = new NotificacaoService();
-
-            $objEmailCorpo = $this->getCorpoNotificacao($proxEtapa->notificacao_id, $data['documento_id']);
-
-            $buscaCorpo = new TagDocumentos($proxEtapa->notificacao_id, $data['documento_id']);
+            $objEmailCorpo = $notificacaoService->getCorpoNotificacao($data['documento_id'], $proxEtapa);
+            $buscaCorpo = new TagDocumentos($proxEtapa, $data['documento_id']);
             $tagDocumento = $buscaCorpo->substituirTags();
 
             if ($proxEtapa->comportamento_aprovacao) {
@@ -455,48 +445,17 @@ class WorkflowService
             }
 
             //Envio de notificacao msg no sistema OBS: SEMPRE VAI ENVIAR
-            $responseNotificacao = $notificacaoService->createNotificacao($usuarios, $tagDocumento['titulo'], $tagDocumento['corpo']);
+            $responseNotificacao = $notificacaoService->createNotificacaoSistema($usuarios, $tagDocumento['titulo'], $tagDocumento['corpo'], $tagDocumento['link']);
 
             if (!$responseNotificacao) {
                 throw new \Exception("Erro ao enviar notificação", 1);
             }
-
             Helper::setNotify(__("messages.workflow.notificationSuccess"), 'success|check-circle');
             return ['success' => true];
         } catch (\Throwable $th) {
             Helper::setNotify(__("messages.workflow.notificationFail"), 'danger|close-circle');
             return ['success' => false];
         }
-    }
-
-    public function getCorpoNotificacao($idNotificacao, $idDocumento)
-    {
-        $buscaNotificacao = $this->notificacaoRepository->find($idNotificacao);
-        $corpo = '';
-        switch ($buscaNotificacao->tipo_id) {
-            //Pode haver varios tipos de corpo de email (hoje soh tem um para teste)
-            case '2':
-                //Documento publicado
-                $corpo = new PadraoDocs($idNotificacao, $idDocumento);
-                break;
-            case '3':
-                //Documento com copia controlada
-                $corpo = new PadraoDocs($idNotificacao, $idDocumento);
-                break;
-            case '5':
-                //Documento que precisa de Verificacao
-                $corpo = new PadraoDocs($idNotificacao, $idDocumento);
-                break;
-            case '6':
-                //Rejeição do documento
-                $corpo = new PadraoDocs($idNotificacao, $idDocumento);
-                break;
-            case '7':
-                //Aprovação do documento
-                $corpo = new PadraoDocs($idNotificacao, $idDocumento);
-                break;
-        }
-        return $corpo;
     }
 
     public function getUserTreinamentoDivulgacao(string $tipo, int $idDocumento)
@@ -508,13 +467,11 @@ class WorkflowService
             ]
         );
         $usuarios = array_column($buscaUsuarios->toArray(), 'user_id');
-
         $email = $this->userRepository->findBy(
             [
                 ['id', '', $usuarios, 'IN']
             ]
         );
-
         return array_column($email->toArray(), 'email');
     }
 
@@ -534,7 +491,38 @@ class WorkflowService
                 ['id', '', $usuarios, 'IN']
             ]
         );
-
         return array_column($email->toArray(), 'email');
+    }
+
+    public function validarNotificacaoAprovRejeicao($etapaAtual, $data)
+    {
+        if ($etapaAtual->enviar_notificacao && !empty($etapaAtual->notificacao_id)) {
+            if (!$this->enviarNotificacaoAprovRejeicao($data, $etapaAtual)['success']) {
+                throw new \Exception("Falha ao enviar notificação de reprovação da etapa");
+            }
+        }
+    }
+
+    public function enviarNotificacaoAprovRejeicao($data, $etapaAtual)
+    {
+        try {
+            $aprovado = $data['aprovado'];
+            $notificacaoService = new NotificacaoService();
+            $objEmailCorpo = '';
+            $notificacaoId = $aprovado == "true" ? $this->parametroRepository->getParametro('NOTIFICACAO_APROVACAO_DOCUMENTO') : $this->parametroRepository->getParametro('NOTIFICACAO_REJEICAO_DOCUMENTO');
+            $objEmailCorpo = $notificacaoService->getCorpoNotificacao($data['documento_id'], $etapaAtual, $notificacaoId);
+
+            $buscaCorpo = new TagDocumentos($etapaAtual, $data['documento_id'], $notificacaoId);
+            $tagDocumento = $buscaCorpo->substituirTags();
+            $usuarios = $this->getUserAprovadores($data['documento_id'], $etapaAtual->id);
+
+            $notificacaoService->sendNotification($notificacaoId, $usuarios, $objEmailCorpo, $tagDocumento['titulo'], $tagDocumento['corpo']);
+
+            $notificacaoService->createNotificacaoSistema($usuarios, $tagDocumento['titulo'], $tagDocumento['corpo'], $tagDocumento['link']);
+            return ['success' => true];
+        } catch (\Throwable $th) {
+            Helper::setNotify(__("messages.workflow.notificationFail"), 'danger|close-circle');
+            return ['success' => false];
+        }
     }
 }

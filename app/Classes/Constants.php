@@ -276,6 +276,7 @@ class Constants {
         "<CODIGO_DOCUMENTO>",
         "<TITULO_DOCUMENTO>",
         "<TIPO_DOCUMENTO>",
-        "<SETOR>"
+        "<SETOR>",
+        "<ETAPA>"
     ];
 }

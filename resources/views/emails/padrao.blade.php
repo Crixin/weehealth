@@ -126,10 +126,13 @@
                                        
                                        <div align="center" class="img-container center autowidth" style="padding-right: 20px;padding-left: 20px;">
                                           
-                                                   <div style="font-size:1px;line-height:20px"> </div>
-                                                   {{$corpo}}
-                                                   <div style="font-size:1px;line-height:20px"> </div>
-                                                   
+                                          <div style="font-size:1px;line-height:20px"> </div>
+                                          {{$corpo}}
+                                          <div style="font-size:1px;line-height:20px"> </div>
+                                          
+                                          <div style="color:#000000;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:0px;padding-right:10px;padding-bottom:5px;padding-left:10px;">
+                                             <p>Olá, você está recebendo este email com o link para acesso ao documento. Clique <a href="{{ $link }}" target="_blank" rel="noopener noreferrer"> aqui</a> para ser redirecionado para a página do documento.</p>
+                                          </div>         
                                        </div>
                                        
                                     </div>

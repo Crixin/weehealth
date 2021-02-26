@@ -89,21 +89,25 @@ class UsuarioController extends Controller
         }
 
         try {
-            DB::transaction(function () use ($request) {
-                $usuario = User::find($request->get('idUsuario'));
+                DB::beginTransaction();
                 $senha = bcrypt($request->get('password'));
-                $usuario->password = $senha;
-                $usuario->save();
+                $userRepository = new UserRepository();
+                $update = $userRepository->update(['password' => $senha], $request->get('idUsuario'));
+
                 DB::purge(getenv('DB_CONNECTION'));
                 Config::set('database.connections.pgsql.username', getenv('DB_USERNAME'));
                 Config::set('database.connections.pgsql.password', getenv('DB_PASSWORD'));
                 DB::reconnect(getenv('DB_CONNECTION'));
-                $altera = DB::unprepared("ALTER USER $usuario->username WITH PASSWORD '" . $senha . "'");
-            });
+                $buscaUsuario = $this->userRepository->find($request->get('idUsuario'));
+                $userAux = '"' . $buscaUsuario->username . '"';
+                $password = $buscaUsuario->password;
+                $altera = DB::unprepared("ALTER USER $userAux WITH PASSWORD '" . $password . "'");
+                DB::commit();
 
             Helper::setNotify('Senha alterada com sucesso!', 'success|check-circle');
             return redirect()->back()->withInput();
         } catch (\Throwable $th) {
+            DB::rollback();
             Helper::setNotify('Um erro ocorreu ao alterar a senha.', 'danger|close-circle');
             return redirect()->back()->withInput();
         }

@@ -26,5 +26,7 @@ class CoreDatabaseSeeder extends Seeder
         $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateGrupoUserBDTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateFunctionInsereLogTableSeeder::class);
         $this->call(\Modules\Core\Database\Seeders\CreateParamAreaGedTableSeeder::class);
+        $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateParametroNotificacaoAprovacao::class);
+        $this->call(\Modules\Core\Database\Seeders\SeedCoreCreateParametroNotificacaoRejeicao::class);
     }
 }

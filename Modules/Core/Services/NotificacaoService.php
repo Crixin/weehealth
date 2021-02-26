@@ -3,6 +3,7 @@
 namespace Modules\Core\Services;
 
 use App\Classes\Helper;
+use App\Mail\PadraoDocs;
 use App\Notifications\GeneralNotification;
 use App\Services\ValidacaoService;
 use Illuminate\Support\Facades\DB;
@@ -112,7 +113,7 @@ class NotificacaoService
         return $responde;
     }
 
-    public function createNotificacao(array $users, string $titulo, string $corpo)
+    public function createNotificacaoSistema(array $users, string $titulo, string $corpo, string $link)
     {
         foreach ($users as $key => $user) {
             $buscaUser = $this->userRepository->findOneBy(
@@ -120,8 +121,39 @@ class NotificacaoService
                     ['email', '=', $user]
                 ]
             );
-            Notification::send($buscaUser, new GeneralNotification($titulo, $corpo));
+            Notification::send($buscaUser, new GeneralNotification($titulo, $corpo, $link));
         }
         return true;
+    }
+
+    public function getCorpoNotificacao($idDocumento, $etapa, $notificacaoPreferencial = '')
+    {
+        $idNotificacao = $notificacaoPreferencial != '' ? $notificacaoPreferencial : $etapa->notificacao_id;
+        $buscaNotificacao = $this->notificacaoRepository->find($idNotificacao);
+        $corpo = '';
+        switch ($buscaNotificacao->tipo_id) {
+            //Pode haver varios tipos de corpo de email (hoje soh tem um para teste)
+            case '2':
+                //Documento publicado
+                $corpo = new PadraoDocs($etapa, $idDocumento, $idNotificacao);
+                break;
+            case '3':
+                //Documento com copia controlada
+                $corpo = new PadraoDocs($etapa, $idDocumento, $idNotificacao);
+                break;
+            case '5':
+                //Documento que precisa de Verificacao
+                $corpo = new PadraoDocs($etapa, $idDocumento, $idNotificacao);
+                break;
+            case '6':
+                //Rejeição do documento
+                $corpo = new PadraoDocs($etapa, $idDocumento, $idNotificacao);
+                break;
+            case '7':
+                //Aprovação do documento
+                $corpo = new PadraoDocs($etapa, $idDocumento, $idNotificacao);
+                break;
+        }
+        return $corpo;
     }
 }

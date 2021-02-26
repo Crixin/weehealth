@@ -45,7 +45,7 @@
                                         <td>{{ $notificacao->id }}</td>
                                         <td>{{ $notificacao->nome }}</td>
                                         <td>{{ $notificacao->documento_anexo == true ? 'Sim' : 'Não' }}</td>
-                                        <td>{{ $notificacao->titulo_email }}</td>
+                                        <td>{{ Helper::limitChar($notificacao->titulo_email,40) }}</td>
                                         <td>
                                             <a href="#" class="btn waves-effect waves-light btn-danger sa-warning" data-id="{{ $notificacao->id }}"> <i class="mdi mdi-delete"></i> @lang('buttons.general.delete') </a>
                                             <a href="{{ route('core.modelo-notificacao.editar', ['id' => $notificacao->id]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>

@@ -10,14 +10,13 @@
                     <li>APROVADOR             <span class="text-muted">- Tag: &ltAPROVADOR&gt</span></li>
                     <li>DATA_REVISAO          <span class="text-muted">- Tag: &ltDATA_REVISAO&gt</span></li>
                     <li>VERSAO                <span class="text-muted">- Tag: &ltVERSAO&gt</span></li>
-                    <li>CODIGO_DOCUMENTO      <span class="text-muted">- Tag: &ltCODIGO_DOCUMENTO&gt</span></li>
                 </ul>
                 <ul>
+                    <li>CODIGO_DOCUMENTO      <span class="text-muted">- Tag: &ltCODIGO_DOCUMENTO&gt</span></li>
                     <li>TITULO_DOCUMENTO      <span class="text-muted">- Tag: &ltTITULO_DOCUMENTO&gt</span></li>
                     <li>TIPO_DOCUMENTO        <span class="text-muted">- Tag: &ltTIPO_DOCUMENTO&gt</span></li>
                     <li>SETOR                 <span class="text-muted">- Tag: &ltSETOR&gt</span></li>
                     <li>ETAPA                 <span class="text-muted">- Tag: &ltETAPA&gt</span></li>
-                    <li>LINK                  <span class="text-muted">- Tag: &ltLINK&gt</span></li>
                 </ul>
             </div>
         </div>

@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use App\Classes\Constants;
 use Modules\Core\Repositories\NotificacaoRepository;
+use Modules\Docs\Model\EtapaFluxo;
 use Modules\Docs\Repositories\DocumentoRepository;
 use Modules\Docs\Repositories\UserEtapaDocumentoRepository;
 use Modules\Docs\Repositories\WorkflowRepository;
@@ -13,7 +14,9 @@ class TagDocumentos
     protected $server;
     protected $tipoNotificacao;
     protected $documentoId;
+    protected $versaoDocumento;
     protected $aprovadores;
+    protected $etapa;
 
     protected $modeloNotificacaoRepository;
     protected $documentoRepository;
@@ -23,16 +26,19 @@ class TagDocumentos
      *
      * @return void
      */
-    public function __construct(int $tipoNotificacao, int $documentoId)
+    public function __construct($etapa, int $documentoId, $idNotificacaoPreferencial = '')
     {
-        //$this->server = 'http' . (empty($_SERVER['HTTPS']) ? '' : 's') . '://' . $_SERVER['HTTP_HOST'];
+        if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
+            $this->server = 'http' . (empty($_SERVER['HTTPS']) ? '' : 's') . '://' . $_SERVER['HTTP_HOST'] ?? '';
+        }
         $this->modeloNotificacaoRepository = new NotificacaoRepository();
         $this->documentoRepository = new DocumentoRepository();
         $this->aprovadores = new UserEtapaDocumentoRepository();
         $this->workflowRepository = new WorkflowRepository();
 
-        $this->tipoNotificacao = $tipoNotificacao;
+        $this->tipoNotificacao = $idNotificacaoPreferencial != '' ? $idNotificacaoPreferencial : $etapa->notificacao_id;
         $this->documentoId = $documentoId;
+        $this->etapa = $etapa;
     }
 
 
@@ -41,6 +47,8 @@ class TagDocumentos
         $buscaDocumento = $this->documentoRepository->find($this->documentoId);
         $buscaTipoNotificacao = $this->modeloNotificacaoRepository->find($this->tipoNotificacao);
 
+        $link = $this->server . '/docs/documento/visualizar/' . $this->documentoId;
+
         //INICIO APROVADORES
         $montaAprovadores = $this->getAprovadores();
         // FIM APROVADORES
@@ -48,9 +56,6 @@ class TagDocumentos
         //INICIO BUSCA ETAPA DIVULGACAO
         $buscaWorkflow = $this->getEtapaDivulgacao();
         //FIM BUSCA ETAPA DIVULGACAO
-
-        //Busca Etapa Atual
-        $etapaAtual = $this->getEtapaAtual();
 
         $titulo = $buscaTipoNotificacao->titulo_email;
         $corpo  = $buscaTipoNotificacao->corpo_email;
@@ -88,10 +93,7 @@ class TagDocumentos
                     $arrayTags['<SETOR>'] = $buscaDocumento->coreSetor->nome;
                     break;
                 case '<ETAPA>':
-                    $arrayTags['<ETAPA>'] = $etapaAtual->docsEtapaFluxo->nome;
-                    break;
-                case '<LINK>':
-                    $arrayTags['<LINK>'] = 'LINK FALTA FAZER';
+                    $arrayTags['<ETAPA>'] = $this->etapa->nome;
                     break;
             }
         }
@@ -102,7 +104,8 @@ class TagDocumentos
         }
         return [
             "titulo" => $titulo,
-            "corpo"  => $corpo
+            "corpo"  => $corpo,
+            "link"   => $link
         ];
     }
 
@@ -136,19 +139,6 @@ class TagDocumentos
             [
                 ['documento_id', '=', $this->documentoId],
                 ['comportamento_divulgacao', '=', true, 'HAS', 'docsEtapaFluxo']
-            ],
-            ['docsEtapaFluxo'],
-            [
-                ['created_at', 'DESC']
-            ]
-        );
-    }
-
-    public function getEtapaAtual()
-    {
-        return $this->workflowRepository->findOneBy(
-            [
-                ['documento_id', '=', $this->documentoId]
             ],
             ['docsEtapaFluxo'],
             [
