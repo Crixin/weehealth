@@ -401,7 +401,9 @@ class WorkflowService
             $info = [
                 "em_revisao" => false,
                 "ged_registro_id" => $idRegistro,
+                "validade" => date('Y-m-d', strtotime('+' . $documento->docsTipoDocumento->periodo_vigencia . ' month'))
             ];
+
 
             if (!$documentoService->update($info, $data['documento_id'])['success']) {
                 throw new \Exception("Falha ao divulgar o documento");

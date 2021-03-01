@@ -2,9 +2,9 @@
 
 namespace App\Console;
 
-use App\Repositories\TarefaRepository;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Modules\Portal\Repositories\TarefaRepository;
 
 class Kernel extends ConsoleKernel
 {
@@ -41,6 +41,12 @@ class Kernel extends ConsoleKernel
         *   À cada iteração, a tabela de logs é populada para que a consulta na tela de logs se torne mais rápida.
         */
         //$schedule->command('command:log')->dailyAt('22:00');
+
+
+        /**
+         * Rotina que verifica a validade do documento e se o mesmo esta vencido
+         */
+        $_schedule->command('command:validadeDocumento')->dailyAt('05:00');
     }
 
     /**
