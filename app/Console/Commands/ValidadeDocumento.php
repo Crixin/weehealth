@@ -53,12 +53,16 @@ class ValidadeDocumento extends Command
         $notificacaoValidadeDocumento = $parametroRepository->getParametro('NOTIFICACAO_VALIDADE_DOCUMENTO');
 
         $dataAtual = date('Y-m-d');
-        $documentos = $documentoRepository->findAll();
+        $documentos = $documentoRepository->findBy(
+            [
+                ['validade', '!=', null]
+            ]
+        );
         foreach ($documentos as $key => $documento) {
             $diasAviso = $documento->docsTipoDocumento->periodo_aviso;
             $etapaAtual = $workflowService->getEtapaAtual($documento->id);
-
             $usuarios = [$documento->coreElaborador->email];
+
             if ($documento->validade < $dataAtual && $documento->validade == date('Y-m-d', strtotime('-1 days'))) {
                 //Documento Vencido
                 $buscaCorpo = new TagDocumentos($etapaAtual, $documento->id, $notificacaoVencimento);
