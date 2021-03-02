@@ -75,22 +75,20 @@
                                 <h2 class="card-title"><b>{{ $documento->nome ?? '' }}</b> <small class="text-success"> &nbsp; | &nbsp; Previsão Próxima revisão: {{ Carbon\Carbon::parse($documento->validade ?? '')->format('d/m/Y') }}</small></h2>
                             </div>
                         </div>
-
+                        
+                        <!-- Visualização-->
+                        @if ($etapaAtual->comportamento_aprovacao || $etapaAtual->comportamento_visualizacao)
+                            <div class="row iframe_box">
+                                <iframe width="100%" id="onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=review' . $permissaoOnlyOffice . '&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
+                            </div>
+                        @endif
+                        
                         <!-- Edicao/Criacao Editor -->
                         @if ($etapaAtual->comportamento_criacao || $etapaAtual->comportamento_edicao)
                             <div class="row iframe_box">
-                                <iframe width="100%" id="speed-onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=edit' . $permissaoOnlyOffice . '&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
+                                <iframe width="100%" id="onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=edit' . $permissaoOnlyOffice . '&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
                             </div>
                         @endif
-                        <!-- End Editor -->
-                        
-                        <!-- Visualizador -->
-                        @if ($etapaAtual->comportamento_visualizacao)
-                            <div class="row iframe_box">
-                                <iframe width="100%" id="speed-onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=review&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
-                            </div>
-                        @endif
-                        <!-- end Visualizador -->
                         
                         @if ($etapaAtual->comportamento_treinamento && $etapaAtual->exigir_lista_presenca)
                             @component('docs::components.documento.treinamento', 
@@ -137,14 +135,13 @@
             <!-- END Page Content -->
         </div>
     </div>
-</div>
 
+</div>
 @include('docs::modal/anexo-documento',
-    [
-        'comportamento_modal' => 'EDICAO',
-        'idDocumento' => $documento->id
-    ]
-)
+[
+    'comportamento_modal' => 'EDICAO',
+    'idDocumento' => $documento->id
+])
 @endsection
 
 @section('footer')

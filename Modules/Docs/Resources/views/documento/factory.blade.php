@@ -66,7 +66,7 @@
 
                                     <!-- Editor -->
                                     <div class="row iframe_box">
-                                        <iframe width="100%" id="speed-onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
+                                        <iframe width="100%" id="onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
                                     </div>
 
                             </div>
