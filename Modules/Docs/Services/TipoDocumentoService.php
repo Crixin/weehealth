@@ -211,7 +211,7 @@ class TipoDocumentoService
                     'setor_id'          => $buscaSetor->id,
                     'tipo_documento_id' => $id
                 ];
-                $tipoDocumentoSetorService  = new tipoDocumentoSetorService();
+                $tipoDocumentoSetorService  = new TipoDocumentoSetorService();
                 $itemCriado = $tipoDocumentoSetorService->store($updateItem);
                 if (!$itemCriado['success']) {
                     throw new Exception("Erro ao atualizar item do tipo de documento", 1);
