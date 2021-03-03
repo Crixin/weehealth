@@ -155,8 +155,6 @@
   
     {{-- Script para carregar áreas do GED (inicia pelas áreas-pai) --}}
     <script>
-        const URL_GED = "{{ env('URL_GED') }}";
-        const ID_USER_GED = "{{ env('ID_GED_USER') }}";
 
         let listaAreas = {!! json_encode($listaAreas, JSON_HEX_TAG) !!};
 

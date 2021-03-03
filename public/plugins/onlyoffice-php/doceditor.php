@@ -75,7 +75,7 @@
     }
 
     function getCallbackUrl($fileName) {
-        return serverPath(TRUE) . '/plugins/onlyoffice-php/'
+        return serverPath(TRUE) . 'plugins/onlyoffice-php/'
                     . "webeditor-ajax.php"
                     . "?type=track"
                     . "&fileName=" . urlencode($fileName)
