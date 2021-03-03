@@ -137,14 +137,16 @@
     </div>
 
 </div>
+
+@endsection
+
+@section('footer')
+
 @include('docs::modal/anexo-documento',
 [
     'comportamento_modal' => 'EDICAO',
     'idDocumento' => $documento->id
 ])
-@endsection
-
-@section('footer')
 
 <script>
     $(document).ready(function(){

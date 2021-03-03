@@ -251,7 +251,7 @@ function getVirtualPath($forDocumentServer) {
     $storagePath = $storagePath != "" ? $storagePath . '/' : "";
 
     //Here is the big secret my friend!!!
-    $virtPath = serverPath($forDocumentServer) . '/plugins/onlyoffice-php/' . $storagePath . getCurUserHostAddress() . '/';
+    $virtPath = serverPath($forDocumentServer) . 'plugins/onlyoffice-php/' . $storagePath . getCurUserHostAddress() . '/';
     sendlog("getVirtualPath virtPath: " . $virtPath, "common.log");
     return $virtPath;
 }
