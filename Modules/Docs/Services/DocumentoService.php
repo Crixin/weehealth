@@ -16,6 +16,7 @@ use Modules\Docs\Repositories\{
     DocumentoItemNormaRepository,
     HierarquiaDocumentoRepository,
     ItemNormaRepository,
+    TipoDocumentoSetorRepository,
     UserEtapaDocumentoRepository,
     VinculoDocumentoRepository
 };
@@ -67,10 +68,10 @@ class DocumentoService
                 $createDocumento['item_normas'],
                 $createDocumento['etapa_aprovacao']
             );
-        
+
             $documento = DB::transaction(function () use ($createDocumento, $data) {
                 $workflowService = new WorkflowService();
-                $tipoDocumentoService = new TipoDocumentoService();
+                $tipoDocumentoSetorService = new TipoDocumentoSetorService();
 
 
                 $documento = $this->documentoRepository->create($createDocumento);
@@ -136,7 +137,7 @@ class DocumentoService
                     }
                 }
 
-                $tipoDocumentoService->atualizaUltimoCodigoTipoDocumento($data['tipo_documento_id']);
+                $tipoDocumentoSetorService->atualizaUltimoCodigoTipoDocumento($data['tipo_documento_id'], $data['setor_id']);
 
 
                 return $documento;
@@ -230,6 +231,14 @@ class DocumentoService
         $setorRepository = new SetorRepository();
         $buscaSetor = $setorRepository->find($setor);
 
+        $tipoDocumentoSetor = new TipoDocumentoSetorRepository();
+        $buscaUltimoNumero = $tipoDocumentoSetor->findOneBy(
+            [
+                ["tipo_documento_id", "=", $tipoDocumento],
+                ["setor_id", "=", $setor, "AND"]
+            ]
+        );
+
         $parametroRepository = new ParametroRepository();
         $buscaParametros = (array)json_decode($parametroRepository->getParametro('PADRAO_CODIGO'));
 
@@ -242,7 +251,7 @@ class DocumentoService
                     break;
                 case 'NUMEROPADRAO':
                     $codigoFinal .= $this->gerarPadraoNumero(
-                        $buscaTipoDocumento->ultimo_documento + 1,
+                        $buscaUltimoNumero->ultimo_documento ? $buscaUltimoNumero->ultimo_documento + 1 : 1,
                         $buscaTipoDocumento->numero_padrao_id
                     );
                     break;

@@ -198,18 +198,6 @@ class DocumentoController extends Controller
      */
     public function create()
     {
-        /**Setores */
-        $setores = $this->setorRepository->findBy(
-            [
-                ['nome', '!=', 'Sem Setor']
-            ],
-            [],
-            [
-                ['nome', 'ASC']
-            ]
-        );
-        $setores = array_column(json_decode(json_encode($setores), true), 'nome', 'id');
-
         /**Grupos */
         $grupos = $this->grupoRepository->findBy(
             [],
@@ -269,7 +257,6 @@ class DocumentoController extends Controller
         return view('docs::documento.create',
             compact(
                 'documentos',
-                'setores',
                 'tiposDocumento',
                 'niveisAcesso',
                 'classificacoes',
@@ -328,19 +315,6 @@ class DocumentoController extends Controller
     public function edit($id)
     {
         $documento = $this->documentoRepository->find($id);
-
-        /**Setores */
-        $setores = $this->setorRepository->findBy(
-            [
-                ['nome', '!=', 'Sem Setor']
-            ],
-            [],
-            [
-                ['nome', 'ASC']
-            ]
-        );
-        $setores = array_column(json_decode(json_encode($setores), true), 'nome', 'id');
-
         /**Grupos */
         $grupos = $this->grupoRepository->findBy(
             [],
@@ -450,7 +424,6 @@ class DocumentoController extends Controller
             compact(
                 'documento',
                 'documentos',
-                'setores',
                 'tiposDocumento',
                 'niveisAcesso',
                 'classificacoes',

@@ -18,7 +18,7 @@ class TipoDocumentoPlano extends Model
     ];
 
     public $rules = [
-        'documento_id' => 'required|integer|exists:docs_documento,id',
+        'tipo_documento_id' => 'required|integer|exists:docs_tipo_documento,id',
         'plano_id' => 'required|integer|exists:docs_plano,id'
     ];
 }

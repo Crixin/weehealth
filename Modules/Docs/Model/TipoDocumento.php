@@ -55,4 +55,9 @@ class TipoDocumento extends Model
     {
         return $this->hasMany('Modules\Docs\Model\Documento', 'tipo_documento_id', 'id');
     }
+
+    public function docsTipoDocumentoSetor()
+    {
+        return $this->hasMany('Modules\Docs\Model\TipoDocumentoSetor', 'tipo_documento_id', 'id');
+    }
 }

@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\{DB, Validator};
 use Modules\Core\Repositories\ParametroRepository;
+use Modules\Core\Repositories\SetorRepository;
 use Modules\Core\Services\NotificacaoService;
-use Modules\Docs\Repositories\{FluxoRepository, TipoDocumentoRepository};
+use Modules\Docs\Repositories\{FluxoRepository, TipoDocumentoRepository, TipoDocumentoSetorRepository};
 use Modules\Docs\Services\TipoDocumentoService;
 
 class TipoDocumentoController extends Controller
@@ -17,13 +18,17 @@ class TipoDocumentoController extends Controller
     protected $tipoDocumentoRepository;
     protected $fluxoRepository;
     protected $parametroRepository;
+    protected $setorRepository;
     protected $tipoDocumentoService;
+    protected $tipoDocumentoSetorRepository;
 
     public function __construct()
     {
         $this->tipoDocumentoRepository = new TipoDocumentoRepository();
         $this->fluxoRepository = new FluxoRepository();
         $this->parametroRepository = new ParametroRepository();
+        $this->setorRepository = new SetorRepository();
+        $this->tipoDocumentoSetorRepository = new TipoDocumentoSetorRepository();
     }
 
     /**
@@ -69,6 +74,16 @@ class TipoDocumentoController extends Controller
 
         $extensoesDocumentos = $this->parametroRepository->getParametro('EXTENSAO_DOCUMENTO_ONLYOFFICE');
 
+        $setores = array_column($this->setorRepository->findBy(
+            [
+                ['nome', '!=', 'Sem Setor']
+            ],
+            [],
+            [
+                ['nome', 'ASC']
+            ]
+        )->toArray(), 'nome');
+
         return view(
             'docs::tipo-documento.create',
             compact(
@@ -76,7 +91,8 @@ class TipoDocumentoController extends Controller
                 'tiposDocumento',
                 'padroesCodigo',
                 'padroesNumero',
-                'extensoesDocumentos'
+                'extensoesDocumentos',
+                'setores'
             )
         );
     }
@@ -153,8 +169,23 @@ class TipoDocumentoController extends Controller
         $padroesNumero = $this->parametroRepository->getParametro('PADRAO_NUMERO');
         $padroesNumero = $padroesNumero ? array_column((array)json_decode($padroesNumero), 'DESCRICAO', 'ID') : [];
 
-
         $extensoesDocumentos = $this->parametroRepository->getParametro('EXTENSAO_DOCUMENTO_ONLYOFFICE');
+
+        $setores = array_column($this->setorRepository->findBy(
+            [
+                ['nome', '!=', 'Sem Setor']
+            ],
+            [],
+            [
+                ['nome', 'ASC']
+            ]
+        )->toArray(), 'nome');
+
+        $tipoDocumentoSetor = $this->tipoDocumentoSetorRepository->findBy(
+            [
+                ['tipo_documento_id', '=', $id]
+            ]
+        );
 
         return view(
             'docs::tipo-documento.edit',
@@ -164,7 +195,9 @@ class TipoDocumentoController extends Controller
                 'tiposDocumento',
                 'padroesCodigo',
                 'padroesNumero',
-                'extensoesDocumentos'
+                'extensoesDocumentos',
+                'setores',
+                'tipoDocumentoSetor'
             )
         );
     }
@@ -249,7 +282,8 @@ class TipoDocumentoController extends Controller
             "extensao"              => $extensao ?? '',
             "codigo_padrao"         => json_encode($request->get('codigoPadrao')),
             "numero_padrao_id"      => $request->get('numeroPadrao'),
-            "ultimo_documento"      => $request->get('ultimoDocumento') ?? 0
+            "ultimo_documento"      => $request->get('ultimoDocumento') ?? 0,
+            "dados"                 => $request->get('dados')
         ];
 
         //REMOVENDO OS CAMPOS DO DOCUMENTO MODELO NO MOMENTO DO UPDATE PARA CASO O USUÁRIO NAO
@@ -257,7 +291,7 @@ class TipoDocumentoController extends Controller
         if (!$request->documentoModelo) {
             unset($retorno["modelo_documento"], $retorno["extensao"], $retorno['mime_type']);
         }
-        
+
         //SE TIVER DOCUMENTO VINCULADO A ESSE FLUXO NÃO ALTERA O ULTIMO DOCUMENTO
         if ($request->get('idTipoDocumento')) {
 /*             $buscaDocumento = $this->tipoDocumentoRepository->find($request->get('idTipoDocumento'));

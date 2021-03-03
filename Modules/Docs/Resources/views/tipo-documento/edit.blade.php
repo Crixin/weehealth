@@ -17,7 +17,10 @@
 
 
 @section('content')
-
+@include('docs::modal/tipo-documento-setor',
+[
+    'setores'        => $setores
+])
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -34,6 +37,7 @@
                 <form method="POST" action="{{ route('docs.tipo-documento.alterar') }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <input type="hidden" id="idTipoDocumento" name="idTipoDocumento" value="{{ $tipoDocumento->id }}">
+                    <input type="hidden" name="ordemHidden" id="ordemHidden" value="{{$tipoDocumento->docsTipoDocumentoSetor->count() ?? 0}}"> 
                     @component(
                         'docs::components.tipo-documento', 
                         [
@@ -49,7 +53,8 @@
                             'tiposDocumento' => $tiposDocumento,
                             'padroesCodigo' => $padroesCodigo,
                             'padroesNumero' => $padroesNumero,
-                            'extensoesDocumentos' => $extensoesDocumentos
+                            'extensoesDocumentos' => $extensoesDocumentos,
+                            'itens' => $tipoDocumentoSetor
                         ]
                     )
                     @endcomponent

@@ -49,6 +49,21 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
         });
 
         /*
+        * TIPO DOCUMENTO SETOR
+        */
+        Route::group(['prefix' => 'tipo-documento-setor' , 'as' => 'docs.'], function () {
+            /*
+            Route::get('',              ['as' => 'tipo-documento-setor',         'uses' => 'TipoDocumentoSetorController@index']);
+            Route::get('novo',          ['as' => 'tipo-documento-setor.novo',    'uses' => 'TipoDocumentoSetorController@create']);
+            Route::post('salvar',       ['as' => 'tipo-documento-setor.salvar',  'uses' => 'TipoDocumentoSetorController@store']);
+            Route::get('editar/{id}',   ['as' => 'tipo-documento-setor.editar',  'uses' => 'TipoDocumentoSetorController@edit']);
+            Route::post('alterar',      ['as' => 'tipo-documento-setor.alterar', 'uses' => 'TipoDocumentoSetorController@update']);
+            Route::post('deletar',      ['as' => 'tipo-documento-setor.deletar', 'uses' => 'TipoDocumentoSetorController@destroy']);
+            */
+            Route::post('setor',  ['as' => 'tipo-documento-setor.setor', 'uses' => 'TipoDocumentoSetorController@getSetor']);
+        });
+
+        /*
         * FLUXO
         */
         Route::group(['prefix' => 'fluxo' , 'as' => 'docs.'], function () {

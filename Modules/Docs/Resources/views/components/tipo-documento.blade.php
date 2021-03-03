@@ -34,6 +34,7 @@
                 <small class="text-danger">{{ $errors->first('codigoPadrao') }}</small>
             </div>
         </div>
+        <!--
         <div class="col-md-6">
             <div class="form-group required{{ $errors->has('ultimoDocumento') ? ' has-error' : '' }}">
                 {!! Form::label('ultimoDocumento', 'Último Documento', ['class' => 'control-label']) !!}
@@ -41,7 +42,7 @@
                 <small class="text-danger">{{ $errors->first('ultimoDocumento') }}</small>
             </div>
         </div>
-        
+        -->
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -198,16 +199,55 @@
     <div class="row">
 
     </div>
-    
+</div>
+<legend>@lang('page_titles.docs.tipo-documento.ultimo-codigo')</legend>
+<hr>
+<div class="table-responsive m-t-40">
+    <button type="button" id="btnTipoDocumentoSetor" class="btn btn-info">@lang('buttons.docs.tipo-documento-setor.create')</button>
+    <table id="itens" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Setor</th>
+                <th>Código</th>
+                <th>Controle</th>           
+            </tr>
+        </thead>
+        <tbody id="itens">
+            @foreach ($itens ?? [] as $chave => $item)
+                @php
+                    $key = $chave + 1;
+                    $conteudoBotao = 
+                    [
+                        "id"        => $key,
+                        "numero"    => $item->ultimo_documento,
+                        "setor" => $item->coreSetor->nome,
+                    ];
+                @endphp
+                <tr>
+                    <td data-id="{{$key}}">{{$key}}</td>
+                    <td>{{$item->coreSetor->nome}}</td>
+                    <td>{{$item->ultimo_documento}}</td>
+                    <td>
+                        <a class="btn waves-effect waves-light btn-danger sa-warning btnExcluirItem" data-id='{{$key}}'><i class="mdi mdi-delete"></i> @lang('buttons.general.delete')</a>
+                        <a class="btn waves-effect waves-light btn-info btnEdit" data-id='{{$key}}' ><input type="hidden" name="dados[]" id="dados{{$key}}" value='{{JSON_encode($conteudoBotao)}}'><i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit')</a>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>
 
+
 @section('footer')
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <link href="{{ asset('plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css">    
 <script src="{{ asset('plugins/select2/dist/js/select2.full.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('plugins/jqueryui/jquery-ui.min.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('plugins/dropify/dist/css/dropify.min.css') }}">
 <script src="{{ asset('plugins/dropify/dist/js/dropify.min.js') }}"></script>
 <script>
+    var myTable;
     $(document).ready(function(){
         verificaVinculoObrigatorio();
         buscaDocumentos();   
@@ -289,7 +329,58 @@
         $('#tipoDocumentoPai').on('change', function(){
             verificaVinculoObrigatorio();   
         });
+
+        
+        $(document).ready(function() {
+            myTable = $('#itens').DataTable({
+                "language": {
+                    "sEmptyTable": "Nenhum registro encontrado",
+                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ".",
+                    "sLengthMenu": "_MENU_ resultados por página",
+                    "sLoadingRecords": "Carregando...",
+                    "sProcessing": "Processando...",
+                    "sZeroRecords": "Nenhum registro encontrado",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": {
+                        "sNext": "Próximo",
+                        "sPrevious": "Anterior",
+                        "sFirst": "Primeiro",
+                        "sLast": "Último"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Ordenar colunas de forma ascendente",
+                        "sSortDescending": ": Ordenar colunas de forma descendente"
+                    }
+                },
+                dom: 'frt',
+                rowReorder: false
+            });
+
+            $(document).on('click','#btnTipoDocumentoSetor', function(){
+                
+                var $inputsModal = $('#formTipoDocumentoSetor :input');
+                $inputsModal.each(function() {
+                        $(this).val('').prop('checked',false).selectpicker('refresh');
+                });
+                $('#tipoDocumentoId').val('');
+                $('#modalTipoDocumentoSetor').modal('show');
+
+            });
+
+            $('#itens').on( 'click', 'tbody tr td .btnExcluirItem', function () {
+                deleteTR($(this).parent().parent());
+            } );
+
+        });
     });
+
+    function deleteTR(trDeletar){
+        myTable.row( trDeletar ).remove().draw();
+    }
 
     function verificaVinculoObrigatorio(){
 
@@ -322,6 +413,5 @@
             console.log(error);
         });
     }
-
 </script>
 @endsection

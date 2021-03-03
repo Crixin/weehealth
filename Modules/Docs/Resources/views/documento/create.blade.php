@@ -37,7 +37,7 @@
                             'tituloDocumento' => '',
                             'codigo' => '',
                             'validade' => '',
-                            'setores' => $setores,
+                            'setores' => [],
                             'tiposDocumento' => $tiposDocumento,
                             'documentosPais' => [],
                             'niveisAcesso' => $niveisAcesso,
