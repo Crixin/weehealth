@@ -386,7 +386,7 @@ class WorkflowService
                 'endereco' => $documento->revisao . "." . $documento->extensao,
                 'idArea' => $areaGed,
                 'idRegistro' => $idRegistro,
-                //'idUsuario' => env('ID_GED_USER'),
+                'idUsuario' => env('ID_GED_USER'),
                 'removido' => false,
                 'bytes'    => $base64file
             ];
