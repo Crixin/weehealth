@@ -43,7 +43,7 @@
                             'tituloDocumento' => $documento->nome,
                             'codigo' =>  $documento->codigo,
                             'validade' => $documento->validade,
-                            'setores' => $setores,
+                            'setores' => [],
                             'tiposDocumento' => $tiposDocumento,
                             'documentosPais' => [],
                             'niveisAcesso' => $niveisAcesso,

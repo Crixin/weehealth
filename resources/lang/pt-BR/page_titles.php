@@ -221,6 +221,7 @@ return [
             'index'           => 'Tipos de Documento',
             'create'          => 'Novo Tipo de Documento',
             'update'          => 'Alterando Tipo de Documento',
+            'ultimo-codigo'   => 'Último código do documento por setor'
         ],
 
         'norma'        => [

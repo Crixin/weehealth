@@ -150,6 +150,11 @@ return [
             'create'   => 'Criar Tipo de Documento'
         ],
 
+        /*TIPO DOCUMENTO SETOR*/
+        'tipo-documento-setor'    => [
+            'create'   => 'Criar último código documento'
+        ],
+
         /*NORMA*/
         'norma'    => [
             'create'   => 'Criar Norma',

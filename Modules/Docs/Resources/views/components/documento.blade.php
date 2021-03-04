@@ -24,19 +24,19 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group required{{ $errors->has('setor') ? ' has-error' : '' }}">
-                {!! Form::label('setor', 'Setor', ['class' => 'control-label']) !!}
-                {!! Form::select('setor',$setores, !empty($documentoEdit) ?  $documentoEdit->setor_id : null, ['id' => 'setor', 'class' => 'form-control selectpicker', 'required' => 'required','data-live-search' => 'true', 'data-actions-box' =>'true', 'placeholder' => __('components.selectepicker-default')]) !!}
-                <small class="text-danger">{{ $errors->first('setor') }}</small>
+            <div class="form-group required{{ $errors->has('tipoDocumento') ? ' has-error' : '' }}">
+                {!! Form::label('tipoDocumento', 'Tipo de Documento' , ['class' => 'control-label']) !!}
+                {!! Form::select('tipoDocumento',$tiposDocumento, !empty($documentoEdit) ?  $documentoEdit->tipo_documento_id : null, ['id' => 'tipoDocumento', 'class' => 'form-control selectpicker', 'required' => 'required','data-live-search' => 'true', 'data-actions-box' =>'true', 'placeholder' => __('components.selectepicker-default')]) !!}
+                <small class="text-danger">{{ $errors->first('tipoDocumento') }}</small>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group required{{ $errors->has('tipoDocumento') ? ' has-error' : '' }}">
-                {!! Form::label('tipoDocumento', 'Tipo de Documento' , ['class' => 'control-label']) !!}
-                {!! Form::select('tipoDocumento',$tiposDocumento, !empty($documentoEdit) ?  $documentoEdit->tipo_documento_id : null, ['id' => 'tipoDocumento', 'class' => 'form-control selectpicker', 'required' => 'required','data-live-search' => 'true', 'data-actions-box' =>'true', 'placeholder' => __('components.selectepicker-default')]) !!}
-                <small class="text-danger">{{ $errors->first('tipoDocumento') }}</small>
+            <div class="form-group required{{ $errors->has('setor') ? ' has-error' : '' }}">
+                {!! Form::label('setor', 'Setor', ['class' => 'control-label']) !!}
+                {!! Form::select('setor',$setores, !empty($documentoEdit) ?  $documentoEdit->setor_id : null, ['id' => 'setor', 'class' => 'form-control selectpicker', 'required' => 'required','data-live-search' => 'true', 'data-actions-box' =>'true', 'placeholder' => __('components.selectepicker-default')]) !!}
+                <small class="text-danger">{{ $errors->first('setor') }}</small>
             </div>
         </div>
         <div class="col-md-6">
@@ -205,6 +205,7 @@
         carregaOptGroup();
         
         buscaEtapas();
+        buscaSetor();
 
         $('#optgroup-newNormaDoc').multiSelect({
             selectableOptgroup: true,
@@ -246,6 +247,7 @@
 
         $('#tipoDocumento').on('change', function(){
             buscaEtapas();
+            buscaSetor();
         });
 
 
@@ -284,8 +286,28 @@
             }, error => {
                 console.log(error);
             });
-        }
-        
+        } 
+    }
+
+    function buscaSetor()
+    {
+        var documento = $('#idDocumento').val();
+        var id = $('#tipoDocumento').val();
+        let obj = {'id': id, 'idDocumento': documento};
+        if(id != ''){
+            $('#setor').empty();
+            ajaxMethod('POST', "{{ URL::route('docs.tipo-documento-setor.setor') }}", obj).then(response => {
+                
+                if(response.response == 'erro') {
+                    swal2_alert_error_support("Tivemos um problema ao buscar o setores vinculados ao tipo de documento.");
+                }else{
+                    montaSetor(response.data);
+                } 
+                
+            }, error => {
+                console.log(error);
+            });
+        } 
     }
 
     function carregaOptGroup()
@@ -420,6 +442,17 @@
         $('.aprovadores').append(linha);
 
         carregaOptGroup();
+    }
+
+    function montaSetor(response)
+    {
+        let options = "<option value=''>Nada selecionado</option>";
+        for (let index = 0; index < response.length; index++) {
+            const element = response[index];
+            let selecionado = element.select == true ? 'selected' : '';
+            options += "<option value='"+element.id+"' "+selecionado+" >"+element.nome+"</option>"
+        }
+        $('#setor').append(options).selectpicker('refresh');
     }
 
     function obrigatoriedadeCampos(tipo, input, div, label)

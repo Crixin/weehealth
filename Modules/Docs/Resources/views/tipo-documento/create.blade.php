@@ -14,53 +14,55 @@
 
 @endsection
 
-
-
 @section('content')
+@include('docs::modal/tipo-documento-setor',
+[
+    'setores'        => $setores
+])
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
 
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
+            @component('components.validation-error', ['errors'])@endcomponent
 
-                @component('components.validation-error', ['errors'])@endcomponent
+            @if(Session::has('message'))
+                @component('components.alert')@endcomponent
 
-                @if(Session::has('message'))
-                    @component('components.alert')@endcomponent
-
-                    {{ Session::forget('message') }}
-                @endif
-                
-                <form method="POST" action="{{ route('docs.tipo-documento.salvar') }}"  enctype="multipart/form-data">
-                    {{ csrf_field() }}
+                {{ Session::forget('message') }}
+            @endif
+            
+            <form method="POST" action="{{ route('docs.tipo-documento.salvar') }}"  enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <input type="hidden" name="ordemHidden" id="ordemHidden" value="0"> 
+                @component(
+                    'docs::components.tipo-documento', 
+                    [
+                        'tipoDocumentoEdit' => [],
+                        'nome' => '', 
+                        'descricao' => '',
+                        'sigla' => '',
+                        'tipo_documento_pai' => '',
+                        'fluxos' => $fluxos,
+                        'periodosVigencia' => '',
+                        'periodosAviso' => '',
+                        'ultimoDocumento' => 0,
+                        'tiposDocumento' => $tiposDocumento,
+                        'padroesCodigo' => $padroesCodigo,
+                        'padroesNumero' => $padroesNumero,
+                        'extensoesDocumentos' => $extensoesDocumentos,
+                        'itens' => []
+                    ]
+                )
+                @endcomponent
                     
-                    @component(
-                        'docs::components.tipo-documento', 
-                        [
-                            'tipoDocumentoEdit' => [],
-                            'nome' => '', 
-                            'descricao' => '',
-                            'sigla' => '',
-                            'tipo_documento_pai' => '',
-                            'fluxos' => $fluxos,
-                            'periodosVigencia' => '',
-                            'periodosAviso' => '',
-                            'ultimoDocumento' => 0,
-                            'tiposDocumento' => $tiposDocumento,
-                            'padroesCodigo' => $padroesCodigo,
-                            'padroesNumero' => $padroesNumero,
-                            'extensoesDocumentos' => $extensoesDocumentos,
-                        ]
-                    )
-                    @endcomponent
-                        
-                    <div class="form-actions ">
-                        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
-                        <a href="{{ route('docs.tipo-documento') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
-                    </div>
-                </form>
+                <div class="form-actions ">
+                    <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> @lang('buttons.general.save')</button>
+                    <a href="{{ route('docs.tipo-documento') }}" class="btn btn-inverse"> @lang('buttons.general.back')</a>
+                </div>
+            </form>
 
-            </div>
         </div>
     </div>
+</div>
     
 @endsection
