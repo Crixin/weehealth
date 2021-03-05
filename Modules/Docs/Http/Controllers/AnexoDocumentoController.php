@@ -64,16 +64,35 @@ class AnexoDocumentoController extends Controller
     {
         try {
             $id = $request->idDocumento;
+            $buscaDocumento = $this->documentoRepository->find($id);
+
+            $anexoService = new AnexoService();
             $files = $request->file('anexo_escolhido', 'local');
             foreach ($files as $key => $file) {
                 $extensao = $file->getClientOriginalExtension();
                 $nome = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $base64 = base64_encode(file_get_contents($file->getRealPath()));
+                $idRegistro = '';
+                if ($buscaDocumento->ged_registro_id) {
+                    $data = [
+                        'idDocumento' => $id,
+                        'base64' => $base64,
+                        'nome' => $nome,
+                        'extensao' => $extensao
+                    ];
+                    $response = $anexoService->createAnexoGED($data);
+                    if (!$response['success']) {
+                        throw new \Exception("Falha ao salvar documento no GED.");
+                    }
+                    $idRegistro = $response['data'];
+                } else {
+                    $cadastro['anexo_documento'] = $base64;
+                    $cadastro['extensao'] = $extensao;
+                }
 
-                $cadastro = [
-                    "nome" => $nome,
-                    "documento_id" => $id,
-                    "ged_documento_id" => ''
-                ];
+                $cadastro["nome"] = $nome;
+                $cadastro["documento_id"] = $id;
+                $cadastro["ged_documento_id"] = $idRegistro;
 
                 DB::transaction(function () use ($cadastro) {
                     $anexoService = new AnexoService();
@@ -83,6 +102,7 @@ class AnexoDocumentoController extends Controller
             Helper::setNotify('Novo(s) anexo(s) criado com sucesso!', 'success|check-circle');
             return true;
         } catch (\Throwable $th) {
+            dd($th);
             Helper::setNotify('Um erro ocorreu ao gravar o anexo', 'danger|close-circle');
             return false;
         }
@@ -126,16 +146,21 @@ class AnexoDocumentoController extends Controller
      */
     public function destroy(Request $request)
     {
-        $id = $request = $request->id;
+        $id = $request->id;
         try {
             DB::transaction(function () use ($id) {
                 $anexoService = new AnexoService();
+                $buscaAnexo = $this->anexoRepository->find($id);
+ 
                 $anexoService->delete($id);
+                if (!$anexoService->deleteAnexoGED($buscaAnexo->ged_documento_id)['success']) {
+                    throw new \Exception("Falha ao deletar anexo do documento no GED.");
+                }
             });
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {
+            dd($th);
             return response()->json(['response' => 'erro']);
         }
     }
-
 }
