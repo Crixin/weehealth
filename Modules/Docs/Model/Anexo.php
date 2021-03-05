@@ -15,7 +15,8 @@ class Anexo extends Model
         'id',
         'nome',
         'ged_documento_id',
-        'documento_id'
+        'documento_id',
+        'anexo_documento',
+        'extensao'
     ];
-
 }

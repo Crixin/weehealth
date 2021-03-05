@@ -6,9 +6,11 @@ use App\Classes\Helper;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Modules\Docs\Repositories\DocumentoRepository;
 use Modules\Docs\Repositories\ListaPresencaRepository;
 use Modules\Docs\Services\ListaPresencaService;
+use Modules\Docs\Services\WorkflowService;
 
 class ListaPresencaController extends Controller
 {
@@ -51,13 +53,42 @@ class ListaPresencaController extends Controller
      */
     public function store(Request $request)
     {
-        $create = $this->montaRequest($request);
-        $listaPresencaService = new ListaPresencaService();
-        $reponse = $listaPresencaService->store($create);
-        if (!$reponse['success']) {
-            return $reponse['redirect'];
-        } else {
-            Helper::setNotify('Nova lista de presença criada com sucesso!', 'success|check-circle');
+        try {
+            $id = $request->idDocumento;
+            $buscaDocumento = $this->documentoRepository->find($id);
+            $file = $request->file('doc_uploaded', 'local');
+            $extensao = $file->getClientOriginalExtension();
+            $nome = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+
+            $cadastro = [
+                "lista_presenca_documento" => $base64,
+                "extensao"                 => $extensao,
+                "nome"                     => $nome,
+                "documento_id"             => $id,
+                "ged_documento_id"         => '',
+                "data"                     => date('d/m/Y'),
+                "descricao"                => "Lista de Presença anexada",
+                "destinatarios_email"      => '',
+                "revisao_documento"        => $buscaDocumento->revisao
+            ];
+
+
+            $listaPresencaService = new ListaPresencaService();
+            if (!$listaPresencaService->store($cadastro)['success']) {
+                throw new \Exception("Falha ao salvar lista de presenca.");
+            }
+
+            $workFlowService = new WorkflowService();
+            if (!$workFlowService->avancarEtapa(['documento_id' => $id])['success']) {
+                throw new \Exception("Falha ao avançar etapa etapa");
+            }
+
+            Helper::setNotify('Nova(s) lista(s) de presença criada(s) com sucesso!', 'success|check-circle');
+            return redirect()->route('docs.documento');
+        } catch (\Throwable $th) {
+            dd($th);
+            Helper::setNotify('Um erro ocorreu ao gravar a lista de presença', 'danger|close-circle');
             return redirect()->route('docs.documento');
         }
     }
@@ -105,8 +136,22 @@ class ListaPresencaController extends Controller
 
     public function montaRequest(Request $request)
     {
+        $id = $request->idDocumento;
+        $buscaDocumento = $this->documentoRepository->find($id);
+        $file = $request->file('doc_uploaded', 'local');
+        $nome = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extensao = $file->getClientOriginalExtension();
+        $base64 = base64_encode(file_get_contents($file->getRealPath()));
+
         return [
-            "documento_id" => $request->idDocumento
+            "documento_id" => $id,
+            "nome" => $nome,
+            "extensao" => $extensao,
+            "data" => date('d/m/Y'),
+            "descricao" => "Lista de Presença anexada",
+            "destinatarios_email" => '',
+            "revisao_documento" => $buscaDocumento->revisao,
+            "base64" => $base64
         ];
     }
 }

@@ -19,7 +19,9 @@ class ListaPresenca extends Model
         'descricao',
         'documento_id',
         'destinatarios_email',
-        'revisao_documento'
+        'revisao_documento',
+        'extensao',
+        'lista_presenca_documento'
     ];
 
 }

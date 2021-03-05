@@ -7,10 +7,10 @@ use Modules\Docs\Repositories\{
     WorkflowRepository,
     DocumentoRepository,
     EtapaFluxoRepository,
+    ListaPresencaRepository,
     UserEtapaDocumentoRepository
 };
 use Modules\Core\Repositories\{
-    NotificacaoRepository,
     ParametroRepository,
     UserRepository,
 };
@@ -35,9 +35,9 @@ class WorkflowService
     private $etapaFluxoRepository;
     private $userEtapaDocumentoRepository;
     private $parametroRepository;
-    private $notificacaoRepository;
     private $agrupamentoUserDocumentoRepository;
     private $userRepository;
+    private $listaPresencaRepository;
 
     public function __construct()
     {
@@ -49,9 +49,9 @@ class WorkflowService
         $this->etapaFluxoRepository = new EtapaFluxoRepository();
         $this->userEtapaDocumentoRepository = new UserEtapaDocumentoRepository();
         $this->parametroRepository = new ParametroRepository();
-        $this->notificacaoRepository = new NotificacaoRepository();
         $this->agrupamentoUserDocumentoRepository = new AgrupamentoUserDocumentoRepository();
         $this->userRepository = new UserRepository();
+        $this->listaPresencaRepository = new ListaPresencaRepository();
     }
 
     public function store(array $data)
@@ -329,6 +329,7 @@ class WorkflowService
             $this->validarNotificacaoAprovRejeicao($etapaAtual, $data);
             return ["success" => true];
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollback();
             return ["success" => false];
         }
@@ -386,17 +387,23 @@ class WorkflowService
                 'endereco' => $documento->revisao . "." . $documento->extensao,
                 'idArea' => $areaGed,
                 'idRegistro' => $idRegistro,
-                //'idUsuario' => env('ID_GED_USER'),
+                'idUsuario' => env('ID_GED_USER'),
                 'removido' => false,
-                'bytes'    => $base64file
-            ];
+                'bytes'    => $base64file,
+                'listaIndice' => [
+                    (object) [
+                        'idTipoIndice' => 12,
+                        'identificador' => 'tipo',
+                        'valor' => 'Documento'
+                    ]
+                ]
 
+            ];
             $response = $ged->postDocumento($insereDocumento);
 
             if ($response['error']) {
                 throw new \Exception("Falha ao criar o documento do registro no GED ");
             }
-
 
             $info = [
                 "em_revisao" => false,
@@ -404,9 +411,31 @@ class WorkflowService
                 "validade" => date('Y-m-d', strtotime('+' . $documento->docsTipoDocumento->periodo_vigencia . ' month'))
             ];
 
-
             if (!$documentoService->update($info, $data['documento_id'])['success']) {
                 throw new \Exception("Falha ao divulgar o documento");
+            }
+
+            //Processa Anexo não salvos no GED
+            if ($documento->revisao == '00') {
+                $anexoService = new AnexoService();
+                if (!$anexoService->processaAnexo($documento->id)['success']) {
+                    throw new \Exception("Falha ao processar anexos de documento");
+                }
+            }
+
+            //Processa Lista de presenca
+            $buscaListaPresenca = $this->listaPresencaRepository->findBy(
+                [
+                    ["documento_id", "=", $documento->id],
+                    ["revisao_documento", "=", $documento->revisao, "AND"],
+                    ["ged_documento_id", "=", '', "AND"]
+                ]
+            );
+            if ($buscaListaPresenca) {
+                $listaPresencaService = new ListaPresencaService();
+                if (!$listaPresencaService->processaListaPresenca($documento->id, $documento->revisao)['success']) {
+                    throw new \Exception("Falha ao processar lista de presençao do documento");
+                }
             }
 
             DB::commit();

@@ -164,6 +164,11 @@ class RESTServices
         return $this->post(env("GED_URL") . "/documento", $_params);
     }
 
+    public function deleteDocumento(string $documento)
+    {
+        return $this->delete(env("GED_URL") . "/documento/" . $documento);
+    }
+
 
     public function getNomeArea(string $area)
     {

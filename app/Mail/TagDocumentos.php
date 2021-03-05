@@ -47,7 +47,7 @@ class TagDocumentos
         $buscaDocumento = $this->documentoRepository->find($this->documentoId);
         $buscaTipoNotificacao = $this->modeloNotificacaoRepository->find($this->tipoNotificacao);
 
-        $link = $this->server . '/docs/documento/visualizar/' . $this->documentoId;
+        $link = env('APP_URL') . 'docs/documento/visualizar/' . $this->documentoId;
 
         //INICIO APROVADORES
         $montaAprovadores = $this->getAprovadores();
