@@ -85,7 +85,7 @@
         var values = {};
         $inputs.each(function() {
             if(this.name != ''){
-                values[this.name] = $(this).val().replace(/ /g,'&nbsp;');
+                values[this.name] = $(this).val();
             }
         });
         montaLinha(values);
@@ -131,7 +131,7 @@
     function montaBotao(ordem, values)
     {
         var botao = '<a  class="btn waves-effect waves-light btn-danger sa-warning btnExcluirItem mr-1" data-id='+ordem+'><i class="mdi mdi-delete"></i> Excluir</a>'; 
-            botao += '<a  class="btn waves-effect waves-light btn-info btnEdit" data-id='+ordem+'><input type="hidden" name="dados[]" id="dados'+ordem+'" value='+JSON.stringify(values)+'><i class="mdi mdi-lead-pencil"></i> Editar</a>';
+            botao += "<a class='btn waves-effect waves-light btn-info btnEdit' data-id='"+ordem+"'><input type='hidden' name='dados[]' id='dados"+ordem+"' value='"+JSON.stringify(values)+"'><i class='mdi mdi-lead-pencil'></i> Editar</a>";
         return botao;
     }
 
