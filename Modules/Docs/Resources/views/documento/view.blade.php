@@ -72,7 +72,7 @@
                         <!-- Título e Validade do Documento (apenas texto) -->
                         <div class="row">
                             <div class="col-md-12 col-sm-12 p-20">
-                                <h2 class="card-title"><b>{{ $documento->nome ?? '' }}</b> <small class="text-success"> &nbsp; | &nbsp; Previsão Próxima revisão: {{ Carbon\Carbon::parse($documento->validade ?? '')->format('d/m/Y') }}</small></h2>
+                                <h2 class="card-title"><b>{{ $documento->nome ?? '' }}</b> <small class="text-success"> &nbsp; | &nbsp; Previsão Próxima revisão: {{ $documento->validade ? Carbon\Carbon::parse($documento->validade ?? '')->format('d/m/Y') : date('d/m/Y', strtotime('+' . $documento->docsTipoDocumento->periodo_vigencia . ' month')) }}</small></h2>
                             </div>
                         </div>
                         
