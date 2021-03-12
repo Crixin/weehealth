@@ -122,7 +122,7 @@
             <div class="col-md-12">
                 <div class="pull-rigth float-right" >
                     <button type="button" data-id="{{$tipoDocumentoEdit->id}}" class="btn btn-info" id="btn-view"><i class="mdi mdi-eye"></i>&nbsp;@lang('buttons.general.view')</button>
-                    <!--<button type="button" data-id="{{$tipoDocumentoEdit->id}}" class="btn btn-info" id="btn-download"><i class="mdi mdi-cloud-download"></i>&nbsp;@lang('buttons.general.download')</button>-->
+                    <button type="button" data-id="{{$tipoDocumentoEdit->id}}" class="btn btn-info" id="btn-download"><i class="mdi mdi-cloud-download"></i>&nbsp;@lang('buttons.general.download')</button>
                 </div>
             </div>
         @endif

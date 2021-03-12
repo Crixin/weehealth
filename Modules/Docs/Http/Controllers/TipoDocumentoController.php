@@ -321,7 +321,7 @@ class TipoDocumentoController extends Controller
             $link = '';
 
             if ($request->download == 'S') {
-                $link = asset('plugins/onlyoffice-php/doceditor.php/Storage/modelo-tipo-documento/') . $buscaTipoDocumento->nome . '.' . $buscaTipoDocumento->extensao;
+                $link = asset('plugins/onlyoffice-php/Storage/modelo-tipo-documento') . '/' . $buscaTipoDocumento->nome . '.' . $buscaTipoDocumento->extensao;
             } else {
                 $link = asset('plugins/onlyoffice-php/doceditor.php?fileID=') . $buscaTipoDocumento->nome . '.' . $buscaTipoDocumento->extensao . '&type=embedded&folder=modelo-tipo-documento';
             }
