@@ -90,6 +90,9 @@
 <script src="{{ asset('js/dataTables/buttons-1.2.2.print.min.js') }}"></script>
 <!-- end - This is for export functionality only -->
 
+<link href="{{ asset('plugins/jquery-loading/jquery.loading.min.css') }}" rel="stylesheet">
+<script src="{{ asset('plugins/jquery-loading/jquery.loading.min.js') }}"></script>
+
 <script>
   let reportTitle = "{{ $documento->nome ?? env('APP_NAME')}}";
 
@@ -151,6 +154,13 @@
 
 
     $('.btn-view-lista').on('click', function(){
+      $("body").loading(
+        {
+          stoppable: true,
+          message: "Carregando...",
+          theme: "dark"
+        }
+      );
       let id = $(this).data('id');
       let obj = {'id': id};
       ajaxMethod('POST', "{{ URL::route('docs.lista-presenca.busca-lista-ged') }}", obj).then(ret => {
@@ -158,8 +168,10 @@
               swal2_alert_error_support("Tivemos um problema ao buscar a lista de presença no GED.");
           }
           window.open(ret.data.caminho, '_blank');
+          $("body").loading('stop');
       }, error => {
           console.log(error);
+          $("body").loading('stop');
       });
     });
 

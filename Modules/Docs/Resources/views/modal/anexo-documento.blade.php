@@ -79,7 +79,8 @@
         </div>
     </div>
 </div>
-
+<link href="{{ asset('plugins/jquery-loading/jquery.loading.min.css') }}" rel="stylesheet">
+<script src="{{ asset('plugins/jquery-loading/jquery.loading.min.js') }}"></script>
 <script>
     $(document).ready(function(){
         //Busca Anexos documentos
@@ -152,6 +153,11 @@
 
         //Visualizacao
         $(document).on("click", "#btn-view-attachment-modal", function() {
+            $('#modal-anexos').loading({
+              stoppable: true,
+              message: "Carregando...",
+              theme: "dark"
+            });
             let id = $(this).data('anexo-id');
             let obj = {'id': id};
 
@@ -160,8 +166,10 @@
                     swal2_alert_error_support("Tivemos um problema ao buscar o anexo no GED.");
                 }
                 window.open(ret.data.caminho, '_blank');
+                $('#modal-anexos').loading('stop');
             }, error => {
                 console.log(error);
+                $('#modal-anexos').loading('stop');
             });
         });
         
@@ -206,6 +214,9 @@
 
     function buscaAnexo()
     {
+        
+        
+
         let id  = $('#idDocumento').val();
         let obj = {'id': id};
         ajaxMethod('POST', "{{ URL::route('docs.anexo') }}", obj).then(ret => {
@@ -230,6 +241,7 @@
         }, error => {
             console.log(error);
         });
+        
     }
 
 </script>
