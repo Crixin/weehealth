@@ -57,7 +57,6 @@
                                                     <a class="dropdown-item" href="{{ route('core.setor.usuariosVinculados', ['id' => $setor->id]) }}"> <i class="mdi mdi-account-settings-variant"></i> @lang('buttons.core.setor.users') </a>  
                                                 </div>
                                             </div>
-                                            
                                         </td>
                                     </tr>
                                 @endforeach
@@ -138,7 +137,7 @@
                     if(response.response != 'erro') {
                         swal2_success("Excluído!", "Setor excluído com sucesso.");
                     } else {
-                        swal2_alert_error_support("Tivemos um problema ao excluir o setor.");
+                        swal2_alert_error_not_reload(response.message ? response.message : "Tivemos um problema ao excluir o setor.");
                     }
                 }, error => {
                     console.log(error);

@@ -164,7 +164,8 @@ class DocumentoService
                 $updateDocumento['grupo_treinamento'],
                 $updateDocumento['grupo_divulgacao'],
                 $updateDocumento['item_normas'],
-                $updateDocumento['etapa_aprovacao']
+                $updateDocumento['etapa_aprovacao'],
+                $updateDocumento['setor_id']
             );
 
             $documento = $this->documentoRepository->find($id);
@@ -584,7 +585,7 @@ class DocumentoService
     }
 
 
-    private function criaCopiaDocumento(array $data)
+    public function criaCopiaDocumento(array $data)
     {
         try {
             $ged = new RESTServices();
@@ -616,13 +617,14 @@ class DocumentoService
 
                     $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
 
-                    $novaRev = str_pad($documento->revisao + 1, strlen($documento->revisao), "0", STR_PAD_LEFT);
+                    $novaRev = str_pad($data['revisao'], strlen($documento->revisao), "0", STR_PAD_LEFT);
+
                     $nomeDocumentoFinal = $documento->nome . $buscaPrefixo . $novaRev . "." . $documento->extensao;
 
                     $storagePath = Storage::disk('weecode_office')->put($nomeDocumentoFinal, base64_decode($documentoToClone->bytes));
                     break;
                 }
-            } 
+            }
             return ["success" => true];
         } catch (\Throwable $th) {
             dd($th);

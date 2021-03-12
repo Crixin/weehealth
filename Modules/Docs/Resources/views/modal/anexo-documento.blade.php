@@ -33,7 +33,7 @@
                                         <tr>
                                             <th class="text-nowrap text-center">Título do Anexo</th>
                                             <th class="text-nowrap text-center">Data de Inserção</th>
-                                            <th class="text-nowrap text-center">Remover</th>
+                                            <th class="text-nowrap text-center">Controle</th>
                                         </tr>
                                     </thead>
                                     <tbody id="attachment-table-body">
@@ -150,6 +150,22 @@
             });
         });
 
+        //Visualizacao
+        $(document).on("click", "#btn-view-attachment-modal", function() {
+            let id = $(this).data('anexo-id');
+            let obj = {'id': id};
+
+            ajaxMethod('POST', "{{ URL::route('docs.anexo.busca-anexo-ged') }}", obj).then(ret => {
+                if(ret.response == 'erro') {
+                    swal2_alert_error_support("Tivemos um problema ao buscar o anexo no GED.");
+                }
+                window.open(ret.data.caminho, '_blank');
+            }, error => {
+                console.log(error);
+            });
+        });
+        
+
         $("#form-save-attachment").submit(function(e){
             e.preventDefault();
             $('#lista-anexos-cadastrados').attr('class', 'collapse');
@@ -204,7 +220,10 @@
 
                 linha += '<tr><td class="text-nowrap text-center">'+element.nome+'</td>';
                 linha += '<td class="text-nowrap text-center">'+moment(element.created_at).format('DD/MM/YYYY')+'</td>';
-                linha += '<td class="text-nowrap text-center"><button type="button" id="btn-delete-attachment-modal" class="btn btn-rounded btn-danger" data-anexo-id="'+element.id+'"> <i class="fa fa-close"></i> </button></td>';
+                linha += '<td class="text-nowrap text-center">';
+                linha += '<a href="#" class="btn waves-effect waves-light btn-danger sa-warning mr-1" id="btn-delete-attachment-modal" data-anexo-id="'+element.id+'"> <i class="mdi mdi-delete"></i> Excluir </a>';
+                linha += '<a href="#"  class="btn waves-effect waves-light btn-info" id="btn-view-attachment-modal" data-anexo-id="'+element.id+'"> <i class="mdi mdi-eye"></i> Visualizar </a>';
+                linha += '</td>';
                 linha += '</tr>';
             }
             $('#attachment-table-body').append(linha); 

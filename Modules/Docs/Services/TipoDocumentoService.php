@@ -6,6 +6,7 @@ use App\Classes\Helper;
 use App\Services\ValidacaoService;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Modules\Core\Repositories\SetorRepository;
 use Modules\Docs\Model\TipoDocumento;
 use Modules\Docs\Repositories\TipoDocumentoRepository;
@@ -182,46 +183,62 @@ class TipoDocumentoService
     public function updateItem($tipoDocumentoSetor, $id)
     {
         try {
-            //deleta
-            $idTipoDocumentoSetor = [];
-            foreach ($tipoDocumentoSetor as $key => $value) {
-                $aux = json_decode($value);
-                if ($aux->id != '') {
-                    array_push($idTipoDocumentoSetor, $aux->id);
+            if ($tipoDocumentoSetor) {
+                //deleta
+                $idTipoDocumentoSetor = [];
+                foreach ($tipoDocumentoSetor as $key => $value) {
+                    $aux = json_decode($value);
+                    if ($aux->id != '') {
+                        array_push($idTipoDocumentoSetor, $aux->id);
+                    }
                 }
-            }
-            $itemDelete = $this->tipoDocumentoSetorRepository->findBy(
-                [
-                    ['tipo_documento_id', "=", $id],
-                    ['id', "", $idTipoDocumentoSetor ?? [] , "NOTIN"]
-                ]
-            )->pluck('id')->toArray();
-            $this->tipoDocumentoSetorRepository->delete($itemDelete, 'id');
-
-            //create/update        
-            foreach ($tipoDocumentoSetor as $key => $value) {
-                $aux = json_decode($value);
-                $buscaSetor = $this->setorRepository->findOneBy(
+                $itemDelete = $this->tipoDocumentoSetorRepository->findBy(
                     [
-                        ['nome', '=', $aux->setor]
+                        ['tipo_documento_id', "=", $id],
+                        ['id', "", $idTipoDocumentoSetor ?? [] , "NOTIN"]
                     ]
-                );
-                $updateItem = [
-                    'ultimo_documento'  => $aux->numero,
-                    'setor_id'          => $buscaSetor->id,
-                    'tipo_documento_id' => $id
-                ];
-                $tipoDocumentoSetorService  = new TipoDocumentoSetorService();
-                $itemCriado = $tipoDocumentoSetorService->store($updateItem);
-                if (!$itemCriado['success']) {
-                    throw new Exception("Erro ao atualizar item do tipo de documento", 1);
+                )->pluck('id')->toArray();
+                $this->tipoDocumentoSetorRepository->delete($itemDelete, 'id');
+
+                //create/update        
+                foreach ($tipoDocumentoSetor as $key => $value) {
+                    $aux = json_decode($value);
+                    $buscaSetor = $this->setorRepository->findOneBy(
+                        [
+                            ['nome', '=', $aux->setor]
+                        ]
+                    );
+                    $updateItem = [
+                        'ultimo_documento'  => $aux->numero,
+                        'setor_id'          => $buscaSetor->id,
+                        'tipo_documento_id' => $id
+                    ];
+                    $tipoDocumentoSetorService  = new TipoDocumentoSetorService();
+                    $itemCriado = $tipoDocumentoSetorService->store($updateItem);
+                    if (!$itemCriado['success']) {
+                        throw new Exception("Erro ao atualizar item do tipo de documento", 1);
+                    }
                 }
             }
+
             return ["success" => true];
         } catch (\Throwable $th) {
             dd($th);
             Helper::setNotify("Erro ao cadastrar o item do tipo de documento. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
             return ["success" => false, "redirect" => redirect()->back()->withInput()];
+        }
+    }
+
+    public function criaCopiaModeloTipoDocumento(array $data)
+    {
+        try {
+            $tipoDocumento = $this->tipoDocumentoRepository->find($data['id']);
+            $nomeDocumentoFinal = $tipoDocumento->nome . "." . $tipoDocumento->extensao;
+            $storagePath = Storage::disk('weecode_office')->put('/modelo-tipo-documento/' . $nomeDocumentoFinal, base64_decode($tipoDocumento->modelo_documento));
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            dd($th);
+            return ["success" => false];
         }
     }
 }

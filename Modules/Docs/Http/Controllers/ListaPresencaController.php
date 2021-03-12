@@ -34,6 +34,7 @@ class ListaPresencaController extends Controller
                 ['documento_id', '=', $id]
             ]
         );
+
         return view('docs::documento.presence-list', compact('documento', 'listaPresenca'));
     }
 
@@ -153,5 +154,21 @@ class ListaPresencaController extends Controller
             "revisao_documento" => $buscaDocumento->revisao,
             "base64" => $base64
         ];
+    }
+
+    public function getListaGed(Request $request)
+    {
+        try {
+            $id = $request->id;
+            $buscaLista = $this->listaPresencaRepository->find($id);
+            $listaPresencaService = new ListaPresencaService();
+            $data = ["id" => $id];
+            if (!$listaPresencaService->criaCopiaListaPresenca($data)['success']) {
+                throw new \Exception("Falha ao buscar o anexo do documento no GED.");
+            }
+            return response()->json(['response' => 'sucesso', 'data' => ['caminho' => asset('plugins/onlyoffice-php/doceditor.php?fileID=') . $buscaLista->nome . '.' . $buscaLista->extensao . '&type=embedded&folder=lista-presenca']]);
+        } catch (\Exception $th) {
+            return response()->json(['response' => 'erro']);
+        }
     }
 }

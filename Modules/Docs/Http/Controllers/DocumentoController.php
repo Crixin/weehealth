@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Facades\{Auth, DB, Storage};
+use IRebega\DocxReplacer\Docx;
 use Modules\Docs\Repositories\{
     DocumentoRepository,
     AgrupamentoUserDocumentoRepository,
@@ -25,6 +26,7 @@ use Modules\Docs\Repositories\{
 };
 use Modules\Core\Repositories\{GrupoRepository, ParametroRepository, SetorRepository, UserRepository};
 use Modules\Docs\Services\{DocumentoService, RegistroImpressoesService, TipoDocumentoService, WorkflowService};
+
 
 class DocumentoController extends Controller
 {
@@ -83,7 +85,8 @@ class DocumentoController extends Controller
     {
         $buscaSetores = $this->setorRepository->findBy(
             [
-                ['nome', '!=', 'Sem Setor']
+                ['nome', '!=', 'Sem Setor'],
+                ['inativo', '=', 0]
             ],
             [],
             [
@@ -290,11 +293,6 @@ class DocumentoController extends Controller
         $fluxo = $buscaTipoDocumento->docsFluxo;
 
         return $this->documentoService->store($cadastro);
-
-        if ($retorno) {
-            return response()->json(['response' => 'sucesso', 'data' => $retorno]);
-        }
-        return response()->json(['response' => 'erro']);
     }
 
     /**
@@ -417,8 +415,12 @@ class DocumentoController extends Controller
         $grupoDivulgacaoSelecionado = json_decode(json_encode($arrayGrupoDivulgacao), true);
 
         /*Usuarios */
-        $usuarios = $this->userRepository->findAll()->pluck('name', 'id')->toArray();
-
+        $usuarios = $this->userRepository->findBy(
+            [
+                ['inativo', '=', 0]
+            ]
+        )->pluck('name', 'id')->toArray();
+   
         return view(
             'docs::documento.edit',
             compact(
@@ -500,6 +502,7 @@ class DocumentoController extends Controller
         $buscaSetores = $this->setorRepository->findOneBy(
             [
                 ['nome', '!=', 'Sem Setor'],
+                ['inativo', '=', 0, 'AND'],
                 ['id', '=', $request->setor,'AND']
             ]
         );
@@ -509,9 +512,9 @@ class DocumentoController extends Controller
                 ['id', '=', $request->tipoDocumento]
             ]
         );
-        
+
         $codigo = $this->documentoService->gerarCodigoDocumento($request->tipoDocumento, $buscaSetores->id);
-        
+
         return view(
             'docs::documento.import',
             [
@@ -756,17 +759,18 @@ class DocumentoController extends Controller
     public function iniciarRevisao(Request $request)
     {
         $documentoService = new DocumentoService();
-
+        $buscaDocumento = $this->documentoRepository->find($request->documento);
         $data = [
-            'documento_id' => $request->documento
+            'documento_id' => $request->documento,
+            'revisao' => $buscaDocumento->revisao + 1
         ];
 
         if (!$documentoService->iniciarRevisao($data)['success']) {
             return redirect()->route('docs.documento');
         }
-        
-        return redirect()->route('docs.documento');
-        //return redirect()->route('docs.documento.visualizar');
+
+        //return redirect()->route('docs.documento');
+        return redirect()->route('docs.documento.visualizar', ['id' => $request->documento]);
     }
 
     public function tornarObsoleto(Request $request)
@@ -781,8 +785,27 @@ class DocumentoController extends Controller
             $mode           = $tipo == 2 ? "with_stripe" : 'without_stripe';
             $message        = "Sucesso! O documento foi atualizado com sucesso e as tarjas para impressão foram aplicadas.";
             $messageClass   = "success";
-            $filename       = '';
             $documento      = $this->documentoRepository->find($id);
+
+            $data = [
+                'documento_id' => $id,
+                'revisao' => $documento->revisao
+            ];
+            $stripe        = ($documento->copia_controlada) ? "CÓPIA CONTROLADA" : "CÓPIA NÃO CONTROLADA";
+            $buscaPrefixo = $this->parametroRepository->getParametro('PREFIXO_TITULO_DOCUMENTO');
+            $documentTitle = $documento->nome . $buscaPrefixo . $documento->revisao;
+            $filename = $documentTitle . "." . $documento->extensao;
+
+            if (Storage::disk('weecode_office')->exists($filename)) {
+                if (!Storage::disk('weecode_office')->delete($filename)) {
+                    DB::rollBack();
+                    return redirect()->route('documentacao')->with('delete_document_error', 'message');
+                }
+            }
+
+            $documentoService = new DocumentoService();
+            $documentoService->criaCopiaDocumento($data);
+
             $setorQualidade = $this->parametroRepository->getParametro('ID_SETOR_QUALIDADE');
             $historico = $this->workflowRepository->findBy(
                 [
@@ -793,14 +816,28 @@ class DocumentoController extends Controller
                 [
                     ['created_at', 'ASC']
                 ]
-            ); 
+            );
             $this->registroImpressoesService->create(['documento_id' => $id, 'user_id' => Auth::user()->id]);
+            if ($documento->extensao == "docx" && $tipo == 2) {
+                $tempPath   = public_path('plugins/onlyoffice-php/Storage/') . $filename;
+                $this->rewriteDocument($tempPath, $documentTitle, $stripe);
+            }
 
             return view('docs::documento.print', compact('mode', 'documento', 'setorQualidade', 'message', 'messageClass', 'filename', 'historico'));
         } catch (\Throwable $th) {
+            dd($th);
             Helper::setNotify('Um erro ocorreu ao tentar imprimir o documento', 'danger|close-circle');
             return redirect()->route('docs.documento');
         }
+    }
+
+    private function rewriteDocument(string $_path, string $_search, string $_replace)
+    {
+        $titleArray = explode(' ', trim($_search));
+        $lastWordOfTitle = end($titleArray);
+
+        $docx = new \IRebega\DocxReplacer\Docx($_path);
+        $docx->replaceText(mb_strtoupper($lastWordOfTitle, 'UTF-8'), mb_strtoupper($lastWordOfTitle, 'UTF-8') . "\n" . $_replace);
     }
 
 

@@ -3,13 +3,12 @@
 namespace Modules\Core\Http\Controllers;
 
 use App\Classes\Helper;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\{DB, Validator};
-use Modules\Core\Model\User;
 use Modules\Core\Repositories\{GrupoUserRepository, UserRepository, PerfilRepository, SetorRepository};
 use Modules\Core\Services\UserService;
-use Modules\Docs\Services\AgrupamentoUserDocumentoService;
 
 class UsuarioController extends Controller
 {
@@ -34,8 +33,28 @@ class UsuarioController extends Controller
         return view('core::usuario.index', compact('usuarios'));
     }
 
+    public function create()
+    {
+        $perfis = $this->perfilRepository->findAll();
+        $setores = $this->setorRepository->findAll();
+        return view('core::auth.register', compact('perfis', 'setores'));
+    }
 
-    public function editUser($_id)
+    public function store(Request $request)
+    {
+        $usuarioService = new UserService();
+        $reponse = $usuarioService->store($request);
+        if (!$reponse['success']) {
+            Helper::setNotify('Um erro ocorreu criar o usuário.', 'danger|close-circle');
+            return $reponse['redirect'];
+        }
+        Helper::setNotify('Novo usuario criado com sucesso!', 'success|check-circle');
+        return redirect()->route('core.usuario');
+
+    }
+
+
+    public function edit($_id)
     {
         $perfis = $this->perfilRepository->findAll();
         $setores = $this->setorRepository->findAll();
@@ -45,92 +64,31 @@ class UsuarioController extends Controller
     }
 
 
-    public function updateUser(Request $request)
+    public function update(Request $request)
     {
-        $arrRegras = array('name' => 'required|string|max:255', 'perfil' => 'required|numeric');
-        $usuario = $this->userRepository->find($request->get('idUsuario'));
+        $usuarioService = new UserService();
 
-        if ($request->get('username') != $usuario->username) {
-            $arrRegras['username'] = 'required|string|max:20|unique:core_users';
+        $reponse = $usuarioService->update($request, $request->idUsuario);
+
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
         }
 
-        if ($request->get('email') != $usuario->email) {
-            $arrRegras['email'] = 'required|string|email|max:255|unique:core_users';
-        }
-
-        if ($request->foto) {
-            $arrRegras['foto'] = 'image|mimes:jpeg,png,jpg';
-        }
-
-        $validator = Validator::make($request->all(), $arrRegras);
-
-        if ($validator->fails()) {
-            Helper::setNotify($validator->messages()->first(), 'danger|close-circle');
-            return redirect()->back()->withInput();
-        }
-
-
-        $montaUpdate = $this->montaRequest($request);
-        $this->userRepository->update($montaUpdate, $request->get('idUsuario'));
-
-        Helper::setNotify('Informações pessoais alteradas com sucesso!', 'success|check-circle');
-        return redirect()->back()->withInput();
+        Helper::setNotify('Usuário atualizado com sucesso!', 'success|check-circle');
+        return redirect()->route('core.usuario');
     }
 
     public function updateUserPassword(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'password' => 'required|string|min:6|confirmed'
-        ]);
+        $usuarioService = new UserService();
+        $reponse = $usuarioService->updateUserPassword($request);
 
-        if ($validator->fails()) {
-            Helper::setNotify($validator->messages()->first(), 'danger|close-circle');
-            return redirect()->back()->withInput();
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
         }
 
-        try {
-                DB::beginTransaction();
-                $senha = bcrypt($request->get('password'));
-                $userRepository = new UserRepository();
-                $update = $userRepository->update(['password' => $senha], $request->get('idUsuario'));
-
-                DB::purge(getenv('DB_CONNECTION'));
-                Config::set('database.connections.pgsql.username', getenv('DB_USERNAME'));
-                Config::set('database.connections.pgsql.password', getenv('DB_PASSWORD'));
-                DB::reconnect(getenv('DB_CONNECTION'));
-                $buscaUsuario = $this->userRepository->find($request->get('idUsuario'));
-                $userAux = '"' . $buscaUsuario->username . '"';
-                $password = $buscaUsuario->password;
-                $altera = DB::unprepared("ALTER USER $userAux WITH PASSWORD '" . $password . "'");
-                DB::commit();
-
-            Helper::setNotify('Senha alterada com sucesso!', 'success|check-circle');
-            return redirect()->back()->withInput();
-        } catch (\Throwable $th) {
-            DB::rollback();
-            Helper::setNotify('Um erro ocorreu ao alterar a senha.', 'danger|close-circle');
-            return redirect()->back()->withInput();
-        }
-    }
-
-    public function montaRequest(Request $request)
-    {
-        $retorno = [
-            "name"      => $request->get('name'),
-            "username" => $request->get('username'),
-            "email"     => $request->get('email'),
-            "perfil_id"     => $request->get('perfil'),
-            "setor_id"     => $request->get('setor'),
-        ];
-
-        if ($request->foto) {
-            $mimeType = $request->file('foto')->getMimeType();
-            $imageBase64 = base64_encode(file_get_contents($request->file('foto')->getRealPath()));
-            $imageBase64 = 'data:' . $mimeType . ';base64,' . $imageBase64;
-            $retorno['foto'] = $imageBase64;
-        }
-
-        return $retorno;
+        Helper::setNotify('Senha do usuário atualizada com sucesso!', 'success|check-circle');
+        return redirect()->route('core.usuario');
     }
 
     public function changeUser($id)
@@ -220,6 +178,31 @@ class UsuarioController extends Controller
 
             Helper::setNotify("Erro ao desvincular usuário. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
             return redirect()->route('core.usuario');
+        }
+    }
+
+    public function inativateUser(Request $request)
+    {
+        try {
+            $idUsuario = $request->id;
+            $inativo   = $request->operacao == 'inativar' ? 1 : 0;
+            $msg = $request->operacao == 'inativar' ? 'inativado' : 'ativado';
+            $montaUpdate = [
+                "inativo" => $inativo
+            ];
+
+            $userService = new UserService();
+            $return = $userService->inativate($montaUpdate, $idUsuario);
+
+            if (!$return['success']) {
+                throw new Exception("Erro ao " . $request->operacao . " usuário.", 1);
+            }
+
+            //Helper::setNotify("Usuário " . $msg . " com sucesso!", 'success|check-circle');
+            return response()->json(['response' => 'sucesso', 'message' => $return['message']]);
+        } catch (\Throwable $th) {
+            //Helper::setNotify("Erro ao " . $request->operacao . " usuário. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
+            return response()->json(['response' => 'erro', 'message' => $return['message']]);
         }
     }
 }

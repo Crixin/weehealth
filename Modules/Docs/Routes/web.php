@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
             Route::post('alterar',      ['as' => 'tipo-documento.alterar', 'uses' => 'TipoDocumentoController@update']);
             Route::post('deletar',      ['as' => 'tipo-documento.deletar', 'uses' => 'TipoDocumentoController@destroy']);
             Route::post('etapa-fluxo',  ['as' => 'tipo-documento.etapa-fluxo', 'uses' => 'TipoDocumentoController@getEtapaFluxo']);
+            Route::post('busca-modelo', ['as' => 'tipo-documento.busca-modelo',  'uses' => 'TipoDocumentoController@getModeloTipoDocumento']);
         });
 
         /*
@@ -143,9 +144,10 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
 
         /**ANEXO */
         Route::group(['prefix' => 'anexo','as' => 'docs.'], function() {
-            Route::post('',         ['as' => 'anexo',    'uses' => 'AnexoDocumentoController@index']);
-            Route::post('salvar',   ['as' => 'anexo.salvar',  'uses' => 'AnexoDocumentoController@store']);
-            Route::post('deletar',  ['as' => 'anexo.deletar', 'uses' => 'AnexoDocumentoController@destroy']);
+            Route::post('',                  ['as' => 'anexo',                  'uses' => 'AnexoDocumentoController@index']);
+            Route::post('salvar',            ['as' => 'anexo.salvar',           'uses' => 'AnexoDocumentoController@store']);
+            Route::post('deletar',           ['as' => 'anexo.deletar',          'uses' => 'AnexoDocumentoController@destroy']);
+            Route::post('busca-anexo-ged',   ['as' => 'anexo.busca-anexo-ged',  'uses' => 'AnexoDocumentoController@getAnexoGed']);
         });
 
         /**WORKFLOW */
@@ -166,6 +168,7 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
         Route::group(['prefix' => 'lista-presenca','as' => 'docs.'], function() {
             Route::get('/{id}', ['as' => 'lista-presenca',	'uses' => 'ListaPresencaController@index']);
             Route::post('salva',['as' => 'lista-presenca.salva', 'uses' => 'ListaPresencaController@store']);
+            Route::post('busca-lista-ged',['as' => 'lista-presenca.busca-lista-ged', 'uses' => 'ListaPresencaController@getListaGed']);
         });
 
         Route::group(['prefix' => 'documento-externo', 'as' => 'docs.'], function() {

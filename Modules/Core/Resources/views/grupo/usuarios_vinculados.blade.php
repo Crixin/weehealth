@@ -42,7 +42,7 @@
                                 <select multiple id="usuarios_grupo" name="usuarios_grupo[]">
                                     @foreach ($setores as $setor)
                                     <optgroup label="{{ $setor->nome }}">
-                                        @foreach ($setor->coreUsers as $user)
+                                        @foreach ($setor->coreUsers->where('inativo', '=', 0) as $user)
                                             <option value="{{ $user->id }}" {{ $grupo->coreUsers->contains('id', $user->id) ? "selected" : "" }} > {{ $user->name }} ( {{ $user->corePerfil->nome}} )  </option>
                                         @endforeach
                                         </optgroup>

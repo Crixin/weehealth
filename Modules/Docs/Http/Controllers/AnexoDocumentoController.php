@@ -87,12 +87,12 @@ class AnexoDocumentoController extends Controller
                     $idRegistro = $response['data'];
                 } else {
                     $cadastro['anexo_documento'] = $base64;
-                    $cadastro['extensao'] = $extensao;
                 }
 
                 $cadastro["nome"] = $nome;
                 $cadastro["documento_id"] = $id;
                 $cadastro["ged_documento_id"] = $idRegistro;
+                $cadastro['extensao'] = $extensao;
 
                 DB::transaction(function () use ($cadastro) {
                     $anexoService = new AnexoService();
@@ -160,6 +160,22 @@ class AnexoDocumentoController extends Controller
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {
             dd($th);
+            return response()->json(['response' => 'erro']);
+        }
+    }
+
+    public function getAnexoGed(Request $request)
+    {
+        try {
+            $id = $request->id;
+            $buscaAnexo = $this->anexoRepository->find($id);
+            $anexoService = new AnexoService();
+            $data = ["id" => $id];
+            if (!$anexoService->criaCopiaAnexos($data)['success']) {
+                throw new \Exception("Falha ao buscar o anexo do documento no GED.");
+            }
+            return response()->json(['response' => 'sucesso', 'data' => ['caminho' => asset('plugins/onlyoffice-php/doceditor.php?fileID=') . $buscaAnexo->nome . '.' . $buscaAnexo->extensao . '&type=embedded&folder=anexos']]);
+        } catch (\Exception $th) {
             return response()->json(['response' => 'erro']);
         }
     }

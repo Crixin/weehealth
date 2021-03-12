@@ -114,13 +114,15 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         try {
+            
+            /*
             $this->validator($request->all())->validate();
             event(new Registered($user = $this->create($request->all())));
 
             // $this->guard()->login($user);
             return $this->registered($request, $user)
             ?: redirect($this->redirectPath())->with(['message' => 'Novo usuário criado com sucesso!', 'style' => 'success|check-circle']);
-
+            */
         } catch (\Throwable $th) {
             Helper::setNotify('Um erro ocorreu ao gravar o usuario.', 'danger|close-circle');
             return redirect()->back()->withInput();

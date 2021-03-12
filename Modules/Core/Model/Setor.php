@@ -16,9 +16,15 @@ class Setor extends Model
         'nome',
         'descricao',
         'sigla',
-        'tipo_setor_id'
+        'tipo_setor_id',
+        'inativo'
     ];
 
+    public $rules = [
+        'nome'      => 'required|string|min:5|unique:core_setor,nome',
+        'sigla'     => 'required|string|max:5',
+        'descricao' => 'required|string|min:5'
+    ];
 
     /**
      * Os usuários que pertencem ao setor.
@@ -26,6 +32,11 @@ class Setor extends Model
     public function coreUsers()
     {
         return $this->hasMany('Modules\Core\Model\User', 'setor_id', 'id');
+    }
+
+    public function docsDocumento()
+    {
+        return $this->hasMany('Modules\Docs\Model\Documento', 'setor_id', 'id');
     }
 
 }

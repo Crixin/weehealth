@@ -4,6 +4,7 @@ namespace Modules\Docs\Services;
 
 use App\Classes\RESTServices;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Modules\Core\Repositories\ParametroRepository;
 use Modules\Docs\Repositories\AnexoRepository;
 use Modules\Docs\Repositories\DocumentoRepository;
@@ -91,7 +92,7 @@ class AnexoService
                 ]
             );
             foreach ($buscaAnexos as $key => $anexo) {
-                if ($anexo->ged_registro_id == null) {
+                if ($anexo->ged_documento_id == null) {
                     $data = [
                         'idDocumento' => $idDocumento,
                         'base64' => $anexo->anexo_documento,
@@ -104,11 +105,32 @@ class AnexoService
                     }
                     $idRegistro = $response['data'];
 
-                    $this->update(["ged_registro_id" => $idRegistro], $anexo->id);
+                    $this->update(["ged_documento_id" => $idRegistro, "anexo_documento" => ''], $anexo->id);
                 }
             }
             return ["success" => true];
         } catch (\Throwable $th) {
+            return ["success" => false];
+        }
+    }
+
+    public function criaCopiaAnexos(array $data)
+    {
+        try {
+            $anexo = $this->anexoRepository->find($data['id']);
+            $ged = new RESTServices();
+            $response = $ged->getDocumento($anexo->ged_documento_id, ['docs' => 'true']);
+            if ($response['error']) {
+                throw new \Exception("Falha na busca o anexo para visualização");
+            }
+
+            $documentoToClone = $response['response'];
+            $nomeDocumentoFinal = $anexo->nome . "." . $anexo->extensao;
+            $storagePath = Storage::disk('weecode_office')->put('/anexos/' . $nomeDocumentoFinal, base64_decode($documentoToClone->bytes));
+
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            dd($th);
             return ["success" => false];
         }
     }

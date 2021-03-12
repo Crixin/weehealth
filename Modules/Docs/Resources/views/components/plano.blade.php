@@ -10,7 +10,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <div class="checkbox required{{ $errors->has('status') ? ' has-error' : '' }}">
-                    {!! Form::label('status', 'Status', ['class' => 'control-label']) !!}
+                    {!! Form::label('status', 'Ativo', ['class' => 'control-label']) !!}
                     <td class="text-center text-nowrap">
                         <div class="switch">
                             <label for="status">Não

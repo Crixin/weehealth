@@ -42,7 +42,8 @@ class DocumentoExternoController extends Controller
     {
         $setores = $this->setorRepository->findBy(
             [
-                ['nome', '!=', 'Sem Setor']
+                ['nome', '!=', 'Sem Setor'],
+                ['inativo', '=', 0]
             ],
             [],
             [
@@ -96,7 +97,8 @@ class DocumentoExternoController extends Controller
         $documento = $this->documentoExternoRepository->find($id);
         $setores = $this->setorRepository->findBy(
             [
-                ['nome', '!=', 'Sem Setor']
+                ['nome', '!=', 'Sem Setor'],
+                ['inativo', '=', 0]
             ],
             [],
             [

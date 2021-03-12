@@ -53,12 +53,14 @@ Route::group(['middleware' => ['auth' , 'changeUser']], function () {
         */
         Route::group(['prefix' => 'usuario'], function () {
             Route::get('',                  ['as' => 'core.usuario',                 'uses' => 'UsuarioController@index']);
-            Route::get('editar/{id}',       ['as' => 'core.usuario.editar',          'uses' => 'UsuarioController@editUser'])->middleware('blockAdmin');
-            Route::post('alterar',          ['as' => 'core.usuario.alterar',         'uses' => 'UsuarioController@updateUser']);
+            Route::get('register',          ['as' => 'core.usuario.register',        'uses' => 'UsuarioController@create']);
+            Route::get('editar/{id}',       ['as' => 'core.usuario.editar',          'uses' => 'UsuarioController@edit'])->middleware('blockAdmin');
+            Route::post('alterar',          ['as' => 'core.usuario.alterar',         'uses' => 'UsuarioController@update']);
             Route::post('alterar-senha',    ['as' => 'core.usuario.alterarSenha',    'uses' => 'UsuarioController@updateUserPassword']);
+            Route::post('inativar',         ['as' => 'core.usuario.inativar',        'uses' => 'UsuarioController@inativateUser'])->middleware('blockAdmin');
             Route::post('deletar',          ['as' => 'core.usuario.deletar',         'uses' => 'AjaxController@deleteUser'])->middleware('blockAdmin');
-            Route::get('register',          ['as' => 'core.usuario.register',        'uses' => 'Auth\RegisterController@showRegistrationForm']);
-            Route::post('save',             ['as' => 'core.usuario.save',            'uses' => 'Auth\RegisterController@register']);
+            
+            Route::post('save',             ['as' => 'core.usuario.save',            'uses' => 'UsuarioController@store']);
             Route::get('substituir/{id}',   ['as' => 'core.usuario.substituir',      'uses' => 'UsuarioController@changeUser']);
             Route::post('substituir-modulo',['as' => 'core.usuario.substituir-modulo','uses' => 'UsuarioController@changeUserMod']);
             Route::post('usuario-por-grupo',['as' => 'core.usuario.usuario-por-grupo','uses' => 'UsuarioController@userByGroup']);
@@ -76,6 +78,7 @@ Route::group(['middleware' => ['auth' , 'changeUser']], function () {
             Route::get('editar/{id}',   ['as' => 'core.setor.editar',  'uses' => 'SetorController@edit']);
             Route::post('alterar',      ['as' => 'core.setor.alterar', 'uses' => 'SetorController@update']);
             Route::post('deletar',      ['as' => 'core.setor.deletar', 'uses' => 'SetorController@destroy']);
+            Route::post('inativar',     ['as' => 'core.setor.inativar', 'uses' => 'SetorController@inativate']);
             Route::get('usuarios-vinculados/{id}',  ['as' => 'core.setor.usuariosVinculados',    'uses' => 'SetorController@linkedUsers']);
             Route::post('vincular-usuarios',        ['as' => 'core.setor.vincularUsuarios',      'uses' => 'SetorController@updateLinkedUsers']);
         });

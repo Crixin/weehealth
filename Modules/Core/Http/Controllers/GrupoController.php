@@ -87,7 +87,12 @@ class GrupoController extends Controller
     public function linkedUsers($_id)
     {
         $grupo = $this->grupoRepository->find($_id, ['coreUsers']);
-        $setores = $this->setorRepository->findAll(['coreUsers', 'coreUsers.corePerfil']);
+        $setores = $this->setorRepository->findBy(
+            [
+                ['core_users.inativo', '=', 0, "HAS", 'coreUsers']
+            ],
+            ['coreUsers', 'coreUsers.corePerfil']
+        );
         return view('core::grupo.usuarios_vinculados', compact('grupo', 'setores'));
     }
 
