@@ -34,7 +34,6 @@ class HistoricoDocumentoService
             });
             return ["success" => true];
         } catch (\Throwable $th) {
-            dd($th);
             return ["success" => false];
         }
     }

@@ -26,15 +26,14 @@
                                                     <h7 class="timeline-title"><b>{{ __('page_titles.docs.documento.stage_create')}}</b>{{' ' . date('d/m/Y h:i:s', strToTime($hist->created_at))}}</h7>
                                                     <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ $hist->created_at->diffForHumans() }}</small> </p>
                                                     
-                                                    @if ($hist->justificativa != null)
-                                                        <h7 class="timeline-title"><b>{{__('page_titles.docs.documento.justification')}}</b></h7>{{$hist->justificativa}}   
-                                                    @endif
-                                                        
-                                                    
                                                     <div class="timeline-body">
                                                         <b>{{ $hist->descricao }}</b>
                                                     </div>
 
+                                                    @if ($hist->justificativa != null)
+                                                        <h7 class="timeline-title"><b>{{__('page_titles.docs.documento.justification')}}</b></h7>{{$hist->justificativa}}   
+                                                    @endif
+                                                        
                                                     @if ($hist->tempo_duracao_etapa != null)
                                                         <p>
                                                             <small class="text-muted">

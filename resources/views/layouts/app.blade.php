@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     {{-- Token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -401,7 +402,7 @@
     <script src="{{ asset('plugins/sparkline/jquery.sparkline.min.js') }}"></script>
 
     <!--Custom JavaScript -->
-    <script src="{{ asset('js/custom.min.js') }}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
 
     <!-- SPEED Custom JavaScript -->
     <script src="{{ asset('js/custom_speed.js') }}"></script>

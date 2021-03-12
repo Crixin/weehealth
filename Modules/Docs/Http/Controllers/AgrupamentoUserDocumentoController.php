@@ -85,8 +85,10 @@ class AgrupamentoUserDocumentoController extends Controller
             "documento_id" => $request->documento_id,
             "documento_lido" => $request->lido == 'on' ? true : false
         ];
-        $AgrupamentoUserDocumentoService = new AgrupamentoUserDocumentoService();
-        $retorno = $AgrupamentoUserDocumentoService->confirmarLeituraGrupoDivulgacao($confirmacaoLeitura);
+        
+        $agrupamentoUserDocumentoService = new AgrupamentoUserDocumentoService();
+        $retorno = $agrupamentoUserDocumentoService->confirmarLeituraGrupoDivulgacao($confirmacaoLeitura);
+        
         if (!$retorno['success']) {
             return $retorno['redirect'];
         } else {

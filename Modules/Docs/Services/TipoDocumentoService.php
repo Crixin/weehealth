@@ -62,7 +62,6 @@ class TipoDocumentoService
             });
             return ["success" => true];
         } catch (\Throwable $th) {
-            dd($th);
             Helper::setNotify("Erro ao cadastrar o tipo de documento. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
             return ["success" => false, "redirect" => redirect()->back()->withInput()];
         }
@@ -219,7 +218,6 @@ class TipoDocumentoService
             }
             return ["success" => true];
         } catch (\Throwable $th) {
-            dd($th);
             Helper::setNotify("Erro ao cadastrar o item do tipo de documento. " . __("messages.contateSuporteTecnico"), 'danger|close-circle');
             return ["success" => false, "redirect" => redirect()->back()->withInput()];
         }

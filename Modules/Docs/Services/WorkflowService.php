@@ -73,11 +73,11 @@ class WorkflowService
             }
 
             if (array_key_exists('iniciar_revisao', $data)) {
-                $descricao = $this->replaceText(__('messages.workflow.startReview'));
+                $descricao = Helper::replaceText(__('messages.workflow.startReview'));
             } elseif (array_key_exists('iniciar_validacao', $data)) {
-                $descricao = $this->replaceText(__('messages.workflow.startValidation'));
+                $descricao = Helper::replaceText(__('messages.workflow.startValidation'));
             } else {
-                $descricao = $data['avancar'] ? $this->replaceText($etapa->descricao) : "A etapa '{$etapa->nome}' foi rejeitada";
+                $descricao = $data['avancar'] ? Helper::replaceText($etapa->descricao) : "A etapa '{$etapa->nome}' foi rejeitada";
             }
 
             $inserir = [
@@ -103,9 +103,9 @@ class WorkflowService
             Helper::setNotify(__("messages.workflow.storeSuccess"), 'success|check-circle');
             return ['success' => true];
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollback();
             Helper::setNotify(__("messages.workflow.storeFail"), 'danger|close-circle');
-            dd($th);
             return ['success' => false];
         }
     }
@@ -115,10 +115,24 @@ class WorkflowService
         return $this->workflowRepository->update($data, $id);
     }
 
-    public function delete($delete)
+    public function delete(array $delete)
     {
-        return $this->workflowRepository->delete($delete);
+        try {
+            DB::beginTransaction();
+
+            $this->workflowRepository->delete($delete, "id");
+
+            DB::commit();
+            Helper::setNotify(__("messages.workflow.deleteSuccess"), 'success|check-circle');
+            return ['success' => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
+            dd($th);
+            Helper::setNotify(__("messages.workflow.deleteFail"), 'danger|close-circle');
+            return ['success' => false];
+        }
     }
+
 
     public function iniciarRevisao($data)
     {
@@ -146,18 +160,6 @@ class WorkflowService
         }
     }
 
-    private function replaceText(string $text)
-    {
-        $arrayTexts = [
-            "<NOME_USUARIO>" => Auth::user()->name
-        ];
-
-        foreach ($arrayTexts as $textToFind => $replace) {
-            $text = str_replace($textToFind, $replace, $text);
-        }
-
-        return $text;
-    }
 
     public function getEtapaAtual(int $documento)
     {
@@ -376,6 +378,7 @@ class WorkflowService
                 ];
 
                 $idRegistro = $ged->postRegistro($newRegister);
+
                 if ($idRegistro['error']) {
                     throw new \Exception("Falha ao criar o registro do documento no GED");
                     return back();

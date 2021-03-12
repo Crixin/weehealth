@@ -122,7 +122,7 @@
     <script src="{{ asset('plugins/sparkline/jquery.sparkline.min.js') }}"></script>
 
     <!--Custom JavaScript -->
-    <script src="{{ asset('js/custom.min.js') }}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
 
     <!-- ============================================================== -->
     <!-- Style switcher -->

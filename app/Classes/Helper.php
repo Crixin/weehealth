@@ -708,4 +708,18 @@ class Helper
         }
         return $result;
     }
+
+
+    public static function replaceText(string $text)
+    {
+        $arrayTexts = [
+            "<NOME_USUARIO>" => Auth::user()->name
+        ];
+
+        foreach ($arrayTexts as $textToFind => $replace) {
+            $text = str_replace($textToFind, $replace, $text);
+        }
+
+        return $text;
+    }
 }

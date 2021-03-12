@@ -120,25 +120,36 @@ Route::group(['middleware' => ['auth', 'changeUser']], function () {
         });
 
 
+        Route::group(['prefix' => 'observacao-documento','as' => 'docs.'], function() {
+            Route::post('salvar',                 ['as' => 'observacao-documento.salvar',      'uses' => 'ObservacaoDocumentoController@store']);
+            Route::get('buscar/{documento}',      ['as' => 'observacao-documento.buscar',      'uses' => 'ObservacaoDocumentoController@buscar']);
+        });
+
+
         Route::group(['prefix' => 'documento','as' => 'docs.'], function() {
-            Route::any('',                    ['as' => 'documento',         'uses' => 'DocumentoController@index']);
-            Route::get('novo',                ['as' => 'documento.novo',    'uses' => 'DocumentoController@create']);
-            Route::post('salvar',             ['as' => 'documento.salvar',  'uses' => 'DocumentoController@store']);
-            Route::get('editar/{id}',         ['as' => 'documento.editar',  'uses' => 'DocumentoController@edit']);
-            Route::post('alterar',            ['as' => 'documento.alterar', 'uses' => 'DocumentoController@update']);
-            Route::post('deletar',            ['as' => 'documento.deletar', 'uses' => 'DocumentoController@destroy']);
-            Route::post('importar-documento', ['as' => 'documento.importar-documento', 'uses' => 'DocumentoController@importarDocumento']);
-            Route::post('criar-documento',    ['as' => 'documento.criar-documento', 'uses' => 'DocumentoController@criarDocumento']);
-            Route::post('documento-pai-por-tipo', ['as' => 'documento.documento-pai-por-tipo', 'uses' => 'DocumentoController@buscaDocumentoPaiPorTipo']);
-            Route::post('iniciar-validacao',  ['as' => 'documento.iniciar-validacao', 'uses' => 'DocumentoController@iniciarValidacao']);
-            Route::post('iniciar-revisao',    ['as' => 'documento.iniciar-revisao', 'uses' => 'DocumentoController@iniciarRevisao']);
-            Route::post('obsoleto',           ['as' => 'documento.obsoleto', 'uses' => 'DocumentoController@tornarObsoleto']);
-            Route::get('{id}/imprimir/{tipo}',['as' => 'documento.imprimir',	'uses' => 'DocumentoController@imprimir']);
-            Route::get('visualizar/{id}',     ['as' => 'documento.visualizar',  'uses' => 'DocumentoController@visualizar']);
+            Route::any('',                        ['as' => 'documento',                        'uses' => 'DocumentoController@index']);
+            Route::get('novo',                    ['as' => 'documento.novo',                   'uses' => 'DocumentoController@create']);
+            Route::post('salvar',                 ['as' => 'documento.salvar',                 'uses' => 'DocumentoController@store']);
+            Route::get('editar/{id}',             ['as' => 'documento.editar',                 'uses' => 'DocumentoController@edit']);
+            Route::post('alterar',                ['as' => 'documento.alterar',                'uses' => 'DocumentoController@update']);
+            Route::post('deletar',                ['as' => 'documento.deletar',                'uses' => 'DocumentoController@destroy']);
+            Route::get('visualizar/{id}',         ['as' => 'documento.visualizar',             'uses' => 'DocumentoController@visualizar']);
+            Route::get('{id}/imprimir/{tipo}',    ['as' => 'documento.imprimir',	           'uses' => 'DocumentoController@imprimir']);
+
+            Route::post('iniciar-revisao',        ['as' => 'documento.iniciar-revisao',        'uses' => 'DocumentoController@iniciarRevisao']);
+            Route::post('cancelar-revisao',       ['as' => 'documento.cancelar-revisao',       'uses' => 'DocumentoController@cancelarRevisao']);
             
-            Route::get('proxima-etapa',    ['as' => 'documento.proxima-etapa', 'uses' => 'DocumentoController@proximaEtapa']);
-            Route::post('documento-por-tipo', ['as' => 'documento.documento-por-tipo', 'uses' => 'DocumentoController@buscaDocumentoPorTipo']);
-            Route::post('documento-por-grupo', ['as' => 'documento.documento-por-grupo', 'uses' => 'DocumentoController@buscaDocumentoPorGrupo']);
+            Route::post('iniciar-validacao',      ['as' => 'documento.iniciar-validacao',      'uses' => 'DocumentoController@iniciarValidacao']);
+            Route::post('cancelar-validacao',     ['as' => 'documento.cancelar-validacao',     'uses' => 'DocumentoController@cancelarValidacao']);
+            
+            Route::post('criar-documento',        ['as' => 'documento.criar-documento',        'uses' => 'DocumentoController@criarDocumento']);
+            Route::post('importar-documento',     ['as' => 'documento.importar-documento',     'uses' => 'DocumentoController@importarDocumento']);
+            
+            Route::post('obsoleto',               ['as' => 'documento.obsoleto',               'uses' => 'DocumentoController@tornarObsoleto']);
+            
+            Route::post('documento-por-tipo',     ['as' => 'documento.documento-por-tipo',     'uses' => 'DocumentoController@buscaDocumentoPorTipo']);
+            Route::post('documento-por-grupo',    ['as' => 'documento.documento-por-grupo',    'uses' => 'DocumentoController@buscaDocumentoPorGrupo']);
+            Route::post('documento-pai-por-tipo', ['as' => 'documento.documento-pai-por-tipo', 'uses' => 'DocumentoController@buscaDocumentoPaiPorTipo']);
         });
 
         /**ANEXO */

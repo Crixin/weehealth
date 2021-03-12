@@ -67,11 +67,15 @@ abstract class BaseRepository
     }
 
 
-    public function findBy(array $where, array $with = [], array $orderBy = [], $limit = null, $offset = null)
+    public function findBy(array $where, array $with = [], array $orderBy = [], $limit = null, $offset = null, $deleted = false)
     {
         $model = $this->model;
 
         $model = $model::with($with);
+        
+        if ($deleted) {
+            $model = $model->withTrashed();
+        }
 
         foreach ($where as $value) {
             $toUpper = $value[3] ?? '';

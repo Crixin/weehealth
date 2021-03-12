@@ -6,8 +6,7 @@ use App\Services\ValidacaoService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Docs\Model\AgrupamentoUserDocumento;
-use Modules\Docs\Repositories\AgrupamentoUserDocumentoRepository;
-use Modules\Docs\Repositories\DocumentoRepository;
+use Modules\Docs\Repositories\{AgrupamentoUserDocumentoRepository, DocumentoRepository};
 
 class AgrupamentoUserDocumentoService
 {
@@ -92,7 +91,7 @@ class AgrupamentoUserDocumentoService
             $documento = $data['documento_id'];
 
             $documento = $this->documentoRepository->find($documento);
-            $usersEtapaDocumento = $this->agrupamentoUserDocumentoRepository->findBy(
+            $agrupamentoUserDocumento = $this->agrupamentoUserDocumentoRepository->findBy(
                 [
                     ['documento_id', "=", $documento->id],
                     ['documento_revisao', "=", str_pad($documento->revisao - 1, strlen($documento->revisao), "0", STR_PAD_LEFT)],
@@ -105,8 +104,7 @@ class AgrupamentoUserDocumentoService
                     'tipo' => $grupoEndUser['tipo'],
                     'grupo_id' => $grupoEndUser['grupo_id'],
                 ];
-            }, $usersEtapaDocumento);
-
+            }, $agrupamentoUserDocumento);
 
             $inserir['documento_id'] = $documento->id;
             $inserir['documento_revisao'] = $documento->revisao;
@@ -117,7 +115,6 @@ class AgrupamentoUserDocumentoService
             DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollback();
             return ["success" => false];
         }

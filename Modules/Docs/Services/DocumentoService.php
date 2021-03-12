@@ -4,7 +4,7 @@ namespace Modules\Docs\Services;
 
 use App\Classes\{Helper, RESTServices};
 use App\Services\ValidacaoService;
-use Illuminate\Support\Facades\{DB, Storage};
+use Illuminate\Support\Facades\{DB, Storage, Auth};
 use Modules\Core\Repositories\ParametroRepository;
 use Modules\Core\Repositories\SetorRepository;
 use Modules\Core\Repositories\UserRepository;
@@ -18,9 +18,10 @@ use Modules\Docs\Repositories\{
     ItemNormaRepository,
     TipoDocumentoSetorRepository,
     UserEtapaDocumentoRepository,
-    VinculoDocumentoRepository
+    VinculoDocumentoRepository,
+    WorkflowRepository
 };
-use Modules\Docs\Services\{WorkflowService, UserEtapaDocumentoService};
+use Modules\Docs\Services\{WorkflowService, UserEtapaDocumentoService, HistoricoDocumentoService};
 
 class DocumentoService
 {
@@ -34,7 +35,7 @@ class DocumentoService
     protected $agrupamentoUserDocumentoRepository;
     protected $documentoItemNormaRepository;
     protected $parametroRepository;
-
+    protected $workflowRepository;
 
     protected $rules;
 
@@ -44,6 +45,7 @@ class DocumentoService
         $this->rules = $documento->rules;
 
         $this->userRepository = new UserRepository();
+        $this->workflowRepository = new WorkflowRepository();
         $this->documentoRepository = new DocumentoRepository();
         $this->itemNormaRepository = new ItemNormaRepository();
         $this->tipoDocumentoRepository = new TipoDocumentoRepository();
@@ -53,7 +55,6 @@ class DocumentoService
         $this->hierarquiaDocumentoRepository = new HierarquiaDocumentoRepository();
         $this->agrupamentoUserDocumentoRepository = new AgrupamentoUserDocumentoRepository();
         $this->parametroRepository = new ParametroRepository();
-
     }
 
     public function store($data)
@@ -144,7 +145,6 @@ class DocumentoService
             });
             return response()->json(["success" => true, "data" => ['documento_id' => $documento->id]]);
         } catch (\Throwable $th) {
-            dd($th);
             return response()->json(["success" => false]);
         }
     }
@@ -218,10 +218,10 @@ class DocumentoService
             return ["success" => true];
         } catch (\Throwable $th) {
             DB::rollback();
-            dd($th);
             return ["success" => false];
         }
     }
+
 
     public function gerarCodigoDocumento($tipoDocumento, $setor)
     {
@@ -268,6 +268,7 @@ class DocumentoService
         return $codigoFinal;
     }
 
+
     public function gerarPadraoNumero($numero, $padrao)
     {
         $codigo = "0";
@@ -302,6 +303,7 @@ class DocumentoService
         return $codigo;
     }
 
+    
     public function validador($data)
     {
         $tipoDocumentoService = new TipoDocumentoService();
@@ -383,6 +385,13 @@ class DocumentoService
             Helper::setNotify(__("messages.documento.startReviewFailed"), 'danger|close-circle');
             return ["success" => false];
         }
+    }
+
+
+    private function getPreviousCodigoRevisao($documento)
+    {
+        $documento = $this->documentoRepository->find($documento);
+        return str_pad($documento->revisao - 1, strlen($documento->revisao), "0", STR_PAD_LEFT);
     }
 
 
@@ -605,7 +614,6 @@ class DocumentoService
 
             foreach ($registro->listaDocumento as $documentoGed) {
                 if ($documentoGed->endereco == $nomeDocumento) {
-
                     $response = $ged->getDocumento($documentoGed->id, ['docs' => 'true']);
 
                     if ($response['error']) {
@@ -622,10 +630,80 @@ class DocumentoService
                     $storagePath = Storage::disk('weecode_office')->put($nomeDocumentoFinal, base64_decode($documentoToClone->bytes));
                     break;
                 }
-            } 
+            }
             return ["success" => true];
         } catch (\Throwable $th) {
-            dd($th);
+            return ["success" => false];
+        }
+    }
+
+
+    public function cancelarRevisao(array $data)
+    {
+        try {
+            DB::beginTransaction();
+
+            $workflowService = new WorkflowService();
+            $userEtapaDocumentoService = new UserEtapaDocumentoService();
+            $agrupamentoUserDocumentoService = new AgrupamentoUserDocumentoService();
+            $historicoDocumentoService = new HistoricoDocumentoService();
+            
+            $documento = $this->documentoRepository->find($data['documento_id']);
+            $update = [
+                'revisao' => $this->getPreviousCodigoRevisao($documento->id),
+                'em_revisao' => false
+            ];
+            
+            $this->documentoRepository->update($update, $documento->id);
+            
+            $userEtapaDocumentoDelete = $this->userEtapaDocumentoRepository->findBy(
+                [
+                    ['documento_id', "=", $documento->id],
+                    ['documento_revisao', "=", $documento->revisao],
+                ]
+            )->pluck('id')->toArray();
+
+            $agrupamentoUserDocumentoDelete = $this->agrupamentoUserDocumentoRepository->findBy(
+                [
+                    ['documento_id', "=", $documento->id],
+                    ['documento_revisao', "=", $documento->revisao],
+                ]
+            )->pluck('id')->toArray();
+
+            $workflowDelete = $this->workflowRepository->findBy(
+                [
+                    ['documento_id', "=", $documento->id],
+                    ['documento_revisao', "=", $documento->revisao],
+                ]
+            )->pluck('id')->toArray();
+
+            $registraHistorico = [
+                "documento_id" => $documento->id,
+                "user_id" => Auth::id(),
+                "documento_revisao" => $documento->revisao,
+                "descricao" => Helper::replaceText(__("messages.workflow.cancelReview") . ': ' . $data['justificativaCancelamento'])
+            ];
+
+            if (!$userEtapaDocumentoService->delete($userEtapaDocumentoDelete, false)['success']) {
+                throw new \Exception("Falha ao deletar user etapa documento no cancelamento da revisao");
+            }
+
+            if (!$agrupamentoUserDocumentoService->delete($agrupamentoUserDocumentoDelete)['success']) {
+                throw new \Exception("Falha ao deletar agrupamento user documento no cancelamento da revisao");
+            }
+
+            if (!$workflowService->delete($workflowDelete)['success']) {
+                throw new \Exception("Falha ao deletar workflow no cancelamento da revisao");
+            }
+            
+            if (!$historicoDocumentoService->store($registraHistorico)['success']) {
+                throw new \Exception("Falha ao criar historico do cancelamento da revisao");
+            }
+
+            DB::commit();
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            DB::rollback();
             return ["success" => false];
         }
     }

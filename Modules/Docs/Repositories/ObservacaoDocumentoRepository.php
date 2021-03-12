@@ -2,15 +2,15 @@
 
 namespace Modules\Docs\Repositories;
 
-use Modules\Docs\Model\DocumentoObservacao;
+use Modules\Docs\Model\ObservacaoDocumento;
 use Modules\Core\Repositories\BaseRepository;
 
-class DocumentoObservacaoRepository extends BaseRepository
+class ObservacaoDocumentoRepository extends BaseRepository
 {
     protected $model;
 
     public function __construct()
     {
-        $this->model = new DocumentoObservacao();
+        $this->model = new ObservacaoDocumento();
     }
 }

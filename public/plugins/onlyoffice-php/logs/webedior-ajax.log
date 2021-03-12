@@ -2840,3 +2840,135 @@ Track START
 _GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:28:"Teste documento30_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
 InputStream data: a:4:{s:3:"key";s:10:"2173361677";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1608668426635";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1608668426635";}}}
 track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:21:"teste12314_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:21:"teste12314_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:9:"991444891";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1614716673518";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1614716673518";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:21:"teste12314_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:21:"teste12314_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:3:{s:3:"key";s:9:"991444891";s:6:"status";i:4;s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:0;s:6:"userid";s:17:"uid-1614716673518";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:21:"teste12314_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:21:"teste12314_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:9:"991444891";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1614716738702";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1614716738702";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:21:"teste12314_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:21:"teste12314_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:3:{s:3:"key";s:9:"991444891";s:6:"status";i:4;s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:0;s:6:"userid";s:17:"uid-1614716738702";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:21:"teste12314_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:21:"teste12314_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:9:"991444891";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1614717146933";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1614717146933";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:21:"teste12314_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:21:"teste12314_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:3:{s:3:"key";s:9:"991444891";s:6:"status";i:4;s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:0;s:6:"userid";s:17:"uid-1614717146933";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:8:"87724843";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1614781804796";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1614781804796";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:3:{s:3:"key";s:8:"87724843";s:6:"status";i:4;s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:0;s:6:"userid";s:17:"uid-1614781804796";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:8:"87724843";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1614781858684";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1614781858684";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:3:{s:3:"key";s:8:"87724843";s:6:"status";i:4;s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:0;s:6:"userid";s:17:"uid-1614781858684";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:8:"87724843";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1614781873896";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1614781873896";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:3:{s:3:"key";s:8:"87724843";s:6:"status";i:4;s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:0;s:6:"userid";s:17:"uid-1614781873896";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:8:"87724843";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1614782172155";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1614782172155";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+a:2:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";}
+Track START
+_GET params: a:2:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";}
+a:2:{s:4:"type";s:4:"VIEW";s:8:"fileName";s:20:"teste1312_rev00.xlsx";}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:3:{s:3:"key";s:8:"87724843";s:6:"status";i:4;s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:0;s:6:"userid";s:17:"uid-1614782172155";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:10:"3150567583";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1614782314808";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1614782314808";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:3:{s:3:"key";s:10:"3150567583";s:6:"status";i:4;s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:0;s:6:"userid";s:17:"uid-1614782314808";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:10:"1043175883";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1614782505582";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1614782505582";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:10:"1043175883";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1614782505582";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1614782505582";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:20:"teste1312_rev00.xlsx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:3:{s:3:"key";s:10:"1043175883";s:6:"status";i:4;s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:0;s:6:"userid";s:17:"uid-1614782505582";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:16:"teste_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:16:"teste_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:10:"3852974635";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1615403098755";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1615403098755";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:16:"teste_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:16:"teste_rev00.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:9:{s:3:"key";s:10:"3852974635";s:6:"status";i:2;s:3:"url";s:166:"http://192.168.0.111:10000/cache/files/3852974635_9734/output.docx/output.docx?md5=Ezr5L4AGXX0wlfohTQ-10Q&expires=1615404032&disposition=attachment&ooname=output.docx";s:10:"changesurl";s:165:"http://192.168.0.111:10000/cache/files/3852974635_9734/changes.zip/changes.zip?md5=JLhzOhcXL5n8dp6l_B1A5g&expires=1615404032&disposition=attachment&ooname=output.zip";s:7:"history";a:2:{s:13:"serverVersion";s:5:"5.4.1";s:7:"changes";a:1:{i:0;a:2:{s:7:"created";s:19:"2021-03-10 19:05:18";s:4:"user";a:2:{s:2:"id";s:17:"uid-1615403098755";s:4:"name";s:8:"Anônimo";}}}}s:5:"users";a:1:{i:0;s:17:"uid-1615403098755";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:0;s:6:"userid";s:17:"uid-1615403098755";}}s:8:"lastsave";s:24:"2021-03-10T19:05:18.799Z";s:11:"notmodified";b:0;}
+track result: a:3:{s:5:"error";i:0;s:1:"c";s:5:"saved";s:6:"status";i:1;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:16:"teste_rev01.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:16:"teste_rev01.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:10:"2474384560";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1615403194512";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1615403194512";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:16:"teste_rev01.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:16:"teste_rev01.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:9:{s:3:"key";s:10:"2474384560";s:6:"status";i:2;s:3:"url";s:166:"http://192.168.0.111:10000/cache/files/2474384560_6779/output.docx/output.docx?md5=KBqXTVLaJ1TDrVwzQ2oJ5A&expires=1615404116&disposition=attachment&ooname=output.docx";s:10:"changesurl";s:165:"http://192.168.0.111:10000/cache/files/2474384560_6779/changes.zip/changes.zip?md5=3ImJSfNUik8xtZzOzcaAbA&expires=1615404116&disposition=attachment&ooname=output.zip";s:7:"history";a:2:{s:13:"serverVersion";s:5:"5.4.1";s:7:"changes";a:1:{i:0;a:2:{s:7:"created";s:19:"2021-03-10 19:06:43";s:4:"user";a:2:{s:2:"id";s:17:"uid-1615403194512";s:4:"name";s:8:"Anônimo";}}}}s:5:"users";a:1:{i:0;s:17:"uid-1615403194512";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:0;s:6:"userid";s:17:"uid-1615403194512";}}s:8:"lastsave";s:24:"2021-03-10T19:06:43.027Z";s:11:"notmodified";b:0;}
+track result: a:3:{s:5:"error";i:0;s:1:"c";s:5:"saved";s:6:"status";i:1;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:16:"teste_rev01.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:16:"teste_rev01.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:4:{s:3:"key";s:10:"3181219102";s:6:"status";i:1;s:5:"users";a:1:{i:0;s:17:"uid-1615403256998";}s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:1;s:6:"userid";s:17:"uid-1615403256998";}}}
+track result: a:1:{s:5:"error";i:0;}
+a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:16:"teste_rev01.docx";s:11:"userAddress";s:7:"Storage";}
+Track START
+_GET params: a:3:{s:4:"type";s:5:"track";s:8:"fileName";s:16:"teste_rev01.docx";s:11:"userAddress";s:7:"Storage";}
+InputStream data: a:3:{s:3:"key";s:10:"3181219102";s:6:"status";i:4;s:7:"actions";a:1:{i:0;a:2:{s:4:"type";i:0;s:6:"userid";s:17:"uid-1615403256998";}}}
+track result: a:1:{s:5:"error";i:0;}

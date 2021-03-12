@@ -23,18 +23,22 @@ return [
     'workflow' => [
         'storeSuccess' => "Workflow cadastrado com sucesso!",
         'storeFail' => "Falha ao cadastrar o workflow.",
+        'deleteSuccess' => "Workflow deletado com sucesso!",
+        'deleteFail' => "Falha ao deletar o workflow.",
         'advanceStepSuccess' => "Etapa avançada com sucesso!",
         'advanceStepFail' => "Falha ao avançar a etapa.",
         'retreatStepSuccess' => "Etapa retrocedida com sucesso!",
         'retreatStepFail' => "Falha ao retroceder a etapa.",
         'validationFail' => "Falha ao validar campos do workflow.",
         'startReview' => "<NOME_USUARIO> iniciou a revisão",
+        'cancelReview' => "<NOME_USUARIO> cancelou a revisão",
         'startValidation' => "<NOME_USUARIO> iniciou a validação",
+        'cancelValidation' => "<NOME_USUARIO> cancelou a validação",
         'notificationSuccess' => "Notificação enviada com sucesso!",
         'notificationFail' => "Falha ao enviar notificação."
     ],
     'documento' => [
         'startReview' => "Revisão do documento iniciada",
-        'startReviewFailed' => "<Falha ao iniciar a revisão do documento"
+        'startReviewFailed' => "Falha ao iniciar a revisão do documento"
     ]
 ];

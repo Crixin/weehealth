@@ -44,7 +44,8 @@ return [
         'complete'       => 'Concluir',
         'clear'          => 'Limpar',
         'attachments'    => 'Anexos',
-        'detail'         => 'Detalhe'
+        'detail'         => 'Detalhe',
+        'observacao'     => 'Observações'
 
     ],
 

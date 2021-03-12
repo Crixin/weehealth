@@ -22,7 +22,7 @@ class UserEtapaDocumentoService
         $this->documentoRepository = new DocumentoRepository();
     }
 
-    public function store(array $data)
+    public function store(array $data, bool $gravaHistorico = true)
     {
         try {
             DB::beginTransaction();
@@ -39,8 +39,10 @@ class UserEtapaDocumentoService
                 if ($response->wasRecentlyCreated) {
                     $buscaUsuario = $this->userRepository->find($grupoUserEtapa['user_id']);
                     $etapaFluxo   = $this->etapaFluxoRepository->find($grupoUserEtapa['etapa_fluxo_id']);
-                    $descricao = 'O usuário ' . $buscaUsuario->name . ' tornou-se aprovador da etapa ' . $etapaFluxo->nome;
-                    $responseHistorico = $this->storeHistorico($data['documento_id'], $descricao, $data['documento_revisao']);
+                    if ($gravaHistorico) {
+                        $descricao = 'O usuário ' . $buscaUsuario->name . ' tornou-se aprovador da etapa ' . $etapaFluxo->nome;
+                        $responseHistorico = $this->storeHistorico($data['documento_id'], $descricao, $data['documento_revisao']);
+                    }
                     if (!$responseHistorico['success']) {
                         throw new Exception("Erro ao gravar histórico", 1);
                     }
@@ -50,29 +52,32 @@ class UserEtapaDocumentoService
             return ["success" => true];
         } catch (\Throwable $th) {
             DB::rollback();
-            dd($th);
             return ["success" => false];
         }
     }
 
 
-    public function delete(array $data)
+    public function delete(array $data, bool $gravaHistorico = true)
     {
         try {
             DB::beginTransaction();
-            foreach ($data as $key => $userEtapaDocumento) {
-                $buscaEtapaDocumento = $this->userEtapaDocumentoRepository->find($userEtapaDocumento);
-                $descricao = 'O usuário ' . $buscaEtapaDocumento->coreUsers->name . ' foi retirado de aprovador da etapa ' . $buscaEtapaDocumento->docsEtapa->nome;
-                $responseHistorico = $this->storeHistorico($buscaEtapaDocumento->documento_id, $descricao, $buscaEtapaDocumento->documento_revisao);
-                if (!$responseHistorico['success']) {
-                    throw new Exception("Erro ao gravar histórico", 1);
+
+            if ($gravaHistorico) {
+                foreach ($data as $key => $userEtapaDocumento) {
+                    $buscaEtapaDocumento = $this->userEtapaDocumentoRepository->find($userEtapaDocumento);
+                    $descricao = 'O usuário ' . $buscaEtapaDocumento->coreUsers->name . ' foi retirado de aprovador da etapa ' . $buscaEtapaDocumento->docsEtapa->nome;
+                    $responseHistorico = $this->storeHistorico($buscaEtapaDocumento->documento_id, $descricao, $buscaEtapaDocumento->documento_revisao);
+                    
+                    if (!$responseHistorico['success']) {
+                        throw new Exception("Erro ao gravar histórico", 1);
+                    }
                 }
             }
+
             $deleteEtapaDocumento = $this->userEtapaDocumentoRepository->delete($data, 'id');
             DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollback();
             return ["success" => false];
         }
@@ -119,13 +124,13 @@ class UserEtapaDocumentoService
             $inserir['documento_id'] = $documento->id;
             $inserir['documento_revisao'] = $documento->revisao;
 
-            if (!$this->store($inserir)) {
+            if (!$this->store($inserir, false)) {
                 throw new \Exception("Falha ao cadastrar aprovadores da nova revisao");
             }
+            
             DB::commit();
             return ["success" => true];
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollback();
             return ["success" => false];
         }

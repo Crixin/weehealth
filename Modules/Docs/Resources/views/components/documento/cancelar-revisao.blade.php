@@ -24,25 +24,26 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
    
-            {{-- {{ Form::open(['route' => 'documentacao.cancel-review', 'method' => 'POST']) }} --}}
-            <div class="modal-body"> 
-                Deseja, realmente, reverter todas alterações realizadas e cancelar a revisão deste documento ?
-                <div class="row mt-3">
-                    <div class="form-group">
-                        <div class="col-md-12 control-label font-bold">
-                            {!! Form::label('justificativaCancelamentoRevisao', 'JUSTIFICATIVA:') !!}
+            {{ Form::open(['route' => 'docs.documento.cancelar-revisao', 'method' => 'POST']) }}
+                <div class="modal-body">
+                    {!! Form::hidden('documento_id', $documento) !!}
+                    Deseja cancelar a revisão deste documento? <br>(Os vínculos entre documentos e anexos não serão removidos! Caso queira desfazê-los, terá que desfazer manualmente)
+                    <div class="row mt-3">
+                        <div class="form-group">
+                            <div class="col-md-12 control-label font-bold">
+                                {!! Form::label('justificativaCancelamentoRevisao', 'JUSTIFICATIVA:') !!}
+                            </div>
+                            <div class="col-md-12">
+                                {!! Form::textarea('justificativaCancelamentoRevisao', null, ['class' => 'form-control', 'required' => 'required']) !!}
+                            </div>
                         </div>
-                        <div class="col-md-12">
-                            {!! Form::textarea('justificativaCancelamentoRevisao', null, ['class' => 'form-control', 'required' => 'required']) !!}
-                        </div>
-                    </div>
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-inverse waves-effect" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-danger waves-effect">Rejeitar</button>
-            </div>
-{{--             {{ Form::close() }} --}}        
+                    </div> 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-inverse waves-effect" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger waves-effect">Rejeitar</button>
+                </div>
+            {{ Form::close() }}        
         </div>
     </div>
 </div>

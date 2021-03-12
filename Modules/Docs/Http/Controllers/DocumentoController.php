@@ -165,9 +165,9 @@ class DocumentoController extends Controller
         if ($request->status != null) {
             array_push($where, ['status_id', '=', $request->status, 'HAS', 'docsEtapaFluxoDocumento']);
         }
-        //DB::enableQueryLog(); 
+
         $documentos = $this->documentoRepository->findBy($where);
-        //dd(DB::getQueryLog()); 
+
         return view(
             'docs::documento.index',
             [
@@ -254,7 +254,8 @@ class DocumentoController extends Controller
         );
         $documentos = array_column(json_decode(json_encode($documentos), true), 'nome', 'id');
 
-        return view('docs::documento.create',
+        return view(
+            'docs::documento.create',
             compact(
                 'documentos',
                 'tiposDocumento',
@@ -477,10 +478,20 @@ class DocumentoController extends Controller
         }
     }
 
-    public function proximaEtapa(Request $request)
+
+    public function cancelarRevisao(Request $request)
     {
-        dd('proxima etapa');
-        $idDocumento = $request->idDocumento;
+        $documentoService = new DocumentoService();
+        
+        $data = [
+            "documento_id" => $request->documento_id,
+            "justificativaCancelamento" => $request->justificativaCancelamentoRevisao
+        ];
+
+        if (!$documentoService->cancelarRevisao($data)) {
+            return redirect()->back()->withInput();
+        }
+        return redirect()->route("docs.documento");
     }
 
 
@@ -793,7 +804,7 @@ class DocumentoController extends Controller
                 [
                     ['created_at', 'ASC']
                 ]
-            ); 
+            );
             $this->registroImpressoesService->create(['documento_id' => $id, 'user_id' => Auth::user()->id]);
 
             return view('docs::documento.print', compact('mode', 'documento', 'setorQualidade', 'message', 'messageClass', 'filename', 'historico'));
@@ -843,8 +854,10 @@ class DocumentoController extends Controller
                 ['documento_revisao', '=', $documento->revisao]
             ]
         );
-        $agrupamentoDivulgacaoLido = $agrupamentoUserDocumento->documento_lido ?? false;
-
+        
+        $agrupamentoDivulgacaoLido = is_null($agrupamentoUserDocumento) ?: false;
+        $agrupamentoDivulgacaoLido = $agrupamentoDivulgacaoLido ? null : $agrupamentoUserDocumento->documento_lido;
+        
         $permissaoOnlyOffice = '';
         $permissaoOnlyOffice .= $documento->docsTipoDocumento->permitir_download ? '&d=1' : '';
         $permissaoOnlyOffice .= $documento->docsTipoDocumento->permitir_impressao ? '&p=1' : '';
@@ -940,7 +953,10 @@ class DocumentoController extends Controller
             ['coreUsers'],
             [
                 ['created_at', 'ASC']
-            ]
+            ],
+            null,
+            null,
+            true
         );
 
         $historicoDocumento = $this->historicoDocumentoRepository->findBy(

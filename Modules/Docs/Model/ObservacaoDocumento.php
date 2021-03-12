@@ -5,11 +5,11 @@ namespace Modules\Docs\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DocumentoObservacao extends Model
+class ObservacaoDocumento extends Model
 {
     use SoftDeletes;
 
-    protected $table = "docs_documento_observacao";
+    protected $table = "docs_observacao_documento";
 
     protected $fillable = [
         'id',
@@ -17,4 +17,10 @@ class DocumentoObservacao extends Model
         'documento_id',
         'user_id'
     ];
+
+
+    public function coreUsers()
+    {
+        return $this->hasOne('Modules\Core\Model\User', 'id', 'user_id');
+    }
 }

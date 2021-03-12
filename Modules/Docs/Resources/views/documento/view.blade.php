@@ -16,7 +16,9 @@
 
         @if ($documento->em_revisao)
             @if (!$etapaAtual->comportamento_treinamento && $etapaAtual->docsFluxo->coreGrupo->coreUsers->contains("id", Auth::id()))
-                @component('docs::components.documento.cancelar-revisao') @endcomponent
+                @component('docs::components.documento.cancelar-revisao', [
+                    "documento" => $documento->id,
+                ]) @endcomponent
             @endif
             
             @if ($etapaAtual->comportamento_criacao || $etapaAtual->comportamento_edicao)
@@ -75,9 +77,16 @@
                                 <h2 class="card-title"><b>{{ $documento->nome ?? '' }}</b> <small class="text-success"> &nbsp; | &nbsp; Previsão Próxima revisão: {{ Carbon\Carbon::parse($documento->validade ?? '')->format('d/m/Y') }}</small></h2>
                             </div>
                         </div>
-                        
+                        @if ($etapaAtual->comportamento_divulgacao && !is_null($agrupamentoDivulgacaoLido))
+                            @component('docs::components.documento.confirmacao-leitura-divulgacao',
+                            [
+                                "lido" => $agrupamentoDivulgacaoLido,
+                                "documento" => $documento->id
+                            ]
+                            ) @endcomponent
+                        @endif
                         <!-- Visualização-->
-                        @if ($etapaAtual->comportamento_aprovacao || $etapaAtual->comportamento_visualizacao)
+                        @if ($etapaAtual->comportamento_aprovacao || $etapaAtual->comportamento_visualizacao || $etapaAtual->comportamento_divulgacao)
                             <div class="row iframe_box">
                                 <iframe width="100%" id="onlyoffice-editor" src="{{ asset('plugins/onlyoffice-php/doceditor.php?action=review' . $permissaoOnlyOffice . '&user=&fileID=').$docPath }}" frameborder="0" width="100%" height="600px"> </iframe>
                             </div>
@@ -98,16 +107,6 @@
                             ]) 
                             @endcomponent
                         @endif
-
-                        @if ($etapaAtual->comportamento_divulgacao)
-                            @component('docs::components.documento.confirmacao-leitura-divulgacao',
-                            [
-                                "lido" => $agrupamentoDivulgacaoLido,
-                                "documento" => $documento->id
-                                 
-                            ]
-                            ) @endcomponent
-                        @endif
                         
                         <div class="col-lg-12 col-md-12 mt-3">
                             <div class="pull-right">
@@ -123,6 +122,7 @@
                                     @endif
                                     
                                     <button type="button" class="btn btn-info anexos-documento" data-id="{{$documento->id}}">@lang('buttons.general.attachments')</button>
+                                    <button type="button" class="btn btn-info observacoes-documento" data-id="{{$documento->id}}">@lang('buttons.general.observacao')</button>
                                     <a href="{{ route('docs.documento') }}" type="button" class="btn btn-inverse">@lang('buttons.general.back')</a>
                                     
                                 {!! Form::close() !!}
@@ -146,6 +146,11 @@
 [
     'comportamento_modal' => 'EDICAO',
     'idDocumento' => $documento->id
+])
+
+@include('docs::modal/observacao-documento',
+[
+    'idDocumento' => $documento->id,
 ])
 
 <script>

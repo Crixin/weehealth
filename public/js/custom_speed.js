@@ -173,7 +173,7 @@ function showToast(h, t, i) {
         position: 'top-right',
         loaderBg:'#ff6849',
         icon: i,
-        hideAfter: 3500, 
+        hideAfter: 4500, 
         stack: 6
     });
 }

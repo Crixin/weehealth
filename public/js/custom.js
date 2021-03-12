@@ -150,13 +150,14 @@ $(function () {
     $('.message-scroll').slimScroll({
         position: 'right'
         , size: "5px"
-        , height: '570'
+        , height: '390'
         , color: '#dcdcdc'
      });
     $('.chat-box').slimScroll({
         position: 'right'
         , size: "5px"
-        , height: '470'
+        , height: '380'
+        , width: '100%'
         , color: '#dcdcdc'
      });
     
