@@ -8,7 +8,9 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\Helper;
+use Exception;
 use Modules\Core\Repositories\{SetorRepository, UserRepository};
+use Modules\Core\Services\SetorService;
 
 class SetorController extends Controller
 {
@@ -47,21 +49,14 @@ class SetorController extends Controller
      */
     public function store(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
-        }
-        $cadastro = self::montaRequest($request);
-        try {
-            DB::transaction(function () use ($cadastro) {
-                $this->setorRepository->create($cadastro);
-            });
-
+        $setorService = new SetorService();
+        $montaRequest = $this->montaRequest($request);
+        $reponse = $setorService->store($montaRequest);
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
             Helper::setNotify('Novo setor criado com sucesso!', 'success|check-circle');
             return redirect()->route('core.setor');
-        } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao gravar o setor', 'danger|close-circle');
-            return redirect()->back()->withInput();
         }
     }
 
@@ -83,7 +78,8 @@ class SetorController extends Controller
     public function edit($id)
     {
         $setor = $this->setorRepository->find($id);
-        return view('core::setor.update', compact('setor'));
+        $achouDocumentos = $setor->docsDocumento->count() > 0 ? true : false ;
+        return view('core::setor.update', compact('setor', 'achouDocumentos'));
     }
 
     /**
@@ -94,23 +90,28 @@ class SetorController extends Controller
      */
     public function update(Request $request)
     {
-        $error = $this->validador($request);
-        if ($error) {
-            return redirect()->back()->withInput()->withErrors($error);
+        $setorService = new SetorService();
+        $montaRequest = $this->montaRequest($request);
+
+        $setor = $this->setorRepository->find($request->idSetor);
+        //Caso tem documento vinculado nao atualiza a sigla
+        if ($setor->docsDocumento->count() > 0) {
+            $montaRequest['sigla'] = $setor->sigla;
         }
 
-        $setor = $request->get('idSetor');
-        $update  = self::montaRequest($request);
-        try {
-            DB::transaction(function () use ($update, $setor) {
-                $this->setorRepository->update($update, $setor);
-            });
-
-            Helper::setNotify('Informações do setor atualizadas com sucesso!', 'success|check-circle');
-        } catch (\Throwable $th) {
-            Helper::setNotify('Um erro ocorreu ao atualizar o setor', 'danger|close-circle');
+        if ($setor->coreUsers->count() > 0 && $setor->inativo == 0 && empty($request->inativo)) {
+            Helper::setNotify("Erro ao inativar setor. Setor possui usuários vinculados", 'danger|close-circle');
+            return redirect()->route('core.setor');
         }
-        return redirect()->back()->withInput();
+
+        $reponse = $setorService->update($montaRequest);
+
+        if (!$reponse['success']) {
+            return $reponse['redirect'];
+        } else {
+            Helper::setNotify('Setor atualizado com sucesso!', 'success|check-circle');
+            return redirect()->route('core.setor');
+        }
     }
 
     /**
@@ -120,14 +121,17 @@ class SetorController extends Controller
      */
     public function destroy(Request $request)
     {
-        $id = $request = $request->id;
+        $id = $request->setor_id;
         try {
-            DB::transaction(function () use ($id) {
-                $this->setorRepository->delete($id);
-            });
+            $setorService = new SetorService();
+            $return = $setorService->delete($id);
+
+            if (!$return['success']) {
+                throw new Exception($return['message'], 1);
+            }
             return response()->json(['response' => 'sucesso']);
         } catch (\Exception $th) {
-            return response()->json(['response' => 'erro']);
+            return response()->json(['response' => 'erro', 'message' => $th->getMessage()]);
         }
     }
 
@@ -137,7 +141,8 @@ class SetorController extends Controller
         $todosUsuarios = $this->userRepository->findBy(
             [
                 ['setor_id', '=', null],
-                ['setor_id', '=', $_id, 'or']
+                ['setor_id', '=', $_id, 'or'],
+                ['inativo', '=', 0, "AND"]
             ],
             [],
             [
@@ -163,31 +168,20 @@ class SetorController extends Controller
         return redirect()->back()->withInput();
     }
 
-    public function validador(Request $request)
-    {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'nome'               => empty($request->get('idSetor')) ? 'required|string|min:5|max:100|unique:core_setor,nome' : 'required|string|min:5|max:100|unique:core_setor,nome,' . $request->idSetor,
-                'descricao'          => 'required|string|min:5|max:200',
-                'sigla'              => 'required|string',
-            ]
-        );
-
-        if ($validator->fails()) {
-            return $validator;
-        }
-
-        return false;
-    }
-
     public function montaRequest(Request $request)
     {
-        return [
+        $retorno = [
             "nome"      => $request->get('nome'),
             "descricao" => $request->get('descricao'),
             "sigla"     => $request->get('sigla'),
+            "inativo"   => $request->get('inativo') ?? 1
 
         ];
+
+        if ($request->idSetor) {
+            $retorno['id'] = $request->idSetor;
+        }
+
+        return $retorno;
     }
 }

@@ -55,7 +55,7 @@
 <legend>@lang('page_titles.docs.item-norma.index')</legend>
 <hr>
 <div class="table-responsive m-t-40">
-    <button type="button" id="btnItemNorma" class="btn btn-info">@lang('buttons.docs.item-norma.create')</button>
+    <button type="button" id="btnItemNorma" class="btn btn-info"><i class="mdi mdi-pencil"></i>&nbsp;@lang('buttons.docs.item-norma.create')</button>
     <table id="itens" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
             <tr>

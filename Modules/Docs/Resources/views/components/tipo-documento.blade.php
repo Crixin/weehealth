@@ -118,7 +118,14 @@
                 <small class="text-danger">{{ $errors->first('documentoModelo') }}</small>
             </div>
         </div>
-        
+        @if ($tipoDocumentoEdit)
+            <div class="col-md-12">
+                <div class="pull-rigth float-right" >
+                    <button type="button" data-id="{{$tipoDocumentoEdit->id}}" class="btn btn-info" id="btn-view"><i class="mdi mdi-eye"></i>&nbsp;@lang('buttons.general.view')</button>
+                    <button type="button" data-id="{{$tipoDocumentoEdit->id}}" class="btn btn-info" id="btn-download"><i class="mdi mdi-cloud-download"></i>&nbsp;@lang('buttons.general.download')</button>
+                </div>
+            </div>
+        @endif
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -203,7 +210,7 @@
 <legend>@lang('page_titles.docs.tipo-documento.ultimo-codigo')</legend>
 <hr>
 <div class="table-responsive m-t-40">
-    <button type="button" id="btnTipoDocumentoSetor" class="btn btn-info">@lang('buttons.docs.tipo-documento-setor.create')</button>
+    <button type="button" id="btnTipoDocumentoSetor" class="btn btn-info"><i class="mdi mdi-pencil"></i>&nbsp;@lang('buttons.docs.tipo-documento-setor.create')</button>
     <table id="itens" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
             <tr>
@@ -331,51 +338,89 @@
         });
 
         
-        $(document).ready(function() {
-            myTable = $('#itens').DataTable({
-                "language": {
-                    "sEmptyTable": "Nenhum registro encontrado",
-                    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-                    "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-                    "sInfoPostFix": "",
-                    "sInfoThousands": ".",
-                    "sLengthMenu": "_MENU_ resultados por página",
-                    "sLoadingRecords": "Carregando...",
-                    "sProcessing": "Processando...",
-                    "sZeroRecords": "Nenhum registro encontrado",
-                    "sSearch": "Pesquisar",
-                    "oPaginate": {
-                        "sNext": "Próximo",
-                        "sPrevious": "Anterior",
-                        "sFirst": "Primeiro",
-                        "sLast": "Último"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": Ordenar colunas de forma ascendente",
-                        "sSortDescending": ": Ordenar colunas de forma descendente"
-                    }
+        myTable = $('#itens').DataTable({
+            "language": {
+                "sEmptyTable": "Nenhum registro encontrado",
+                "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "_MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing": "Processando...",
+                "sZeroRecords": "Nenhum registro encontrado",
+                "sSearch": "Pesquisar",
+                "oPaginate": {
+                    "sNext": "Próximo",
+                    "sPrevious": "Anterior",
+                    "sFirst": "Primeiro",
+                    "sLast": "Último"
                 },
-                dom: 'frt',
-                rowReorder: false
+                "oAria": {
+                    "sSortAscending": ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                }
+            },
+            dom: 'frt',
+            rowReorder: false
+        });
+
+        $(document).on('click','#btnTipoDocumentoSetor', function(){
+            
+            var $inputsModal = $('#formTipoDocumentoSetor :input');
+            $inputsModal.each(function() {
+                    $(this).val('').prop('checked',false).selectpicker('refresh');
             });
-
-            $(document).on('click','#btnTipoDocumentoSetor', function(){
-                
-                var $inputsModal = $('#formTipoDocumentoSetor :input');
-                $inputsModal.each(function() {
-                        $(this).val('').prop('checked',false).selectpicker('refresh');
-                });
-                $('#tipoDocumentoId').val('');
-                $('#modalTipoDocumentoSetor').modal('show');
-
-            });
-
-            $('#itens').on( 'click', 'tbody tr td .btnExcluirItem', function () {
-                deleteTR($(this).parent().parent());
-            } );
+            $('#tipoDocumentoId').val('');
+            $('#modalTipoDocumentoSetor').modal('show');
 
         });
+
+        $('#itens').on( 'click', 'tbody tr td .btnExcluirItem', function () {
+            deleteTR($(this).parent().parent());
+        } );
+
+
+        $('#input-file-now').on('change', function(){
+            let idTipo = $('#idTipoDocumento').val();
+            if (idTipo != '' && idTipo != undefined) {
+                let deleteIt = swal2_warning("Essa ação irá substituir o modelo de documento existente!", "Sim, substituir!");
+                deleteIt.then(resolvedValue => {
+                    swal.close();   
+                }, error => {
+                    $('.dropify-clear').trigger('click');
+                    swal.close();
+                });
+            }
+        });
+
+        $('#btn-view').on('click', function(){
+            let id = $(this).data('id');
+            let obj = {'id': id, 'download': 'N'};
+            ajaxMethod('POST', "{{ URL::route('docs.tipo-documento.busca-modelo') }}", obj).then(ret => {
+                if(ret.response == 'erro') {
+                    swal2_alert_error_support("Tivemos um problema ao buscar o modelo do tipo de documento.");
+                }
+                window.open(ret.data.caminho, '_blank');
+            }, error => {
+                console.log(error);
+            });
+        });
+
+        $('#btn-download').on('click', function(){
+            let id = $(this).data('id');
+            let obj = {'id': id, 'download': 'S'};
+            ajaxMethod('POST', "{{ URL::route('docs.tipo-documento.busca-modelo') }}", obj).then(ret => {
+                if(ret.response == 'erro') {
+                    swal2_alert_error_support("Tivemos um problema ao buscar o modelo do tipo de documento.");
+                }
+                window.open(ret.data.caminho, '_blank');
+            }, error => {
+                console.log(error);
+            });
+        });
+
     });
 
     function deleteTR(trDeletar){

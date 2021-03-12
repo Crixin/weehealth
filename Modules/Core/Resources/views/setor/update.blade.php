@@ -42,6 +42,7 @@
                             'nome' => $setor->nome,
                             'descricao' => $setor->descricao, 
                             'sigla' => $setor->sigla,
+                            'achouDocumentos' => $achouDocumentos
                             
                         ]
                     )

@@ -12,6 +12,7 @@ use Modules\Core\Model\{Empresa, Parametro};
 use Modules\Portal\Model\{Grupo, EmpresaUser, EmpresaGrupo};
 use Modules\Docs\Repositories\{DocumentoRepository};
 use Modules\Core\Repositories\{ParametroRepository, GrupoUserRepository, EmpresaRepository};
+use Modules\Docs\Services\WorkflowService;
 use Modules\Portal\Repositories\{EmpresaGrupoRepository, EmpresaUserRepository};
 
 class Helper
@@ -573,18 +574,20 @@ class Helper
 
     public static function listEmailAddresses($_emailList)
     {
-        $addressesText = explode('Lista de presença enviada para: ', $_emailList)[1];
-        if (is_null($addressesText)) {
-            return '';
-        }
-        $stylizedList = "";
-        $addressesArr = explode(';', $addressesText);
-        foreach ($addressesArr as $address) {
-            if (!is_null($address) && $address != " ") {
-                $stylizedList .= "<li><i class='fa fa-chevron-right'></i>$address</li>";
+        $stylizedList = '';
+        if ($_emailList) {
+            $addressesText = explode('Lista de presença enviada para: ', $_emailList)[1];
+            if (is_null($addressesText)) {
+                return '';
+            }
+            $stylizedList = "";
+            $addressesArr = explode(';', $addressesText);
+            foreach ($addressesArr as $address) {
+                if (!is_null($address) && $address != " ") {
+                    $stylizedList .= "<li><i class='fa fa-chevron-right'></i>$address</li>";
+                }
             }
         }
-
         return $stylizedList;
     }
 
@@ -612,8 +615,7 @@ class Helper
 
         return Auth::user()->setor_id == $idSetorQualidade || Auth::user()->id == $documento->elaborador_id;
     }
-    
-    
+
     public static function permissaoRevisaoDocumento($documento)
     {
         $documentoRepository = new DocumentoRepository();
@@ -635,6 +637,13 @@ class Helper
         return
             Auth::user()->perfil_id == $perfilElaborador && Auth::user()->setor_id == $documento->setor_id ||
             Auth::user()->perfil_id == $fluxo->perfil_id && $grupoUser;
+    }
+
+    public static function permissaoImprimirDocumento($documento)
+    {
+        $workflowService = new WorkflowService();
+        $etapaAtual = $workflowService->getEtapaAtual($documento);
+        return $etapaAtual->comportamento_divulgacao ?? false;
     }
 
 

@@ -26,6 +26,7 @@ return [
         'edit'           => 'Editar',
         'delete'         => 'Excluir',
         'disable'        => 'Inativar',
+        'enable'         => 'Ativar',
         'list_documents' => 'Listar Documentos',
         'mark_as_read'   => 'Marcar Como Lida',
         'upload'         => 'Realizar Upload',

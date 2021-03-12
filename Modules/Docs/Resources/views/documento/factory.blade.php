@@ -119,7 +119,10 @@
                 success: function(ret) {
                     if(ret.success == true) {
                         swal2_success_not_reload("Sucesso!", "Documento criado com sucesso.");
-                        document.location.href="{!! route('docs.documento'); !!}";
+                        let aux = ret.data;
+                        let url = "{!! route('docs.documento.visualizar', ['id' => ':id']); !!}";
+                        url = url.replace(':id', aux.documento_id); 
+                        document.location.href = url;
                     }else{
                         swal2_alert_error_not_reload("Erro ao criar documento.");
                     }

@@ -5,6 +5,7 @@ namespace Modules\Docs\Services;
 use App\Classes\Helper;
 use App\Classes\RESTServices;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Modules\Core\Repositories\ParametroRepository;
 use Modules\Docs\Repositories\DocumentoRepository;
 use Modules\Docs\Repositories\ListaPresencaRepository;
@@ -97,10 +98,35 @@ class ListaPresencaService
                 }
                 $idRegistro = $response['data'];
 
-                $this->update(["ged_documento_id" => $idRegistro], $listaPresenca->id);
+                $this->update(["ged_documento_id" => $idRegistro, "lista_presenca_documento" => ''], $listaPresenca->id);
             }
             return ["success" => true];
         } catch (\Throwable $th) {
+            return ["success" => false];
+        }
+    }
+
+    public function criaCopiaListaPresenca(array $data)
+    {
+        try {
+            $listaPresenca = $this->listaPresencaRepository->find($data['id']);
+            $ged = new RESTServices();
+            $nomeDocumentoFinal = $listaPresenca->nome . "." . $listaPresenca->extensao;
+
+            if ($listaPresenca->ged_documento_id  != '') {
+                $response = $ged->getDocumento($listaPresenca->ged_documento_id, ['docs' => 'true']);
+                if ($response['error']) {
+                    throw new \Exception("Falha na busca da lista de presença para visualização");
+                }
+                $documentoToClone = $response['response'];
+                $storagePath = Storage::disk('weecode_office')->put('/lista-presenca/' . $nomeDocumentoFinal, base64_decode($documentoToClone->bytes));
+
+            } else {
+                $storagePath = Storage::disk('weecode_office')->put('/lista-presenca/' . $nomeDocumentoFinal, base64_decode($listaPresenca->lista_presenca_documento));
+            }
+            return ["success" => true];
+        } catch (\Throwable $th) {
+            dd($th);
             return ["success" => false];
         }
     }

@@ -40,7 +40,8 @@
                             'setorEdit' => [],
                             'nome' => '',
                             'descricao' => '',
-                            'sigla' => ''
+                            'sigla' => '',
+                            'achouDocumentos' => false
                         ]
                     )
                     @endcomponent

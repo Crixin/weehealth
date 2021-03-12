@@ -95,7 +95,7 @@ class TipoDocumentoSetorController extends Controller
     {
         try {
             $id = $request->id;
-            $documentoId = $request->documentoId;
+            $documentoId = $request->idDocumento;
 
             $setorSelecionado = '';
             if ($documentoId) {

@@ -34,24 +34,25 @@
                                 <table id="tabela-listas-presenca" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center text-nowrap noExport">Ações</th>
                                             <th class="text-center">Nome</th>
                                             <th class="text-center">Anexada durante</th>
                                             <th class="text-center">Destinatários</th>
+                                            <th class="text-center text-nowrap noExport">Ações</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($listaPresenca as $lista)
                                             <tr>
-                                                <td class="text-center">
-                                                    <a href="{{ asset('plugins/onlyoffice-php/Storage/lists') .'/'. $lista->nome .'.'. $lista->extensao }}" target="_blank" class="btn btn-success btn-sm"><i class="fa fa-eye"></i> &nbsp;Visualizar Lista</a>
-                                                </td>
+                                                
                                                 <td class="text-center">{{ $lista->nome }}</td>
                                                 <td class="text-center">Revisão: <span class="font-weight-bold">{{ $lista->revisao_documento }}</span></td>
                                                 <td class="text-center">
                                                     <ul class="list-icons">
                                                         <?php echo(\App\Classes\Helper::listEmailAddresses($lista->destinatarios_email)); ?>
                                                     </ul>
+                                                </td>
+                                                <td class="text-center">
+                                                  <a href="#" data-id="{{$lista->id}}" class="btn btn-success btn-sm btn-view-lista"><i class="fa fa-eye"></i> &nbsp;Visualizar Lista</a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -88,6 +89,9 @@
 <script src="{{ asset('js/dataTables/buttons-1.2.2.html5.min.js') }}"></script>
 <script src="{{ asset('js/dataTables/buttons-1.2.2.print.min.js') }}"></script>
 <!-- end - This is for export functionality only -->
+
+<link href="{{ asset('plugins/jquery-loading/jquery.loading.min.css') }}" rel="stylesheet">
+<script src="{{ asset('plugins/jquery-loading/jquery.loading.min.js') }}"></script>
 
 <script>
   let reportTitle = "{{ $documento->nome ?? env('APP_NAME')}}";
@@ -147,6 +151,30 @@
         }
       ]
     });
+
+
+    $('.btn-view-lista').on('click', function(){
+      $("body").loading(
+        {
+          stoppable: true,
+          message: "Carregando...",
+          theme: "dark"
+        }
+      );
+      let id = $(this).data('id');
+      let obj = {'id': id};
+      ajaxMethod('POST', "{{ URL::route('docs.lista-presenca.busca-lista-ged') }}", obj).then(ret => {
+          if(ret.response == 'erro') {
+              swal2_alert_error_support("Tivemos um problema ao buscar a lista de presença no GED.");
+          }
+          window.open(ret.data.caminho, '_blank');
+          $("body").loading('stop');
+      }, error => {
+          console.log(error);
+          $("body").loading('stop');
+      });
+    });
+
   });
 </script>
 @endsection

@@ -13,6 +13,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Repositories\{SetorRepository, UserRepository, PerfilRepository};
+use Modules\Core\Services\UserService;
 
 class RegisterController extends Controller
 {
@@ -153,14 +154,21 @@ class RegisterController extends Controller
                 $altera = DB::unprepared("ALTER USER $userAux WITH PASSWORD '" . $password . "'");
                 $setFrupo = DB::unprepared("GRANT weehealth TO $userAux ");
             }
+
             // $this->guard()->login($user);
-            $retorno = $this->registered($request, $user);
+            $userService = new UserService();
+            $montaRequest = $this->montaRequest($request);
+            $userService->store($montaRequest);
+
             DB::commit();
             return redirect()->route('core.usuario')->with(['message' => 'Novo usuário criado com sucesso!', 'style' => 'success|check-circle']);
+
         } catch (\Throwable $th) {
             DB::rollBack();
             Helper::setNotify('Um erro ocorreu ao gravar o usuario.', 'danger|close-circle');
             return redirect()->back()->withInput();
         }
     }
+
+    
 }

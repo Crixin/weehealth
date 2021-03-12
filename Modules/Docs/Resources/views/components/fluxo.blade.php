@@ -64,7 +64,7 @@
 <legend>@lang('page_titles.docs.etapa-fluxo.index')</legend>
 <hr>
 <div class="table-responsive m-t-40">
-    <button type="button" id="btnEtapaFluxo" class="btn btn-info">@lang('buttons.docs.etapa-fluxo.create')</button>
+    <button type="button" id="btnEtapaFluxo" class="btn btn-info"><i class="mdi mdi-pencil"></i>&nbsp;@lang('buttons.docs.etapa-fluxo.create')</button>
     <table id="dataTable-etapas"  class="display " cellspacing="0" width="100%">
         <thead>
             <tr>

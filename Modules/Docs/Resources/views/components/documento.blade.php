@@ -35,7 +35,7 @@
         <div class="col-md-6">
             <div class="form-group required{{ $errors->has('setor') ? ' has-error' : '' }}">
                 {!! Form::label('setor', 'Setor', ['class' => 'control-label']) !!}
-                {!! Form::select('setor',$setores, !empty($documentoEdit) ?  $documentoEdit->setor_id : null, ['id' => 'setor', 'class' => 'form-control selectpicker', 'required' => 'required','data-live-search' => 'true', 'data-actions-box' =>'true', 'placeholder' => __('components.selectepicker-default')]) !!}
+                {!! Form::select('setor',$setores, !empty($documentoEdit) ?  $documentoEdit->setor_id : null, ['id' => 'setor', 'class' => 'form-control selectpicker', 'required' => 'required','data-live-search' => 'true', 'data-actions-box' =>'true', 'placeholder' => __('components.selectepicker-default'), "disabled" => !empty($documentoEdit) ? true : false]) !!}
                 <small class="text-danger">{{ $errors->first('setor') }}</small>
             </div>
         </div>
@@ -86,7 +86,7 @@
                             
                         </div>
                         @if ( !empty($documentoEdit) && $documentoEdit->copia_controlada)
-                            <button type="button" id="btnGerenciarCopiaControlada" class="btn btn-success pull-right">Gerenciar</button>
+                            <button type="button" id="btnGerenciarCopiaControlada" class="btn btn-success pull-right">Gerenciar Cópia Controlada</button>
                         @endif
                     </td>    
                 </div>

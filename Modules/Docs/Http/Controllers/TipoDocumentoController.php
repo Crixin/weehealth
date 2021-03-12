@@ -76,7 +76,8 @@ class TipoDocumentoController extends Controller
 
         $setores = array_column($this->setorRepository->findBy(
             [
-                ['nome', '!=', 'Sem Setor']
+                ['nome', '!=', 'Sem Setor'],
+                ['inativo', '=', 0]
             ],
             [],
             [
@@ -173,7 +174,8 @@ class TipoDocumentoController extends Controller
 
         $setores = array_column($this->setorRepository->findBy(
             [
-                ['nome', '!=', 'Sem Setor']
+                ['nome', '!=', 'Sem Setor'],
+                ['inativo', '=', 0]
             ],
             [],
             [
@@ -261,7 +263,7 @@ class TipoDocumentoController extends Controller
             $mimeType = $request->file('documentoModelo')->getMimeType();
             $extensao = $request->file('documentoModelo')->getClientOriginalExtension();
             $imageBase64 = base64_encode(file_get_contents($request->file('documentoModelo')->getRealPath()));
-            $imageBase64 = 'data:' . $mimeType . ';base64,' . $imageBase64;
+            $imageBase64 = $imageBase64;
         }
 
         $retorno = [
@@ -303,5 +305,31 @@ class TipoDocumentoController extends Controller
         }
 
         return $retorno;
+    }
+
+    public function getModeloTipoDocumento(Request $request)
+    {
+        try {
+            $id = $request->id;
+            $buscaTipoDocumento = $this->tipoDocumentoRepository->find($id);
+            $tipoDocumentoService = new TipoDocumentoService();
+            $data = ["id" => $id];
+            if (!$tipoDocumentoService->criaCopiaModeloTipoDocumento($data)['success']) {
+                throw new \Exception("Falha ao buscar o modelo do tipo de documento.");
+            }
+
+            $link = '';
+
+            if ($request->download == 'S') {
+                $link = asset('plugins/onlyoffice-php/Storage/modelo-tipo-documento') . '/' . $buscaTipoDocumento->nome . '.' . $buscaTipoDocumento->extensao;
+            } else {
+                $link = asset('plugins/onlyoffice-php/doceditor.php?fileID=') . $buscaTipoDocumento->nome . '.' . $buscaTipoDocumento->extensao . '&type=embedded&folder=modelo-tipo-documento';
+            }
+
+            return response()->json(['response' => 'sucesso', 'data' => ['caminho' => $link]]);
+        } catch (\Exception $th) {
+            return response()->json(['response' => 'erro']);
+        }
+
     }
 }

@@ -169,8 +169,9 @@
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{ route('docs.documento.imprimir', ['id' => $documento->id, 'tipo' => 2]) }}"> <i class="fa fa-print text-info"></i>&nbsp; @lang('buttons.docs.documento.printer') </a> 
-
+                                                @if (Helper::permissaoImprimirDocumento($documento->id))
+                                                    <a class="dropdown-item" href="{{ route('docs.documento.imprimir', ['id' => $documento->id, 'tipo' => 2]) }}"> <i class="fa fa-print text-info"></i>&nbsp; @lang('buttons.docs.documento.printer') </a> 
+                                                @endif
                                                 @if (Helper::permissaoEditarDocumento($documento))
                                                     <a class="dropdown-item" href="{{ route('docs.documento.editar', ['id' => $documento->id]) }}"> <i class="fa fa-pencil text-success"></i>&nbsp; @lang('buttons.docs.documento.edit') </a>
                                                 @endif

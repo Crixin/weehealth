@@ -23,7 +23,8 @@ class SetorRepository extends BaseRepository
         } else {
             $setores = $this->findBy(
                 [
-                    ['nome', '!=', 'Sem Setor']
+                    ['nome', '!=', 'Sem Setor'],
+                    ['inativo', '=', 0]
                 ],
                 [],
                 [

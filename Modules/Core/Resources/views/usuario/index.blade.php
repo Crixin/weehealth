@@ -63,7 +63,12 @@
                                         <label for="permissao_nivel_usuario-{{ $usuario->id }}">Ativa</label>
                                     </td>
                                     <td>
-                                        <a href="#" class="btn waves-effect waves-light btn-warning sa-warning" data-id="{{ $usuario->id }}"> <i class="mdi mdi-account-off"></i> @lang('buttons.general.disable') </a>
+                                        @if ($usuario->inativo == 0)
+                                            <a href="#" style="width: 90px" class="btn waves-effect waves-light btn-warning sa-warning" data-id="{{ $usuario->id }}"> <i class="mdi mdi-account-off"></i> @lang('buttons.general.disable') </a>
+                                        @else
+                                            <a href="#" style="width: 90px" class="btn waves-effect waves-light btn-success sa-success" data-id="{{ $usuario->id }}"> <i class="mdi mdi-account-settings"></i> @lang('buttons.general.enable') </a>
+                                            
+                                        @endif
                                         <a href="{{ route('core.usuario.editar', ['id' => $usuario->id ]) }}" class="btn waves-effect waves-light btn-info"> <i class="mdi mdi-lead-pencil"></i> @lang('buttons.general.edit') </a>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-block btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> @lang('buttons.general.actions') </button>
@@ -155,39 +160,8 @@
                     { extend: 'print',  text: 'Imprimir' }
                 ]
             });
-        });
-    </script>
 
-
-    <!-- SweetAlert2 -->
-    <script>
-        
-        // Exclusão de usuário
-        $('.sa-warning').click(function(){
-            let idUser   = $(this).data('id');
-            let deleteIt = swal2_warning("Para reativar esse usuário, entre em contato com o suporte técnico!", 'Sim, inativar!');
-            let obj = {'id': idUser};
-
-            deleteIt.then(resolvedValue => {
-                ajaxMethod('POST', "{{ URL::route('core.usuario.deletar') }}", obj).then(response => {
-                    if(response.response != 'erro') {
-                        swal2_success("Inativado!", "Usuário inativado com sucesso.");
-                    } else {
-                        swal2_alert_error_support("Tivemos um problema ao excluir o usuário.");
-                    }
-                }, error => {
-                    swal2_alert_error_support("Tivemos um problema ao excluir o usuário.");
-                    console.log(error);
-                });
-            }, error => {
-                swal.close();
-            });
-        });
-    </script>
-
-    {{-- Click nos checkboxes de permissionamento --}}
-    <script>
-        $(".filled-in").on('click', evt => {
+            $(".filled-in").on('click', evt => {
             let idElemento = evt.currentTarget.id;
             let idUsuario = idElemento.split('-')[1];
             let valor = $("#" + idElemento).is(":checked");
@@ -198,31 +172,73 @@
             let texto = (valor) ? 'Ao ativar a permissão à nível de usuário, você estará indicando ao sistema que apenas os vínculos DIRETOS entre USUÁRIO e EMPRESA devem ser levados em conta. Além disso, todas as vinculações do usuário com algum grupo serão removidas e, caso você deseje alterar essas permissões posteriormente, deverá refazer os vínculos que foram excluídos.' : 'Ao desativar a permissão à nível de usuário, você está indicando ao sistema para considerar apenas os vínculos dos GRUPOS que esse usuário pertence, com as EMPRESAS. Ou seja, nenhum vínculo feito diretamente com o usuário surtirá efeito!';
             $("#descricao_mudanca_permissao").text(texto);
             $("#modalChangeUserPermission").modal({backdrop: 'static', keyboard: false});
-        });
-
-        // Quando o modal de confirmação é fechada através do botão cancelar, limpa a sessão e recarrega a página
-        $('.btn-back, .close').on('click', function (e) {
-            $("#modalChangeUserPermission").hide();
-            location.reload();
-        })
-
-        // Quando o usuário confirmar a mudança de nível de permissão em um dos usuários
-        $("#confirm_change_permission").on('click', function() {
-            let idUsuario = window.sessionStorage.getItem('ID_USUARIO_MUDANCA_PERMISSAO');
-            let valor     = (window.sessionStorage.getItem('VALOR_MUDANCA_PERMISSAO') == "false") ? false : true;
-            window.sessionStorage.clear();
-
-            let obj = {'idUsuario': idUsuario, 'valor': valor};
-            ajaxMethod('POST', "{{ URL::route('core.atualizar.permissaoUsuario') }}", obj).then(response => {
-                console.log(response);
-                if(response.response != 'erro') {
-                    swal2_success('Atualizado!', 'O nível de permissão do usuário foi atualizado com sucesso!');
-                } else {
-                    swal2_alert_error_support("Tivemos um problema ao atualizar o nível de permissão do usuário.");
-                }
-            }, error => {
-                console.log(error);
             });
+
+            // Quando o modal de confirmação é fechada através do botão cancelar, limpa a sessão e recarrega a página
+            $('.btn-back, .close').on('click', function (e) {
+                $("#modalChangeUserPermission").hide();
+                location.reload();
+            })
+
+            // Quando o usuário confirmar a mudança de nível de permissão em um dos usuários
+            $("#confirm_change_permission").on('click', function() {
+                let idUsuario = window.sessionStorage.getItem('ID_USUARIO_MUDANCA_PERMISSAO');
+                let valor     = (window.sessionStorage.getItem('VALOR_MUDANCA_PERMISSAO') == "false") ? false : true;
+                window.sessionStorage.clear();
+
+                let obj = {'idUsuario': idUsuario, 'valor': valor};
+                ajaxMethod('POST', "{{ URL::route('core.atualizar.permissaoUsuario') }}", obj).then(response => {
+                    console.log(response);
+                    if(response.response != 'erro') {
+                        swal2_success('Atualizado!', 'O nível de permissão do usuário foi atualizado com sucesso!');
+                    } else {
+                        swal2_alert_error_support("Tivemos um problema ao atualizar o nível de permissão do usuário.");
+                    }
+                }, error => {
+                    console.log(error);
+                });
+            });
+
+            
+
         });
+
+        // Inativacao de usuário
+        $('.sa-warning').click(function(){
+            let idUser   = $(this).data('id');
+            let msg = swal2_warning("O usuário será inativado!", 'Sim, inativar!');
+            ativarInativar(idUser, msg, 'inativar');
+        });
+
+        // ativacao de usuário
+        $('.sa-success').click(function(){
+            let idUser   = $(this).data('id');
+            let msg = swal2_warning("O usuário será ativado!", 'Sim, ativar!');
+            ativarInativar(idUser, msg, 'ativar');
+        });
+
+        function ativarInativar(idUser, msg, operacao)
+        {
+            let obj = {'id': idUser, 'operacao': operacao, _token: "{{ csrf_token() }}"};
+
+            msg.then(resolvedValue => {
+                ajaxMethod('POST', "{{ URL::route('core.usuario.inativar') }}", obj).then(response => {
+                    if(response.response != 'erro') {
+                        swal2_success("Sucesso!", response.message);
+                    } else {
+                        swal2_alert_error_support(response.message);
+                    }
+                }, error => {
+                    swal2_alert_error_support(response.message);
+                });
+            }, error => {
+                swal.close();
+            });
+        }
     </script>
+
+
+    
+
+
 @endsection

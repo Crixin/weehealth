@@ -27,7 +27,18 @@ class User extends Authenticatable
         'administrador',
         'foto',
         'perfil_id',
-        'setor_id'
+        'setor_id',
+        'inativo'
+    ];
+
+    public $rules = [
+            'name'     => 'required|string|max:255',
+            'username' => 'required|string|max:20|unique:core_users,username',
+            'email'    => 'required|string|email|max:255|unique:core_users,email',
+            'password' => 'required|string|min:6|confirmed',
+            'foto'     => 'image|mimes:jpeg,png,jpg',
+            'perfil'   => 'required|numeric',
+            'setor'    => 'required|numeric'
     ];
 
     /**

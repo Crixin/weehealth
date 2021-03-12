@@ -40,5 +40,15 @@ return [
     'documento' => [
         'startReview' => "Revisão do documento iniciada",
         'startReviewFailed' => "Falha ao iniciar a revisão do documento"
-    ]
+    ],
+    'setor' => [
+        'storeSuccess' => "",
+        'storeFail' => "",
+        'updateSucess' => "",
+        'updateFail' => "",
+        'deleteSucess' => "Setor excluido com sucesso!",
+        'deleteFail' => "Falha ao excluir o setor. Setor possui vínculos."
+    ],
+
+    
 ];
