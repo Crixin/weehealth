@@ -119,14 +119,19 @@ class AnexoService
         try {
             $anexo = $this->anexoRepository->find($data['id']);
             $ged = new RESTServices();
-            $response = $ged->getDocumento($anexo->ged_documento_id, ['docs' => 'true']);
-            if ($response['error']) {
-                throw new \Exception("Falha na busca o anexo para visualização");
-            }
-
-            $documentoToClone = $response['response'];
             $nomeDocumentoFinal = $anexo->nome . "." . $anexo->extensao;
-            $storagePath = Storage::disk('weecode_office')->put('/anexos/' . $nomeDocumentoFinal, base64_decode($documentoToClone->bytes));
+            if ($anexo->ged_documento_id != '') {
+                $response = $ged->getDocumento($anexo->ged_documento_id, ['docs' => 'true']);
+                if ($response['error']) {
+                    throw new \Exception("Falha na busca o anexo para visualização");
+                }
+
+                $documentoToClone = $response['response'];
+                $storagePath = Storage::disk('weecode_office')->put('/anexos/' . $nomeDocumentoFinal, base64_decode($documentoToClone->bytes));
+
+            } else {
+                $storagePath = Storage::disk('weecode_office')->put('/anexos/' . $nomeDocumentoFinal, base64_decode($anexo->anexo_documento));
+            }
 
             return ["success" => true];
         } catch (\Throwable $th) {

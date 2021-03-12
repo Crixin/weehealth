@@ -171,9 +171,11 @@ class AnexoDocumentoController extends Controller
             $buscaAnexo = $this->anexoRepository->find($id);
             $anexoService = new AnexoService();
             $data = ["id" => $id];
+
             if (!$anexoService->criaCopiaAnexos($data)['success']) {
                 throw new \Exception("Falha ao buscar o anexo do documento no GED.");
             }
+            
             return response()->json(['response' => 'sucesso', 'data' => ['caminho' => asset('plugins/onlyoffice-php/doceditor.php?fileID=') . $buscaAnexo->nome . '.' . $buscaAnexo->extensao . '&type=embedded&folder=anexos']]);
         } catch (\Exception $th) {
             return response()->json(['response' => 'erro']);

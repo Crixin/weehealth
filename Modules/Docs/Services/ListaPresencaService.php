@@ -111,15 +111,19 @@ class ListaPresencaService
         try {
             $listaPresenca = $this->listaPresencaRepository->find($data['id']);
             $ged = new RESTServices();
-            $response = $ged->getDocumento($listaPresenca->ged_documento_id, ['docs' => 'true']);
-            if ($response['error']) {
-                throw new \Exception("Falha na busca da lista de presença para visualização");
-            }
-
-            $documentoToClone = $response['response'];
             $nomeDocumentoFinal = $listaPresenca->nome . "." . $listaPresenca->extensao;
-            $storagePath = Storage::disk('weecode_office')->put('/lista-presenca/' . $nomeDocumentoFinal, base64_decode($documentoToClone->bytes));
 
+            if ($listaPresenca->ged_documento_id  != '') {
+                $response = $ged->getDocumento($listaPresenca->ged_documento_id, ['docs' => 'true']);
+                if ($response['error']) {
+                    throw new \Exception("Falha na busca da lista de presença para visualização");
+                }
+                $documentoToClone = $response['response'];
+                $storagePath = Storage::disk('weecode_office')->put('/lista-presenca/' . $nomeDocumentoFinal, base64_decode($documentoToClone->bytes));
+
+            } else {
+                $storagePath = Storage::disk('weecode_office')->put('/lista-presenca/' . $nomeDocumentoFinal, base64_decode($listaPresenca->lista_presenca_documento));
+            }
             return ["success" => true];
         } catch (\Throwable $th) {
             dd($th);
